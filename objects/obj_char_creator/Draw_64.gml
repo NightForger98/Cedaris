@@ -25,7 +25,7 @@ draw_text_transformed_colour(previewCX, previewCY + 212, "Turn", textScale, text
 var ts = textScale;
 for(var i = 0; i < rowCount; i++){
 	var s = slots[i];
-	var part = look[$ s.key];
+	var part = look.parts[$ s.key];
 	var y1 = top + i * rowH;
 	var cy = y1 + rowH / 2;
 
@@ -38,20 +38,25 @@ for(var i = 0; i < rowCount; i++){
 	draw_set_halign(fa_left);
 	draw_text_transformed_colour(colLabel, cy, s.label, ts, ts, 0, cAccent, cAccent, cAccent, cAccent, 1);
 
-	// Sprite selector
-	var si = array_get_index(s.sprites, part.spr);
-	var name = (si == -1) ? "none" : s.names[si];
-	var cName = (si == -1) ? cDim : c_white;
+	// Item selector (the Body row picks the body type)
+	var name;
+	if(s.key == "body") name = look.body;
+	else if(part.item == -1) name = (s.key == "eyes") ? "normal" : "none";
+	else name = lpc_catalog().items[part.item].name;
+	var cName = (part.item == -1 && s.key != "body") ? cDim : c_white;
 	draw_set_colour(cPanel);
 	draw_roundrect_ext(optX, y1 + 2, optX + optW, y1 + rowH - 4, 6, 6, false);
 	draw_set_halign(fa_center);
 	draw_text_transformed_colour(optX + arrowW / 2, cy, "<", ts, ts, 0, cAccent, cAccent, cAccent, cAccent, 1);
 	draw_text_transformed_colour(optX + optW - arrowW / 2, cy, ">", ts, ts, 0, cAccent, cAccent, cAccent, cAccent, 1);
-	draw_text_transformed_colour(optX + optW / 2, cy, name, ts, ts, 0, cName, cName, cName, cName, 1);
+	var nts = min(ts, (optW - arrowW * 2 - 8) / max(1, string_width(name))); // shrink long names to fit
+	draw_text_transformed_colour(optX + optW / 2, cy, name, nts, nts, 0, cName, cName, cName, cName, 1);
 
-	// Colour selector (ears and nose use the skin colour)
-	if(array_length(s.palettes) > 0){
-		var palIdx = array_get_index(s.palettes, part.pal);
+	// Colour selector
+	var cols = character_palettes_for(s.key, part.item);
+	if(array_length(cols.pals) > 0){
+		var cur = (part.pal == -1) ? lpc_catalog().items[part.item].defPal : part.pal;
+		var palIdx = array_get_index(cols.pals, cur);
 		draw_set_colour(cPanel);
 		draw_roundrect_ext(palX, y1 + 2, palX + palW, y1 + rowH - 4, 6, 6, false);
 		draw_text_transformed_colour(palX + arrowW / 2, cy, "<", ts, ts, 0, cAccent, cAccent, cAccent, cAccent, 1);
@@ -60,13 +65,15 @@ for(var i = 0; i < rowCount; i++){
 			// Swatch: the palette sprite stretched into a strip
 			var sw = 56;
 			var sx = palX + arrowW + 4;
-			draw_sprite_stretched(s.palettes[palIdx], 0, sx, y1 + 8, sw, rowH - 16);
+			draw_sprite_stretched(cols.pals[palIdx], 0, sx, y1 + 6, sw, rowH - 12);
 			draw_set_halign(fa_left);
-			draw_text_transformed_colour(sx + sw + 8, cy, s.palNames[palIdx], ts * 0.85, ts * 0.85, 0, c_white, c_white, c_white, c_white, 1);
+			draw_text_transformed_colour(sx + sw + 8, cy, cols.names[palIdx], ts * 0.85, ts * 0.85, 0, c_white, c_white, c_white, c_white, 1);
 		}
-	} else {
+	} else if(part.item != -1){
+		// Heads, ears and noses follow the skin colour; some items have fixed colours
+		var note = (s.key == "head" || s.key == "ears" || s.key == "nose") ? "skin colour" : "fixed colours";
 		draw_set_halign(fa_left);
-		draw_text_transformed_colour(palX + 8, cy, "skin colour", ts * 0.85, ts * 0.85, 0, cDim, cDim, cDim, cDim, 1);
+		draw_text_transformed_colour(palX + 8, cy, note, ts * 0.85, ts * 0.85, 0, cDim, cDim, cDim, cDim, 1);
 	}
 }
 

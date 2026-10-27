@@ -1,183 +1,261 @@
-/// Character looks: the slots a character is built from, the default look,
-/// and drawing a look with palette swaps. Used by obj_plyr and obj_char_creator.
+/// Character looks, built from the LPC item catalog (lpc_catalog script).
+/// Used by obj_plyr, obj_npc_parent and obj_char_creator.
 ///
-/// A look is a struct of parts keyed by slot, e.g. look.hair = {spr: index_bs1_hair_short_mess3, pal: pal_hair_sandy}.
-/// spr == -1 means the slot is empty. pal == -1 means "use the body's skin colour" (ears, nose).
+/// A look is { body: "male", parts: { <slot key>: {item, pal} } }
+///   item - index into lpc_catalog().items, or -1 for none
+///   pal  - palette sprite for the item's colour (-1 = the item's default)
+/// parts.body.pal is the skin colour and parts.eyes.pal the eye colour; heads,
+/// ears and noses follow them automatically.
 
-/// @description The slots shown in the character creator, in on-screen order.
-/// Option lists are built from sprite names, so new index_/pal_ sprites with a
-/// matching prefix show up automatically.
+/// @description The creator rows, in on-screen order.
 function character_slots(){
-	if(variable_global_exists("character_slot_list")) return global.character_slot_list;
-
-	var skin  = ["pal_skin_"];
-	var eyes  = ["pal_eyes_"];
-	var hairp = ["pal_hair_"];
-	var gear  = ["pal_clothes_", "pal_metal_"];
-	var jewel = ["pal_metal_", "pal_clothes_"];
-	var hatp  = ["pal_clothes_", "pal_hair_", "pal_metal_"];
-
-	// label, key, sprite prefixes, prefixes stripped for display, palette prefixes (-1 = skin colour), can be empty, chance of empty when randomising
-	global.character_slot_list = [
-		character_slot("Body",      "body",      ["index_base0_"],                 ["index_base0_"],          skin,  false, 0),
-		character_slot("Ears",      "ears",      ["index_base1__ears_"],           ["index_base1__ears_"],    -1,    true,  0.6),
-		character_slot("Nose",      "nose",      ["index_base1__nose_"],           ["index_base1__nose_"],    -1,    false, 0),
-		character_slot("Eyes",      "eyes",      ["index_base1_eyes"],             ["index_base1_"],          eyes,  false, 0),
-		character_slot("Hair",      "hair",      ["index_bs1_hair_"],              ["index_bs1_hair_"],       hairp, true,  0.05),
-		character_slot("Beard",     "beard",     ["index_bs1_beard_"],             ["index_bs1_beard_"],      hairp, true,  0.7),
-		character_slot("Headwear",  "hat",       ["index_bs2_headtop_", "index_bs3_hat_", "index_bs3_headtop_", "index_bs3_helmet_"],
-		                                         ["index_bs2_headtop_", "index_bs3_"],                        hatp,  true,  0.6),
-		character_slot("Face",      "face",      ["index_bs2_face_"],              ["index_bs2_face_"],       jewel, true,  0.8),
-		character_slot("Neck",      "neck",      ["index_bs2_neck_"],              ["index_bs2_neck_"],       jewel, true,  0.6),
-		character_slot("Shirt",     "shirt",     ["index_bs3_torso_shirt_", "index_bs3_torso_bandages"],
-		                                         ["index_bs3_torso_shirt_", "index_bs3_torso_"],              gear,  true,  0.05),
-		character_slot("Vest",      "vest",      ["index_bs3_torso_vest_", "index_bs3_torso_chainmail", "index_bs3_torso_apron_", "index_bs3_torso_tabard"],
-		                                         ["index_bs3_torso_"],                                        gear,  true,  0.6),
-		character_slot("Coat",      "coat",      ["index_bs3_torso_coat_", "index_bs3_torso_jacket_", "index_bs3_torso_overarmor_", "index_bs3_torso_santacoat"],
-		                                         ["index_bs3_torso_"],                                        gear,  true,  0.7),
-		character_slot("Belt",      "belt",      ["index_bs3_torso_waist_"],       ["index_bs3_torso_waist_"], gear, true,  0.4),
-		character_slot("Legs",      "pants",     ["index_bs3_leg_"],               ["index_bs3_leg_"],        gear,  false, 0),
-		character_slot("Shoes",     "shoes",     ["index_bs3_shoes_"],             ["index_bs3_shoes_"],      gear,  true,  0.1),
-		character_slot("Shoulders", "shoulders", ["index_bs2_shoulder_"],          ["index_bs2_shoulder_"],   gear,  true,  0.8),
-		character_slot("Bauldron",  "bauldron",  ["index_bs2_body_"],              ["index_bs2_body_"],       gear,  true,  0.8),
-		character_slot("Wrists",    "wrist",     ["index_bs3_arms_wrist_"],        ["index_bs3_arms_wrist_"], gear,  true,  0.7),
-		character_slot("Gloves",    "gloves",    ["index_bs3_arms_hands_"],        ["index_bs3_arms_hands_"], gear,  true,  0.7),
-		character_slot("Cape",      "cape",      ["index_bs3_cape_"],              ["index_bs3_cape_"],       gear,  true,  0.8),
+	static slots = undefined;
+	if(slots != undefined) return slots;
+	// label, key, can be empty, chance of empty when randomising
+	slots = [
+		character_slot("Body",      "body",      false, 0),
+		character_slot("Head",      "head",      false, 0),
+		character_slot("Eyes",      "eyes",      true,  0.95),
+		character_slot("Ears",      "ears",      true,  0.8),
+		character_slot("Nose",      "nose",      true,  0.5),
+		character_slot("Eyebrows",  "eyebrows",  true,  0.3),
+		character_slot("Hair",      "hair",      true,  0.05),
+		character_slot("Beard",     "beard",     true,  0.7),
+		character_slot("Headwear",  "hat",       true,  0.6),
+		character_slot("Face",      "face",      true,  0.85),
+		character_slot("Earrings",  "earrings",  true,  0.85),
+		character_slot("Neck",      "neck",      true,  0.75),
+		character_slot("Shirt",     "shirt",     true,  0.05),
+		character_slot("Vest",      "vest",      true,  0.7),
+		character_slot("Coat",      "coat",      true,  0.8),
+		character_slot("Belt",      "belt",      true,  0.5),
+		character_slot("Legs",      "pants",     true,  0.02),
+		character_slot("Shoes",     "shoes",     true,  0.1),
+		character_slot("Shoulders", "shoulders", true,  0.85),
+		character_slot("Bauldron",  "bauldron",  true,  0.9),
+		character_slot("Wrists",    "wrist",     true,  0.8),
+		character_slot("Gloves",    "gloves",    true,  0.8),
+		character_slot("Cape",      "cape",      true,  0.85),
+		character_slot("Back",      "back",      true,  0.85),
+		character_slot("Held item", "held",      true,  0.5),
 	];
-	return global.character_slot_list;
+	return slots;
 }
 
-function character_slot(_label, _key, _sprPrefixes, _strip, _palPrefixes, _canBeEmpty, _emptyChance){
-	var sprites = sprites_with_prefix(_sprPrefixes);
-	var palettes = is_array(_palPrefixes) ? sprites_with_prefix(_palPrefixes) : [];
-
-	var names = [];
-	for(var i = 0; i < array_length(sprites); i++){
-		array_push(names, character_option_name(sprites[i], _strip));
+function character_slot(_label, _key, _canBeEmpty, _emptyChance){
+	var items = [];
+	var allItems = lpc_catalog().items;
+	for(var i = 0; i < array_length(allItems); i++){
+		if(allItems[i].slot == _key) array_push(items, i);
 	}
-	var palNames = [];
-	for(var i = 0; i < array_length(palettes); i++){
-		array_push(palNames, character_option_name(palettes[i], ["pal_"]));
-	}
-
-	return {
-		label: _label,
-		key: _key,
-		sprites: sprites,
-		names: names,
-		palettes: palettes,
-		palNames: palNames,
-		canBeEmpty: _canBeEmpty,
-		emptyChance: _emptyChance,
-	};
+	return {label: _label, key: _key, items: items, canBeEmpty: _canBeEmpty, emptyChance: _emptyChance};
 }
 
-/// @description All sprites whose name starts with one of the prefixes, grouped by prefix and sorted by name.
-function sprites_with_prefix(_prefixes){
-	var ids = asset_get_ids(asset_sprite);
+/// @description True if catalog item _i has art for body type _body.
+function character_item_fits(_i, _body){
+	var layers = lpc_catalog().items[_i].layers;
+	for(var l = 0; l < array_length(layers); l++){
+		if(variable_struct_exists(layers[l], _body)) return true;
+	}
+	return false;
+}
+
+/// @description The slot's items that fit a body type.
+function character_slot_options(_slot, _body){
 	var out = [];
-	for(var p = 0; p < array_length(_prefixes); p++){
-		var found = [];
-		for(var i = 0; i < array_length(ids); i++){
-			if(string_starts_with(sprite_get_name(ids[i]), _prefixes[p])) array_push(found, ids[i]);
-		}
-		array_sort(found, function(a, b){ return sprite_get_name(a) < sprite_get_name(b) ? -1 : 1; });
-		out = array_concat(out, found);
+	for(var i = 0; i < array_length(_slot.items); i++){
+		if(character_item_fits(_slot.items[i], _body)) array_push(out, _slot.items[i]);
 	}
 	return out;
 }
 
-/// @description Readable name for a sprite: first matching prefix removed, underscores to spaces.
-function character_option_name(_spr, _strip){
-	var full = sprite_get_name(_spr);
-	var n = full;
-	for(var p = 0; p < array_length(_strip); p++){
-		if(string_starts_with(n, _strip[p])){
-			n = string_delete(n, 1, string_length(_strip[p]));
-			break;
-		}
+/// @description Colour choices for a slot's current item: {pals, names}, empty when it has fixed colours.
+function character_palettes_for(_slotKey, _item){
+	var p = lpc_catalog().palettes;
+	var m = "";
+	if(_slotKey == "body") m = "body";
+	else if(_slotKey == "eyes") m = "eye";
+	else if(_item != -1) m = lpc_catalog().items[_item].material;
+	if(m == "") return {pals: [], names: []};
+	return {pals: p[$ m], names: p[$ m + "_names"]};
+}
+
+/// @description Index of the item called _name in a slot, or -1.
+function character_find_item(_slotKey, _name){
+	var allItems = lpc_catalog().items;
+	for(var i = 0; i < array_length(allItems); i++){
+		if(allItems[i].slot == _slotKey && allItems[i].name == _name) return i;
 	}
-	// Prefix was the whole name (e.g. index_bs3_torso_tabard) - use its last word
-	if(n == ""){ n = string_delete(full, 1, string_last_pos("_", full)); }
-	return string_replace_all(n, "_", " ");
+	return -1;
+}
+
+/// @description Palette sprite of a material by name (e.g. "cloth", "blue"), or -1.
+function character_find_palette(_material, _name){
+	var p = lpc_catalog().palettes;
+	var i = array_get_index(p[$ _material + "_names"], _name);
+	return (i == -1) ? -1 : p[$ _material][i];
+}
+
+function character_empty_look(_body){
+	var look = {body: _body, parts: {}};
+	var slots = character_slots();
+	for(var i = 0; i < array_length(slots); i++){
+		look.parts[$ slots[i].key] = {item: -1, pal: -1};
+	}
+	look.parts.body.item = character_find_item("body", "Body Color");
+	look.parts.body.pal = character_find_palette("body", "light");
+	look.parts.eyes.pal = character_find_palette("eye", "blue");
+	return look;
 }
 
 /// @description The look the player starts with if the creator was skipped.
 function character_default_look(){
-	return {
-		body:      {spr: index_base0_male_norm,             pal: pal_skin_light},
-		ears:      {spr: -1,                                pal: -1},
-		nose:      {spr: index_base1__nose_straight,        pal: -1},
-		eyes:      {spr: index_base1_eyes,                  pal: pal_eyes_blue},
-		hair:      {spr: index_bs1_hair_short_mess3,        pal: pal_hair_sandy},
-		beard:     {spr: index_bs1_beard_full,              pal: pal_hair_sandy},
-		hat:       {spr: index_bs2_headtop_headcover_hijab, pal: pal_hair_black},
-		face:      {spr: index_bs2_face_earing,             pal: pal_metal_silver},
-		neck:      {spr: index_bs2_neck_necklace,           pal: pal_metal_silver},
-		shirt:     {spr: index_bs3_torso_shirt_longsleeve,  pal: pal_clothes_purple},
-		vest:      {spr: index_bs3_torso_chainmail,         pal: pal_clothes_forest},
-		coat:      {spr: index_bs3_torso_overarmor_leather, pal: pal_clothes_navy},
-		belt:      {spr: index_bs3_torso_waist_leatherbelt, pal: pal_clothes_leather},
-		pants:     {spr: index_bs3_leg_pants,               pal: pal_clothes_blue},
-		shoes:     {spr: index_bs3_shoes_shoes,             pal: pal_clothes_black},
-		shoulders: {spr: index_bs2_shoulder_leather,        pal: pal_clothes_leather},
-		bauldron:  {spr: index_bs2_body_bauldron,           pal: pal_clothes_leather},
-		wrist:     {spr: index_bs3_arms_wrist_bracers,      pal: pal_clothes_blue},
-		gloves:    {spr: index_bs3_arms_hands_gloves,       pal: pal_clothes_maroon},
-		cape:      {spr: index_bs3_cape_tattered,           pal: pal_clothes_lavender},
-	};
+	var look = character_empty_look("male");
+	var parts = look.parts;
+	parts.head  = {item: character_find_item("head", "Human Male"),     pal: -1};
+	parts.hair  = {item: character_find_item("hair", "Plain"),          pal: character_find_palette("hair", "chestnut")};
+	parts.shirt = {item: character_find_item("shirt", "Longsleeve"),    pal: character_find_palette("cloth", "blue")};
+	parts.pants = {item: character_find_item("pants", "Pants"),         pal: character_find_palette("cloth", "brown")};
+	parts.shoes = {item: character_find_item("shoes", "Basic Shoes"),   pal: character_find_palette("cloth", "black")};
+	parts.belt  = {item: character_find_item("belt", "Leather Belt"),   pal: -1};
+	return look;
+}
+
+/// @description Change body type, swapping out parts that have no art for the new body.
+function character_set_body(_look, _body){
+	_look.body = _body;
+	var slots = character_slots();
+	for(var i = 0; i < array_length(slots); i++){
+		var s = slots[i];
+		var part = _look.parts[$ s.key];
+		if(part.item != -1 && character_item_fits(part.item, _body)) continue;
+		if(s.canBeEmpty && part.item == -1) continue;
+		var opts = character_slot_options(s, _body);
+		part.item = -1;
+		if(!s.canBeEmpty && array_length(opts) > 0){
+			// Prefer a human head over beast heads
+			part.item = opts[0];
+			for(var o = 0; o < array_length(opts); o++){
+				if(string_pos("Human", lpc_catalog().items[opts[o]].name) > 0){ part.item = opts[o]; break; }
+			}
+		}
+	}
 }
 
 /// @description Draw one 64x64 frame of a look. _frame is the sheet column, _row the sheet row.
 function character_draw(_look, _frame, _row, _x, _y, _scale){
-	// Back to front - same order the player was drawn in before
-	static order = ["body", "ears", "nose", "eyes", "hair", "face", "neck", "hat", "shirt", "pants", "shoes",
-	                "vest", "coat", "bauldron", "belt", "shoulders", "wrist", "gloves", "cape", "beard"];
+	var cat = lpc_catalog();
+	var parts = _look.parts;
+	var skin = parts.body.pal;
+	var eyes = parts.eyes.pal;
+
+	// Gather every sprite layer of every part, then draw back to front by z
+	var list = [];
+	var slots = character_slots();
+	for(var s = 0; s < array_length(slots); s++){
+		var part = parts[$ slots[s].key];
+		if(part.item == -1) continue;
+		var it = cat.items[part.item];
+		var pal = (part.pal == -1) ? it.defPal : part.pal;
+		for(var l = 0; l < array_length(it.layers); l++){
+			var subs = it.layers[l][$ _look.body];
+			if(subs == undefined) continue;
+			for(var k = 0; k < array_length(subs); k++){
+				var kind = subs[k].k;
+				var p = kind;                    // a fixed palette sprite
+				if(kind == -1) p = pal;          // the part's chosen colour
+				else if(kind == -2) p = skin;
+				else if(kind == -3) p = eyes;
+				// -4 = fixed colours, drawn without the palette shader
+				array_push(list, {order: it.layers[l].z * 1000 + s * 10 + k, spr: subs[k].spr, pal: p});
+			}
+		}
+	}
+	array_sort(list, function(a, b){ return a.order - b.order; });
+
 	var size = 64;
-	for(var i = 0; i < array_length(order); i++){
-		var part = _look[$ order[i]];
-		if(part == undefined || part.spr == -1) continue;
-		var pal = (part.pal == -1) ? _look.body.pal : part.pal;
-		lorikeet_set(pal);
-		draw_sprite_part_ext(part.spr, 0, _frame * size, _row * size, size, size, _x, _y, _scale, _scale, c_white, 1);
-		lorikeet_reset();
+	for(var i = 0; i < array_length(list); i++){
+		var e = list[i];
+		if(e.pal != -4) lorikeet_set(e.pal);
+		draw_sprite_part_ext(e.spr, 0, _frame * size, _row * size, size, size, _x, _y, _scale, _scale, c_white, 1);
+		if(e.pal != -4) lorikeet_reset();
 	}
 }
 
-/// @description Step a slot to its next/previous option (wrapping, including "none" when allowed).
-function character_cycle_sprite(_look, _slot, _dir){
-	var part = _look[$ _slot.key];
-	var n = array_length(_slot.sprites);
+/// @description Step a slot to its next/previous option. The Body row steps through body types.
+function character_cycle_item(_look, _slot, _dir){
+	if(_slot.key == "body"){
+		var bodies = lpc_catalog().bodies;
+		var n = array_length(bodies);
+		var b = (array_get_index(bodies, _look.body) + _dir + n) mod n;
+		character_set_body(_look, bodies[b]);
+		return;
+	}
+	var part = _look.parts[$ _slot.key];
+	var opts = character_slot_options(_slot, _look.body);
+	var n = array_length(opts);
 	if(n == 0) return;
 	var lo = _slot.canBeEmpty ? -1 : 0;
-	var i = array_get_index(_slot.sprites, part.spr) + _dir;
+	var i = array_get_index(opts, part.item) + _dir;
 	if(i > n - 1) i = lo;
 	if(i < lo) i = n - 1;
-	part.spr = (i == -1) ? -1 : _slot.sprites[i];
+	part.item = (i == -1) ? -1 : opts[i];
+
+	// Keep the colour if the new item can use it, else take the item's default
+	var cols = character_palettes_for(_slot.key, part.item);
+	if(_slot.key != "eyes" && array_get_index(cols.pals, part.pal) == -1) part.pal = -1;
 }
 
 /// @description Step a slot to its next/previous colour (wrapping).
 function character_cycle_palette(_look, _slot, _dir){
-	var n = array_length(_slot.palettes);
+	var part = _look.parts[$ _slot.key];
+	var cols = character_palettes_for(_slot.key, part.item);
+	var n = array_length(cols.pals);
 	if(n == 0) return;
-	var part = _look[$ _slot.key];
-	var i = array_get_index(_slot.palettes, part.pal) + _dir;
-	part.pal = _slot.palettes[(i + n) mod n];
+	var cur = (part.pal == -1) ? lpc_catalog().items[part.item].defPal : part.pal;
+	var i = array_get_index(cols.pals, cur) + _dir;
+	part.pal = cols.pals[(i + n) mod n];
 }
 
-/// @description Random look, using each slot's chance of being empty.
-function character_randomise(_look){
+/// @description Fill a look with random parts and colours. _body = "" picks a random body type.
+function character_randomise(_look, _body = ""){
+	var cat = lpc_catalog();
+	if(_body == "") _body = cat.bodies[irandom(array_length(cat.bodies) - 1)];
+	_look.body = _body;
 	var slots = character_slots();
 	for(var i = 0; i < array_length(slots); i++){
 		var s = slots[i];
-		var part = _look[$ s.key];
-		var n = array_length(s.sprites);
-		if(n == 0 || (s.canBeEmpty && random(1) < s.emptyChance)){
-			part.spr = -1;
+		var part = _look.parts[$ s.key];
+		var opts = character_slot_options(s, _body);
+		var n = array_length(opts);
+		if(s.key == "body"){
+			part.item = character_find_item("body", "Body Color");
+		} else if(n == 0 || (s.canBeEmpty && random(1) < s.emptyChance)){
+			part.item = -1;
 		} else {
-			part.spr = s.sprites[irandom(n - 1)];
+			part.item = opts[irandom(n - 1)];
 		}
-		var np = array_length(s.palettes);
-		part.pal = (np > 0) ? s.palettes[irandom(np - 1)] : -1;
+		var cols = character_palettes_for(s.key, part.item);
+		var np = array_length(cols.pals);
+		if(s.key == "body") np = min(np, 7); // natural skin tones are listed first
+		part.pal = (np > 0) ? cols.pals[irandom(np - 1)] : -1;
 	}
+	// Mostly human heads
+	if(random(1) < 0.8) character_set_body_head_human(_look);
+}
+
+function character_set_body_head_human(_look){
+	var opts = character_slot_options(character_slots()[1], _look.body);
+	var humans = [];
+	for(var o = 0; o < array_length(opts); o++){
+		if(string_pos("Human", lpc_catalog().items[opts[o]].name) > 0) array_push(humans, opts[o]);
+	}
+	if(array_length(humans) > 0) _look.parts.head.item = humans[irandom(array_length(humans) - 1)];
+}
+
+/// @description A new random look. _body = "" picks any body type.
+function character_random_look(_body = ""){
+	var look = character_empty_look("male");
+	character_randomise(look, _body);
+	return look;
 }

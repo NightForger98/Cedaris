@@ -2,7 +2,8 @@
 slots = character_slots();
 
 // Edit a copy, so backing out of the creator doesn't change the saved look
-look = variable_global_exists("look") ? variable_clone(global.look) : character_default_look();
+look = (variable_global_exists("look") && is_struct(global.look) && variable_struct_exists(global.look, "parts"))
+	? variable_clone(global.look) : character_default_look();
 
 // Preview animation
 facingRows = [10, 9, 8, 11]; // sheet rows: down, left, up, right
@@ -13,8 +14,8 @@ frame = 1;
 guiW = display_get_gui_width();
 guiH = display_get_gui_height();
 rowCount = array_length(slots);
-top = 96;
-rowH = min(34, floor((guiH - top - 100) / rowCount));
+top = 78;
+rowH = min(34, floor((guiH - top - 92) / rowCount));
 textScale = min(0.7, rowH / 44);
 
 colLabel = floor(guiW * 0.42);

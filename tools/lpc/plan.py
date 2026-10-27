@@ -1,0 +1,149 @@
+"""Map LPC generator items onto Harvest Valley creator slots and list the art files needed.
+
+usage: python -I plan.py <lpc repo dir> <tree.txt> <out dir>
+writes catalog.json (items, layers, sprites) and files.txt (sparse-checkout paths)
+"""
+import json, os, re, sys, collections
+
+repo, tree_file, out = sys.argv[1:4]
+tree = set(l.strip() for l in open(tree_file, encoding='utf-8'))
+
+BODIES = ['male', 'female', 'muscular', 'teen', 'pregnant', 'child']
+# Universal sheet rows, plus watering for the farm tools
+ANIMS = ['spellcast', 'thrust', 'walk', 'slash', 'shoot', 'hurt', 'watering']
+
+SLOT = {
+    'body': 'body', 'head': 'head', 'ears': 'ears', 'nose': 'nose', 'eyes': 'eyes', 'eyebrows': 'eyebrows',
+    'hair': 'hair', 'beard': 'beard', 'mustache': 'beard',
+    'hat': 'hat', 'headcover': 'hat', 'bandana': 'hat',
+    'facial_eyes': 'face', 'facial_mask': 'face', 'earrings': 'earrings',
+    'neck': 'neck', 'necklace': 'neck', 'charm': 'neck',
+    'clothes': 'shirt', 'dress': 'shirt', 'bandages': 'shirt',
+    'vest': 'vest', 'chainmail': 'vest', 'apron': 'vest', 'overalls': 'vest',
+    'jacket': 'coat', 'armour': 'coat',
+    'belt': 'belt', 'sash': 'belt',
+    'legs': 'pants', 'shoes': 'shoes', 'shoulders': 'shoulders', 'bauldron': 'bauldron',
+    'bracers': 'wrist', 'wrists': 'wrist', 'gloves': 'gloves', 'cape': 'cape',
+    'backpack': 'back', 'quiver': 'back',
+    'weapon': 'held',
+}
+SKIP_FILES = {'body/special', 'body/wheelchair'}
+
+def load(p):
+    return json.load(open(p, encoding='utf-8'))
+
+ramps, bases, source = {}, {}, {}
+for m in ['body', 'eye', 'hair', 'cloth', 'metal', 'wood']:
+    ramps[m] = load(os.path.join(repo, 'palette_definitions', m, m + '_ulpc.json'))
+    bases[m] = load(os.path.join(repo, 'palette_definitions', m, 'meta_' + m + '.json'))['base']
+    # Source colours can name an LPC Revised variant too; palettes offered in game are ULPC only
+    lpcr = os.path.join(repo, 'palette_definitions', m, m + '_lpcr.json')
+    source[m] = dict(load(lpcr)) if os.path.exists(lpcr) else {}
+    source[m].update(ramps[m])
+
+def groups_for(d):
+    """Colour groups as [(material, base variant)], first one is player-selectable. None = fixed colours."""
+    rc = d.get('recolors')
+    if not rc:
+        return None
+    if 'material' in rc:
+        rc = {'color_1': rc}
+    gs = []
+    for k in sorted(rc):
+        g = rc[k]
+        m = g.get('material')
+        if m not in ramps:
+            return None
+        base = g.get('base') or bases[m]
+        if base not in source[m]:
+            base = bases[m]
+        gs.append((m, base))
+    return gs
+
+def variant_choice(d):
+    """For items shipped as one image per colour: a variant whose colours are a known cloth/metal ramp."""
+    vs = d.get('variants') or []
+    for m in ['cloth', 'metal']:
+        for pref in [bases[m]] + list(ramps[m]):
+            if pref in vs:
+                return m, pref
+    return None, (vs[0] if vs else None)
+
+def sprite_name(path, variant):
+    s = 'lpc_' + re.sub(r'[^a-z0-9]+', '_', path.lower()).strip('_')
+    if variant:
+        s += '_' + re.sub(r'[^a-z0-9]+', '_', variant.lower())
+    return s
+
+items, sprites, files = [], {}, set()
+skipped = collections.Counter()
+for dp, dn, fn in os.walk(os.path.join(repo, 'sheet_definitions')):
+    for f in sorted(fn):
+        if not f.endswith('.json') or f.startswith('meta_'):
+            continue
+        full = os.path.join(dp, f)
+        rel = os.path.relpath(full, os.path.join(repo, 'sheet_definitions')).replace(os.sep, '/')
+        d = load(full)
+        slot = SLOT.get(d.get('type_name'))
+        if slot is None or any(rel.startswith(s) for s in SKIP_FILES):
+            skipped[d.get('type_name')] += 1
+            continue
+        if slot == 'body' and rel != 'body/body.json':
+            continue
+
+        groups = groups_for(d)
+        mode, variant = 'recolor', None
+        if groups is None:
+            m, variant = variant_choice(d)
+            if m:
+                mode, groups = 'variant', [(m, variant)]
+            elif variant:
+                mode = 'variant_raw'
+            else:
+                mode = 'raw'
+
+        layers = []
+        for lk in sorted(k for k in d if k.startswith('layer_')):
+            L = d[lk]
+            if 'custom_animation' in L or L.get('is_mask'):
+                continue
+            per_body = {}
+            for b in BODIES:
+                path = L.get(b)
+                if not path:
+                    continue
+                path = path.rstrip('/') + '/'
+                fv = variant.replace(' ', '_') if variant else None
+                anim_files = {}
+                for a in ANIMS:
+                    p = 'spritesheets/' + path + (a + '/' + fv + '.png' if fv else a + '.png')
+                    if p in tree:
+                        anim_files[a] = p
+                if 'walk' not in anim_files:
+                    continue
+                name = sprite_name(path, variant if mode.startswith('variant') else None)
+                sprites[name] = {'files': anim_files, 'groups': groups, 'mode': mode}
+                files.update(anim_files.values())
+                per_body[b] = name
+            if per_body:
+                layers.append({'z': L.get('zPos', 0), 'bodies': per_body})
+        if not layers:
+            skipped['no_art:' + str(d.get('type_name'))] += 1
+            continue
+        items.append({
+            'name': d.get('name', f[:-5]), 'file': rel, 'slot': slot, 'mode': mode,
+            'groups': groups, 'layers': layers,
+            'credits': d.get('credits', []),
+        })
+
+os.makedirs(out, exist_ok=True)
+json.dump({'items': items, 'sprites': sprites, 'ramps': ramps, 'source': source, 'bases': bases,
+           'bodies': BODIES, 'anims': ANIMS}, open(os.path.join(out, 'catalog.json'), 'w'), indent=1)
+open(os.path.join(out, 'files.txt'), 'w').write('\n'.join(sorted('/' + p for p in files)) + '\n')
+
+by_slot = collections.Counter(i['slot'] for i in items)
+print('items', len(items), dict(by_slot))
+print('modes', dict(collections.Counter(i['mode'] for i in items)))
+print('sprites', len(sprites), 'files', len(files))
+print('bodies covered', dict(collections.Counter(b for i in items for L in i['layers'] for b in L['bodies'])))
+print('skipped', skipped.most_common(15))

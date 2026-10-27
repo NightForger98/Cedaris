@@ -20,7 +20,7 @@ for(var i = 0; i < rowCount; i++){
 	if(mx >= optX && mx < optX + optW){
 		if(click) d = (mx < optX + arrowW) ? -1 : ((mx >= optX + optW - arrowW) ? 1 : 0);
 		if(d == 0) d = wheel;
-		if(d != 0) character_cycle_sprite(look, s, d);
+		if(d != 0) character_cycle_item(look, s, d);
 	}
 	d = 0;
 	if(mx >= palX && mx < palX + palW){

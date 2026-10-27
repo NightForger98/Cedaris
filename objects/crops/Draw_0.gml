@@ -4,6 +4,8 @@ if(!planting) exit;
 var cs = cellSize;
 var gx = (mx div cs);
 var gy= (my div cs);
+// Mouse outside the room
+if(gx < 0 || gy < 0 || gx >= ds_grid_width(ds_crops_instances) || gy >= ds_grid_height(ds_crops_instances)) exit;
 
 
 //whats in the cell

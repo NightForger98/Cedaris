@@ -56,7 +56,8 @@ if(moveY != 0){
 
 //objects
 var inst = instance_place(x,y,obj_transition);
-if (inst != noone and facing == inst.PlayerFacingBefore){
+// Skip transitions that were never given a target room
+if (inst != noone and inst.targetRoom != -1 and facing == inst.PlayerFacingBefore){
 	
 	with(game){
 		spawnRoom= inst.targetRoom;

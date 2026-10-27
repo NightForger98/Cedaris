@@ -2,6 +2,8 @@
 // You can write your code in this edito
 #region Planting
 if(keyboard_check_pressed(ord("P"))){ planting = !planting }
+// The planting grid only exists on the farm
+if(!ds_exists(ds_crops_instances, ds_type_grid)){ planting = false }
 
 if(planting){
 	

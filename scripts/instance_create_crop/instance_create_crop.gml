@@ -10,7 +10,11 @@ function instance_create_crop(){
 	var cs = crops.cellSize;
 	var gx = argument0 div cs;
 	var gy = argument1 div cs;
-	var i_grid = crops.ds_crops_instances; 
+	var i_grid = crops.ds_crops_instances;
+	if(!ds_exists(i_grid, ds_type_grid) || gx < 0 || gy < 0
+	|| gx >= ds_grid_width(i_grid) || gy >= ds_grid_height(i_grid)){
+		return false;
+	}
 	var cell = i_grid[# gx, gy];
 	
 	if(cell == 0){

@@ -20,7 +20,18 @@ for(var i = 0; i < rowCount; i++){
 	if(mx >= optX && mx < optX + optW){
 		if(click) d = (mx < optX + arrowW) ? -1 : ((mx >= optX + optW - arrowW) ? 1 : 0);
 		if(d == 0) d = wheel;
-		if(d != 0) character_cycle_item(look, s, d);
+		if(d != 0){
+			if(story && s.key == "race"){
+				// Locked to Human in story mode
+			} else if(story && s.key == "body"){
+				var n = array_length(storyBodies);
+				character_set_body(look, storyBodies[(array_get_index(storyBodies, look.body) + d + n) mod n]);
+				storyRules();
+			} else {
+				character_cycle_item(look, s, d);
+				storyRules();
+			}
+		}
 	}
 	d = 0;
 	if(mx >= palX && mx < palX + palW){
@@ -45,13 +56,15 @@ if(keyboard_check_pressed(vk_left)) action = "turnleft";
 if(keyboard_check_pressed(vk_right)) action = "turnright";
 
 switch(action){
-	case "random":    character_randomise(look); break;
-	case "reset":     look = character_default_look(); break;
+	case "random":    character_randomise(look, story ? "Human" : ""); storyRules(); break;
+	case "reset":     look = character_default_look(); storyRules(); break;
 	case "turnleft":  facing = (facing + 1) mod 4; break;
 	case "turnright": facing = (facing + 3) mod 4; break;
 	case "back":      room_goto(rm_menu); break;
 	case "done":
 		global.look = look;
+		global.inv = story ? inv_new_story() : inv_new_free(look);
+		inv_apply_look(global.look);
 		room_goto(rm_1);
 		break;
 }

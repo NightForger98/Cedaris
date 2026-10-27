@@ -1,5 +1,6 @@
 /// @description Insert description here
 // You can write your code in this edito
+if(instance_exists(obj_inventory)) exit; // clicks belong to the inventory
 #region Planting
 if(keyboard_check_pressed(ord("P"))){ planting = !planting }
 // The planting grid only exists on the farm

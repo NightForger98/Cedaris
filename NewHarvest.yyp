@@ -140,6 +140,10 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"items","path":"scripts/items/items.yy",},},
+    {"id":{"name":"inventory","path":"scripts/inventory/inventory.yy",},},
+    {"id":{"name":"obj_inventory","path":"objects/obj_inventory/obj_inventory.yy",},},
+    {"id":{"name":"obj_npc_blacksmith","path":"objects/obj_npc_blacksmith/obj_npc_blacksmith.yy",},},
     {"id":{"name":"save_system","path":"scripts/save_system/save_system.yy",},},
     {"id":{"name":"ui","path":"scripts/ui/ui.yy",},},
     {"id":{"name":"lpc_credits","path":"scripts/lpc_credits/lpc_credits.yy",},},

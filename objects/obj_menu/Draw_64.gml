@@ -28,7 +28,7 @@ case "main":
 	if(picked != -1){
 		switch(labels[picked]){
 			case "Continue":  load_game(latestSlot); break;
-			case "New Game":  game_new(); break;
+			case "New Game":  openScreen("newgame"); break;
 			case "Load Game": slotMode = "load"; openScreen("slots"); break;
 			case "Options":   openScreen("options"); break;
 			case "Credits":   openScreen("credits"); break;
@@ -36,6 +36,25 @@ case "main":
 		}
 	}
 	ui_text(16, guiH - 16, "v0.1", 0.5, c.dim, fa_left);
+	break;
+
+case "newgame":
+	ui_text(cx, 130, "New Game", 1.8, c.accent);
+	var bw = 420, bh = 210, gap = 40;
+	var modes = [
+		["Story Mode", "story", "Start as a human farmer in plain clothes.\nEarn materials and dyes from quests and\nevents to unlock new clothing and colours.\nBuy tools from the blacksmith."],
+		["Free Mode", "free", "Every race, body, outfit and colour is\nunlocked in the character creator, and\ncrafting and the shop are free.\nA sandbox to play however you like."],
+	];
+	for(var i = 0; i < 2; i++){
+		var x1 = cx - bw - gap / 2 + i * (bw + gap), y1 = 230;
+		if(ui_button(x1, y1, x1 + bw, y1 + 64, modes[i][0], true, 1)) game_new(modes[i][1]);
+		draw_set_colour(c.panel);
+		draw_roundrect_ext(x1, y1 + 76, x1 + bw, y1 + 76 + bh, 12, 12, false);
+		draw_set_halign(fa_center);
+		draw_set_valign(fa_top);
+		draw_text_ext_transformed_colour(x1 + bw / 2, y1 + 96, modes[i][2], 34, bw / 0.55, 0.55, 0.55, 0, c_white, c_white, c_white, c_white, 1);
+	}
+	if(ui_button(cx - 120, guiH - 90, cx + 120, guiH - 40, "Back")) openScreen("main");
 	break;
 
 case "pause":
@@ -131,11 +150,14 @@ case "controls":
 		["G", "Grow crops by one day (testing)"],
 		["C", "Free camera, move it with W A S D"],
 		["Insert", "Show collision boxes and grid"],
+		["I", "Inventory and equipment"],
+		["1 - 0", "Pick a hotbar item to hold"],
+		["E", "Talk / trade (near the blacksmith)"],
 		["Esc", "Pause menu / back"],
 	];
 	for(var i = 0; i < array_length(rows); i++){
-		ui_text(cx - 200, 190 + i * 52, rows[i][0], 0.8, c.accent, fa_right);
-		ui_text(cx - 170, 190 + i * 52, rows[i][1], 0.7, c_white, fa_left);
+		ui_text(cx - 200, 170 + i * 46, rows[i][0], 0.8, c.accent, fa_right);
+		ui_text(cx - 170, 170 + i * 46, rows[i][1], 0.7, c_white, fa_left);
 	}
 	if(ui_button(cx - 120, guiH - 90, cx + 120, guiH - 40, "Back")) openScreen("options");
 	break;

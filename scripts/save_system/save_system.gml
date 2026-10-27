@@ -43,6 +43,7 @@ function save_game(_slot){
 		y: obj_plyr.y,
 		row: obj_plyr.y_frame,
 		look: character_look_to_save(obj_plyr.look),
+		inv: inv_to_save(),
 		crops: crops_to_save(),
 	};
 	if(!directory_exists("saves")) directory_create("saves");
@@ -62,6 +63,10 @@ function load_game(_slot){
 
 	instance_activate_all(); // in case the game was paused
 	global.look = character_look_from_save(data.look);
+	// Saves from before the inventory existed become free-mode inventories of what you wore
+	global.inv = variable_struct_exists(data, "inv") ? inv_from_save(data.inv) : inv_new_free(global.look);
+	global.gameMode = global.inv.mode;
+	inv_apply_look(global.look);
 	game.playtime = data.playtime;
 	crops_from_save(data.crops);
 	crops.loadPending = true; // don't let the farm's Room End overwrite the loaded crops
@@ -99,10 +104,12 @@ function save_latest_slot(){
 	return best;
 }
 
-/// @description Start a fresh game: clear the farm and go to the character creator.
-function game_new(){
+/// @description Start a fresh game in "story" or "free" mode: clear the farm and go to the character creator.
+function game_new(_mode){
 	instance_activate_all();
+	global.gameMode = _mode;
 	global.look = undefined;
+	global.inv = undefined;
 	game.playtime = 0;
 	game.spawnRoom = -1;
 	game.doTransition = false;

@@ -1,5 +1,7 @@
 /// @description Insert description here
 // You can write your code in this editor
+// Stand still while the inventory is open
+if(instance_exists(obj_inventory)){ moveX = 0; moveY = 0; facing = -1; exit; }
 var in_left =keyboard_check(vk_left);
 var in_right =keyboard_check(vk_right);
 var in_up=keyboard_check(vk_up);

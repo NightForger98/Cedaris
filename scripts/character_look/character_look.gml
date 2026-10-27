@@ -260,6 +260,35 @@ function character_draw(_look, _frame, _row, _x, _y, _scale){
 	}
 }
 
+/// @description Draw one catalog item on its own (inventory icons). _crop = [x, y, w, h] of the 64x64 frame.
+/// Uses _body's art, or the first body type the item has. _pal -1 = the item's default colour.
+function character_draw_item(_i, _body, _pal, _frame, _row, _crop, _x, _y, _scale){
+	var cat = lpc_catalog();
+	var it = cat.items[_i];
+	if(!character_item_fits(_i, _body)){
+		for(var b = 0; b < array_length(cat.bodies); b++){
+			if(character_item_fits(_i, cat.bodies[b])){ _body = cat.bodies[b]; break; }
+		}
+	}
+	var pal = (_pal == -1) ? it.defPal : _pal;
+	var skin = character_find_palette("body", "light");
+	var eyes = character_find_palette("eye", "blue");
+	for(var l = 0; l < array_length(it.layers); l++){
+		var subs = it.layers[l][$ _body];
+		if(subs == undefined) continue;
+		for(var k = 0; k < array_length(subs); k++){
+			var kind = subs[k].k;
+			var p = kind;
+			if(kind == -1) p = pal;
+			else if(kind == -2) p = skin;
+			else if(kind == -3) p = eyes;
+			if(p != -4) lorikeet_set(p);
+			draw_sprite_part_ext(subs[k].spr, 0, _frame * 64 + _crop[0], _row * 64 + _crop[1], _crop[2], _crop[3], _x, _y, _scale, _scale, c_white, 1);
+			if(p != -4) lorikeet_reset();
+		}
+	}
+}
+
 /// @description Step a slot to its next/previous option. Race and Body rows step through races and body types.
 function character_cycle_item(_look, _slot, _dir){
 	if(_slot.key == "race"){

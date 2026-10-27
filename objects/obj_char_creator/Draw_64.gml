@@ -12,7 +12,7 @@ draw_set_valign(fa_middle);
 
 // Title
 draw_set_halign(fa_center);
-draw_text_colour(guiW / 2, 44, "Create your farmer", cAccent, cAccent, cAccent, cAccent, 1);
+draw_text_colour(guiW / 2, 44, story ? "Create your farmer - Story Mode" : "Create your farmer - Free Mode", cAccent, cAccent, cAccent, cAccent, 1);
 
 // Preview
 var pw = 64 * previewScale;
@@ -48,7 +48,7 @@ for(var i = 0; i < rowCount; i++){
 	// Item selector (the Race and Body rows pick the race and body type)
 	var name;
 	var picker = (s.key == "race" || s.key == "body");
-	if(s.key == "race") name = look.race;
+	if(s.key == "race") name = story ? look.race + " (story)" : look.race;
 	else if(s.key == "body") name = look.body;
 	else if(array_length(character_slot_options(s, look)) == 0) name = "-"; // nothing for this race and body
 	else if(part.item == -1) name = (s.key == "eyes") ? "normal" : "none";
@@ -85,6 +85,14 @@ for(var i = 0; i < rowCount; i++){
 		draw_set_halign(fa_left);
 		draw_text_transformed_colour(palX + 8, cy, note, ts * 0.85, ts * 0.85, 0, cDim, cDim, cDim, cDim, 1);
 	}
+}
+
+// Story mode: the starter outfit is fixed
+if(story){
+	var ny = top + rowCount * rowH + 30;
+	draw_set_halign(fa_left);
+	draw_text_transformed_colour(colLabel, ny, "Clothing: red shirt, blue trousers, brown shoes", textScale, textScale, 0, cAccent, cAccent, cAccent, cAccent, 1);
+	draw_text_transformed_colour(colLabel, ny + 34, "New clothes, colours and tools are earned in the world.", textScale * 0.85, textScale * 0.85, 0, cDim, cDim, cDim, cDim, 1);
 }
 
 // Buttons

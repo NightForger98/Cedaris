@@ -1,5 +1,23 @@
 /// @description Character creator setup
+// Story mode: human only, body features only; clothing is the fixed starter outfit (earned later in the world).
+story = variable_global_exists("gameMode") && global.gameMode == "story";
+storyKeys = ["race", "body", "head", "eyes", "ears", "nose", "eyebrows", "hair", "beard"];
+storyBodies = ["male", "female", "teen"]; // the bodies the red shirt / blue pants / brown shoes exist for
 slots = character_slots();
+if(story){
+	var keep = [];
+	for(var i = 0; i < array_length(slots); i++) if(array_get_index(storyKeys, slots[i].key) != -1) array_push(keep, slots[i]);
+	slots = keep;
+}
+
+/// Story mode: force human, an allowed body, and the starter outfit
+storyRules = function(){
+	if(!story) return;
+	if(look.race != "Human") character_set_race(look, "Human");
+	if(array_get_index(storyBodies, look.body) == -1) character_set_body(look, storyBodies[0]);
+	global.inv = inv_new_story();
+	inv_apply_look(look);
+};
 
 // Edit a copy, so backing out of the creator doesn't change the saved look
 look = (variable_global_exists("look") && is_struct(global.look) && variable_struct_exists(global.look, "parts"))
@@ -42,3 +60,4 @@ buttons = [
 	{label: ">",         x1: previewCX + 76,   y1: previewCY + 190, x2: previewCX + 120, y2: previewCY + 234, action: "turnright"},
 ];
 hoverRow = -1;
+storyRules();

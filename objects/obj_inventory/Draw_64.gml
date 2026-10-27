@@ -90,8 +90,8 @@ if(shop){
 			else { inv.gold -= price; showMessage("Bought " + stock[i].name); changed(); }
 		}
 	}
-} else {
-	var title = "Crafting";
+} else if(craft){
+	var title = "Crafting Table";
 	if(filter == "dye") title += " - dyes";
 	else if(filter != "") title += " - " + item_slot_label(filter);
 	ui_text(panelX1 + 16, panelY1 + 26, title, 0.8, c.accent, fa_left);
@@ -135,6 +135,18 @@ if(shop){
 			changed();
 		}
 	}
+} else {
+	// Plain inventory: what you're carrying for crafting, and where to craft
+	ui_text(panelX1 + 16, panelY1 + 26, "Materials", 0.8, c.accent, fa_left);
+	var mats = item_materials();
+	for(var m = 0; m < array_length(mats); m++){
+		var y1 = listTop + m * 44;
+		var st = item_stack("m|" + mats[m].key, inv_count("m|" + mats[m].key));
+		item_draw_icon(item_stack(st.id), panelX1 + 14, y1, 40, body);
+		ui_text(panelX1 + 68, y1 + 20, mats[m].name, 0.58, (st.count > 0) ? c_white : c.dim, fa_left);
+		ui_text(panelX2 - 20, y1 + 20, string(st.count), 0.6, (st.count > 0) ? c.accent : c.dim, fa_right);
+	}
+	ui_text((panelX1 + panelX2) / 2, panelY2 - 30, "Use a crafting table [E] to make clothing and dyes", 0.5, c.dim);
 }
 
 // Tooltip (not while carrying something)

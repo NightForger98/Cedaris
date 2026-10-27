@@ -64,7 +64,7 @@ if(mouse_check_button_pressed(mb_right) && loc != undefined && loc.area == "inv"
 }
 
 // Clicking an equipment or dye slot filters the crafting list to it
-if(mouse_check_button_pressed(mb_left) && loc != undefined && cursor == undefined && !shop){
+if(mouse_check_button_pressed(mb_left) && loc != undefined && cursor == undefined && craft){
 	if(loc.area == "equip"){ filter = loc.key; scroll = 0; }
 	if(loc.area == "dye"){ filter = "dye"; scroll = 0; }
 }

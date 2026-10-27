@@ -152,7 +152,7 @@ case "controls":
 		["Insert", "Show collision boxes and grid"],
 		["I", "Inventory and equipment"],
 		["1 - 0", "Pick a hotbar item to hold"],
-		["E", "Talk / trade (near the blacksmith)"],
+		["E", "Trade with the blacksmith / use the crafting table"],
 		["Esc", "Pause menu / back"],
 	];
 	for(var i = 0; i < array_length(rows); i++){

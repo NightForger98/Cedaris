@@ -1,8 +1,9 @@
 /// @description Inventory screen setup
-// Opened with I (or E at the blacksmith, with shop = true). The world keeps running but the player can't move.
+// Opened with I, with E at the blacksmith (shop = true), or with E at a crafting table (craft = true). The world keeps running but the player can't move.
 // Mouse: drag an item to move it, or click to pick it up and click again to put it down.
 // Shift-click equips/unequips, right-click splits one off a stack (or sells it when the shop is open).
-shop = false;
+shop = false;   // set by Brom: the left panel is his shop
+craft = false;  // set by a crafting table: the left panel is the crafting list
 justOpened = true;  // ignore the key press that opened us
 guiW = display_get_gui_width();
 guiH = display_get_gui_height();

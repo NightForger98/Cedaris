@@ -27,7 +27,7 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
 
 ## How things unlock
 
-- **Clothing** is crafted from materials. `item_recipe_cost()` sets the cost by slot (metal pieces use
+- **Clothing** is crafted from materials at a crafting table (`obj_crafting_table`, press E). `item_recipe_cost()` sets the cost by slot (metal pieces use
   iron). The crafting list shows what you can make right now; clicking an equipment slot shows every
   recipe for that slot, dimmed until you have the materials.
 - **Colours** come from dyes. Story mode has no dye recipes: dyes are quest and event rewards.
@@ -49,7 +49,7 @@ Call `inv_apply_look(global.look)` after changing what's equipped from code.
 
 ## Ideas for later
 
-- Crafting stations (a tailor's loom, Brom's anvil) so recipes need you to be at the right place.
+- More crafting stations (a tailor's loom, Brom's anvil), each offering its own recipes.
 - Recipes that need a specific collection (e.g. "Celestial Wizard Hat" needs silk + gems + a quest item).
 - Dye mixing: combine two dyes into a new colour.
 - Selling crops to a general store for gold.

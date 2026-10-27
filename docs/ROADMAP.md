@@ -190,7 +190,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 |---|---|---|---|
 | 1 | 0.2 Pipeline custom animations | M | **done** (27 items, 87 swing sprites) |
 | 2 | 0.1 Action system | M | **done**: click/Space uses the held item; `action_hit` is the hook for effects |
-| 3 | 0.3 Time + 0.4 Energy/Health + 0.5 World state | L | daily loop, costs and saving for everything after |
+| 3 | 0.3 Time + 0.4 Energy/Health + 0.5 World state | L | **done**: clock, seasons, night tint, bed and passing out, new-day event with autosave, energy/health HUD, per-room world store (save v2) |
 | 4 | 1 Farming loop | L | the game's main loop; brings Luck and Stamina in |
 | 5 | 2 Gathering + smelting + upgrades | M | feeds crafting with real materials |
 | 6 | 3 Stats wiring (Warmth, buffs) | S | small once the loops exist |

@@ -28,7 +28,8 @@ if(mouse_check_button_pressed(mb_left)){
 }
 #endregion
 
-if(instance_exists(obj_crop) and keyboard_check_pressed(ord("G"))){
+// Debug (Insert): G grows crops a day; normally sleeping does
+if(game.debug and instance_exists(obj_crop) and keyboard_check_pressed(ord("G"))){
 	with(obj_crop){
 		if(growthStage < maxGrowthStage){
 		daysOld += 1;	

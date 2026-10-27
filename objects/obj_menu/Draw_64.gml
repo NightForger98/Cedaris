@@ -153,6 +153,7 @@ case "controls":
 		["I", "Inventory and equipment"],
 		["1 - 0", "Pick a hotbar item to hold"],
 		["E", "Trade with the blacksmith / use the crafting table"],
+		["Click / Space", "Use the held tool or weapon"],
 		["Esc", "Pause menu / back"],
 	];
 	for(var i = 0; i < array_length(rows); i++){

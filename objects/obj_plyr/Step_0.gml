@@ -8,7 +8,9 @@ if(act != undefined){
 	actStep += act.fps / game_get_speed(gamespeed_fps);
 	if(!actHit && actStep >= act.hit){
 		actHit = true;
-		action_hit(id, lpc_catalog().items[look.parts.held.item].name, actDir);
+		var itemName = lpc_catalog().items[look.parts.held.item].name;
+		if(item_is_tool(itemName) && world_time_ready()) global.vitals.energy = max(0, global.vitals.energy - tool_energy_cost());
+		action_hit(id, itemName, actDir);
 	}
 	if(actStep >= act.frames) act = undefined;
 	moveX = 0; moveY = 0;
@@ -17,6 +19,12 @@ if(act != undefined){
 var planting = instance_exists(crops) && crops.planting;
 if(!planting && (mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_space))){
 	act = character_action_for(look);
+	// Too tired to swing a tool (weapons still work)
+	if(act != undefined && world_time_ready() && vitals_exhausted() && item_is_tool(lpc_catalog().items[look.parts.held.item].name)){
+		act = undefined;
+		game.hudMessage = "You're too tired. Get some sleep.";
+		game.hudTime = game_get_speed(gamespeed_fps) * 2;
+	}
 	if(act != undefined){
 		actStep = 0;
 		actHit = false;
@@ -39,6 +47,7 @@ if(in_walk || in_run){
 }
 // Equipment Speed stat (feathers and pixie dust help, heavy metal slows you down)
 spd *= inv_speed_multiplier();
+if(world_time_ready() && vitals_exhausted()) spd *= 0.6; // exhausted: slow
 //RESETVARIABLES
 
 moveY= (in_down - in_up) * spd;

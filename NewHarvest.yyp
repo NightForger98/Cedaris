@@ -140,6 +140,8 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"obj_bed","path":"objects/obj_bed/obj_bed.yy",},},
+    {"id":{"name":"world_time","path":"scripts/world_time/world_time.yy",},},
     {"id":{"name":"lpc_pal_body_light","path":"sprites/lpc_pal_body_light/lpc_pal_body_light.yy",},},
     {"id":{"name":"lpc_pal_body_amber","path":"sprites/lpc_pal_body_amber/lpc_pal_body_amber.yy",},},
     {"id":{"name":"lpc_pal_body_olive","path":"sprites/lpc_pal_body_olive/lpc_pal_body_olive.yy",},},

@@ -6,6 +6,15 @@ settings_load();
 playtime = 0;     // seconds played, saved with the game
 pauseShot = -1;   // snapshot of the screen behind the pause menu
 resumeLock = 0;   // frames to ignore Esc after resuming, so the same press doesn't pause again
+sleeping = false; // fading out to end the day (sleep_now)
+passedOut = false;
+sleepDone = false;
+waking = false;   // fading in after waking up
+wakeAtBed = false;
+autosavePending = false;
+lostGold = 0;
+hudMessage = "";
+hudTime = 0;
 room_goto_next(); // the main menu
 
 guiWidth = display_get_gui_width();

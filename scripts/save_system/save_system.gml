@@ -2,7 +2,7 @@
 /// Saves are JSON files in the game's save folder (saves/slotN.json); settings live in settings.ini.
 
 #macro SAVE_SLOTS 3
-#macro SAVE_VERSION 1
+#macro SAVE_VERSION 2
 
 function save_path(_slot){ return "saves/slot" + string(_slot) + ".json"; }
 
@@ -33,6 +33,7 @@ function save_game(_slot){
 	// The pause menu deactivates the world; wake it up long enough to read it
 	var frozen = instance_exists(obj_menu) && obj_menu.isPause;
 	instance_activate_all();
+	crops_store(); // the farm's live crops into the world store
 	if(!instance_exists(obj_plyr)){ if(frozen) game_freeze(); return false; }
 	var data = {
 		version: SAVE_VERSION,
@@ -44,9 +45,12 @@ function save_game(_slot){
 		row: obj_plyr.y_frame,
 		look: character_look_to_save(obj_plyr.look),
 		inv: inv_to_save(),
-		crops: crops_to_save(),
+		clock: global.clock,
+		vitals: global.vitals,
+		world: global.world,
 	};
 	if(!directory_exists("saves")) directory_create("saves");
+	global.saveSlot = _slot; // sleeping autosaves here
 	var f = file_text_open_write(save_path(_slot));
 	file_text_write_string(f, json_stringify(data));
 	file_text_close(f);
@@ -68,7 +72,16 @@ function load_game(_slot){
 	global.gameMode = global.inv.mode;
 	inv_apply_look(global.look);
 	game.playtime = data.playtime;
-	crops_from_save(data.crops);
+	// Version 1 saves kept only the farm's crops
+	if(variable_struct_exists(data, "world")){
+		global.world = data.world;
+		global.clock = data.clock;
+		global.vitals = data.vitals;
+	} else {
+		world_time_new();
+		world_room("rm_1").crops = variable_struct_exists(data, "crops") ? data.crops : [];
+	}
+	global.saveSlot = _slot;
 	crops.loadPending = true; // don't let the farm's Room End overwrite the loaded crops
 
 	// Sheet row back to a facing direction (rows: 8 up, 9 left, 10 down, 11 right)
@@ -110,10 +123,11 @@ function game_new(_mode){
 	global.gameMode = _mode;
 	global.look = undefined;
 	global.inv = undefined;
+	global.saveSlot = undefined;
+	world_time_new();
 	game.playtime = 0;
 	game.spawnRoom = -1;
 	game.doTransition = false;
-	crops_from_save([]);
 	room_goto(rm_creator);
 }
 
@@ -158,39 +172,6 @@ function character_look_from_save(_data){
 	}
 	character_validate(look);
 	return look;
-}
-
-// ---------------------------------------------------------------- crops
-
-/// @description Planted crops as an array of {gx, gy, type, days}.
-function crops_to_save(){
-	var out = [];
-	if(room == rm_1){
-		// On the farm the live crop instances are the truth
-		var cs = crops.cellSize;
-		with(obj_crop){ array_push(out, {gx: x div cs, gy: y div cs, type: cropType, days: daysOld}); }
-	} else {
-		var g = crops.ds_crops_data;
-		for(var r = 0; r < ds_grid_height(g); r++){
-			if(g[# 0, r] == -1) continue;
-			array_push(out, {gx: g[# 0, r], gy: g[# 1, r], type: g[# 2, r], days: g[# 3, r]});
-		}
-	}
-	return out;
-}
-
-/// @description Replace the stored crops; they respawn the next time the farm loads.
-function crops_from_save(_list){
-	var g = crops.ds_crops_data;
-	var n = array_length(_list);
-	ds_grid_resize(g, 4, max(1, n));
-	ds_grid_clear(g, -1);
-	for(var r = 0; r < n; r++){
-		g[# 0, r] = _list[r].gx;
-		g[# 1, r] = _list[r].gy;
-		g[# 2, r] = _list[r].type;
-		g[# 3, r] = _list[r].days;
-	}
 }
 
 // ---------------------------------------------------------------- settings

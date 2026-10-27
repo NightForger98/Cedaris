@@ -1,0 +1,1 @@
+sprite_collision_mask(spr_masks_male_dup,true,2,0,640,64,64,bboxkind_precise,0)

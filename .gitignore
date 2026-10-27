@@ -1,0 +1,7 @@
+# GameMaker build/cache output
+/tmp/
+/output/
+/build/
+*.yydebug
+*.win
+*.zip

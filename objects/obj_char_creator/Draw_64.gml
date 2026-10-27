@@ -21,6 +21,13 @@ draw_roundrect_ext(previewCX - pw / 2 - 20, previewCY - pw / 2 - 20, previewCX +
 character_draw(look, floor(frame), facingRows[facing], previewCX - pw / 2, previewCY - pw / 2, previewScale);
 draw_text_transformed_colour(previewCX, previewCY + 212, "Turn", textScale, textScale, 0, c_white, c_white, c_white, c_white, 1);
 
+// Race name and description
+var race = character_race(look.race);
+draw_text_transformed_colour(previewCX, previewCY + 270, race.name, 0.9, 0.9, 0, cAccent, cAccent, cAccent, cAccent, 1);
+draw_set_valign(fa_top);
+draw_text_ext_transformed_colour(previewCX, previewCY + 292, race.desc, -1, (pw + 40) / 0.55, 0.55, 0.55, 0, cDim, cDim, cDim, cDim, 1);
+draw_set_valign(fa_middle);
+
 // Slot rows
 var ts = textScale;
 for(var i = 0; i < rowCount; i++){
@@ -38,12 +45,15 @@ for(var i = 0; i < rowCount; i++){
 	draw_set_halign(fa_left);
 	draw_text_transformed_colour(colLabel, cy, s.label, ts, ts, 0, cAccent, cAccent, cAccent, cAccent, 1);
 
-	// Item selector (the Body row picks the body type)
+	// Item selector (the Race and Body rows pick the race and body type)
 	var name;
-	if(s.key == "body") name = look.body;
+	var picker = (s.key == "race" || s.key == "body");
+	if(s.key == "race") name = look.race;
+	else if(s.key == "body") name = look.body;
+	else if(array_length(character_slot_options(s, look)) == 0) name = "-"; // nothing for this race and body
 	else if(part.item == -1) name = (s.key == "eyes") ? "normal" : "none";
 	else name = lpc_catalog().items[part.item].name;
-	var cName = (part.item == -1 && s.key != "body") ? cDim : c_white;
+	var cName = (part.item == -1 && !picker) ? cDim : c_white;
 	draw_set_colour(cPanel);
 	draw_roundrect_ext(optX, y1 + 2, optX + optW, y1 + rowH - 4, 6, 6, false);
 	draw_set_halign(fa_center);
@@ -53,7 +63,7 @@ for(var i = 0; i < rowCount; i++){
 	draw_text_transformed_colour(optX + optW / 2, cy, name, nts, nts, 0, cName, cName, cName, cName, 1);
 
 	// Colour selector
-	var cols = character_palettes_for(s.key, part.item);
+	var cols = character_palettes_for(s.key, part.item, look);
 	if(array_length(cols.pals) > 0){
 		var cur = (part.pal == -1) ? lpc_catalog().items[part.item].defPal : part.pal;
 		var palIdx = array_get_index(cols.pals, cur);

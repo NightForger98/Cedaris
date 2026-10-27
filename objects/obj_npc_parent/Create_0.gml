@@ -8,8 +8,8 @@ y_frame =0;
 moveX=0;
 moveY=0;
 
-// Appearance: a random villager (child objects can replace it with a chosen body type)
-look = character_random_look(choose("male", "female", "muscular", "teen", "pregnant"));
+// Appearance: a random villager, race weighted by how common it is (see character_races)
+look = character_random_look();
 
 ///////
 x_offset = sprite_get_xoffset(mask_index);

@@ -1,2 +1,2 @@
-/// @description Villager with a random body type
+/// @description Villager of any race
 event_inherited();

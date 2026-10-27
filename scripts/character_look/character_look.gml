@@ -1,7 +1,7 @@
-/// Character looks, built from the LPC item catalog (lpc_catalog script).
-/// Used by obj_plyr, obj_npc_parent and obj_char_creator.
+/// Character looks, built from the LPC item catalog (lpc_catalog script) and the race
+/// rules (character_races script). Used by obj_plyr, obj_npc_parent and obj_char_creator.
 ///
-/// A look is { body: "male", parts: { <slot key>: {item, pal} } }
+/// A look is { race: "Human", body: "male", parts: { <slot key>: {item, pal} } }
 ///   item - index into lpc_catalog().items, or -1 for none
 ///   pal  - palette sprite for the item's colour (-1 = the item's default)
 /// parts.body.pal is the skin colour and parts.eyes.pal the eye colour; heads,
@@ -13,6 +13,7 @@ function character_slots(){
 	if(slots != undefined) return slots;
 	// label, key, can be empty, chance of empty when randomising
 	slots = [
+		character_slot("Race",      "race",      false, 0),
 		character_slot("Body",      "body",      false, 0),
 		character_slot("Head",      "head",      false, 0),
 		character_slot("Eyes",      "eyes",      true,  0.95),
@@ -51,6 +52,15 @@ function character_slot(_label, _key, _canBeEmpty, _emptyChance){
 	return {label: _label, key: _key, items: items, canBeEmpty: _canBeEmpty, emptyChance: _emptyChance};
 }
 
+/// @description The slot struct with key _key.
+function character_slot_by_key(_key){
+	var slots = character_slots();
+	for(var i = 0; i < array_length(slots); i++){
+		if(slots[i].key == _key) return slots[i];
+	}
+	return undefined;
+}
+
 /// @description True if catalog item _i has art for body type _body.
 function character_item_fits(_i, _body){
 	var layers = lpc_catalog().items[_i].layers;
@@ -60,21 +70,46 @@ function character_item_fits(_i, _body){
 	return false;
 }
 
-/// @description The slot's items that fit a body type.
-function character_slot_options(_slot, _body){
+/// @description True if the look's race allows catalog item _i in slot _key.
+function character_race_allows(_race, _key, _i){
+	if(array_get_index(_race.none, _key) != -1) return false;
+	var only = _race.only[$ _key];
+	if(only == undefined) return true;
+	return array_get_index(only, lpc_catalog().items[_i].name) != -1;
+}
+
+/// @description True if the slot must always have an item for this race.
+function character_slot_required(_slot, _race){
+	return !_slot.canBeEmpty || array_get_index(_race.require, _slot.key) != -1;
+}
+
+/// @description The slot's items that fit the look's body type and race.
+function character_slot_options(_slot, _look){
+	var race = character_race(_look.race);
 	var out = [];
 	for(var i = 0; i < array_length(_slot.items); i++){
-		if(character_item_fits(_slot.items[i], _body)) array_push(out, _slot.items[i]);
+		var it = _slot.items[i];
+		if(character_item_fits(it, _look.body) && character_race_allows(race, _slot.key, it)) array_push(out, it);
 	}
 	return out;
 }
 
 /// @description Colour choices for a slot's current item: {pals, names}, empty when it has fixed colours.
-function character_palettes_for(_slotKey, _item){
+function character_palettes_for(_slotKey, _item, _look){
 	var p = lpc_catalog().palettes;
+	if(_slotKey == "body"){
+		// Skin tones the race allows
+		var skins = character_race(_look.race).skins;
+		var pals = [];
+		var names = [];
+		for(var i = 0; i < array_length(skins); i++){
+			var pal = character_find_palette("body", skins[i]);
+			if(pal != -1){ array_push(pals, pal); array_push(names, string_replace_all(skins[i], "_", " ")); }
+		}
+		return {pals: pals, names: names};
+	}
 	var m = "";
-	if(_slotKey == "body") m = "body";
-	else if(_slotKey == "eyes") m = "eye";
+	if(_slotKey == "eyes") m = "eye";
 	else if(_item != -1) m = lpc_catalog().items[_item].material;
 	if(m == "") return {pals: [], names: []};
 	return {pals: p[$ m], names: p[$ m + "_names"]};
@@ -92,12 +127,12 @@ function character_find_item(_slotKey, _name){
 /// @description Palette sprite of a material by name (e.g. "cloth", "blue"), or -1.
 function character_find_palette(_material, _name){
 	var p = lpc_catalog().palettes;
-	var i = array_get_index(p[$ _material + "_names"], _name);
+	var i = array_get_index(p[$ _material + "_names"], string_replace_all(_name, "_", " "));
 	return (i == -1) ? -1 : p[$ _material][i];
 }
 
-function character_empty_look(_body){
-	var look = {body: _body, parts: {}};
+function character_empty_look(_race, _body){
+	var look = {race: _race, body: _body, parts: {}};
 	var slots = character_slots();
 	for(var i = 0; i < array_length(slots); i++){
 		look.parts[$ slots[i].key] = {item: -1, pal: -1};
@@ -110,7 +145,7 @@ function character_empty_look(_body){
 
 /// @description The look the player starts with if the creator was skipped.
 function character_default_look(){
-	var look = character_empty_look("male");
+	var look = character_empty_look("Human", "male");
 	var parts = look.parts;
 	parts.head  = {item: character_find_item("head", "Human Male"),     pal: -1};
 	parts.hair  = {item: character_find_item("hair", "Plain"),          pal: character_find_palette("hair", "chestnut")};
@@ -121,25 +156,68 @@ function character_default_look(){
 	return look;
 }
 
-/// @description Change body type, swapping out parts that have no art for the new body.
-function character_set_body(_look, _body){
-	_look.body = _body;
+/// @description Best default for a required slot: heads that match the body (Female heads on female bodies...).
+function character_pick_default(_slot, _opts, _look){
+	if(_slot.key != "head") return _opts[0];
+	var fem = (_look.body == "female" || _look.body == "pregnant");
+	for(var o = 0; o < array_length(_opts); o++){
+		var n = lpc_catalog().items[_opts[o]].name;
+		if(fem == (string_pos("emale", n) > 0)) return _opts[o];
+	}
+	return _opts[0];
+}
+
+/// @description Make a look obey its race and body type: allowed body, skin and items, required slots filled.
+function character_validate(_look){
+	var race = character_race(_look.race);
+	if(array_get_index(race.bodies, _look.body) == -1) _look.body = race.bodies[0];
+
+	var skins = character_palettes_for("body", -1, _look).pals;
+	if(array_get_index(skins, _look.parts.body.pal) == -1) _look.parts.body.pal = skins[0];
+
 	var slots = character_slots();
 	for(var i = 0; i < array_length(slots); i++){
 		var s = slots[i];
+		if(s.key == "race" || s.key == "body") continue;
 		var part = _look.parts[$ s.key];
-		if(part.item != -1 && character_item_fits(part.item, _body)) continue;
-		if(s.canBeEmpty && part.item == -1) continue;
-		var opts = character_slot_options(s, _body);
-		part.item = -1;
-		if(!s.canBeEmpty && array_length(opts) > 0){
-			// Prefer a human head over beast heads
-			part.item = opts[0];
-			for(var o = 0; o < array_length(opts); o++){
-				if(string_pos("Human", lpc_catalog().items[opts[o]].name) > 0){ part.item = opts[o]; break; }
-			}
+		var opts = character_slot_options(s, _look);
+		// want = what was last picked for this slot, restored whenever the race and body allow it
+		if(!variable_struct_exists(part, "want")) part.want = part.item;
+		if(part.want == -1) part.item = -1;
+		else if(array_get_index(opts, part.want) != -1) part.item = part.want;
+		else part.item = character_closest_item(part.want, opts); // most similar item that is allowed
+		if(part.item == -1 && character_slot_required(s, race) && array_length(opts) > 0){
+			part.item = character_pick_default(s, opts, _look);
 		}
 	}
+}
+
+/// @description The option whose name shares the most words with item _old (e.g. "Child shirts" -> a shirt), or -1 if none.
+function character_closest_item(_old, _opts){
+	if(array_length(_opts) == 0) return -1;
+	var words = string_split(string_lower(lpc_catalog().items[_old].name), " ");
+	var best = _opts[0], bestHits = -1;
+	for(var o = 0; o < array_length(_opts); o++){
+		var n = string_lower(lpc_catalog().items[_opts[o]].name);
+		var hits = 0;
+		for(var w = 0; w < array_length(words); w++){
+			if(string_length(words[w]) > 2 && string_pos(words[w], n) > 0) hits++;
+		}
+		if(hits > bestHits){ bestHits = hits; best = _opts[o]; }
+	}
+	return best;
+}
+
+/// @description Change race, then fix up body, skin and parts to suit it.
+function character_set_race(_look, _race){
+	_look.race = _race;
+	character_validate(_look);
+}
+
+/// @description Change body type, swapping out parts that have no art for the new body.
+function character_set_body(_look, _body){
+	_look.body = _body;
+	character_validate(_look);
 }
 
 /// @description Draw one 64x64 frame of a look. _frame is the sheet column, _row the sheet row.
@@ -182,80 +260,85 @@ function character_draw(_look, _frame, _row, _x, _y, _scale){
 	}
 }
 
-/// @description Step a slot to its next/previous option. The Body row steps through body types.
+/// @description Step a slot to its next/previous option. Race and Body rows step through races and body types.
 function character_cycle_item(_look, _slot, _dir){
+	if(_slot.key == "race"){
+		var races = character_races();
+		var n = array_length(races);
+		var r = 0;
+		for(var i = 0; i < n; i++) if(races[i].name == _look.race) r = i;
+		character_set_race(_look, races[(r + _dir + n) mod n].name);
+		return;
+	}
 	if(_slot.key == "body"){
-		var bodies = lpc_catalog().bodies;
+		var bodies = character_race(_look.race).bodies;
 		var n = array_length(bodies);
 		var b = (array_get_index(bodies, _look.body) + _dir + n) mod n;
 		character_set_body(_look, bodies[b]);
 		return;
 	}
 	var part = _look.parts[$ _slot.key];
-	var opts = character_slot_options(_slot, _look.body);
+	var opts = character_slot_options(_slot, _look);
 	var n = array_length(opts);
 	if(n == 0) return;
-	var lo = _slot.canBeEmpty ? -1 : 0;
+	var lo = character_slot_required(_slot, character_race(_look.race)) ? 0 : -1;
 	var i = array_get_index(opts, part.item) + _dir;
 	if(i > n - 1) i = lo;
 	if(i < lo) i = n - 1;
 	part.item = (i == -1) ? -1 : opts[i];
+	part.want = part.item;
 
 	// Keep the colour if the new item can use it, else take the item's default
-	var cols = character_palettes_for(_slot.key, part.item);
+	var cols = character_palettes_for(_slot.key, part.item, _look);
 	if(_slot.key != "eyes" && array_get_index(cols.pals, part.pal) == -1) part.pal = -1;
 }
 
 /// @description Step a slot to its next/previous colour (wrapping).
 function character_cycle_palette(_look, _slot, _dir){
 	var part = _look.parts[$ _slot.key];
-	var cols = character_palettes_for(_slot.key, part.item);
+	var cols = character_palettes_for(_slot.key, part.item, _look);
 	var n = array_length(cols.pals);
 	if(n == 0) return;
-	var cur = (part.pal == -1) ? lpc_catalog().items[part.item].defPal : part.pal;
+	var cur = (part.pal == -1 && part.item != -1) ? lpc_catalog().items[part.item].defPal : part.pal;
 	var i = array_get_index(cols.pals, cur) + _dir;
 	part.pal = cols.pals[(i + n) mod n];
 }
 
-/// @description Fill a look with random parts and colours. _body = "" picks a random body type.
-function character_randomise(_look, _body = ""){
-	var cat = lpc_catalog();
-	if(_body == "") _body = cat.bodies[irandom(array_length(cat.bodies) - 1)];
-	_look.body = _body;
+/// @description Fill a look with random parts and colours. _race = "" picks a random race.
+function character_randomise(_look, _race = ""){
+	if(_race == "") _race = character_random_race();
+	var race = character_race(_race);
+	_look.race = _race;
+	_look.body = race.bodies[irandom(array_length(race.bodies) - 1)];
+
 	var slots = character_slots();
 	for(var i = 0; i < array_length(slots); i++){
 		var s = slots[i];
+		if(s.key == "race") continue;
 		var part = _look.parts[$ s.key];
-		var opts = character_slot_options(s, _body);
-		var n = array_length(opts);
 		if(s.key == "body"){
 			part.item = character_find_item("body", "Body Color");
-		} else if(n == 0 || (s.canBeEmpty && random(1) < s.emptyChance)){
-			part.item = -1;
 		} else {
-			part.item = opts[irandom(n - 1)];
+			var opts = character_slot_options(s, _look);
+			var n = array_length(opts);
+			var emptyChance = race.chance[$ s.key] ?? s.emptyChance;
+			if(n == 0 || (!character_slot_required(s, race) && random(1) < emptyChance)){
+				part.item = -1;
+			} else {
+				part.item = opts[irandom(n - 1)];
+			}
+			part.want = part.item;
 		}
-		var cols = character_palettes_for(s.key, part.item);
+		var cols = character_palettes_for(s.key, part.item, _look);
 		var np = array_length(cols.pals);
-		if(s.key == "body") np = min(np, 7); // natural skin tones are listed first
 		part.pal = (np > 0) ? cols.pals[irandom(np - 1)] : -1;
 	}
-	// Mostly human heads
-	if(random(1) < 0.8) character_set_body_head_human(_look);
+	character_validate(_look);
 }
 
-function character_set_body_head_human(_look){
-	var opts = character_slot_options(character_slots()[1], _look.body);
-	var humans = [];
-	for(var o = 0; o < array_length(opts); o++){
-		if(string_pos("Human", lpc_catalog().items[opts[o]].name) > 0) array_push(humans, opts[o]);
-	}
-	if(array_length(humans) > 0) _look.parts.head.item = humans[irandom(array_length(humans) - 1)];
-}
-
-/// @description A new random look. _body = "" picks any body type.
-function character_random_look(_body = ""){
-	var look = character_empty_look("male");
-	character_randomise(look, _body);
+/// @description A new random look. _race = "" picks a race weighted by how common it is.
+function character_random_look(_race = ""){
+	var look = character_empty_look("Human", "male");
+	character_randomise(look, _race);
 	return look;
 }

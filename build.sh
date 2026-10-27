@@ -37,8 +37,9 @@ LOG=build/last_build.log
 
 case "${1:-check}" in
   clean) rm -rf build/cache build/temp; echo "Cache cleared."; exit 0 ;;
-  run)   CMD="Run" ;;
-  check) CMD="PackageZip" ;;
+  # Run must not get a target file, or the game tries to load it as its data file
+  run)   CMD="Run"; OUT=() ;;
+  check) CMD="PackageZip"; OUT=(--of="$(win "$PWD/build/out/HarvestValley.zip")" --tf="HarvestValley.zip") ;;
   *)     echo "Usage: ./build.sh [check|run|clean]"; exit 2 ;;
 esac
 
@@ -49,8 +50,7 @@ echo "Runtime: $(basename "$RUNTIME")   Command: Windows $CMD"
   --runtimePath="$(win "$RUNTIME")" \
   --cache="$(win "$PWD/build/cache")" \
   --temp="$(win "$PWD/build/temp")" \
-  --of="$(win "$PWD/build/out/HarvestValley.zip")" \
-  --tf="HarvestValley.zip" \
+  "${OUT[@]}" \
   -- Windows "$CMD" > "$LOG" 2>&1
 STATUS=$?
 

@@ -40,6 +40,7 @@ if(click){
 }
 if(keyboard_check_pressed(ord("R"))) action = "random";
 if(keyboard_check_pressed(vk_enter)) action = "done";
+if(keyboard_check_pressed(vk_escape)) action = "back";
 if(keyboard_check_pressed(vk_left)) action = "turnleft";
 if(keyboard_check_pressed(vk_right)) action = "turnright";
 
@@ -48,6 +49,7 @@ switch(action){
 	case "reset":     look = character_default_look(); break;
 	case "turnleft":  facing = (facing + 1) mod 4; break;
 	case "turnright": facing = (facing + 3) mod 4; break;
+	case "back":      room_goto(rm_menu); break;
 	case "done":
 		global.look = look;
 		room_goto(rm_1);

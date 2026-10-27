@@ -29,5 +29,4 @@ mx = 0;
 my = 0;
 
 cellSize = 32;
-
-
+loadPending = false; // set by load_game: skip saving crops on the next Room End

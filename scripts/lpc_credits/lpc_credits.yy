@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"lpc_credits",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lpc_credits",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

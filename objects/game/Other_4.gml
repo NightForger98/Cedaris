@@ -4,7 +4,8 @@
 roomWidth = room_width;
 roomHeight = room_height;
  
-if(spawnRoom == -1)exit;
+// Place the player where the transition or loaded save says, only in that room
+if(spawnRoom == -1 || room != spawnRoom || !instance_exists(obj_plyr)) exit;
 obj_plyr.x=spawnX;
 obj_plyr.y=spawnY;
 obj_plyr.facing = spawnPlayerFacing; 

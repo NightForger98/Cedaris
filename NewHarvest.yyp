@@ -140,6 +140,11 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"save_system","path":"scripts/save_system/save_system.yy",},},
+    {"id":{"name":"ui","path":"scripts/ui/ui.yy",},},
+    {"id":{"name":"lpc_credits","path":"scripts/lpc_credits/lpc_credits.yy",},},
+    {"id":{"name":"obj_menu","path":"objects/obj_menu/obj_menu.yy",},},
+    {"id":{"name":"rm_menu","path":"rooms/rm_menu/rm_menu.yy",},},
     {"id":{"name":"fnt_eq","path":"fonts/fnt_eq/fnt_eq.yy",},},
     {"id":{"name":"Note1","path":"notes/Note1/Note1.yy",},},
     {"id":{"name":"buttextparent","path":"objects/buttextparent/buttextparent.yy",},},
@@ -1228,6 +1233,7 @@
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
     {"roomId":{"name":"rm_0","path":"rooms/rm_0/rm_0.yy",},},
+    {"roomId":{"name":"rm_menu","path":"rooms/rm_menu/rm_menu.yy",},},
     {"roomId":{"name":"rm_creator","path":"rooms/rm_creator/rm_creator.yy",},},
     {"roomId":{"name":"rm_1","path":"rooms/rm_1/rm_1.yy",},},
     {"roomId":{"name":"rm_2","path":"rooms/rm_2/rm_2.yy",},},

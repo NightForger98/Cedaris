@@ -1,5 +1,6 @@
 /// @description Insert description here
 // You can write your code in this editor
+loadPending = false;
 if(room == rm_1 ){
 ds_crops_instances = ds_grid_create(room_width div cellSize, room_height div cellSize);
 ds_grid_clear(ds_crops_instances, 0 );

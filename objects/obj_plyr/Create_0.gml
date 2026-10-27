@@ -11,7 +11,7 @@ moveY=0;
 
 // Appearance: the look picked in the character creator, or the default look
 // (body parts, clothes and palettes - see character_default_look in character_look)
-look = variable_global_exists("look") ? global.look : character_default_look();
+look = (variable_global_exists("look") && is_struct(global.look)) ? global.look : character_default_look();
 
 
 ///////

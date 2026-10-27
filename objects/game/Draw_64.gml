@@ -29,3 +29,9 @@ draw_set_alpha(1);
 
 
 
+
+// Frame rate (Options > Show FPS)
+if(global.settings.showFps){
+	draw_set_font(fnt_eq);
+	draw_text_transformed_colour(8, 8, string(fps) + " fps", 0.6, 0.6, 0, c_yellow, c_yellow, c_yellow, c_yellow, 1);
+}

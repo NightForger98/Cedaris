@@ -2,7 +2,11 @@
 // You can write your code in this editor
 debug =false;
 randomize();
-room_goto_next();
+settings_load();
+playtime = 0;     // seconds played, saved with the game
+pauseShot = -1;   // snapshot of the screen behind the pause menu
+resumeLock = 0;   // frames to ignore Esc after resuming, so the same press doesn't pause again
+room_goto_next(); // the main menu
 
 guiWidth = display_get_gui_width();
 guiHeight = display_get_gui_height();

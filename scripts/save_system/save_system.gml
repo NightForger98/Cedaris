@@ -1,0 +1,251 @@
+/// Save slots, new game, and player settings.
+/// Saves are JSON files in the game's save folder (saves/slotN.json); settings live in settings.ini.
+
+#macro SAVE_SLOTS 3
+#macro SAVE_VERSION 1
+
+function save_path(_slot){ return "saves/slot" + string(_slot) + ".json"; }
+
+function save_exists(_slot){ return file_exists(save_path(_slot)); }
+
+/// @description Friendly name for a room, shown on save slots.
+function save_room_name(_roomName){
+	switch(_roomName){
+		case "rm_1": return "The Farm";
+		case "rm_2": return "Village";
+		default:     return "Indoors";
+	}
+}
+
+/// @description Read a slot's save data, or undefined if empty or unreadable.
+function save_read(_slot){
+	if(!save_exists(_slot)) return undefined;
+	var f = file_text_open_read(save_path(_slot));
+	var text = "";
+	while(!file_text_eof(f)){ text += file_text_readln(f); }
+	file_text_close(f);
+	try { return json_parse(text); }
+	catch(e) { return undefined; }
+}
+
+/// @description Save the current game. Only works in a room with the player in it.
+function save_game(_slot){
+	// The pause menu deactivates the world; wake it up long enough to read it
+	var frozen = instance_exists(obj_menu) && obj_menu.isPause;
+	instance_activate_all();
+	if(!instance_exists(obj_plyr)){ if(frozen) game_freeze(); return false; }
+	var data = {
+		version: SAVE_VERSION,
+		savedAt: date_current_datetime(),
+		playtime: game.playtime,
+		room: room_get_name(room),
+		x: obj_plyr.x,
+		y: obj_plyr.y,
+		row: obj_plyr.y_frame,
+		look: character_look_to_save(obj_plyr.look),
+		crops: crops_to_save(),
+	};
+	if(!directory_exists("saves")) directory_create("saves");
+	var f = file_text_open_write(save_path(_slot));
+	file_text_write_string(f, json_stringify(data));
+	file_text_close(f);
+	if(frozen) game_freeze();
+	return true;
+}
+
+/// @description Load a slot and go to the room it was saved in.
+function load_game(_slot){
+	var data = save_read(_slot);
+	if(data == undefined) return false;
+	var rm = asset_get_index(data.room);
+	if(rm == -1) return false;
+
+	instance_activate_all(); // in case the game was paused
+	global.look = character_look_from_save(data.look);
+	game.playtime = data.playtime;
+	crops_from_save(data.crops);
+	crops.loadPending = true; // don't let the farm's Room End overwrite the loaded crops
+
+	// Sheet row back to a facing direction (rows: 8 up, 9 left, 10 down, 11 right)
+	var facing = dir.down;
+	switch(data.row){
+		case 8:  facing = dir.up;    break;
+		case 9:  facing = dir.left;  break;
+		case 11: facing = dir.right; break;
+	}
+	with(game){
+		spawnRoom = rm;
+		spawnX = data.x;
+		spawnY = data.y;
+		spawnPlayerFacing = facing;
+		doTransition = false;
+		blackAlpha = 0;
+	}
+	room_goto(rm);
+	return true;
+}
+
+function save_delete(_slot){
+	if(save_exists(_slot)) file_delete(save_path(_slot));
+}
+
+/// @description Slot with the newest save, or -1 if there are none.
+function save_latest_slot(){
+	var best = -1, bestTime = -1;
+	for(var s = 1; s <= SAVE_SLOTS; s++){
+		var d = save_read(s);
+		if(d != undefined && d.savedAt > bestTime){ bestTime = d.savedAt; best = s; }
+	}
+	return best;
+}
+
+/// @description Start a fresh game: clear the farm and go to the character creator.
+function game_new(){
+	instance_activate_all();
+	global.look = undefined;
+	game.playtime = 0;
+	game.spawnRoom = -1;
+	game.doTransition = false;
+	crops_from_save([]);
+	room_goto(rm_creator);
+}
+
+/// @description Format seconds as h:mm.
+function save_format_time(_seconds){
+	var m = floor(_seconds / 60);
+	var mm = string(m mod 60);
+	if(string_length(mm) < 2) mm = "0" + mm;
+	return string(m div 60) + ":" + mm;
+}
+
+// ---------------------------------------------------------------- looks
+// Looks are saved by item and palette name, so saves survive catalog changes.
+
+function character_look_to_save(_look){
+	var cat = lpc_catalog();
+	var out = {race: _look.race, body: _look.body, parts: {}};
+	var keys = variable_struct_get_names(_look.parts);
+	for(var i = 0; i < array_length(keys); i++){
+		var p = _look.parts[$ keys[i]];
+		var want = p[$ "want"] ?? p.item;
+		out.parts[$ keys[i]] = {
+			item: (p.item == -1) ? "" : cat.items[p.item].name,
+			want: (want == -1) ? "" : cat.items[want].name,
+			pal:  (p.pal == -1) ? "" : sprite_get_name(p.pal),
+		};
+	}
+	return out;
+}
+
+function character_look_from_save(_data){
+	var look = character_empty_look(_data.race, _data.body);
+	var keys = variable_struct_get_names(_data.parts);
+	for(var i = 0; i < array_length(keys); i++){
+		var k = keys[i];
+		var s = _data.parts[$ k];
+		if(!variable_struct_exists(look.parts, k)) continue;
+		var p = look.parts[$ k];
+		p.item = (s.item == "") ? -1 : character_find_item(k, s.item);
+		p.want = (s.want == "") ? -1 : character_find_item(k, s.want);
+		p.pal  = (s.pal == "") ? -1 : asset_get_index(s.pal);
+	}
+	character_validate(look);
+	return look;
+}
+
+// ---------------------------------------------------------------- crops
+
+/// @description Planted crops as an array of {gx, gy, type, days}.
+function crops_to_save(){
+	var out = [];
+	if(room == rm_1){
+		// On the farm the live crop instances are the truth
+		var cs = crops.cellSize;
+		with(obj_crop){ array_push(out, {gx: x div cs, gy: y div cs, type: cropType, days: daysOld}); }
+	} else {
+		var g = crops.ds_crops_data;
+		for(var r = 0; r < ds_grid_height(g); r++){
+			if(g[# 0, r] == -1) continue;
+			array_push(out, {gx: g[# 0, r], gy: g[# 1, r], type: g[# 2, r], days: g[# 3, r]});
+		}
+	}
+	return out;
+}
+
+/// @description Replace the stored crops; they respawn the next time the farm loads.
+function crops_from_save(_list){
+	var g = crops.ds_crops_data;
+	var n = array_length(_list);
+	ds_grid_resize(g, 4, max(1, n));
+	ds_grid_clear(g, -1);
+	for(var r = 0; r < n; r++){
+		g[# 0, r] = _list[r].gx;
+		g[# 1, r] = _list[r].gy;
+		g[# 2, r] = _list[r].type;
+		g[# 3, r] = _list[r].days;
+	}
+}
+
+// ---------------------------------------------------------------- settings
+
+function settings_load(){
+	ini_open("settings.ini");
+	global.settings = {
+		fullscreen: ini_read_real("display", "fullscreen", 0),
+		showFps:    ini_read_real("display", "show_fps", 0),
+		volume:     ini_read_real("audio", "master", 80),
+	};
+	ini_close();
+	settings_apply();
+}
+
+function settings_save(){
+	ini_open("settings.ini");
+	ini_write_real("display", "fullscreen", global.settings.fullscreen);
+	ini_write_real("display", "show_fps", global.settings.showFps);
+	ini_write_real("audio", "master", global.settings.volume);
+	ini_close();
+}
+
+function settings_apply(){
+	window_set_fullscreen(global.settings.fullscreen);
+	audio_master_gain(global.settings.volume / 100);
+}
+
+// ---------------------------------------------------------------- pausing
+
+/// @description True in rooms where the game is actually being played (not menus).
+function game_is_playing_room(){
+	return room != rm_0 && room != rm_menu && room != rm_creator;
+}
+
+/// @description Freeze everything except the game controller, crops and the menu.
+function game_freeze(){
+	instance_deactivate_all(true);
+	instance_activate_object(game);
+	instance_activate_object(crops);
+	instance_activate_object(obj_menu);
+}
+
+/// @description Open the pause menu over a snapshot of the current frame.
+function game_pause(){
+	if(instance_exists(obj_menu)) return;
+	with(game){
+		pauseShot = sprite_create_from_surface(application_surface, 0, 0,
+			surface_get_width(application_surface), surface_get_height(application_surface), false, false, 0, 0);
+	}
+	crops.planting = false;
+	var m = instance_create_depth(0, 0, -10000, obj_menu);
+	m.isPause = true;
+	m.screen = "pause";
+	game_freeze();
+}
+
+function game_unpause(){
+	instance_activate_all();
+	with(obj_menu) instance_destroy();
+	with(game){
+		if(pauseShot != -1){ sprite_delete(pauseShot); pauseShot = -1; }
+		resumeLock = 2;
+	}
+}

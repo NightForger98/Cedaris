@@ -34,6 +34,7 @@ var by = guiH - 70;
 var bw = 170;
 var bx = palX + palW - bw * 3 - 24;
 buttons = [
+	{label: "Back",      x1: bx - bw - 12,     y1: by, x2: bx - 12,           y2: by + 44, action: "back"},
 	{label: "Randomise", x1: bx,               y1: by, x2: bx + bw,           y2: by + 44, action: "random"},
 	{label: "Reset",     x1: bx + bw + 12,     y1: by, x2: bx + bw * 2 + 12,  y2: by + 44, action: "reset"},
 	{label: "Done",      x1: bx + bw * 2 + 24, y1: by, x2: bx + bw * 3 + 24,  y2: by + 44, action: "done"},

@@ -1,5 +1,6 @@
-/// @description Draw Brom, his name, and a prompt when the player is close
-event_inherited();
+/// @description Draw Brom (hammering or standing), his name, and a prompt when the player is close
+if(act != undefined) character_draw(look, 0, 0, round(x - x_offset), round(y - y_offset), 1, {act: act, i: floor(actStep), dir: 2});
+else event_inherited();
 draw_set_font(fnt_eq);
 draw_set_halign(fa_center);
 draw_set_valign(fa_bottom);

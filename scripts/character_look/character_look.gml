@@ -89,7 +89,7 @@ function character_slot_options(_slot, _look){
 	var out = [];
 	for(var i = 0; i < array_length(_slot.items); i++){
 		var it = _slot.items[i];
-		if(character_item_fits(it, _look.body) && character_race_allows(race, _slot.key, it)) array_push(out, it);
+		if(character_item_fits_any(it, _look.body) && character_race_allows(race, _slot.key, it)) array_push(out, it);
 	}
 	return out;
 }
@@ -221,11 +221,24 @@ function character_set_body(_look, _body){
 }
 
 /// @description Draw one 64x64 frame of a look. _frame is the sheet column, _row the sheet row.
-function character_draw(_look, _frame, _row, _x, _y, _scale){
+/// _action (optional) = {act, i, dir}: draw step i of an action (see the actions script) facing dir 0-3;
+/// then _frame and _row are ignored.
+function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined){
 	var cat = lpc_catalog();
 	var parts = _look.parts;
 	var skin = parts.body.pal;
 	var eyes = parts.eyes.pal;
+
+	// Which 64x64 frame the body and clothes show
+	var sx = _frame * 64, sy = _row * 64;
+	var act = undefined;
+	if(_action != undefined){
+		act = _action.act;
+		var step = min(_action.i, act.frames - 1);
+		var bodyFrame = act.custom ? act.seq[_action.dir][step] : act.seq[step];
+		sx = bodyFrame * 64;
+		sy = (act.row + _action.dir) * 64;
+	}
 
 	// Gather every sprite layer of every part, then draw back to front by z
 	var list = [];
@@ -235,8 +248,19 @@ function character_draw(_look, _frame, _row, _x, _y, _scale){
 		if(part.item == -1) continue;
 		var it = cat.items[part.item];
 		var pal = (part.pal == -1) ? it.defPal : part.pal;
-		for(var l = 0; l < array_length(it.layers); l++){
-			var subs = it.layers[l][$ _look.body];
+		var layers = it.layers;
+		var lsx = sx, lsy = sy, lsw = 64, ldx = _x, ldy = _y;
+		// During a custom action the held item swaps to its oversized sheet, centred on the 64px body
+		if(act != undefined && act.custom && slots[s].key == "held" && variable_struct_exists(it.actions, act.name)){
+			layers = it.actions[$ act.name];
+			lsw = act.fs;
+			lsx = min(_action.i, act.frames - 1) * act.fs;
+			lsy = _action.dir * act.fs;
+			ldx = _x - (act.fs - 64) / 2 * _scale;
+			ldy = _y - (act.fs - 64) / 2 * _scale;
+		}
+		for(var l = 0; l < array_length(layers); l++){
+			var subs = layers[l][$ _look.body];
 			if(subs == undefined) continue;
 			for(var k = 0; k < array_length(subs); k++){
 				var kind = subs[k].k;
@@ -245,17 +269,17 @@ function character_draw(_look, _frame, _row, _x, _y, _scale){
 				else if(kind == -2) p = skin;
 				else if(kind == -3) p = eyes;
 				// -4 = fixed colours, drawn without the palette shader
-				array_push(list, {order: it.layers[l].z * 1000 + s * 10 + k, spr: subs[k].spr, pal: p});
+				array_push(list, {order: layers[l].z * 1000 + s * 10 + k, spr: subs[k].spr, pal: p,
+				                  sx: lsx, sy: lsy, sw: lsw, dx: ldx, dy: ldy});
 			}
 		}
 	}
 	array_sort(list, function(a, b){ return a.order - b.order; });
 
-	var size = 64;
 	for(var i = 0; i < array_length(list); i++){
 		var e = list[i];
 		if(e.pal != -4) lorikeet_set(e.pal);
-		draw_sprite_part_ext(e.spr, 0, _frame * size, _row * size, size, size, _x, _y, _scale, _scale, c_white, 1);
+		draw_sprite_part_ext(e.spr, 0, e.sx, e.sy, e.sw, e.sw, e.dx, e.dy, _scale, _scale, c_white, 1);
 		if(e.pal != -4) lorikeet_reset();
 	}
 }
@@ -270,11 +294,27 @@ function character_draw_item(_i, _body, _pal, _frame, _row, _crop, _x, _y, _scal
 			if(character_item_fits(_i, cat.bodies[b])){ _body = cat.bodies[b]; break; }
 		}
 	}
+	var layers = it.layers;
+	// Items with only an oversized swing (fishing rod, whip, long spears): show its first frame facing south
+	var fs = 64;
+	if(array_length(layers) == 0){
+		var acts = variable_struct_get_names(it.actions);
+		if(array_length(acts) == 0) return;
+		layers = it.actions[$ acts[0]];
+		fs = cat.anims[$ acts[0]].fs;
+		_row = 2;
+		_crop = [0, 0, fs, fs];
+		if(!variable_struct_exists(layers[0], _body)){
+			for(var b = 0; b < array_length(cat.bodies); b++){
+				if(variable_struct_exists(layers[0], cat.bodies[b])){ _body = cat.bodies[b]; break; }
+			}
+		}
+	}
 	var pal = (_pal == -1) ? it.defPal : _pal;
 	var skin = character_find_palette("body", "light");
 	var eyes = character_find_palette("eye", "blue");
-	for(var l = 0; l < array_length(it.layers); l++){
-		var subs = it.layers[l][$ _body];
+	for(var l = 0; l < array_length(layers); l++){
+		var subs = layers[l][$ _body];
 		if(subs == undefined) continue;
 		for(var k = 0; k < array_length(subs); k++){
 			var kind = subs[k].k;
@@ -283,7 +323,7 @@ function character_draw_item(_i, _body, _pal, _frame, _row, _crop, _x, _y, _scal
 			else if(kind == -2) p = skin;
 			else if(kind == -3) p = eyes;
 			if(p != -4) lorikeet_set(p);
-			draw_sprite_part_ext(subs[k].spr, 0, _frame * 64 + _crop[0], _row * 64 + _crop[1], _crop[2], _crop[3], _x, _y, _scale, _scale, c_white, 1);
+			draw_sprite_part_ext(subs[k].spr, 0, _frame * fs + _crop[0], _row * fs + _crop[1], _crop[2], _crop[3], _x, _y, _scale, _scale, c_white, 1);
 			if(p != -4) lorikeet_reset();
 		}
 	}

@@ -28,6 +28,10 @@ SLOT = {
     'weapon': 'held',
 }
 SKIP_FILES = {'body/special', 'body/wheelchair'}
+# LPC custom (oversized) tool/weapon animations we support: they replay the body's slash or thrust rows.
+# backslash_128 / halfslash_128 need body rows we don't convert; walk_128 isn't a custom animation.
+CUSTOM_OK = {'tool_axe', 'tool_hammer', 'tool_rod', 'tool_whip', 'whip_oversize', 'slash_oversize',
+             'slash_reverse_oversize', 'thrust_oversize', 'slash_128', 'thrust_128'}
 
 def load(p):
     return json.load(open(p, encoding='utf-8'))
@@ -103,9 +107,33 @@ for dp, dn, fn in os.walk(os.path.join(repo, 'sheet_definitions')):
                 mode = 'raw'
 
         layers = []
+        actions = {}   # custom animation -> layers, for held items
         for lk in sorted(k for k in d if k.startswith('layer_')):
             L = d[lk]
-            if 'custom_animation' in L or L.get('is_mask'):
+            if L.get('is_mask'):
+                continue
+            if 'custom_animation' in L:
+                anim = L['custom_animation']
+                if slot != 'held' or anim not in CUSTOM_OK:
+                    continue
+                per_body = {}
+                fv = variant.replace(' ', '_') if variant else None
+                for b in BODIES:
+                    path = L.get(b)
+                    if not path:
+                        continue
+                    base = 'spritesheets/' + path.rstrip('/')
+                    # One sheet already in the custom layout: <path>.png, <path>/<variant>.png or <path>/<anim>.png
+                    cands = ([base + '/' + fv + '.png'] if fv else []) + [base + '.png', base + '/' + anim + '.png']
+                    hit = next((c for c in cands if c in tree), None)
+                    if hit is None:
+                        continue
+                    name = sprite_name(path.rstrip('/') + '/' + anim, variant if mode.startswith('variant') else None)
+                    sprites[name] = {'custom': {'file': hit, 'anim': anim}, 'groups': groups, 'mode': mode}
+                    files.add(hit)
+                    per_body[b] = name
+                if per_body:
+                    actions.setdefault(anim, []).append({'z': L.get('zPos', 0), 'bodies': per_body})
                 continue
             per_body = {}
             for b in BODIES:
@@ -127,12 +155,12 @@ for dp, dn, fn in os.walk(os.path.join(repo, 'sheet_definitions')):
                 per_body[b] = name
             if per_body:
                 layers.append({'z': L.get('zPos', 0), 'bodies': per_body})
-        if not layers:
+        if not layers and not actions:
             skipped['no_art:' + str(d.get('type_name'))] += 1
             continue
         items.append({
             'name': d.get('name', f[:-5]), 'file': rel, 'slot': slot, 'mode': mode,
-            'groups': groups, 'layers': layers,
+            'groups': groups, 'layers': layers, 'actions': actions, 'anims': d.get('animations', []),
             'credits': d.get('credits', []),
         })
 
@@ -147,3 +175,4 @@ print('modes', dict(collections.Counter(i['mode'] for i in items)))
 print('sprites', len(sprites), 'files', len(files))
 print('bodies covered', dict(collections.Counter(b for i in items for L in i['layers'] for b in L['bodies'])))
 print('skipped', skipped.most_common(15))
+print('held items with custom actions', [(i['name'], sorted(i['actions'])) for i in items if i['actions']])

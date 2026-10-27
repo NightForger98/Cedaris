@@ -23,12 +23,18 @@ Run from Git Bash. Work in a scratch folder (`$W` below), not inside the project
    ```bash
    (printf '/sheet_definitions/\n/palette_definitions/\n'; cat $W/out/files.txt) | MSYS_NO_PATHCONV=1 git -C $W/lpc sparse-checkout set --no-cone --stdin
    ```
-4. Write the conversion jobs: `python -I jobs.py $W/out $W/lpc`
+4. Parse the custom (oversized) tool and weapon animations, then write the conversion jobs:
+   ```bash
+   git -C $W/lpc show HEAD:sources/custom-animations.ts > $W/custom-animations.ts
+   python -I custom_anims.py $W/custom-animations.ts $W/out
+   python -I jobs.py $W/out $W/lpc
+   ```
 5. Convert (assembles universal sheets and palette-indexes them):
    `powershell -File convert.ps1 -Jobs $W/out/jobs.txt -OutDir $W/sheets > $W/convert_log.txt`
 6. Write everything into the project (close GameMaker first):
    `python -I finalize.py $W <project folder> $W/lpc`
-   (`finalize.py` expects `out/`, `sheets/` and `convert_log.txt` inside `$W`.)
+   (`finalize.py` expects `out/`, `sheets/` and `convert_log.txt` inside `$W`. It reuses existing sprite ids, so
+   unchanged sprites produce no git changes.)
 
 Then run `./build.sh` from the project folder.
 

@@ -334,7 +334,8 @@ function item_shop_stock(){
 		["Dagger", 80], ["Arming Sword", 150], ["Saber", 180], ["Rapier", 200], ["Longsword", 250], ["Glowsword", 600],
 		["Mace", 160], ["Flail", 190], ["Waraxe", 220], ["Spear", 120], ["Halberd", 260], ["Cane", 30],
 		["Simple staff", 120], ["Gnarled staff", 180], ["Loop staff", 220], ["S staff", 240], ["Diamond staff", 400],
-		["Slingshot", 70], ["Crossbow", 300],
+		["Slingshot", 70], ["Crossbow", 300], ["Fishing Rod", 60], ["Club", 60], ["Boomerang", 90], ["Katana", 320],
+		["Scimitar", 240], ["Longsword alt", 280], ["Long spear", 200], ["Trident", 280], ["Dragon spear", 450],
 	];
 	s = [];
 	for(var i = 0; i < array_length(held); i++) array_push(s, {id: "c|held|" + held[i][0], price: held[i][1]});
@@ -364,6 +365,12 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			if(d.cat == -1) break;
 			// Zoom into the part of the 64x64 frame where this slot's art sits
 			var r = item_icon_crop(d.slot);
+			if(d.slot == "held" && array_length(lpc_catalog().items[d.cat].layers) == 0){
+				// Only an oversized swing sheet: draw its south-facing first frame scaled to fit
+				var a = variable_struct_get_names(lpc_catalog().items[d.cat].actions)[0];
+				var f = lpc_catalog().anims[$ a].fs;
+				r = [0, 0, f, f];
+			}
 			var sc = _size / max(r[2], r[3]);
 			var pal = (_stack.pal != "") ? asset_get_index(_stack.pal) : -1;
 			character_draw_item(d.cat, _body, pal, 0, 10, r, cx - r[2] * sc / 2, cy - r[3] * sc / 2, sc);

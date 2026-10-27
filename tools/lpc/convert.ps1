@@ -46,23 +46,45 @@ public static class LpcConv {
             string name = parts[0];
 
             // Assemble the sheet
-            var srcs = new List<KeyValuePair<int, int[]>>();
-            var dims = new List<int[]>();
             int W = 832, H = Rows * 64;
-            foreach (var f in parts[2].Split(';')) {
-                int eq = f.IndexOf('=');
-                string anim = f.Substring(0, eq), path = f.Substring(eq + 1);
-                if (!File.Exists(path)) { log.AppendLine("MISSING " + name + " " + path); continue; }
-                int w, h;
-                var px = Read(path, out w, out h);
-                srcs.Add(new KeyValuePair<int, int[]>(Row[anim] * 64, px));
-                dims.Add(new int[] { w, h });
-                if (w > W) W = w;
-            }
-            var sheet = new int[W * H];
-            for (int s = 0; s < srcs.Count; s++) {
-                int top = srcs[s].Key, w = dims[s][0], h = Math.Min(dims[s][1], H - top);
-                for (int y = 0; y < h; y++) Array.Copy(srcs[s].Value, y * w, sheet, (top + y) * W, w);
+            int[] sheet;
+            if (parts[2].StartsWith("CUSTOM|")) {
+                // Oversized tool/weapon animation: 4 rows (n, w, s, e) of frameSize frames.
+                // With a frame map, each output frame copies the listed source frame from the same row.
+                var c = parts[2].Split(new char[] { '|' }, 5);
+                int fs = int.Parse(c[1]), cols = int.Parse(c[2]);
+                string[] map = c[3].Length > 0 ? c[3].Split('/') : null;
+                if (!File.Exists(c[4])) { log.AppendLine("MISSING " + name + " " + c[4]); continue; }
+                int sw, sh;
+                var spx = Read(c[4], out sw, out sh);
+                W = cols * fs; H = 4 * fs;
+                sheet = new int[W * H];
+                for (int r = 0; r < 4; r++) {
+                    var fr = map != null ? map[r].Split(',') : null;
+                    for (int col = 0; col < cols; col++) {
+                        int src = fr != null ? int.Parse(fr[col]) : col;
+                        if ((src + 1) * fs > sw || (r + 1) * fs > sh) continue;
+                        for (int y = 0; y < fs; y++) Array.Copy(spx, (r * fs + y) * sw + src * fs, sheet, (r * fs + y) * W + col * fs, fs);
+                    }
+                }
+            } else {
+                var srcs = new List<KeyValuePair<int, int[]>>();
+                var dims = new List<int[]>();
+                foreach (var f in parts[2].Split(';')) {
+                    int eq = f.IndexOf('=');
+                    string anim = f.Substring(0, eq), path = f.Substring(eq + 1);
+                    if (!File.Exists(path)) { log.AppendLine("MISSING " + name + " " + path); continue; }
+                    int w, h;
+                    var px = Read(path, out w, out h);
+                    srcs.Add(new KeyValuePair<int, int[]>(Row[anim] * 64, px));
+                    dims.Add(new int[] { w, h });
+                    if (w > W) W = w;
+                }
+                sheet = new int[W * H];
+                for (int s = 0; s < srcs.Count; s++) {
+                    int top = srcs[s].Key, w = dims[s][0], h = Math.Min(dims[s][1], H - top);
+                    for (int y = 0; y < h; y++) Array.Copy(srcs[s].Value, y * w, sheet, (top + y) * W, w);
+                }
             }
 
             // Always keep the original colours, used when an item can't be recoloured

@@ -31,6 +31,9 @@ What each tool and weapon actually ships with, from the generator's `sheet_defin
 | Staffs, Halberd, long spears | `thrust_oversize` (192 px) | custom |
 | Bows, Slingshot | `shoot` (64 px) | already in our sheets |
 
+**Watering isn't separate art**: the generator's own table (`sources/state/constants.ts`) plays it as
+thrust frames 0, 1, 4, 4, 4, 4, 5, so it works for every body that can thrust.
+
 **How LPC custom animations work** (`sources/custom-animations.ts`): each is a frame size plus, per
 direction, a list of frames taken from the body's standard animations, e.g. `tool_axe` = slash frames
 5, 5, 4, 4, 3, 1, 0, 0, 0, 0 at 128 px. So:
@@ -183,10 +186,10 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 
 ## Order, size and why
 
-| # | Phase | Size | Why here |
+| # | Phase | Size | Status |
 |---|---|---|---|
-| 1 | 0.2 Pipeline custom animations | M | every tool and weapon action needs the art |
-| 2 | 0.1 Action system | M | the core of farming, gathering, combat and magic |
+| 1 | 0.2 Pipeline custom animations | M | **done** (27 items, 87 swing sprites) |
+| 2 | 0.1 Action system | M | **done**: click/Space uses the held item; `action_hit` is the hook for effects |
 | 3 | 0.3 Time + 0.4 Energy/Health + 0.5 World state | L | daily loop, costs and saving for everything after |
 | 4 | 1 Farming loop | L | the game's main loop; brings Luck and Stamina in |
 | 5 | 2 Gathering + smelting + upgrades | M | feeds crafting with real materials |

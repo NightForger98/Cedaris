@@ -13,6 +13,7 @@ import json, os, sys
 out, repo = sys.argv[1:3]
 cat = json.load(open(os.path.join(out, 'catalog.json')))
 general = json.load(open(os.path.join(repo, 'palette_definitions', 'all', 'all_lpcr.json')))
+customs = json.load(open(os.path.join(out, 'custom_anims.json')))  # parsed from the generator's custom-animations.ts
 
 def candidates(material, base):
     """Base variant first, then every other ramp of the same material, then the general LPC ramps."""
@@ -38,7 +39,14 @@ for name, s in sorted(cat['sprites'].items()):
             gl = [candidates(m, base) for m, base in s['groups']]
         meta[name] = gl
         groups = '|'.join('/'.join(ramp(m, v) for m, v in g) for g in gl)
-    files = ';'.join(a + '=' + os.path.join(repo, p.replace('/', os.sep)) for a, p in s['files'].items())
+    if 'custom' in s:
+        # Custom (oversized) animation sheet: CUSTOM|frame size|columns|per-row source frames ("" = copy as laid out)|file
+        a = customs[s['custom']['anim']]
+        rows = '' if not a['single'] else '/'.join(','.join(f.split(',')[1] for f in row) for row in a['frames'])
+        files = 'CUSTOM|%d|%d|%s|%s' % (a['frameSize'], len(a['frames'][0]), rows,
+                                        os.path.join(repo, s['custom']['file'].replace('/', os.sep)))
+    else:
+        files = ';'.join(a + '=' + os.path.join(repo, p.replace('/', os.sep)) for a, p in s['files'].items())
     lines.append('\t'.join([name, groups, files]))
 open(os.path.join(out, 'jobs.txt'), 'w', encoding='utf-8').write('\n'.join(lines) + '\n')
 json.dump(meta, open(os.path.join(out, 'jobs_meta.json'), 'w'))

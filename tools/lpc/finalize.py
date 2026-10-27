@@ -43,9 +43,18 @@ def write_sprite(name, png_path, folder, w=None, h=None):
     if w is None:
         w, h = png_size(png_path)
     d = os.path.join(proj, 'sprites', name)
+    frame, layer, key = str(uuid.uuid4()), str(uuid.uuid4()), str(uuid.uuid4())
+    old_yy = os.path.join(d, name + '.yy')
+    if os.path.exists(old_yy):
+        # Keep the existing ids so regenerating doesn't rename every file (no git churn)
+        txt = open(old_yy, encoding='utf-8').read()
+        m1 = re.search(r'"\$GMSpriteFrame":"v1","%Name":"([0-9a-f-]+)"', txt)
+        m2 = re.search(r'"\$GMImageLayer":"","%Name":"([0-9a-f-]+)"', txt)
+        m3 = re.search(r'"IsCreationKey":false,"Key":0\.0,', txt) and re.search(r'"Disabled":false,"id":"([0-9a-f-]+)"', txt)
+        if m1 and m2 and m3:
+            frame, layer, key = m1[1], m2[1], m3[1]
     if os.path.exists(d):
         shutil.rmtree(d)
-    frame, layer, key = str(uuid.uuid4()), str(uuid.uuid4()), str(uuid.uuid4())
     os.makedirs(os.path.join(d, 'layers', frame))
     shutil.copyfile(png_path, os.path.join(d, frame + '.png'))
     shutil.copyfile(png_path, os.path.join(d, 'layers', frame, layer + '.png'))
@@ -180,9 +189,16 @@ sel_material = {}  # sheet name -> (material, default variant) of its selectable
 def folder_of(slot):
     return slot
 
+def item_layers(it):
+    """Every layer of an item: its normal layers plus the layers of its custom (oversized) actions."""
+    out = list(it['layers'])
+    for anim_layers in it.get('actions', {}).values():
+        out += anim_layers
+    return out
+
 slot_of_sheet = {}
 for it in cat['items']:
-    for L in it['layers']:
+    for L in item_layers(it):
         for n in L['bodies'].values():
             slot_of_sheet.setdefault(n, it['slot'])
 
@@ -223,23 +239,40 @@ def gml_str(s):
     return '"' + s.replace('\\', '/').replace('"', "'") + '"'
 
 KIND = {'sel': '-1', 'skin': '-2', 'eye': '-3', 'raw': '-4'}
-lines = []
-for it in cat['items']:
-    first = next(iter(it['layers'][0]['bodies'].values()))
-    mat, default = sel_material.get(first, ('', ''))
-    def_pal = palettes[(mat, default)] if mat else '-1'
-    # Mostly fixed colours (gems, glasses...): recolouring barely shows, so offer no colour choice
-    if max(fixed_frac.get(n, 0) for L in it['layers'] for n in L['bodies'].values()) > 0.5:
-        mat = ''
-    layer_src = []
-    for L in it['layers']:
+def layers_gml(layers):
+    out = []
+    for L in layers:
         bodies = []
         for b, n in L['bodies'].items():
             subs = ', '.join('{spr: %s, k: %s}' % (spr, KIND.get(k, k)) for spr, k in sublayers[n])
             bodies.append('%s: [%s]' % (b, subs))
-        layer_src.append('{z: %d, %s}' % (L['z'], ', '.join(bodies)))
-    lines.append('\t\t{name: %s, slot: %s, material: %s, defPal: %s, layers: [%s]},' % (
-        gml_str(it['name']), gml_str(it['slot']), gml_str(mat), def_pal, ', '.join(layer_src)))
+        out.append('{z: %d, %s}' % (L['z'], ', '.join(bodies)))
+    return '[' + ', '.join(out) + ']'
+
+lines = []
+used_anims = set()
+for it in cat['items']:
+    first = next(iter(item_layers(it)[0]['bodies'].values()))
+    mat, default = sel_material.get(first, ('', ''))
+    def_pal = palettes[(mat, default)] if mat else '-1'
+    # Mostly fixed colours (gems, glasses...): recolouring barely shows, so offer no colour choice
+    if max(fixed_frac.get(n, 0) for L in item_layers(it) for n in L['bodies'].values()) > 0.5:
+        mat = ''
+    actions = ', '.join('%s: %s' % (a, layers_gml(ls)) for a, ls in sorted(it.get('actions', {}).items()))
+    used_anims.update(it.get('actions', {}))
+    lines.append('\t\t{name: %s, slot: %s, material: %s, defPal: %s, anims: [%s], actions: {%s}, layers: %s},' % (
+        gml_str(it['name']), gml_str(it['slot']), gml_str(mat), def_pal,
+        ', '.join(gml_str(a) for a in it.get('anims', [])), actions, layers_gml(it['layers'])))
+
+# Custom animations: frame size, which body animation they replay, and the body frame for each
+# output frame per direction (rows n, w, s, e) - from the generator's custom-animations.ts
+customs = json.load(open(os.path.join(out, 'custom_anims.json')))
+anim_lines = []
+for a in sorted(used_anims):
+    c = customs[a]
+    base = c['frames'][0][0].split(',')[0].rsplit('-', 1)[0]
+    seq = '[' + ', '.join('[' + ', '.join(f.split(',')[1] for f in row) + ']' for row in c['frames']) + ']'
+    anim_lines.append('\t\t%s: {fs: %d, base: %s, cols: %d, seq: %s},' % (a, c['frameSize'], gml_str(base), len(c['frames'][0]), seq))
 
 pal_lines = []
 for m in PAL_MATERIALS:
@@ -253,6 +286,9 @@ gml = '''/// Generated from the Universal LPC Spritesheet Character Generator by
 /// sprites with how each is coloured:
 ///   k = -1 selectable palette, -2 skin palette, -3 eye palette, -4 fixed colours, or a fixed palette sprite.
 /// Sheets use the universal LPC layout (64x64 frames, walk cycle in rows 8-11, watering in rows 21-24).
+/// anims: the LPC animations the item supports. actions: layers for LPC custom (oversized) animations,
+/// in sheets of 4 rows (n, w, s, e) of cat.anims[name].fs-sized frames; while one plays, the body replays
+/// frames seq[direction][i] of its cat.anims[name].base animation.
 function lpc_catalog(){
 	static cat = undefined;
 	if(cat != undefined) return cat;
@@ -261,12 +297,15 @@ function lpc_catalog(){
 	cat.palettes = {
 %s
 	};
+	cat.anims = {
+%s
+	};
 	cat.items = [
 %s
 	];
 	return cat;
 }
-''' % (', '.join(gml_str(b) for b in BODIES), '\n'.join(pal_lines), '\n'.join(lines))
+''' % (', '.join(gml_str(b) for b in BODIES), '\n'.join(pal_lines), '\n'.join(anim_lines), '\n'.join(lines))
 
 sd = os.path.join(proj, 'scripts', 'lpc_catalog')
 os.makedirs(sd, exist_ok=True)

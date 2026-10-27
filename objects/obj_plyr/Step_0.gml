@@ -2,6 +2,29 @@
 // You can write your code in this editor
 // Stand still while the inventory is open
 if(instance_exists(obj_inventory)){ moveX = 0; moveY = 0; facing = -1; exit; }
+
+// Using the held item: play the action through, firing its effect once on the hit step
+if(act != undefined){
+	actStep += act.fps / game_get_speed(gamespeed_fps);
+	if(!actHit && actStep >= act.hit){
+		actHit = true;
+		action_hit(id, lpc_catalog().items[look.parts.held.item].name, actDir);
+	}
+	if(actStep >= act.frames) act = undefined;
+	moveX = 0; moveY = 0;
+	exit;
+}
+var planting = instance_exists(crops) && crops.planting;
+if(!planting && (mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_space))){
+	act = character_action_for(look);
+	if(act != undefined){
+		actStep = 0;
+		actHit = false;
+		actDir = clamp(y_frame - 8, 0, 3); // walk rows 8-11 are n, w, s, e
+		moveX = 0; moveY = 0;
+		exit;
+	}
+}
 var in_left =keyboard_check(vk_left);
 var in_right =keyboard_check(vk_right);
 var in_up=keyboard_check(vk_up);

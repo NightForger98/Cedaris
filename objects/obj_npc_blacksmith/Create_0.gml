@@ -7,6 +7,11 @@ moveY = 0;
 y_frame = 10;    // face down
 near = false;
 
+// Every few seconds he swings his hammer (the same action system as the player)
+act = undefined;
+actStep = 0;
+hammerTimer = 60;
+
 // A stout dwarf smith in an apron, hammer in hand
 look = character_empty_look("Dwarf", "male");
 var p = look.parts;

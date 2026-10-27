@@ -25,4 +25,5 @@ if(facing != -1){
 }
 
 // All layers, palettes and draw order live in character_draw (character_look script)
-character_draw(look, floor(x_frame), y_frame, xx, yy, 1);
+if(act != undefined) character_draw(look, 0, 0, xx, yy, 1, {act: act, i: floor(actStep), dir: actDir});
+else character_draw(look, floor(x_frame), y_frame, xx, yy, 1);

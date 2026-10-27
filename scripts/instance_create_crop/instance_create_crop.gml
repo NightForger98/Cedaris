@@ -43,7 +43,7 @@ function instance_create_crop(){
 with(inst){
 	depth_sort();
 	cropType = argument2; //crop type
-	growthStageDuration = crops.ds_crops_types[# 0, cropType];
+	growthStageDuration = crop_table()[cropType].stageDays;
 }
 return inst;
 }

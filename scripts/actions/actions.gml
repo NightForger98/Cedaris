@@ -76,9 +76,13 @@ function character_item_fits_any(_i, _body){
 }
 
 /// @description Called once per action, on its hit step. Farming, gathering and combat hook in here.
-/// _dir: 0 north, 1 west, 2 south, 3 east. Returns nothing yet - effects arrive with the farming phase.
+/// _dir: 0 north, 1 west, 2 south, 3 east. The hoe tills and the watering can waters the cell in front.
 function action_hit(_user, _item, _dir){
-	var tx = _user.x + [0, -32, 0, 32][_dir];
-	var ty = _user.y + [-32, 0, 32, 0][_dir];
-	show_debug_message("action hit: " + _item + " at " + string(tx) + "," + string(ty));
+	if(!instance_exists(crops)) return;
+	var cell = farm_front_cell(_user, _dir);
+	switch(_item){
+		case "Hoe":          farm_till(cell[0], cell[1]); break;
+		case "Watering Can": farm_water(_user, cell[0], cell[1]); break;
+		// Axe, pickaxe, scythe and weapons: gathering and combat phases
+	}
 }

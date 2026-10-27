@@ -79,10 +79,10 @@ var listBottom = panelY2 - 30;
 var overPanel = (mx >= panelX1 && mx < panelX2 && my >= listTop && my < listBottom);
 
 if(shop){
-	ui_text(panelX1 + 16, panelY1 + 26, "Brom's Smithy", 0.8, c.accent, fa_left);
+	ui_text(panelX1 + 16, panelY1 + 26, shopTitle, 0.8, c.accent, fa_left);
 	var charm = inv.stats.charm;
 	ui_text(panelX2 - 16, panelY1 + 26, (charm > 0 && !inv_is_free()) ? "Charm discount " + string(min(30, charm)) + "%  -  right-click to sell" : "Right-click your items to sell", 0.45, c.dim, fa_right);
-	var stock = item_shop_stock();
+	var stock = shopStock;
 	scroll = min(scroll, max(0, array_length(stock) * rowH - (listBottom - listTop)));
 	for(var i = 0; i < array_length(stock); i++){
 		var y1 = listTop + i * rowH - scroll;
@@ -101,6 +101,20 @@ if(shop){
 			else { inv.gold -= price; showMessage("Bought " + item_def(itemId).name); changed(); }
 		}
 	}
+} else if(ship){
+	// Shipping bin: what's in it and what it'll pay tomorrow morning
+	ui_text(panelX1 + 16, panelY1 + 26, "Shipping Bin", 0.8, c.accent, fa_left);
+	ui_text(panelX2 - 16, panelY1 + 26, "Right-click to ship one, Shift+right-click a stack", 0.42, c.dim, fa_right);
+	var list = shipping_list();
+	if(array_length(list) == 0) ui_text((panelX1 + panelX2) / 2, (listTop + listBottom) / 2, "Empty. Shipped items are paid for overnight.", 0.55, c.dim);
+	for(var i = 0; i < array_length(list); i++){
+		var y1 = listTop + i * 40;
+		if(y1 + 40 > listBottom - 30) break;
+		item_draw_icon(item_stack(list[i].id), panelX1 + 14, y1, 36, body);
+		ui_text(panelX1 + 60, y1 + 18, item_def(list[i].id).name + "  x" + string(list[i].count), 0.55, c_white, fa_left);
+		ui_text(panelX2 - 20, y1 + 18, string(item_sell_price(list[i].id) * list[i].count) + " gold", 0.55, c.accent, fa_right);
+	}
+	ui_text(panelX2 - 20, listBottom - 6, "Pays tomorrow: " + string(shipping_value()) + " gold", 0.6, c.accent, fa_right);
 } else if(craft){
 	var title = "Crafting Table";
 	if(filter == "dye") title += " - dyes";

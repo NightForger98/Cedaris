@@ -18,6 +18,22 @@ if(act != undefined){
 }
 var planting = instance_exists(crops) && crops.planting;
 if(!planting && (mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_space))){
+	var faceDir = clamp(y_frame - 8, 0, 3);
+	var cell = instance_exists(crops) ? farm_front_cell(id, faceDir) : [0, 0];
+	var cropHere = instance_exists(crops) ? farm_crop_at(cell[0], cell[1]) : noone;
+	var held = inv_held_stack();
+	var heldType = (held == undefined) ? "" : item_def(held.id).type;
+	// A ripe crop in front: harvest it, whatever you're holding
+	if(cropHere != noone && cropHere.growthStage >= cropHere.maxGrowthStage){ farm_harvest(cropHere); exit; }
+	// Seeds: plant; produce: eat
+	if(heldType == "seed"){
+		if(farm_plant(cell[0], cell[1], item_def(held.id).crop)){
+			held.count--;
+			if(held.count <= 0) global.inv.slots[global.inv.hotbar] = undefined;
+		}
+		exit;
+	}
+	if(heldType == "produce"){ farm_eat(held); exit; }
 	act = character_action_for(look);
 	// Too tired to swing a tool (weapons still work)
 	if(act != undefined && world_time_ready() && vitals_exhausted() && item_is_tool(lpc_catalog().items[look.parts.held.item].name)){

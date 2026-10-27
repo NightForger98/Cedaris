@@ -9,7 +9,7 @@ if(sleeping){
 	blackAlpha = min(1, blackAlpha + 0.025);
 	if(blackAlpha >= 1 && !sleepDone){
 		sleepDone = true;
-		lostGold = day_advance(passedOut);
+		dayReport = day_advance(passedOut);
 		crops.loadPending = true; // the store already holds today's crops
 		wakeAtBed = true;
 		spawnRoom = -1;
@@ -30,7 +30,9 @@ if(autosavePending && instance_exists(obj_plyr)){
 	var saved = (variable_global_exists("saveSlot") && global.saveSlot != undefined) && save_game(global.saveSlot);
 	hudMessage = weekday_name(global.clock.day) + " " + string(global.clock.day) + " of " + season_name(global.clock.season)
 	           + (saved ? "  -  saved to slot " + string(global.saveSlot) : "  -  no free save slot: save from the pause menu")
-	           + ((lostGold > 0) ? "  -  you passed out and lost " + string(lostGold) + " gold" : "");
+	           + ((dayReport.paid > 0) ? "  -  shipping paid " + string(dayReport.paid) + " gold" : "")
+	           + ((dayReport.died > 0) ? "  -  " + string(dayReport.died) + " crops died out of season" : "")
+	           + ((dayReport.lost > 0) ? "  -  you passed out and lost " + string(dayReport.lost) + " gold" : "");
 	hudTime = game_get_speed(gamespeed_fps) * 5;
 }
 

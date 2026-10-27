@@ -46,7 +46,18 @@ if(mouse_check_button_released(mb_left)){
 if(mouse_check_button_pressed(mb_right) && loc != undefined && loc.area == "inv"){
 	var st = inv_get(loc);
 	if(st != undefined){
-		if(shop){
+		if(ship){
+			// Into the shipping bin (paid overnight); tools and clothing can't be shipped
+			var dd = item_def(st.id);
+			if(dd.type == "held" || dd.type == "clothing") showMessage("You can't ship that");
+			else {
+				var n = keyboard_check(vk_shift) ? st.count : 1;
+				shipping_add(st, n);
+				st.count -= n;
+				if(st.count <= 0) inv_set(loc, undefined);
+				changed();
+			}
+		} else if(shop){
 			var price = inv_is_free() ? 0 : item_sell_price(st.id);
 			global.inv.gold += price;
 			st.count--;

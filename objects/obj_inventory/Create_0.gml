@@ -2,7 +2,10 @@
 // Opened with I, with E at the blacksmith (shop = true), or with E at a crafting table (craft = true). The world keeps running but the player can't move.
 // Mouse: drag an item to move it, or click to pick it up and click again to put it down.
 // Shift-click equips/unequips, right-click splits one off a stack (or sells it when the shop is open).
-shop = false;   // set by Brom: the left panel is his shop
+shop = false;   // set by a seller: the left panel is their shop (shopStock, shopTitle)
+shopStock = item_shop_stock(); // [{id, price}] - Brom's by default
+shopTitle = "Brom's Smithy";
+ship = false;   // set by the shipping bin: right-click items to ship them (paid overnight)
 craft = false;  // set by a crafting table: the left panel is the crafting list
 justOpened = true;  // ignore the key press that opened us
 guiW = display_get_gui_width();

@@ -140,6 +140,11 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"obj_farm_soil","path":"objects/obj_farm_soil/obj_farm_soil.yy",},},
+    {"id":{"name":"obj_water_zone","path":"objects/obj_water_zone/obj_water_zone.yy",},},
+    {"id":{"name":"obj_shipping_bin","path":"objects/obj_shipping_bin/obj_shipping_bin.yy",},},
+    {"id":{"name":"obj_npc_seller","path":"objects/obj_npc_seller/obj_npc_seller.yy",},},
+    {"id":{"name":"farming","path":"scripts/farming/farming.yy",},},
     {"id":{"name":"obj_bed","path":"objects/obj_bed/obj_bed.yy",},},
     {"id":{"name":"world_time","path":"scripts/world_time/world_time.yy",},},
     {"id":{"name":"lpc_pal_body_light","path":"sprites/lpc_pal_body_light/lpc_pal_body_light.yy",},},

@@ -1,29 +1,23 @@
-/// @description respawn_ crop
+/// @description respawn_crop: create a crop on the farm grid (planting, or rebuilding the farm from the world store)
 /// @arg grid_x
 /// @arg grid_y
 /// @arg crop_type
-/// @arg days_old
+/// @arg days_old  watered days it has grown
 function respawn_crop(){
-var xx = argument0*cellSize;
-var yy = argument1*cellSize;
-//Create the instance 
-var inst =instance_create_depth(xx+(cellSize/2), yy+(cellSize/2),0, obj_crop);
-with(inst){ depth_sort(); }
-ds_crops_instances[# argument0, argument1] = inst;
-show_debug_message("Respawned crop type " + string(argument2));
-// Give Crop its characteristics
+	var cs = crops.cellSize;
+	var inst = instance_create_depth(argument0 * cs + cs / 2, argument1 * cs + cs / 2, 0, obj_crop);
+	with(inst){ depth_sort(); }
+	crops.ds_crops_instances[# argument0, argument1] = inst;
+	// Give the crop its characteristics; its stage follows from its age (crop_stage in the farming script)
 	with(inst){
 		cropType = argument2;
-		daysOld= argument3;
-		growthStageDuration = crops.ds_crops_types[# 0, cropType]
-
-		// Restore growth stage (same formula as growing with G)
-		var firstGrowth = 0;
-		if(daysOld > 0){firstGrowth = 1}
-		growthStage = min(firstGrowth + (daysOld div growthStageDuration), maxGrowthStage);
+		daysOld = argument3;
+		growthStageDuration = crop_table()[cropType].stageDays;
+		growthStage = crop_stage(cropType, daysOld);
 		if(growthStage == maxGrowthStage){
 			fullyGrown = true;
 			alarm[1] = 1;
 		}
-
-}}
+	}
+	return inst;
+}

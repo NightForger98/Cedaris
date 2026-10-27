@@ -30,6 +30,12 @@ function inv_new_story(){
 	inv.equip.pants = item_stack("c|pants|Pants", 1, inv_pal_name("cloth", "blue"));
 	inv.equip.shoes = item_stack("c|shoes|Basic Shoes", 1, inv_pal_name("cloth", "brown"));
 	inv.gold = 120;
+	inv.water = 40;
+	// Every farmer starts with a hoe, a watering can and some seeds (as in Stardew)
+	inv.slots[0] = item_stack("c|held|Hoe");
+	inv.slots[1] = item_stack("c|held|Watering Can");
+	inv.slots[2] = item_stack("s|potato", 5);
+	inv.slots[3] = item_stack("s|carrot", 10);
 	global.inv = inv;
 	inv_add(item_stack("m|linen", 6));
 	inv_add(item_stack("m|leather", 4));
@@ -53,7 +59,13 @@ function inv_new_free(_look){
 		inv.equip[$ keys[i]] = item_stack("c|" + keys[i] + "|" + cat[part.item].name, 1, (part.pal == -1) ? "" : sprite_get_name(part.pal));
 	}
 	var held = _look.parts.held;
-	if(held.item != -1) inv.slots[0] = item_stack("c|held|" + cat[held.item].name, 1, (held.pal == -1) ? "" : sprite_get_name(held.pal));
+	inv.water = 40;
+	inv.slots[0] = item_stack("c|held|Hoe");
+	inv.slots[1] = item_stack("c|held|Watering Can");
+	inv.slots[2] = item_stack("s|potato", 20);
+	inv.slots[3] = item_stack("s|carrot", 20);
+	if(held.item != -1 && cat[held.item].name != "Hoe" && cat[held.item].name != "Watering Can")
+		inv.slots[4] = item_stack("c|held|" + cat[held.item].name, 1, (held.pal == -1) ? "" : sprite_get_name(held.pal));
 	return inv;
 }
 

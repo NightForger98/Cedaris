@@ -105,6 +105,25 @@ function item_def(_id){
 				     shape: mt.shape, tier: mt.tier, stats: {}};
 			}
 			break;
+		case "s":
+			var ci = crop_index(p[1]);
+			if(ci != -1){
+				var ct = crop_table()[ci];
+				d = {id: _id, type: "seed", crop: ci, name: ct.name + " Seeds", max: 99, price: ct.seed, tier: 0, stats: {},
+				     desc: "Plant on tilled soil in " + crop_seasons_text(ci) + ". Ripe after " + string(crop_days_to_ripe(ci)) + " watered days"
+				           + ((ct.regrow > 0) ? ", then every " + string(ct.regrow) + "." : ".")};
+			}
+			break;
+		case "p":
+			var ci = crop_index(p[1]);
+			if(ci != -1){
+				var q = real(p[2]);
+				var ct = crop_table()[ci];
+				d = {id: _id, type: "produce", crop: ci, quality: q, max: 99, price: produce_price(ci, q) * 2, tier: q, stats: {},
+				     name: ["", "Silver ", "Gold "][q] + ct.name,
+				     desc: "Ship it, or hold it and use it to eat (+" + string(round(ct.energy * (1 + q * 0.4))) + " energy)."};
+			}
+			break;
 		case "d":
 			var colour = string_replace_all(p[2], "_", " ");
 			var nice = string_upper(string_char_at(colour, 1)) + string_delete(colour, 1, 1);
@@ -351,7 +370,11 @@ function item_shop_price(_id){
 }
 
 /// @description What a stack sells for, per item.
-function item_sell_price(_id){ return max(1, floor(item_def(_id).price / 2)); }
+function item_sell_price(_id){
+	var d = item_def(_id);
+	if(d.type == "produce") return produce_price(d.crop, d.quality);
+	return max(1, floor(d.price / 2));
+}
 
 // ---------------------------------------------------------------- icons
 
@@ -380,6 +403,22 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			break;
 		case "material":
 			item_draw_material(d.shape, d.colour, cx, cy, _size * 0.34);
+			break;
+		case "produce":
+			draw_sprite_stretched(spr_crops_picked, d.crop, cx - _size * 0.4, cy - _size * 0.4, _size * 0.8, _size * 0.8);
+			if(d.quality > 0){
+				// Quality star: silver or gold
+				draw_set_colour(d.quality == 2 ? make_colour_rgb(250, 200, 50) : make_colour_rgb(200, 205, 215));
+				draw_circle(_x + 9, _y + _size - 9, 5, false);
+			}
+			break;
+		case "seed":
+			// Seed packet with the crop on it
+			draw_set_colour(make_colour_rgb(190, 160, 110));
+			draw_roundrect_ext(cx - _size * 0.3, cy - _size * 0.36, cx + _size * 0.3, cy + _size * 0.36, 6, 6, false);
+			draw_set_colour(make_colour_rgb(120, 90, 55));
+			draw_roundrect_ext(cx - _size * 0.3, cy - _size * 0.36, cx + _size * 0.3, cy + _size * 0.36, 6, 6, true);
+			draw_sprite_stretched(spr_crops_picked, d.crop, cx - _size * 0.24, cy - _size * 0.26, _size * 0.48, _size * 0.48);
 			break;
 		case "dye":
 			// A little bottle filled with the palette's colours

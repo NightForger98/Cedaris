@@ -7,7 +7,7 @@ cropType = 0;
 daysOld = 0;
 growthStage= 0;
 growthStageDuration = 0;
-maxGrowthStage= (sprite_get_width(spr_crops)/frameWidth)-1;
+maxGrowthStage= 4; // spr_crops: seed + 4 growth stages (see crop_stage)
 
 fullyGrown = false;
 sparkle = -1;

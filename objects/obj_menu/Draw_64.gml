@@ -146,14 +146,13 @@ case "controls":
 		["Arrow keys", "Walk"],
 		["Shift", "Run"],
 		["Ctrl", "Walk slowly"],
-		["P", "Planting mode (mouse wheel picks a crop, click to plant)"],
-		["G", "Grow crops by one day (testing)"],
+
 		["C", "Free camera, move it with W A S D"],
 		["Insert", "Show collision boxes and grid"],
 		["I", "Inventory and equipment"],
 		["1 - 0", "Pick a hotbar item to hold"],
 		["E", "Trade with the blacksmith / use the crafting table"],
-		["Click / Space", "Use the held tool or weapon"],
+		["Click / Space", "Use the held tool, plant seeds, eat, harvest a ripe crop"],
 		["Esc", "Pause menu / back"],
 	];
 	for(var i = 0; i < array_length(rows); i++){

@@ -81,7 +81,8 @@ function item_is_tool(_name){
 /// @description The saved state of a room (created on first use).
 function world_room(_name){
 	var r = global.world.rooms[$ _name];
-	if(r == undefined){ r = {crops: []}; global.world.rooms[$ _name] = r; }
+	if(r == undefined){ r = {crops: [], tiles: {}}; global.world.rooms[$ _name] = r; }
+	if(!variable_struct_exists(r, "tiles")) r.tiles = {};
 	return r;
 }
 
@@ -110,18 +111,16 @@ function sleep_now(_passedOut){
 function day_advance(_passedOut){
 	crops_store();
 
-	// Crops grow a day (watering comes with the farming phase)
-	var names = variable_struct_get_names(global.world.rooms);
-	for(var i = 0; i < array_length(names); i++){
-		var cl = global.world.rooms[$ names[i]].crops;
-		for(var c = 0; c < array_length(cl); c++) cl[c].days += 1;
-	}
-
 	// Calendar
 	var ck = global.clock;
 	ck.minutes = DAY_START;
 	ck.day += 1;
 	if(ck.day > SEASON_DAYS){ ck.day = 1; ck.season += 1; if(ck.season > 3){ ck.season = 0; ck.year += 1; } }
+	ck.luck = random_range(-0.05, 0.05); // today's luck, added to the Luck stat for harvest quality
+
+	// Farm: watered crops grow, out-of-season crops die, soil dries; then shipping pays out
+	var died = farm_new_day(ck.season);
+	var paid = shipping_payout();
 
 	// You: passing out costs gold and leaves you half rested
 	var lost = 0;
@@ -131,5 +130,5 @@ function day_advance(_passedOut){
 	}
 	global.vitals.energy = vitals_max_energy() * (_passedOut ? 0.5 : 1);
 	global.vitals.health = vitals_max_health();
-	return lost;
+	return {lost: lost, died: died, paid: paid};
 }

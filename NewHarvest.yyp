@@ -156,6 +156,7 @@
     {"id":{"name":"lorikeet_set","path":"scripts/lorikeet_set/lorikeet_set.yy",},},
     {"id":{"name":"LorikeetPaletteManager","path":"scripts/LorikeetPaletteManager/LorikeetPaletteManager.yy",},},
     {"id":{"name":"respawn_crop","path":"scripts/respawn_crop/respawn_crop.yy",},},
+    {"id":{"name":"depth_sort","path":"scripts/depth_sort/depth_sort.yy",},},
     {"id":{"name":"shd_lorikeet","path":"shaders/shd_lorikeet/shd_lorikeet.yy",},},
     {"id":{"name":"iconplacment","path":"sprites/iconplacment/iconplacment.yy",},},
     {"id":{"name":"index_base0_child_human","path":"sprites/index_base0_child_human/index_base0_child_human.yy",},},

@@ -77,3 +77,4 @@ idx_trs3 =index_bs3_torso_overarmor_leather;
 x_offset = sprite_get_xoffset(mask_index);
 y_offset = sprite_get_yoffset(mask_index);
 facing = 0;
+baseDepth = depth; // depth of the room layer the player was placed on, used by depth_sort()

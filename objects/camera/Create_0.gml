@@ -3,7 +3,7 @@
 following = obj_plyr;
 h_border=60;
 v_border=30;
-move_cam= keyboard_check(ord("C"));
+move_cam= false; // toggled with C in Step
 
 
 

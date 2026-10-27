@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"depth_sort",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"depth_sort",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -6,27 +6,25 @@
 /// @description Insert description here
 // You can write your code in this editor
 var anim_length=9;
-var anim_speed =10;
+var anim_speed = 6 * spd; // same pace as the player at this speed
 var frame_size = 64;
-var in_run =keyboard_check(vk_shift);
-var skn_Index ;
 
 
 if( moveX < 0){ y_frame = 9}
 else if(moveX > 0){y_frame = 11}
 else if(moveY < 0){y_frame = 8}
 else if(moveY > 0){y_frame = 10}
-else				{x_frame = 0;}
 
-if(x_frame + anim_speed/60  < anim_length - 1)	{ x_frame += anim_speed/60;}
-else							{x_frame = 0}
+//INCREMENT FRAME - frame 0 is standing, 1-8 are the walk cycle
+if(moveX == 0 && moveY == 0){
+	x_frame = 0;
+} else {
+	x_frame += anim_speed/60;
+	if(x_frame >= anim_length) {x_frame = 1}
+}
 
-
-
-if(in_run){anim_speed = 18} else{anim_speed = 12}
-
-var xx = x-x_offset;
-var yy = y- y_offset;
+var xx = round(x-x_offset);
+var yy = round(y- y_offset);
 
 
 //base0

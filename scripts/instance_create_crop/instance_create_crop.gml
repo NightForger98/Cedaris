@@ -35,11 +35,13 @@ function instance_create_crop(){
 	
 	
 	//create the instance
-	var inst = instance_create_layer(xx+(cs/2),yy+(cs/2),"Instances",obj_crop);
-	i_grid[# gx, gy] = inst; 
+	// The farm room has no layer called "Instances", so create by depth and y-sort
+	var inst = instance_create_depth(xx+(cs/2),yy+(cs/2),0,obj_crop);
+	i_grid[# gx, gy] = inst;
 // give the crop charachteristics
 
 with(inst){
+	depth_sort();
 	cropType = argument2; //crop type
 	growthStageDuration = crops.ds_crops_types[# 0, cropType];
 }

@@ -7,7 +7,8 @@ function respawn_crop(){
 var xx = argument0*cellSize;
 var yy = argument1*cellSize;
 //Create the instance 
-var inst =instance_create_layer(xx+(cellSize/2), yy+(cellSize/2),"Instances", obj_crop);
+var inst =instance_create_depth(xx+(cellSize/2), yy+(cellSize/2),0, obj_crop);
+with(inst){ depth_sort(); }
 ds_crops_instances[# argument0, argument1] = inst;
 show_debug_message("Respawned crop type " + string(argument2));
 // Give Crop its characteristics

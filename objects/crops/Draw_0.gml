@@ -23,7 +23,7 @@ if(data != 0) {c = c_lime;}
 xx = gx * cs;
 yy = gy * cs;
 
-draw_rectangle_color(xx,yy,xx+(cs/2),yy+(cs/2),c,c,c,c,true);
+draw_rectangle_color(xx,yy,xx+cs-1,yy+cs-1,c,c,c,c,true);
 
 //draw crops to be planted	
 draw_sprite(spr_crops_picked,selectCrop,xx+(cs/2),yy+(cs/2));

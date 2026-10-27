@@ -6,10 +6,8 @@
 /// @description Insert description here
 // You can write your code in this editor
 var anim_length=9;
-var anim_speed =10;
+var anim_speed = 6 * spd; // walk 6, normal 12, run 18
 var frame_size = 64;
-var in_run =keyboard_check(vk_shift);
-var skn_Index ;
 
 
 
@@ -23,16 +21,15 @@ case  -1:			 x_frame = 0;break;
 
 
 
+// Round so diagonal (fractional) positions don't shimmer
+var xx = round(x-x_offset);
+var yy = round(y- y_offset);
 
-
-if(in_run){anim_speed = 18} else{anim_speed = 12}
-
-var xx = x-x_offset;
-var yy = y- y_offset;
-
-//INCREMENT FRAME
-if(x_frame + anim_speed/60  < anim_length - 1)	{ x_frame += anim_speed/60;}
-else							{x_frame = 0}
+//INCREMENT FRAME - frame 0 is standing, 1-8 are the walk cycle
+if(facing != -1){
+	x_frame += anim_speed/60;
+	if(x_frame >= anim_length) {x_frame = 1}
+}
 //base0
 lorikeet_set(pal_skn)
 draw_sprite_part(idx_bs,0,floor(x_frame)*frame_size,y_frame*frame_size,frame_size,frame_size,xx,yy);//skin

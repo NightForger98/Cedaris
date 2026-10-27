@@ -12,7 +12,7 @@ var gh = ds_grid_height(ds_crops_instances);
 var slot = 0; 
 var xx = 0; repeat(gw){
 	var yy = 0; repeat(gh){
-		var inst = ds_ ds_crops_instances[# xx, yy];
+	//	var inst = ds_ ds_crops_instances[# xx, yy];
 		//if there is an instance in the cell save data
 		if(inst != 0 ){
 		ds_crops_data[# 0, slot] = xx;

@@ -14,6 +14,8 @@ if(in_walk || in_run){
 }else {
 	spd=n_spd;
 }
+// Equipment Speed stat (feathers and pixie dust help, heavy metal slows you down)
+spd *= inv_speed_multiplier();
 //RESETVARIABLES
 
 moveY= (in_down - in_up) * spd;

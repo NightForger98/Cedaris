@@ -19,7 +19,7 @@ Item ids are strings, so saves and quest data can name them directly:
 |---|---|
 | `c|shirt|Longsleeve` | clothing from the LPC catalog (`c|<slot>|<catalog name>`) |
 | `c|held|Hoe` | tool or weapon; held when selected on the hotbar |
-| `m|linen` | crafting material (`item_materials()` lists them) |
+| `m|linen`, `m|dragon_scale` | crafting material (`item_materials()` lists all 24 with rarity and stats) |
 | `d|cloth|red`, `d|metal|gold` | dye or metal polish, put in a dye slot to recolour that piece |
 
 A stack is `{id, count, pal}`. `pal` gives a clothing piece its own colour (the starter outfit uses it);
@@ -33,6 +33,22 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
 - **Colours** come from dyes. Story mode has no dye recipes: dyes are quest and event rewards.
 - **Tools and weapons** are bought from Brom (`item_shop_stock()` sets stock and prices). Right-click
   an item while trading to sell it.
+
+## Materials, recipes and stats
+
+- **24 materials in four rarities**: common (linen, cotton, wool, leather, fur, feather, bone, copper,
+  iron), uncommon (silk, silver, steel, gold, gemstone), rare (troll hide, frost crystal, ember core,
+  moonsilk, pixie dust) and legendary (mithril, dragon scale, phoenix feather, unicorn hair, void pearl).
+  Brom sells the metal bars; rare and legendary ones are meant as quest and event rewards.
+- **Recipes** follow what the item is: `item_recipe_named()` for specific items (the Crown needs a void
+  pearl), then keyword rules in `item_recipe_rules()` (anything with "chain" or "mail" takes iron, plate
+  and great helms take steel, wizard hats take moonsilk and pixie dust), then a default per slot.
+- **Stats** come from the recipe: each material adds its per-unit stats (iron: +2 Defence, -0.25 Speed;
+  fur: +2.5 Warmth; pixie dust: +2.5 Luck, +1 Speed...). An item's rarity is its rarest ingredient.
+  Everything equipped adds up (`inv_stats()`), shown under the character in the inventory.
+- **Stats in use now**: Speed changes walking speed (+5% per point, -30% to +40%); Charm lowers Brom's
+  prices (1% per point, up to 30%). Defence, Warmth, Stamina, Luck and Magic are ready for combat,
+  seasons, energy, crop quality and spells.
 
 ## Hooks for quests and events
 

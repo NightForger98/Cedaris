@@ -34,6 +34,8 @@ function inv_new_story(){
 	inv_add(item_stack("m|linen", 6));
 	inv_add(item_stack("m|leather", 4));
 	inv_add(item_stack("m|wool", 2));
+	inv_add(item_stack("m|cotton", 4));
+	inv_add(item_stack("m|feather", 2));
 	inv_add(item_stack("d|cloth|green", 1));
 	inv_add(item_stack("d|cloth|yellow", 1));
 	return inv;
@@ -175,6 +177,35 @@ function inv_apply_look(_look){
 	_look.parts.held.item = (hd != undefined && hd.type == "held") ? hd.cat : -1;
 	_look.parts.held.pal = (hd != undefined && hd.type == "held" && h.pal != "") ? asset_get_index(h.pal) : -1;
 	_look.parts.held.want = _look.parts.held.item;
+	inv.stats = inv_stats();
+}
+
+/// @description Total stats of everything equipped (they stack).
+function inv_stats(){
+	var total = {};
+	var keys = STAT_KEYS;
+	for(var i = 0; i < array_length(keys); i++) total[$ keys[i]] = 0;
+	var slots = item_equip_slots();
+	for(var i = 0; i < array_length(slots); i++){
+		var st = global.inv.equip[$ slots[i]];
+		if(st == undefined) continue;
+		var s = item_def(st.id).stats;
+		for(var k = 0; k < array_length(keys); k++) total[$ keys[k]] += s[$ keys[k]] ?? 0;
+	}
+	return total;
+}
+
+/// @description Walking speed multiplier from the Speed stat: +5% per point, between -30% and +40%.
+function inv_speed_multiplier(){
+	if(!variable_global_exists("inv") || !is_struct(global.inv) || !variable_struct_exists(global.inv, "stats")) return 1;
+	return 1 + clamp(global.inv.stats.speed * 0.05, -0.3, 0.4);
+}
+
+/// @description A shop price after the Charm discount: 1% off per point, up to 30%.
+function inv_charmed_price(_price){
+	if(inv_is_free()) return 0;
+	var charm = variable_struct_exists(global.inv, "stats") ? global.inv.stats.charm : 0;
+	return max(1, round(_price * (1 - clamp(charm * 0.01, 0, 0.3))));
 }
 
 /// @description Recipes the player can see: in story mode only what fits them; free mode shows everything.

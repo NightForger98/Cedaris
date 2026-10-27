@@ -1,26 +1,82 @@
-/// Items: definitions, icons, crafting recipes and the blacksmith's stock.
+/// Items: definitions, materials, crafting recipes, stats, icons and the blacksmith's stock.
 ///
 /// Item ids are strings:
 ///   "c|<slot>|<catalog name>"  clothing or held item from the LPC catalog, e.g. "c|shirt|Longsleeve", "c|held|Hoe"
-///   "m|<material>"             crafting material, e.g. "m|linen"
+///   "m|<material>"             crafting material, e.g. "m|linen", "m|dragon_scale"
 ///   "d|<palette material>|<colour>"  dye that recolours equipment, e.g. "d|cloth|red", "d|metal|gold"
 /// A stack is {id, count, pal} - pal is an optional palette name giving clothing its own colour.
+///
+/// Stats: clothing gets its stats from the materials in its recipe (item_stats), and everything
+/// equipped adds up (inv_stats). Speed changes walking speed and Charm lowers shop prices;
+/// the rest are ready for future systems (combat, seasons, crops, magic).
 
-/// @description The crafting materials. Quests and events hand these out; recipes consume them.
+#macro STAT_KEYS ["defense", "warmth", "speed", "stamina", "luck", "charm", "magic"]
+
+/// @description Display names for stats.
+function item_stat_name(_key){
+	switch(_key){
+		case "defense": return "Defence";
+		case "warmth":  return "Warmth";
+		case "speed":   return "Speed";
+		case "stamina": return "Stamina";
+		case "luck":    return "Luck";
+		case "charm":   return "Charm";
+		case "magic":   return "Magic";
+	}
+	return _key;
+}
+
+/// @description Rarity names and colours (tier 0-3).
+function item_tier_name(_t){ static n = ["Common", "Uncommon", "Rare", "Legendary"]; return n[clamp(_t, 0, 3)]; }
+function item_tier_colour(_t){
+	static c = [c_white, make_colour_rgb(120, 220, 120), make_colour_rgb(110, 170, 255), make_colour_rgb(255, 170, 60)];
+	return c[clamp(_t, 0, 3)];
+}
+
+/// @description Crafting materials. Stats are per unit used in a recipe; shape picks the icon.
+/// Common and uncommon ones can be bought (Brom sells the metal bars); rare and legendary ones are
+/// meant as quest and event rewards.
 function item_materials(){
 	static m = [
-		{key: "linen",   name: "Linen",      desc: "Light cloth for shirts and trousers.", colour: make_colour_rgb(225, 214, 180), price: 4},
-		{key: "wool",    name: "Wool",       desc: "Warm cloth for coats and hats.",       colour: make_colour_rgb(240, 240, 235), price: 5},
-		{key: "leather", name: "Leather",    desc: "Tough hide for belts, boots and vests.", colour: make_colour_rgb(140, 90, 50), price: 6},
-		{key: "silk",    name: "Silk",       desc: "Fine fabric for capes and finery.",    colour: make_colour_rgb(230, 150, 200), price: 12},
-		{key: "iron",    name: "Iron Bar",   desc: "For armour and metal fittings.",       colour: make_colour_rgb(150, 155, 165), price: 10},
-		{key: "gold",    name: "Gold Bar",   desc: "For jewellery and crowns.",            colour: make_colour_rgb(240, 200, 60),  price: 25},
-		{key: "gem",     name: "Gemstone",   desc: "Sparkly. Jewellers love it.",          colour: make_colour_rgb(90, 220, 230),  price: 30},
+		// Common
+		{key: "linen",   name: "Linen",       tier: 0, shape: "cloth",   colour: make_colour_rgb(225, 214, 180), price: 4,  stats: {stamina: 0.5},             desc: "Light, breathable cloth."},
+		{key: "cotton",  name: "Cotton",      tier: 0, shape: "cloth",   colour: make_colour_rgb(250, 250, 245), price: 4,  stats: {stamina: 0.5, charm: 0.25}, desc: "Soft cloth for everyday wear."},
+		{key: "wool",    name: "Wool",        tier: 0, shape: "cloth",   colour: make_colour_rgb(235, 228, 210), price: 5,  stats: {warmth: 1.5},              desc: "Warm, thick cloth for coats and hats."},
+		{key: "leather", name: "Leather",     tier: 0, shape: "hide",    colour: make_colour_rgb(140, 90, 50),   price: 6,  stats: {defense: 1, warmth: 0.5},  desc: "Tough hide for belts, boots and vests."},
+		{key: "fur",     name: "Fur",         tier: 0, shape: "hide",    colour: make_colour_rgb(175, 135, 95),  price: 8,  stats: {warmth: 2.5},              desc: "Keeps the winter out."},
+		{key: "feather", name: "Feather",     tier: 0, shape: "feather", colour: make_colour_rgb(240, 240, 250), price: 5,  stats: {speed: 0.75},              desc: "Light as air. Plumes and trims."},
+		{key: "bone",    name: "Bone",        tier: 0, shape: "bone",    colour: make_colour_rgb(232, 226, 200), price: 5,  stats: {defense: 0.75},            desc: "Horns, toggles and grim decorations."},
+		{key: "copper",  name: "Copper Bar",  tier: 0, shape: "bar",     colour: make_colour_rgb(205, 120, 70),  price: 10, stats: {defense: 1},               desc: "Soft metal for fittings and trims."},
+		{key: "iron",    name: "Iron Bar",    tier: 0, shape: "bar",     colour: make_colour_rgb(150, 155, 165), price: 15, stats: {defense: 2, speed: -0.25}, desc: "Chainmail, helmets and armour. Heavy."},
+		// Uncommon
+		{key: "silk",    name: "Silk",        tier: 1, shape: "cloth",   colour: make_colour_rgb(230, 150, 200), price: 14, stats: {charm: 1.5},               desc: "Fine fabric for robes, dresses and capes."},
+		{key: "silver",  name: "Silver Bar",  tier: 1, shape: "bar",     colour: make_colour_rgb(215, 220, 230), price: 30, stats: {charm: 1, magic: 0.5},     desc: "Jewellery, lenses and fine fittings."},
+		{key: "steel",   name: "Steel Bar",   tier: 1, shape: "bar",     colour: make_colour_rgb(115, 130, 150), price: 35, stats: {defense: 3, speed: -0.25}, desc: "Refined iron for plate and great helms."},
+		{key: "gold",    name: "Gold Bar",    tier: 1, shape: "bar",     colour: make_colour_rgb(245, 205, 60),  price: 45, stats: {charm: 2},                 desc: "For crowns, rings and showing off."},
+		{key: "gem",     name: "Gemstone",    tier: 1, shape: "gem",     colour: make_colour_rgb(90, 220, 230),  price: 40, stats: {luck: 1.5, charm: 1},      desc: "Sparkly. Jewellers love it."},
+		// Rare
+		{key: "troll_hide",    name: "Troll Hide",    tier: 2, shape: "hide",  colour: make_colour_rgb(105, 140, 90),  price: 90,  stats: {defense: 2, stamina: 2}, desc: "Thick, rubbery and it never quite stops healing."},
+		{key: "frost_crystal", name: "Frost Crystal", tier: 2, shape: "gem",   colour: make_colour_rgb(175, 230, 255), price: 100, stats: {magic: 2, defense: 0.5}, desc: "Cold to the touch, even in summer."},
+		{key: "ember_core",    name: "Ember Core",    tier: 2, shape: "orb",   colour: make_colour_rgb(255, 120, 40),  price: 100, stats: {warmth: 4},              desc: "A coal that never goes out."},
+		{key: "moonsilk",      name: "Moonsilk",      tier: 2, shape: "cloth", colour: make_colour_rgb(185, 195, 255), price: 120, stats: {magic: 2.5, charm: 1},   desc: "Spun by moths under a full moon."},
+		{key: "pixie_dust",    name: "Pixie Dust",    tier: 2, shape: "dust",  colour: make_colour_rgb(255, 170, 240), price: 120, stats: {luck: 2.5, speed: 1},    desc: "Sneeze-inducing and wildly lucky."},
+		// Legendary
+		{key: "mithril",         name: "Mithril Bar",     tier: 3, shape: "bar",     colour: make_colour_rgb(200, 235, 245), price: 300, stats: {defense: 3, speed: 0.25},      desc: "Stronger than steel and light as linen."},
+		{key: "dragon_scale",    name: "Dragon Scale",    tier: 3, shape: "scale",   colour: make_colour_rgb(205, 50, 40),   price: 350, stats: {defense: 4, warmth: 2},        desc: "Shed by a dragon. Shrugs off flame."},
+		{key: "phoenix_feather", name: "Phoenix Feather", tier: 3, shape: "feather", colour: make_colour_rgb(255, 140, 30),  price: 350, stats: {magic: 2, warmth: 2, speed: 1}, desc: "Warm, and it glows at night."},
+		{key: "unicorn_hair",    name: "Unicorn Hair",    tier: 3, shape: "feather", colour: make_colour_rgb(250, 235, 255), price: 350, stats: {luck: 3, magic: 2, charm: 1}, desc: "A single silvery strand. Utterly charming."},
+		{key: "void_pearl",      name: "Void Pearl",      tier: 3, shape: "orb",     colour: make_colour_rgb(95, 40, 145),   price: 400, stats: {magic: 4, luck: 1},           desc: "Darker than night. Hums quietly."},
 	];
 	return m;
 }
 
-/// @description Definition of an item id: {id, type, name, desc, max, price, ...}. Cached.
+function item_material(_key){
+	var m = item_materials();
+	for(var i = 0; i < array_length(m); i++) if(m[i].key == _key) return m[i];
+	return undefined;
+}
+
+/// @description Definition of an item id: {id, type, name, desc, max, price, tier, stats, ...}. Cached.
 function item_def(_id){
 	static cache = {};
 	var d = cache[$ _id];
@@ -30,29 +86,35 @@ function item_def(_id){
 		case "c":
 			var idx = character_find_item(p[1], p[2]);
 			var held = (p[1] == "held");
-			d = {id: _id, type: held ? "held" : "clothing", slot: p[1], name: p[2], cat: idx, max: 1,
-			     price: held ? item_shop_price(p[2]) : 20,
+			d = {id: _id, type: held ? "held" : "clothing", slot: p[1], name: p[2], cat: idx, max: 1, tier: 0, stats: {},
+			     price: held ? item_shop_price(_id) : 20,
 			     desc: held ? "Select it on the hotbar to hold it." : "Equip in the " + item_slot_label(p[1]) + " slot."};
 			if(idx != -1) d.material = lpc_catalog().items[idx].material;
+			if(!held && idx != -1){
+				// Stats, rarity and value follow the recipe's materials
+				var cost = item_recipe_cost(p[1], d.material, p[2]);
+				d.stats = item_stats_from_cost(cost);
+				d.tier = item_cost_tier(cost);
+				d.price = item_cost_value(cost);
+			}
 			break;
 		case "m":
-			var mats = item_materials();
-			for(var i = 0; i < array_length(mats); i++){
-				if(mats[i].key == p[1]){
-					d = {id: _id, type: "material", name: mats[i].name, desc: mats[i].desc, max: 99, price: mats[i].price, colour: mats[i].colour};
-				}
+			var mt = item_material(p[1]);
+			if(mt != undefined){
+				d = {id: _id, type: "material", name: mt.name, desc: mt.desc, max: 99, price: mt.price, colour: mt.colour,
+				     shape: mt.shape, tier: mt.tier, stats: {}};
 			}
 			break;
 		case "d":
 			var colour = string_replace_all(p[2], "_", " ");
 			var nice = string_upper(string_char_at(colour, 1)) + string_delete(colour, 1, 1);
-			d = {id: _id, type: "dye", material: p[1], colour: p[2], max: 30, price: 15,
+			d = {id: _id, type: "dye", material: p[1], colour: p[2], max: 30, price: 15, tier: 1, stats: {},
 			     pal: character_find_palette(p[1], p[2]),
 			     name: nice + ((p[1] == "metal") ? " Polish" : " Dye"),
 			     desc: (p[1] == "metal") ? "Put it in a dye slot to recolour metal gear." : "Put it in a dye slot to recolour cloth and leather."};
 			break;
 	}
-	if(d == undefined) d = {id: _id, type: "unknown", name: _id, desc: "", max: 1, price: 0};
+	if(d == undefined) d = {id: _id, type: "unknown", name: _id, desc: "", max: 1, price: 0, tier: 0, stats: {}};
 	cache[$ _id] = d;
 	return d;
 }
@@ -71,16 +133,93 @@ function item_slot_label(_key){
 	return (slot == undefined) ? _key : slot.label;
 }
 
-// ---------------------------------------------------------------- crafting
+// ---------------------------------------------------------------- recipes
 
-/// @description Materials a clothing item costs, as a struct {material: count}, by slot. Metal pieces use iron.
-function item_recipe_cost(_slot, _material){
+/// @description Recipes for particular items, by exact catalog name. These come first.
+function item_recipe_named(){
+	static r = {
+		"Crown":                     {gold: 3, gem: 2, void_pearl: 1},
+		"Tiara":                     {silver: 2, gem: 1, unicorn_hair: 1},
+		"Celestial Wizard Hat":      {moonsilk: 3, pixie_dust: 2, frost_crystal: 1},
+		"Celestial Wizard Moon Hat": {moonsilk: 3, pixie_dust: 2, void_pearl: 1},
+		"Wizard Hat Base":           {moonsilk: 2, linen: 1},
+		"Christmas Hat":             {wool: 2, fur: 1},
+		"Plate":                     {steel: 4, dragon_scale: 1},
+		"Leather":                   {leather: 3, troll_hide: 1},
+		"Iverness cloak":            {wool: 3, ember_core: 1},
+		"Sunglasses":                {silver: 1, frost_crystal: 1},
+		"Shades":                    {silver: 1, frost_crystal: 1},
+		"Bauldron":                  {iron: 2, dragon_scale: 1},
+		"Gloves":                    {leather: 2, fur: 1},
+		"Solid":                     {silk: 3},                 // the plain cape
+		"Jetpack":                   {copper: 3, ember_core: 1},
+		"Quiver":                    {leather: 2, feather: 2},
+		"Basket":                    {linen: 2},
+		"Tattered":                  {linen: 3},                // the tattered cape
+		"Bandages":                  {linen: 1},
+		"Hoofs":                     {iron: 2},                 // horseshoes, naturally
+	};
+	return r;
+}
+
+/// @description Keyword rules, checked in order against the item's name (lower case). slots: optional limit.
+function item_recipe_rules(){
+	static r = [
+		{k: ["legion", "centurion", "maximus"],                     cost: {steel: 3, phoenix_feather: 1}},
+		{k: ["xion", "xeon"],                                       cost: {mithril: 2, frost_crystal: 1}},
+		{k: ["greathelm", "great helm", "sugarloaf", "closehelm", "close helm"], cost: {steel: 3, troll_hide: 1}},
+		{k: ["horn"],                                               cost: {iron: 3, bone: 2}},
+		{k: ["viking", "barbarian"],                                cost: {iron: 2, fur: 2}},
+		{k: ["armet", "bascinet", "barbuta", "visor", "grated"],    cost: {steel: 3, leather: 1}},
+		{k: ["chain", "mail"],                                      cost: {iron: 4}},
+		{k: ["helm", "nasal", "kettle", "morion", "norman", "pigface", "flattop", "pagan"], cost: {iron: 3, leather: 1}},
+		{k: ["armour", "armor", "plate", "overarmor"],              cost: {iron: 4, leather: 2}},
+		{k: ["pauldron"],                                           cost: {iron: 2, leather: 1}},
+		{k: ["epaulet", "mantal", "mantle"],                        cost: {gold: 1, silk: 1}},
+		{k: ["admiral", "commodore", "captain"],                    cost: {wool: 2, leather: 1, gold: 1}},
+		{k: ["plume", "plumage", "crest", "feather", "cavalier", "bonnie"], cost: {wool: 2, feather: 2}},
+		{k: ["tricorne", "bicorne", "pirate"],                      cost: {wool: 2, leather: 1}},
+		{k: ["tophat", "bowler"],                                   cost: {wool: 2, silk: 1}},
+		{k: ["formal", "collared"], slots: ["shirt", "pants"],      cost: {cotton: 2, silk: 1}},
+		{k: ["santa", "winter", "fur"],                             cost: {wool: 2, fur: 2}},
+		{k: ["skull"],                                              cost: {leather: 2, bone: 1}},
+		{k: ["robe", "kimono", "dress", "blouse", "bodice", "corset", "sash", "obi", "silk"], cost: {silk: 2, cotton: 1}},
+		{k: ["hood", "cloak", "trench", "frock", "coat", "jacket", "tabard"], cost: {wool: 3, leather: 1}},
+		{k: ["glasses", "monocle"],                                 cost: {silver: 1, gem: 1}},
+		{k: ["eyepatch", "mask"],                                   cost: {leather: 1}},
+		{k: ["necklace", "pendant", "pearl", "gem", "charm"],       cost: {silver: 1, gem: 1}},
+		{k: ["boots"],                                              cost: {leather: 3}},
+		{k: ["sandals", "slippers", "ghillies"],                    cost: {leather: 1, linen: 1}},
+		{k: ["bracer"],                                             cost: {leather: 2}},
+		{k: ["cuffs"],                                              cost: {cotton: 1, silk: 1}},
+		{k: ["apron", "overall", "suspender"],                      cost: {linen: 2, leather: 1}},
+		{k: ["tshirt", "shirt", "sleeve", "tank", "scoop", "polo", "cardigan"], cost: {cotton: 3}},
+		{k: ["skirt", "pants", "leggings", "shorts", "hose"],       cost: {linen: 3}},
+		{k: ["bandana", "kerchief", "headband", "hijab", "cap"],    cost: {cotton: 2}},
+	];
+	return r;
+}
+
+/// @description What a clothing item costs to craft: named recipe, else keyword rule, else the slot default.
+/// Metal pieces with no specific recipe are smithed from iron.
+function item_recipe_cost(_slot, _material, _name){
+	var named = item_recipe_named()[$ _name];
+	if(named != undefined) return named;
+	var low = string_lower(_name);
+	var rules = item_recipe_rules();
+	for(var i = 0; i < array_length(rules); i++){
+		var rule = rules[i];
+		if(variable_struct_exists(rule, "slots") && array_get_index(rule.slots, _slot) == -1) continue;
+		for(var k = 0; k < array_length(rule.k); k++){
+			if(string_pos(rule.k[k], low) > 0) return rule.cost;
+		}
+	}
 	var cost;
 	switch(_slot){
 		case "hat":       cost = {wool: 2}; break;
-		case "face":      cost = {iron: 1, gem: 1}; break;
+		case "face":      cost = {copper: 1, gem: 1}; break;
 		case "earrings":  cost = {gold: 1, gem: 1}; break;
-		case "neck":      cost = {gold: 1}; break;
+		case "neck":      cost = {silver: 1}; break;
 		case "shirt":     cost = {linen: 3}; break;
 		case "vest":      cost = {leather: 2, linen: 1}; break;
 		case "coat":      cost = {wool: 4}; break;
@@ -95,7 +234,6 @@ function item_recipe_cost(_slot, _material){
 		case "back":      cost = {leather: 3}; break;
 		default:          cost = {linen: 1};
 	}
-	// Metal helmets, armour and fittings are smithed instead of sewn
 	if(_material == "metal"){
 		var n = 0, names = variable_struct_get_names(cost);
 		for(var i = 0; i < array_length(names); i++) n += cost[$ names[i]];
@@ -104,7 +242,7 @@ function item_recipe_cost(_slot, _material){
 	return cost;
 }
 
-/// @description Every clothing recipe: [{result id, cost struct}], built from the catalog. Cached.
+/// @description Every clothing recipe: [{id, slot, cat, cost}], built from the catalog. Cached.
 function item_recipes(){
 	static list = undefined;
 	if(list != undefined) return list;
@@ -114,7 +252,7 @@ function item_recipes(){
 	for(var i = 0; i < array_length(cat); i++){
 		if(array_get_index(slots, cat[i].slot) == -1) continue;
 		array_push(list, {id: "c|" + cat[i].slot + "|" + cat[i].name, slot: cat[i].slot, cat: i,
-		                  cost: item_recipe_cost(cat[i].slot, cat[i].material)});
+		                  cost: item_recipe_cost(cat[i].slot, cat[i].material, cat[i].name)});
 	}
 	return list;
 }
@@ -130,25 +268,84 @@ function item_dye_ids(){
 	return ids;
 }
 
-// ---------------------------------------------------------------- blacksmith
+// ---------------------------------------------------------------- stats
 
-/// @description Brom's stock: farm tools first, then weapons. [{name, price}]
-function item_shop_stock(){
-	static s = [
-		{name: "Hoe", price: 40}, {name: "Watering Can", price: 40}, {name: "Axe", price: 60},
-		{name: "Pickaxe", price: 60}, {name: "Shovel", price: 50}, {name: "Hammer", price: 50}, {name: "Scythe", price: 90},
-		{name: "Dagger", price: 80}, {name: "Arming Sword", price: 150}, {name: "Saber", price: 180}, {name: "Rapier", price: 200},
-		{name: "Longsword", price: 250}, {name: "Glowsword", price: 600}, {name: "Mace", price: 160}, {name: "Flail", price: 190},
-		{name: "Waraxe", price: 220}, {name: "Spear", price: 120}, {name: "Halberd", price: 260}, {name: "Cane", price: 30},
-		{name: "Simple staff", price: 120}, {name: "Gnarled staff", price: 180}, {name: "Loop staff", price: 220},
-		{name: "S staff", price: 240}, {name: "Diamond staff", price: 400}, {name: "Slingshot", price: 70}, {name: "Crossbow", price: 300},
-	];
+/// @description Stats from a recipe: each material's per-unit stats times how many are used, rounded.
+function item_stats_from_cost(_cost){
+	var out = {};
+	var names = variable_struct_get_names(_cost);
+	for(var i = 0; i < array_length(names); i++){
+		var mt = item_material(names[i]);
+		if(mt == undefined) continue;
+		var sn = variable_struct_get_names(mt.stats);
+		for(var s = 0; s < array_length(sn); s++){
+			out[$ sn[s]] = (out[$ sn[s]] ?? 0) + mt.stats[$ sn[s]] * _cost[$ names[i]];
+		}
+	}
+	var keys = variable_struct_get_names(out);
+	for(var i = 0; i < array_length(keys); i++){
+		out[$ keys[i]] = round(out[$ keys[i]]);
+		if(out[$ keys[i]] == 0) variable_struct_remove(out, keys[i]);
+	}
+	return out;
+}
+
+/// @description Rarity of something made from these materials: its rarest ingredient.
+function item_cost_tier(_cost){
+	var t = 0, names = variable_struct_get_names(_cost);
+	for(var i = 0; i < array_length(names); i++){
+		var mt = item_material(names[i]);
+		if(mt != undefined) t = max(t, mt.tier);
+	}
+	return t;
+}
+
+/// @description Value of a crafted item: what its materials are worth, plus a bit for the work.
+function item_cost_value(_cost){
+	var v = 0, names = variable_struct_get_names(_cost);
+	for(var i = 0; i < array_length(names); i++){
+		var mt = item_material(names[i]);
+		if(mt != undefined) v += mt.price * _cost[$ names[i]];
+	}
+	return round(v * 1.25);
+}
+
+/// @description Stats line for tooltips, e.g. "+8 Defence, -1 Speed".
+function item_stats_text(_stats){
+	var parts = [], keys = STAT_KEYS;
+	for(var i = 0; i < array_length(keys); i++){
+		var v = _stats[$ keys[i]];
+		if(v == undefined || v == 0) continue;
+		array_push(parts, ((v > 0) ? "+" : "") + string(v) + " " + item_stat_name(keys[i]));
+	}
+	var s = "";
+	for(var i = 0; i < array_length(parts); i++) s += ((i > 0) ? ", " : "") + parts[i];
 	return s;
 }
 
-function item_shop_price(_name){
+// ---------------------------------------------------------------- blacksmith
+
+/// @description Brom's stock: farm tools, weapons, then metal bars. [{id, price}]
+function item_shop_stock(){
+	static s = undefined;
+	if(s != undefined) return s;
+	var held = [
+		["Hoe", 40], ["Watering Can", 40], ["Axe", 60], ["Pickaxe", 60], ["Shovel", 50], ["Hammer", 50], ["Scythe", 90],
+		["Dagger", 80], ["Arming Sword", 150], ["Saber", 180], ["Rapier", 200], ["Longsword", 250], ["Glowsword", 600],
+		["Mace", 160], ["Flail", 190], ["Waraxe", 220], ["Spear", 120], ["Halberd", 260], ["Cane", 30],
+		["Simple staff", 120], ["Gnarled staff", 180], ["Loop staff", 220], ["S staff", 240], ["Diamond staff", 400],
+		["Slingshot", 70], ["Crossbow", 300],
+	];
+	s = [];
+	for(var i = 0; i < array_length(held); i++) array_push(s, {id: "c|held|" + held[i][0], price: held[i][1]});
+	var bars = ["copper", "iron", "steel", "silver", "gold"];
+	for(var i = 0; i < array_length(bars); i++) array_push(s, {id: "m|" + bars[i], price: item_material(bars[i]).price});
+	return s;
+}
+
+function item_shop_price(_id){
 	var s = item_shop_stock();
-	for(var i = 0; i < array_length(s); i++) if(s[i].name == _name) return s[i].price;
+	for(var i = 0; i < array_length(s); i++) if(s[i].id == _id) return s[i].price;
 	return 50;
 }
 
@@ -172,13 +369,7 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			character_draw_item(d.cat, _body, pal, 0, 10, r, cx - r[2] * sc / 2, cy - r[3] * sc / 2, sc);
 			break;
 		case "material":
-			var s = _size * 0.32;
-			draw_set_colour(c_black);
-			draw_roundrect_ext(cx - s - 2, cy - s - 2, cx + s + 2, cy + s + 2, 6, 6, false);
-			draw_set_colour(d.colour);
-			draw_roundrect_ext(cx - s, cy - s, cx + s, cy + s, 6, 6, false);
-			draw_set_colour(merge_colour(d.colour, c_white, 0.5));
-			draw_roundrect_ext(cx - s + 3, cy - s + 3, cx - 2, cy - 2, 3, 3, false);
+			item_draw_material(d.shape, d.colour, cx, cy, _size * 0.34);
 			break;
 		case "dye":
 			// A little bottle filled with the palette's colours
@@ -194,6 +385,92 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 		draw_set_halign(fa_right);
 		draw_set_valign(fa_bottom);
 		draw_text_transformed_colour(_x + _size - 3, _y + _size, string(_stack.count), 0.5, 0.5, 0, c_white, c_white, c_white, c_white, 1);
+	}
+}
+
+/// @description Simple drawn icons for materials (placeholders until there's art), centred on (_cx, _cy).
+function item_draw_material(_shape, _col, _cx, _cy, _r){
+	var light = merge_colour(_col, c_white, 0.5), dark = merge_colour(_col, c_black, 0.45);
+	switch(_shape){
+		case "bar":     // ingot
+			draw_set_colour(dark);
+			draw_triangle(_cx - _r, _cy + _r * 0.5, _cx + _r, _cy + _r * 0.5, _cx + _r * 0.7, _cy - _r * 0.4, false);
+			draw_triangle(_cx - _r, _cy + _r * 0.5, _cx - _r * 0.7, _cy - _r * 0.4, _cx + _r * 0.7, _cy - _r * 0.4, false);
+			draw_set_colour(_col);
+			draw_rectangle(_cx - _r * 0.6, _cy - _r * 0.35, _cx + _r * 0.6, _cy + _r * 0.1, false);
+			draw_set_colour(light);
+			draw_line_width(_cx - _r * 0.5, _cy - _r * 0.25, _cx + _r * 0.3, _cy - _r * 0.25, 2);
+			break;
+		case "gem":     // cut stone
+			draw_set_colour(dark);
+			draw_triangle(_cx - _r, _cy - _r * 0.2, _cx + _r, _cy - _r * 0.2, _cx, _cy + _r, false);
+			draw_set_colour(_col);
+			draw_triangle(_cx - _r * 0.6, _cy - _r * 0.7, _cx + _r * 0.6, _cy - _r * 0.7, _cx + _r, _cy - _r * 0.2, false);
+			draw_triangle(_cx - _r * 0.6, _cy - _r * 0.7, _cx - _r, _cy - _r * 0.2, _cx + _r, _cy - _r * 0.2, false);
+			draw_set_colour(light);
+			draw_triangle(_cx - _r * 0.3, _cy - _r * 0.6, _cx + _r * 0.1, _cy - _r * 0.6, _cx - _r * 0.2, _cy - _r * 0.25, false);
+			break;
+		case "orb":
+			draw_set_colour(dark);
+			draw_circle(_cx, _cy, _r, false);
+			draw_set_colour(_col);
+			draw_circle(_cx, _cy, _r * 0.8, false);
+			draw_set_colour(light);
+			draw_circle(_cx - _r * 0.3, _cy - _r * 0.3, _r * 0.25, false);
+			break;
+		case "dust":    // a small heap of sparkles
+			draw_set_colour(dark);
+			draw_ellipse(_cx - _r, _cy, _cx + _r, _cy + _r * 0.7, false);
+			draw_set_colour(_col);
+			draw_ellipse(_cx - _r * 0.8, _cy - _r * 0.3, _cx + _r * 0.8, _cy + _r * 0.5, false);
+			draw_set_colour(c_white);
+			draw_circle(_cx - _r * 0.6, _cy - _r * 0.8, 2, false);
+			draw_circle(_cx + _r * 0.5, _cy - _r * 0.6, 2, false);
+			draw_circle(_cx, _cy - _r, 1.5, false);
+			break;
+		case "scale":
+			draw_set_colour(dark);
+			draw_ellipse(_cx - _r * 0.9, _cy - _r, _cx + _r * 0.9, _cy + _r, false);
+			draw_set_colour(_col);
+			draw_ellipse(_cx - _r * 0.7, _cy - _r * 0.85, _cx + _r * 0.7, _cy + _r * 0.7, false);
+			draw_set_colour(light);
+			draw_line_width(_cx, _cy - _r * 0.6, _cx, _cy + _r * 0.5, 2);
+			break;
+		case "feather":
+			draw_set_colour(dark);
+			draw_line_width(_cx - _r * 0.8, _cy + _r, _cx + _r * 0.6, _cy - _r, 2);
+			draw_set_colour(_col);
+			draw_ellipse(_cx - _r * 0.5, _cy - _r * 0.9, _cx + _r * 0.7, _cy + _r * 0.4, false);
+			draw_set_colour(light);
+			draw_line_width(_cx - _r * 0.5, _cy + _r * 0.6, _cx + _r * 0.5, _cy - _r * 0.8, 1);
+			break;
+		case "bone":
+			draw_set_colour(dark);
+			draw_line_width(_cx - _r * 0.7, _cy + _r * 0.7, _cx + _r * 0.7, _cy - _r * 0.7, _r * 0.45);
+			draw_set_colour(_col);
+			draw_circle(_cx - _r * 0.75, _cy + _r * 0.55, _r * 0.28, false);
+			draw_circle(_cx - _r * 0.55, _cy + _r * 0.8, _r * 0.28, false);
+			draw_circle(_cx + _r * 0.75, _cy - _r * 0.55, _r * 0.28, false);
+			draw_circle(_cx + _r * 0.55, _cy - _r * 0.8, _r * 0.28, false);
+			draw_line_width(_cx - _r * 0.6, _cy + _r * 0.6, _cx + _r * 0.6, _cy - _r * 0.6, _r * 0.3);
+			break;
+		case "hide":
+			draw_set_colour(dark);
+			draw_roundrect_ext(_cx - _r, _cy - _r * 0.8, _cx + _r, _cy + _r * 0.8, _r, _r * 0.6, false);
+			draw_set_colour(_col);
+			draw_roundrect_ext(_cx - _r * 0.8, _cy - _r * 0.6, _cx + _r * 0.8, _cy + _r * 0.6, _r * 0.8, _r * 0.5, false);
+			draw_set_colour(light);
+			draw_line_width(_cx - _r * 0.4, _cy - _r * 0.2, _cx + _r * 0.3, _cy - _r * 0.2, 1);
+			break;
+		default:        // folded cloth
+			draw_set_colour(dark);
+			draw_roundrect_ext(_cx - _r - 2, _cy - _r - 2, _cx + _r + 2, _cy + _r + 2, 6, 6, false);
+			draw_set_colour(_col);
+			draw_roundrect_ext(_cx - _r, _cy - _r, _cx + _r, _cy + _r, 6, 6, false);
+			draw_set_colour(dark);
+			draw_line_width(_cx - _r, _cy, _cx + _r, _cy, 1);
+			draw_set_colour(light);
+			draw_roundrect_ext(_cx - _r + 3, _cy - _r + 3, _cx - 2, _cy - 3, 3, 3, false);
 	}
 }
 

@@ -284,29 +284,21 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 	}
 }
 
-/// @description Draw one catalog item on its own (inventory icons). _crop = [x, y, w, h] of the 64x64 frame.
+/// @description Draw one catalog item on its own (inventory icons). _crop = [x, y, w, h] of the frame.
+/// _act: "" for the item's normal sheets, or a custom action name to use its oversized sheet.
 /// Uses _body's art, or the first body type the item has. _pal -1 = the item's default colour.
-function character_draw_item(_i, _body, _pal, _frame, _row, _crop, _x, _y, _scale){
+function character_draw_item(_i, _body, _pal, _frame, _row, _crop, _x, _y, _scale, _act = ""){
 	var cat = lpc_catalog();
 	var it = cat.items[_i];
-	if(!character_item_fits(_i, _body)){
-		for(var b = 0; b < array_length(cat.bodies); b++){
-			if(character_item_fits(_i, cat.bodies[b])){ _body = cat.bodies[b]; break; }
-		}
-	}
-	var layers = it.layers;
-	// Items with only an oversized swing (fishing rod, whip, long spears): show its first frame facing south
-	var fs = 64;
-	if(array_length(layers) == 0){
-		var acts = variable_struct_get_names(it.actions);
-		if(array_length(acts) == 0) return;
-		layers = it.actions[$ acts[0]];
-		fs = cat.anims[$ acts[0]].fs;
-		_row = 2;
-		_crop = [0, 0, fs, fs];
-		if(!variable_struct_exists(layers[0], _body)){
-			for(var b = 0; b < array_length(cat.bodies); b++){
-				if(variable_struct_exists(layers[0], cat.bodies[b])){ _body = cat.bodies[b]; break; }
+	var layers = (_act == "") ? it.layers : it.actions[$ _act];
+	var fs = (_act == "") ? 64 : cat.anims[$ _act].fs;
+	if(array_length(layers) == 0) return;
+	var has = false;
+	for(var l = 0; l < array_length(layers); l++) if(variable_struct_exists(layers[l], _body)) has = true;
+	if(!has){
+		for(var b = 0; b < array_length(cat.bodies) && !has; b++){
+			for(var l = 0; l < array_length(layers); l++){
+				if(variable_struct_exists(layers[l], cat.bodies[b])){ _body = cat.bodies[b]; has = true; break; }
 			}
 		}
 	}

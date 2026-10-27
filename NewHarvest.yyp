@@ -140,7 +140,6 @@
   },
   "name":"NewHarvest",
   "resources":[
-    {"id":{"name":"actions","path":"scripts/actions/actions.yy",},},
     {"id":{"name":"lpc_pal_body_light","path":"sprites/lpc_pal_body_light/lpc_pal_body_light.yy",},},
     {"id":{"name":"lpc_pal_body_amber","path":"sprites/lpc_pal_body_amber/lpc_pal_body_amber.yy",},},
     {"id":{"name":"lpc_pal_body_olive","path":"sprites/lpc_pal_body_olive/lpc_pal_body_olive.yy",},},
@@ -1245,6 +1244,7 @@
     {"id":{"name":"lpc_weapon_sword_scimitar_slash_behind_slash_128_scimitar","path":"sprites/lpc_weapon_sword_scimitar_slash_behind_slash_128_scimitar/lpc_weapon_sword_scimitar_slash_behind_slash_128_scimitar.yy",},},
     {"id":{"name":"lpc_weapon_sword_scimitar_slash_slash_128_scimitar","path":"sprites/lpc_weapon_sword_scimitar_slash_slash_128_scimitar/lpc_weapon_sword_scimitar_slash_slash_128_scimitar.yy",},},
     {"id":{"name":"lpc_catalog","path":"scripts/lpc_catalog/lpc_catalog.yy",},},
+    {"id":{"name":"actions","path":"scripts/actions/actions.yy",},},
     {"id":{"name":"obj_crafting_table","path":"objects/obj_crafting_table/obj_crafting_table.yy",},},
     {"id":{"name":"fnt_eq","path":"fonts/fnt_eq/fnt_eq.yy",},},
     {"id":{"name":"Note1","path":"notes/Note1/Note1.yy",},},

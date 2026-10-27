@@ -363,16 +363,19 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 		case "clothing":
 		case "held":
 			if(d.cat == -1) break;
-			// Zoom into the part of the 64x64 frame where this slot's art sits
-			var r = item_icon_crop(d.slot);
-			if(d.slot == "held" && array_length(lpc_catalog().items[d.cat].layers) == 0){
-				// Only an oversized swing sheet: draw its south-facing first frame scaled to fit
-				var a = variable_struct_get_names(lpc_catalog().items[d.cat].actions)[0];
-				var f = lpc_catalog().anims[$ a].fs;
-				r = [0, 0, f, f];
-			}
-			var sc = _size / max(r[2], r[3]);
 			var pal = (_stack.pal != "") ? asset_get_index(_stack.pal) : -1;
+			var it = lpc_catalog().items[d.cat];
+			if(variable_struct_exists(it, "icon")){
+				// Tools and weapons: the frame where the item is largest, cropped tight (measured by tools/lpc/icons.ps1)
+				var ic = it.icon;
+				var sc = (_size - 6) / max(ic.crop[2], ic.crop[3]);
+				character_draw_item(d.cat, _body, pal, ic.col, ic.row, ic.crop,
+				                    cx - ic.crop[2] * sc / 2, cy - ic.crop[3] * sc / 2, sc, ic.act);
+				break;
+			}
+			// Clothing: zoom into the part of the 64x64 frame where this slot's art sits
+			var r = item_icon_crop(d.slot);
+			var sc = _size / max(r[2], r[3]);
 			character_draw_item(d.cat, _body, pal, 0, 10, r, cx - r[2] * sc / 2, cy - r[3] * sc / 2, sc);
 			break;
 		case "material":

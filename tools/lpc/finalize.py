@@ -249,6 +249,15 @@ def layers_gml(layers):
         out.append('{z: %d, %s}' % (L['z'], ', '.join(bodies)))
     return '[' + ', '.join(out) + ']'
 
+# Icon framing for held items, measured by icons.ps1: the frame where the item is largest, cropped tight
+icons = {}
+icon_file = os.path.join(out, 'icons.txt')
+if os.path.exists(icon_file):
+    for l in open(icon_file, encoding='utf-8-sig'):
+        p = l.rstrip('\r\n').split('\t')
+        if len(p) == 6:
+            icons[p[0]] = '{act: %s, col: %s, row: %s, crop: [%s]}' % (gml_str(p[1]), p[3], p[4], p[5])
+
 lines = []
 used_anims = set()
 for it in cat['items']:
@@ -260,9 +269,10 @@ for it in cat['items']:
         mat = ''
     actions = ', '.join('%s: %s' % (a, layers_gml(ls)) for a, ls in sorted(it.get('actions', {}).items()))
     used_anims.update(it.get('actions', {}))
-    lines.append('\t\t{name: %s, slot: %s, material: %s, defPal: %s, anims: [%s], actions: {%s}, layers: %s},' % (
+    icon = (', icon: ' + icons[it['name']]) if (it['slot'] == 'held' and it['name'] in icons) else ''
+    lines.append('\t\t{name: %s, slot: %s, material: %s, defPal: %s, anims: [%s], actions: {%s}%s, layers: %s},' % (
         gml_str(it['name']), gml_str(it['slot']), gml_str(mat), def_pal,
-        ', '.join(gml_str(a) for a in it.get('anims', [])), actions, layers_gml(it['layers'])))
+        ', '.join(gml_str(a) for a in it.get('anims', [])), actions, icon, layers_gml(it['layers'])))
 
 # Custom animations: frame size, which body animation they replay, and the body frame for each
 # output frame per direction (rows n, w, s, e) - from the generator's custom-animations.ts

@@ -6,7 +6,7 @@ if(flash > 0) flash--;
 if(cooldown > 0) cooldown--;
 // Flyers pass over rocks but not through the cave walls
 var solids = collision_solids(false);
-if(def[$ "flies"] ?? false) solids = (room == rm_mine && global.mineWalls != -1) ? global.mineWalls : obj_col_box;
+if(def[$ "flies"] ?? false) solids = (global.mineWalls != -1) ? global.mineWalls : obj_col_box;
 
 if(hurtT > 0){
 	hurtT--;
@@ -30,6 +30,24 @@ if(attacking){
 }
 
 var d = (p != noone) ? point_distance(x, y, p.x, p.y) : infinity;
+// Pixies and moths never attack: they flutter about, and dart away when you come close
+if(def[$ "passive"] ?? false){
+	if(d < 70){
+		var away = point_direction(p.x, p.y, x, y) + random_range(-30, 30);
+		moveX = lengthdir_x(def.speed, away);
+		moveY = lengthdir_y(def.speed, away);
+	} else if(--wanderT <= 0){
+		wanderT = irandom_range(30, 90);
+		var a = random(360);
+		moveX = lengthdir_x(def.speed * 0.5, a);
+		moveY = lengthdir_y(def.speed * 0.5, a);
+	}
+	if(moveX != 0) dirIdx = (moveX < 0) ? 1 : 3;
+	monster_move(moveX, moveY, solids);
+	frame += 0.25;
+	depth_sort();
+	exit;
+}
 if(d < aggro){
 	var a = point_direction(x, y, p.x, p.y);
 	dirIdx = monster_dir(a);

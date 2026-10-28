@@ -45,7 +45,7 @@ function clock_tick(){
 }
 
 /// @description Rooms that get the day/night tint.
-function room_is_outdoors(){ return room == rm_1 || room == rm_2; }
+function room_is_outdoors(){ return room == rm_1 || room == rm_2 || room == rm_forest; }
 
 /// @description Darkness 0-1: evening from 6 pm, full night by 10 pm, light again by 7 am.
 function night_amount(){
@@ -57,8 +57,8 @@ function night_amount(){
 
 // ---------------------------------------------------------------- energy and health
 
-/// @description Max energy: 270 (as in Stardew) plus 10 per point of Stamina.
-function vitals_max_energy(){ return 270 + 10 * stat("stamina"); }
+/// @description Max energy: 270 (as in Stardew) plus 10 per point of Stamina, and 40 once Hesta's pantry is stocked.
+function vitals_max_energy(){ return 270 + 10 * stat("stamina") + (project_done("pantry") ? 40 : 0); } // + Hesta's pantry
 function vitals_max_health(){ return 100; }
 
 function vitals_exhausted(){ return global.vitals.energy <= 0; }
@@ -122,6 +122,7 @@ function day_advance(_passedOut){
 	// Farm: watered crops grow, out-of-season crops die, soil dries; resources return; then shipping pays out
 	var died = farm_new_day(ck.season);
 	weather_new_day(); // today's weather; rain waters the soil that just dried
+	var blessed = project_pixie_blessing(); // the shrine's pixies
 	resources_new_day(); // stumps regrow, rocks and weeds come back
 	var paid = shipping_payout();
 
@@ -136,5 +137,5 @@ function day_advance(_passedOut){
 	global.vitals.health = vitals_max_health();
 	global.vitals.mana = mana_max();   // a night's sleep restores your magic
 	global.vitals.light = 0;
-	return {lost: lost, died: died, paid: paid};
+	return {lost: lost, died: died, paid: paid, blessed: blessed};
 }

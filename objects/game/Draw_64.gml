@@ -9,6 +9,19 @@ if(game_is_playing_room() && world_time_ready() && room_is_outdoors()){
 	}
 }
 
+// Pixies glow through the dark (their light is drawn again over the night tint)
+with(obj_monster){
+	if((def[$ "look"] ?? "") != "pixie" || dying) continue;
+	var cam = view_camera[0];
+	var gx = (x - camera_get_view_x(cam)) * other.guiWidth / camera_get_view_width(cam);
+	var gy = (y - 26 - camera_get_view_y(cam)) * other.guiHeight / camera_get_view_height(cam);
+	gpu_set_blendmode(bm_add);
+	draw_set_alpha(0.3 * night_amount() + 0.1);
+	draw_circle_colour(gx, gy, 26, make_colour_rgb(255, 150, 230), c_black, false);
+	draw_set_alpha(1);
+	gpu_set_blendmode(bm_normal);
+}
+
 // Rain, storms and snow over outdoor rooms
 if(game_is_playing_room() && world_time_ready()) weather_draw(guiWidth, guiHeight);
 

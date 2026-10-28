@@ -202,11 +202,11 @@ if(shop && upgrades){
 			draw_roundrect_ext(cx2 - 16, y1 + rowH / 2 - 9, cx2, y1 + rowH / 2 + 7, 4, 4, false);
 			cx2 -= 26;
 		}
-		// Cooking ingredients: produce of any quality, shown as the crop
+		// Cooking ingredients: produce of any quality (shown as the crop) and forage
 		var keys = variable_struct_get_names(rc.cost);
 		array_sort(keys, false);
 		for(var k = 0; k < array_length(keys); k++){
-			if(string_pos("p|", keys[k]) != 1) continue;
+			if(string_pos("|", keys[k]) == 0) continue; // materials are the swatches above
 			var need = rc.cost[$ keys[k]];
 			var col = (cost_count(keys[k]) >= need || inv_is_free()) ? c_white : make_colour_rgb(230, 110, 90);
 			ui_text(cx2, y1 + rowH / 2, string(need), 0.5, col, fa_right);
@@ -258,6 +258,7 @@ if(tip != undefined && cursor == undefined){
 		case "material": array_push(lines, "Material"); break;
 		case "dye":      array_push(lines, "Dye"); break;
 		case "scroll":   array_push(lines, "Spell scroll"); break;
+		case "forage":   array_push(lines, "Forage"); break;
 		case "food":     array_push(lines, "Food"); break;
 	}
 	if(tierLine != "") lines[1] = tierLine + " " + string_lower(lines[1]);

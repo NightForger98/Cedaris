@@ -66,6 +66,11 @@ function monster_table(){
 		             drops: [["m|frost_crystal", 1, 1, 0.05], ["m|linen", 1, 2, 0.3], ["k|heal", 1, 1, 0.02]], gold: [4, 9]},
 		eyeball:    {name: "Watcher",    spr: spr_mon_eyeball, frames: 7, from: 20, hp: 32, dmg: [10, 14], def: 2, speed: 1.0, reach: 24, flies: true,
 		             drops: [["m|gem", 1, 1, 0.12]], gold: [8, 15]},
+		// Whisperwood at night: harmless, quick to flee (passive), drawn by obj_monster (look: "pixie" / "moth")
+		pixie:      {name: "Pixie", look: "pixie", passive: true, flies: true, frames: 1, from: 1, hp: 6, dmg: [0, 0], def: 0, speed: 1.9, reach: 0,
+		             drops: [["m|pixie_dust", 1, 1, 0.6]], gold: [0, 0]},
+		moth:       {name: "Moon Moth", look: "moth", passive: true, flies: true, frames: 3, from: 1, hp: 4, dmg: [0, 0], def: 0, speed: 1.4, reach: 0,
+		             drops: [["m|moonsilk", 1, 1, 0.35], ["m|fibre", 1, 1, 0.5]], gold: [0, 0]},
 		goblin:     {name: "Goblin",     race: "Goblin",  body: "teen",     head: "Goblin",      skins: ["green", "dark_green", "olive"],
 		             wear: [["pants", "Pants", "cloth", "brown"], ["shirt", "Longsleeve", "cloth", "leather"]], weapon: "Dagger",
 		             from: 1,  hp: 22, dmg: [4, 7],   def: 0, speed: 1.3, reach: 26, drops: [["m|leather", 1, 1, 0.3], ["m|bone", 1, 1, 0.1]], gold: [3, 8]},
@@ -165,17 +170,19 @@ function monster_kill(_inst){
 	_inst.dying = true;
 	var g = irandom_range(m.gold[0], m.gold[1]);
 	if(!inv_is_free()) global.inv.gold += g;
-	got = "+" + string(g) + " gold";
+	if(g > 0) got = "+" + string(g) + " gold";
 	for(var i = 0; i < array_length(m.drops); i++){
 		var dr = m.drops[i];
 		if(random(1) >= dr[3] + stat("luck") * 0.002) continue;
 		var n = irandom_range(dr[1], dr[2]);
 		if(n <= 0) continue;
 		inv_add(item_stack(dr[0], n));
-		got += ",  +" + string(n) + " " + item_def(dr[0]).name;
+		got += ((got == "") ? "+" : ",  +") + string(n) + " " + item_def(dr[0]).name;
 	}
 	quests_on_kill(_inst.kind);
-	farm_message(m.name + " defeated  " + got);
+	// Pixies and moths are caught, not defeated
+	if(m[$ "passive"] ?? false) farm_message("Caught a " + string_lower(m.name) + "  " + ((got == "") ? "(it slipped away with nothing)" : got));
+	else farm_message(m.name + " defeated  " + got);
 }
 
 // ---------------------------------------------------------------- the player gets hurt

@@ -327,3 +327,26 @@ function autotest_weather(_today, _tomorrow = ""){
 	if(_tomorrow != "") global.clock.tomorrow = _tomorrow;
 	return weather_now() + " / " + weather_tomorrow();
 }
+
+/// @description Finish a village project at once (hand in everything), for tests.
+function autotest_project_finish(_key){
+	var d = project_def(_key), p = project_state(_key);
+	for(var i = 0; i < array_length(d.need); i++) p.given[$ d.need[i][0]] = d.need[i][1];
+	p.done = true;
+	return project_done(_key);
+}
+
+/// @description The forest's layout, in short.
+function autotest_forest(){
+	if(!variable_global_exists("forestMap")) return "no map";
+	var f = global.forestMap, open = 0;
+	for(var x1 = 0; x1 < FOREST_W; x1++) for(var y1 = 0; y1 < FOREST_H; y1++) if(f.grid[x1][y1] == 0) open++;
+	return "open " + string(open) + " entrance " + string(f.entrance) + " shrine " + string(f.shrine) + " pond " + string(f.pond)
+	       + " trees " + string(instance_number(obj_resource));
+}
+
+/// @description Stand south of the shrine.
+function autotest_goto_shrine(){ with(obj_shrine){ obj_plyr.x = x; obj_plyr.y = y + 30; return "shrine"; } return "none"; }
+
+/// @description Switch the open notice board to a page ("requests" / "projects").
+function autotest_board_page(_page){ with(obj_quest_board) page = _page; return instance_exists(obj_quest_board) && obj_quest_board.open; }

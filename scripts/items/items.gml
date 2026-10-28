@@ -6,6 +6,7 @@
 ///   "d|<palette material>|<colour>"  dye that recolours equipment, e.g. "d|cloth|red", "d|metal|gold"
 ///   "s|<crop>", "p|<crop>|<quality>"  seeds and produce (see farming); "f|<dish>" cooked food (see food)
 ///   "k|<spell>"                spell scroll (see magic)
+///   "w|<forage>"               something wild from Whisperwood (see forest)
 /// A stack is {id, count, pal} - pal is an optional palette name giving clothing its own colour.
 ///
 /// Stats: clothing gets its stats from the materials in its recipe (item_stats), and everything
@@ -134,6 +135,13 @@ function item_def(_id){
 				d = {id: _id, type: "produce", crop: ci, quality: q, max: 99, price: produce_price(ci, q) * 2, tier: q, stats: {},
 				     name: ["", "Silver ", "Gold "][q] + ct.name,
 				     desc: "Ship it, or hold it and use it to eat (+" + string(round(ct.energy * (1 + q * 0.4))) + " energy)."};
+			}
+			break;
+		case "w":
+			var fg = forage_table()[$ p[1]];
+			if(fg != undefined){
+				d = {id: _id, type: "forage", forage: p[1], name: fg.name, max: 99, price: fg.sell * 2, tier: 0, stats: {}, art: fg.art,
+				     desc: fg.desc + ((fg.energy > 0) ? " Hold it and use it to eat (+" + string(fg.energy) + " energy)." : "")};
 			}
 			break;
 		case "k":
@@ -455,6 +463,11 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			draw_set_colour(make_colour_rgb(120, 90, 55));
 			draw_roundrect_ext(cx - _size * 0.3, cy - _size * 0.36, cx + _size * 0.3, cy + _size * 0.36, 6, 6, true);
 			draw_sprite_stretched(spr_crops_picked, d.crop, cx - _size * 0.24, cy - _size * 0.26, _size * 0.48, _size * 0.48);
+			break;
+		case "forage":
+			// The plant itself, from the terrain tileset
+			var fa = d.art, fs = (_size * 0.8) / max(fa[2], fa[3]);
+			draw_sprite_part_ext(spr_tile_terrain, 0, fa[0], fa[1], fa[2], fa[3], cx - fa[2] * fs / 2, cy - fa[3] * fs / 2, fs, fs, c_white, 1);
 			break;
 		case "scroll":
 			// A rolled parchment tied with a ribbon in the spell's colour

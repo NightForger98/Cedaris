@@ -33,6 +33,7 @@ function lpc_credits(){
 			"Joe White",
 			"Johannes Sjölund (wulax)",
 			"Joshua Taylor",
+			"Julien Jorge",
 			"kcilds/Rocetti/Eredah",
 			"kheftel",
 			"kirts",

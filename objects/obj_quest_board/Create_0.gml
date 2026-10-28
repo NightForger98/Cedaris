@@ -4,3 +4,4 @@ near = false;
 open = false;
 message = "";
 messageTime = 0;
+page = "requests"; // or "projects" (village projects, see the projects script)

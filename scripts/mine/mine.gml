@@ -280,10 +280,11 @@ function mine_leave(){
 	}
 }
 
-/// @description What the player and monsters can't walk through: walls and things, plus the mine's rock.
+/// @description What the player and monsters can't walk through: walls and things, plus the rock of the mine and
+/// the trees and water of Whisperwood (rooms built at runtime keep them in the global.mineWalls tilemap).
 function collision_solids(_withNpcs){
 	var s = _withNpcs ? [obj_col_box, obj_npc_parent] : [obj_col_box];
-	if(room == rm_mine && variable_global_exists("mineWalls") && global.mineWalls != -1) array_push(s, global.mineWalls);
+	if(variable_global_exists("mineWalls") && global.mineWalls != -1) array_push(s, global.mineWalls);
 	return s;
 }
 

@@ -1,0 +1,63 @@
+# Milestone 10.2-10.3: village projects; the bridge opens Whisperwood; foraging; night creatures; the shrine
+start story
+wait 60
+# The bridge is out until its project is done
+room rm_2 970 500
+wait 40
+face e
+key e
+wait 5
+shot 01_bridge_out
+# The projects page
+pos 982 452
+face n
+key e
+wait 5
+call autotest_board_page projects
+shot 02_board
+key esc
+wait 30
+give m|wood 30
+call project_give bridge wood
+pos 982 452
+face n
+key e
+wait 5
+call autotest_board_page projects
+shot 02b_board_progress
+key esc
+wait 30
+give m|wood 30
+give m|stone 40
+give m|iron 5
+call project_give bridge wood
+call project_give bridge stone
+call project_give bridge iron
+call project_done bridge
+# Across to Whisperwood
+pos 970 500
+face e
+key e
+wait 80
+call room_get_name room
+call autotest_forest
+call autotest_resources
+shot 03_forest
+# Forage something
+hold 7
+call autotest_goto forage_mushroom
+use 1
+inv
+pos 600 480
+wait 30
+shot 04_clearing
+call autotest_goto_shrine
+wait 5
+shot 05_shrine
+# Night: pixies and moths
+time 21
+room rm_forest
+wait 60
+call autotest_monsters
+shot 06_night
+quit

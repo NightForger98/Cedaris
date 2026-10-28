@@ -27,6 +27,7 @@ function dish_table(){
 		{key: "corn_fritters", name: "Corn Fritters",    ing: [["corn", 2]],                                energy: 80,  buff: {charm: 3},            minutes: 300, colour: make_colour_rgb(240, 200, 70)},
 		{key: "stuffed_artichoke", name: "Stuffed Artichoke", ing: [["artichoke", 1], ["tomato", 1]],       energy: 100, buff: {luck: 4},             minutes: 360, colour: make_colour_rgb(120, 160, 80)},
 		{key: "gourd_pie",    name: "Gourd Pie",         ing: [["gourd", 1], ["carrot", 1]],                energy: 120, buff: {charm: 2, luck: 2},   minutes: 360, colour: make_colour_rgb(220, 130, 60)},
+		{key: "forest_stew",  name: "Forest Stew",       ing: [["w|mushroom", 2], ["w|herb", 1], ["potato", 1]], energy: 110, buff: {magic: 3, stamina: 2}, minutes: 360, colour: make_colour_rgb(130, 110, 80)},
 	];
 	return t;
 }
@@ -37,17 +38,24 @@ function dish_def(_key){
 	return undefined;
 }
 
-/// @description A dish's ingredients as a recipe cost {"p|<crop>": n} (any quality counts).
+/// @description A dish's ingredients as a recipe cost: a crop by name means any quality ({"p|<crop>": n}); anything
+/// else is an exact item id ("w|mushroom").
 function dish_cost(_d){
 	var c = {};
-	for(var i = 0; i < array_length(_d.ing); i++) c[$ "p|" + _d.ing[i][0]] = _d.ing[i][1];
+	for(var i = 0; i < array_length(_d.ing); i++){
+		var k = _d.ing[i][0];
+		c[$ (string_pos("|", k) > 0) ? k : "p|" + k] = _d.ing[i][1];
+	}
 	return c;
 }
 
 /// @description Worth a bit more than its ingredients.
 function dish_price(_d){
 	var v = 0;
-	for(var i = 0; i < array_length(_d.ing); i++) v += crop_table()[crop_index(_d.ing[i][0])].sell * _d.ing[i][1];
+	for(var i = 0; i < array_length(_d.ing); i++){
+		var k = _d.ing[i][0];
+		v += ((string_pos("|", k) > 0) ? item_sell_price(k) : crop_table()[crop_index(k)].sell) * _d.ing[i][1];
+	}
 	return round(v * 1.5);
 }
 
@@ -128,18 +136,20 @@ function climate_chill(){
 /// @description A recipe cost key as an item: "copper" is a material, "p|potato" is produce of any quality.
 function cost_item_id(_key){
 	if(string_pos("p|", _key) == 1) return _key + "|0";
+	if(string_pos("|", _key) > 0) return _key; // an exact item ("w|mushroom", "f|carrot_soup")
 	return "m|" + _key;
 }
 
 /// @description How many you have for a cost key (produce counts every quality).
 function cost_count(_key){
 	if(string_pos("p|", _key) == 1) return inv_count(_key + "|0") + inv_count(_key + "|1") + inv_count(_key + "|2");
+	if(string_pos("|", _key) > 0) return inv_count(_key);
 	return inv_count("m|" + _key);
 }
 
 /// @description Take _n for a cost key: produce goes lowest quality first, so the gold stars stay for shipping.
 function cost_take(_key, _n){
-	if(string_pos("p|", _key) != 1) return inv_take("m|" + _key, _n);
+	if(string_pos("p|", _key) != 1) return inv_take((string_pos("|", _key) > 0) ? _key : "m|" + _key, _n);
 	for(var q = 0; q <= 2 && _n > 0; q++){
 		var t = min(_n, inv_count(_key + "|" + string(q)));
 		if(t > 0){ inv_take(_key + "|" + string(q), t); _n -= t; }

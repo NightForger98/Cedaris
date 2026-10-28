@@ -17,7 +17,7 @@ restartRoom = false; // the transition rebuilds the current room (going down a m
 lightSurf = -1;   // the mine's darkness, drawn in Draw GUI
 wakeAtBed = false;
 autosavePending = false;
-dayReport = {lost: 0, died: 0, paid: 0}; // what the last new day did, for the morning message
+dayReport = {lost: 0, died: 0, paid: 0, blessed: 0}; // what the last new day did, for the morning message
 hudMessage = "";
 hudTime = 0;
 autotest_start(); // automated test run, if autotest.txt is in the save folder

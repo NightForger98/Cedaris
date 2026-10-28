@@ -85,6 +85,14 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
   to 3. Deliveries are handed in at the board; hunts count monsters beaten after you take them. Rewards: gold,
   +60 friendship with whoever asked, and often a dye (story mode's main source of dyes) or a material.
 
+- **Village projects** (the notice board's Projects page, `scripts/projects`): hand things in bit by bit. The East
+  Bridge (wood, stone, iron) opens Whisperwood; the Old Well (stone, copper, a frost crystal) unlocks sprinklers;
+  Aunt Hesta's Pantry (five dishes) gives +40 max energy; the Forest Shrine (moonsilk, gems, a frost crystal, an
+  ember core) brings pixies to bless your crops at night.
+- **Whisperwood** (`scripts/forest`): the same generated wood every visit, east across the bridge. Trees, bushes and
+  forage come back daily: wild mushrooms and herbs (eat or cook them: Forest Stew gives +3 Magic) and red
+  toadstools (Elda loves them). At night, pixies (pixie dust) and moon moths (moonsilk) - catch them with a swing.
+
 ## Hooks for quests and events
 
 ```gml

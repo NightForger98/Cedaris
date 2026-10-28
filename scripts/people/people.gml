@@ -40,7 +40,7 @@ function villager_table(){
 		                ["You're good company. Quiet when it counts.", "I made you a gate latch. Don't tell Pip, he'll want one.", "Whatever's down in that mine, you'll beat it."]],
 		        rewards: [["m|wood", 30], ["d|cloth|walnut", 1], ["m|leather", 5], ["d|cloth|forest", 1], ["m|fur", 5]]},
 		elda:  {name: "Elda", title: "the Herbalist", room: "rm_2", slot: "woman", race: "Elf", body: "female", seed: 2101,
-		        loves: ["p|artichoke", "f|stuffed_artichoke", "m|frost_crystal", "m|pixie_dust"], likes: ["p|", "m|gem", "m|fibre"], dislikes: ["m|bone", "m|coal"], hates: ["m|ember_core", "f|fiery_chilli"],
+		        loves: ["p|artichoke", "f|stuffed_artichoke", "m|frost_crystal", "m|pixie_dust", "w|toadstool"], likes: ["p|", "m|gem", "m|fibre", "w|"], dislikes: ["m|bone", "m|coal"], hates: ["m|ember_core", "f|fiery_chilli"],
 		        lines: [["The river remembers every leaf it carries.", "Weeds are only plants nobody's asked about.", "Mind the mushrooms by the bridge. Not all are friendly."],
 		                ["Your hands smell of soil. Good. Honest.", "There's frost deep in the mine that never melts. I'd love a piece.", "Magic grows like crops: slowly, then all at once."],
 		                ["I've seen four hundred springs. This one's my favourite.", "You listen to the land. Few do.", "Take this - for the road, and the dark under it."]],

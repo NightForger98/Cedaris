@@ -1,12 +1,12 @@
 # Screenshots of rooms with debug on (grid, collision boxes, position readout), for placing things
 start free
 wait 40
-room rm_2 982 452
+room rm_2 960 600
 wait 40
-call autotest_resources
-call autotest_people
-call room_get_name room
 debug on
 wait 5
-shot village_board
+shot village_se
+pos 960 760
+wait 10
+shot village_se2
 quit

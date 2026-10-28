@@ -10,6 +10,8 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
   functions - check names against the runtime's `GmlSpec.xml` when using new built-ins.
 - **GML gotchas hit before**: `all`, `id`, `score`, `pi` are built-ins (don't use as variable names); `crop` is an
   enum (in the crops object); `static` only works inside functions; JSON `null` may not load as `undefined`.
+  Also `floor`, `y`, `power` (built-ins). `f()[$ g()[i]]` (an accessor on a call, keyed by an indexed call)
+  crashes the compiler with a bare NullReferenceException: split it into two lines.
 - **GameMaker open while editing files**: it shows "Project Directory Modified" - choose **Reload**, never Save.
 - **Testing**: `tools/test/autotest.sh tools/test/cases/<case>.txt` builds and runs the game with a test script
   (commands in `scripts/autotest`: start, pos, hold, use, give, call <function>, shot...) and copies its log and
@@ -38,6 +40,9 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
   `combat` (`weapon_table`, `monster_table`, `obj_monster`, knock-outs). Monster art: `spr_mon_*` from [LPC] Monsters,
   imported with `node tools/sprite_import.js <png> <spr_name>` (credited in `LPC_CREDITS.csv`).
 - Magic: `magic` (spells, mana, scrolls `k|<spell>`; the player casts with F holding a staff, Q changes spell).
+- Weather: `weather`. Village projects: `projects` (the board's Projects page). Whisperwood: `forest` (`rm_forest`,
+  generated from a fixed seed at Room Start like the mine; `obj_path` is the bridge / the way back, `obj_shrine`).
+  Rooms built at runtime keep walls and water in the `global.mineWalls` tilemap (see `collision_solids`).
 - People and quests: `people` (villagers, friendship, gifts; `obj_dialogue`), `quests` (`obj_quest_board` in the
   village). Anything usable with E calls `interact_near(range)` and `interact_ready()` (`interact`): only the
   closest thing answers. `ui_blocking()` is true while any window is open.

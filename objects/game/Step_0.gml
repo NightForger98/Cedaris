@@ -47,6 +47,7 @@ if(autosavePending && instance_exists(obj_plyr)){
 	           + (saved ? "  -  saved to slot " + string(global.saveSlot) : "  -  no free save slot: save from the pause menu")
 	           + ((dayReport.paid > 0) ? "  -  shipping paid " + string(dayReport.paid) + " gold" : "")
 	           + ((dayReport.died > 0) ? "  -  " + string(dayReport.died) + " crops died out of season" : "")
+	           + (((dayReport[$ "blessed"] ?? 0) > 0) ? "  -  pixies blessed " + string(dayReport.blessed) + " crops" : "")
 	           + ((dayReport.lost > 0) ? "  -  you passed out and lost " + string(dayReport.lost) + " gold" : "");
 	hudTime = game_get_speed(gamespeed_fps) * 5;
 }
@@ -78,7 +79,7 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 
 	// Debug (Insert): Page Up / Page Down hop between play rooms
 	if(debug && (keyboard_check_pressed(vk_pageup) || keyboard_check_pressed(vk_pagedown))){
-		var rooms = [rm_1, rm_2, rm_3, rm_12, rm_123, rm_mine];
+		var rooms = [rm_1, rm_2, rm_3, rm_12, rm_123, rm_mine, rm_forest];
 		var n = array_length(rooms);
 		var i = array_get_index(rooms, room);
 		spawnRoom = -1; // use the room's own player position

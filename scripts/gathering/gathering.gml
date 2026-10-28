@@ -48,6 +48,12 @@ function resource_table(){
 		               tint: make_colour_rgb(255, 140, 100), drops: [["m|stone", 1, 3, 1], ["m|coal", 1, 2, 0.3], ["m|ember_core", 1, 1, 0.05]]},
 		gem_node:     {name: "Gem Node",     tools: ["Pickaxe"], hp: 5,  hard: 1, art: [578, 392, 56, 53],  anchor: [28, 46],  foot: [1.5, 1.25], scale: 0.75,
 		               ore: make_colour_rgb(90, 220, 230),  drops: [["m|gem", 1, 2, 1]]},
+		// Whisperwood: the old trees that make its walls (they can't be cut), and things to forage
+		ancient_oak:  {name: "Ancient Oak",  tools: ["none"], hp: 999, hard: 0, art: [931, 902, 90, 117], anchor: [46, 112], foot: [2, 2], fixed: true, drops: []},
+		ancient_pine: {name: "Ancient Pine", tools: ["none"], hp: 999, hard: 0, art: [961, 5, 63, 147],   anchor: [31, 141], foot: [2, 2], fixed: true, drops: []},
+		forage_mushroom:  {name: "Mushrooms",     tools: ["any"], hp: 1, hard: 0, art: [862, 893, 43, 34], anchor: [21, 30], foot: [1, 0.75], scale: 0.7, drops: [["w|mushroom", 1, 2, 1]]},
+		forage_toadstool: {name: "Red Toadstool", tools: ["any"], hp: 1, hard: 0, art: [830, 994, 32, 30], anchor: [16, 28], foot: [1, 0.75], scale: 0.8, drops: [["w|toadstool", 1, 1, 1]]},
+		forage_herb:      {name: "Wild Herbs",    tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [1, 0.75], tint: make_colour_rgb(200, 255, 170), drops: [["w|herb", 1, 2, 1]]},
 		weeds:        {name: "Weeds",        tools: ["any"],     hp: 1,  hard: 0, art: [191, 767, 30, 33],  anchor: [15, 30],  foot: [1.25, 1],
 		               drops: [["m|fibre", 1, 2, 1]]},
 		bush:         {name: "Bush",         tools: ["Scythe", "Axe"], hp: 2, hard: 0, art: [289, 447, 29, 33], anchor: [14, 30], foot: [1.5, 1],
@@ -72,6 +78,9 @@ function resource_areas(){
 		// Farm: the southern edge
 		{room: "rm_1", cells: [1, 22, 30, 22],  max: 8,  perDay: 2, start: 5,
 		 kinds: [["stone", 45], ["weeds", 25], ["boulder", 10], ["copper_vein", 10], ["oak", 5], ["pine", 5]]},
+		// Whisperwood: its clearings (walls and water are skipped) - wood, forage and a few stones
+		{room: "rm_forest", cells: [2, 2, 45, 27], max: 34, perDay: 8, start: 28,
+		 kinds: [["oak", 16], ["pine", 16], ["bush", 14], ["weeds", 10], ["stone", 6], ["forage_mushroom", 16], ["forage_herb", 12], ["forage_toadstool", 5]]},
 	];
 	return a;
 }
@@ -188,6 +197,8 @@ function resource_cell_free(_gx, _gy){
 	var cx = _gx * RES_CELL + RES_CELL / 2, cy = _gy * RES_CELL + RES_CELL / 2;
 	if(cx < 0 || cy < 0 || cx >= room_width || cy >= room_height) return false;
 	if(instance_exists(crops) && farm_is_soil(_gx, _gy)) return false;
+	// Rooms built at runtime (the mine, Whisperwood) keep their walls and water in a tilemap
+	if(variable_global_exists("mineWalls") && global.mineWalls != -1 && tilemap_get_at_pixel(global.mineWalls, cx, cy) > 0) return false;
 	var x1 = cx - 15, y1 = cy - 15, x2 = cx + 15, y2 = cy + 15;
 	if(collision_rectangle(x1, y1, x2, y2, obj_col_box, false, true) != noone) return false;
 	if(collision_rectangle(x1, y1, x2, y2, obj_npc_parent, false, true) != noone) return false;
@@ -303,8 +314,8 @@ function gather_hit(_user, _item, _dir){
 	}
 	if(best == noone) return false;
 	if(!resource_tool_ok(best.def, _item)){
-		// Only say so for tools; weapons just bounce off
-		if(item_is_tool(_item)) farm_message("That needs " + ((best.def.tools[0] == "Axe") ? "an axe" : "a " + string_lower(best.def.tools[0])));
+		// Only say so for tools; weapons just bounce off (and the ancient trees aren't for cutting)
+		if(item_is_tool(_item) && !(best.def[$ "fixed"] ?? false)) farm_message("That needs " + ((best.def.tools[0] == "Axe") ? "an axe" : "a " + string_lower(best.def.tools[0])));
 		return false;
 	}
 	gather_damage(best, _item);

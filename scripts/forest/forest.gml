@@ -177,3 +177,32 @@ function forage_eat(_stack){
 	farm_message("Ate " + f.name + "  (+" + string(f.energy) + " energy)");
 	return true;
 }
+
+/// @description The world map's Whisperwood: the real wood (the same seeded layout) drawn over the map's stand-in
+/// once the bridge is mended, and veiled in mist until then. _mx, _my, _s: where the map is on screen and its scale.
+function forest_draw_on_map(_mx, _my, _s){
+	var m = world_map(), r = m.rooms[$ "rm_forest"];
+	if(r == undefined) return;
+	var x0 = _mx + r[0] * _s, y0 = _my + r[1] * _s, cw = 32 * m.scale * _s;
+	if(!project_done("bridge")){
+		draw_set_alpha(0.75);
+		draw_set_colour(make_colour_rgb(40, 55, 50));
+		draw_rectangle(x0, y0, x0 + r[2] * _s, y0 + r[3] * _s, false);
+		draw_set_alpha(1);
+		ui_text(x0 + r[2] * _s / 2, y0 + r[3] * _s / 2, "???", 0.7, make_colour_rgb(170, 190, 180));
+		return;
+	}
+	static f = undefined;
+	if(f == undefined) f = forest_generate();
+	var g = f.grid;
+	for(var gx = 0; gx < FOREST_W; gx++) for(var gy = 0; gy < FOREST_H; gy++){
+		var v = g[gx][gy];
+		draw_set_colour((v == 1) ? make_colour_rgb(30, 70, 45) : ((v == 3) ? make_colour_rgb(50, 110, 170) : make_colour_rgb(70, 130, 60)));
+		draw_rectangle(x0 + gx * cw, y0 + gy * cw, x0 + (gx + 1) * cw - 1, y0 + (gy + 1) * cw - 1, false);
+	}
+	// The shrine: a glow once it's lit
+	var sx = x0 + (f.shrine[0] + 0.5) * cw, sy = y0 + (f.shrine[1] + 0.5) * cw;
+	draw_set_colour(project_done("shrine") ? make_colour_rgb(255, 190, 245) : make_colour_rgb(160, 160, 170));
+	draw_circle(sx, sy, max(3, cw * 0.8), false);
+	draw_set_colour(c_white);
+}

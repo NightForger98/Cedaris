@@ -146,7 +146,10 @@ y += moveY;
 //objects
 var inst = instance_place(x,y,obj_transition);
 // Skip transitions that were never given a target room
-if (inst != noone and inst.targetRoom != -1 and facing == inst.PlayerFacingBefore){
+// Homes and shops lock at night and out of hours (door_lock_reason)
+var locked = (inst != noone && inst.targetRoom != -1) ? door_lock_reason(room_get_name(inst.targetRoom)) : "";
+if(locked != "" && facing == inst.PlayerFacingBefore && game.hudTime <= 0) farm_message(locked);
+if (inst != noone and inst.targetRoom != -1 and facing == inst.PlayerFacingBefore and locked == ""){
 	
 	with(game){
 		spawnRoom= inst.targetRoom;

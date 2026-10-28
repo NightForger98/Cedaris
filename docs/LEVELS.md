@@ -68,7 +68,6 @@ The farm is the middle of the map; a way out on each side:
 - **Hollow Vale** (`rm_valley`, 60x44): Wren's ranch at the top of the path (`rm_valley_ranch`: livestock; Pip
   works and lives there too), Thorne's carpentry in the woods east of the path (`rm_valley_carpentry`: timber and
   stone; Rowan works its yard), a river with a bridge, a lake (river fish), wood and forage on both banks.
-- `rm_3` is an empty test room nothing leads to.
 - The world map (M in game) is `spr_world_map` and `scripts/world_map`, made by `node tools/rooms/worldmap.js` from
   the built rooms (run it again after changing an outdoor room): rooms laid out as their exits join, every building
   with a door, and where each indoor room's door is.
@@ -80,7 +79,10 @@ Harvest Moon. Each stop is an hour and a named spot; they set off at that hour a
 doors (routes found at runtime over `scripts/room_walk`, which the room builder writes), so a shopkeeper who opens
 at 9 leaves home at 8 and gets in around 9. A shop only trades while its keeper is behind the counter, in hours;
 otherwise T in their dialogue gives the hours. Each has a day off with its own routine. On a festival day everyone
-is in the village crowd instead.
+is in the village crowd instead. On a rainy day most stay in (anything outdoors becomes home), except
+the `rainproof`: Marlo fishes, Garrick keeps watch, Pip minds the sheep, Hask hunts, and Elda loves the rain.
+Doors lock: homes while their people sleep (9pm - 8am), shops outside hours and on their day off - unless you have
+2 hearts with someone who lives or works there (`door_lock_reason`). Villagers step around you and each other.
 
 | Shop | Keeper (lives) | Hours | Closed | Day off |
 | --- | --- | --- | --- | --- |

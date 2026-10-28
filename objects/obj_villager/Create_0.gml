@@ -14,3 +14,5 @@ hammerTimer = 60;
 var w = villager_where(who);
 x = w.x;
 y = w.y;
+sideX = 0;         // a sidestep around you or another villager (see Step)
+sideY = 0;

@@ -1,0 +1,47 @@
+# Handoff gaps: locked doors, rainy days, villagers stepping round you, Whisperwood on the map
+start story
+wait 60
+call autotest_date 0 2
+# Doors: a home locks at night; a shop out of hours; friends are welcome any time
+time 23
+call door_lock_reason rm_village_elda
+call door_lock_reason rm_village_smithy
+call door_lock_reason rm_12
+time 12
+call door_lock_reason rm_village_elda
+call door_lock_reason rm_village_smithy
+time 23
+call autotest_set_friend elda 520
+call door_lock_reason rm_village_elda
+# Rain: Posy stays in, Marlo still fishes
+time 11
+call autotest_weather sun
+call autotest_villager_at posy
+call autotest_villager_at marlo
+call autotest_villager_at tobin
+call autotest_weather rain
+call autotest_villager_at posy
+call autotest_villager_at marlo
+call autotest_villager_at tobin
+call autotest_weather sun
+# Stepping round you: stand where Posy is
+room rm_town 500 400
+wait 60
+call autotest_villager_at posy
+call autotest_block posy
+call autotest_nudge -10 0
+wait 40
+call autotest_side posy
+shot 01_sidestep
+# The map: Whisperwood shrouded, then the real wood once the bridge is mended
+key m
+wait 10
+shot 02_map_before
+key m
+wait 20
+call autotest_project_finish bridge
+key m
+wait 10
+shot 03_map_after
+key m
+quit

@@ -22,7 +22,8 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
   `%APPDATA%/GameMakerStudio2-LTS2026/<user>/licence.plist`). The compiler does not catch calls to unknown
   functions - check names against the runtime's `GmlSpec.xml` when using new built-ins.
 - **GML gotchas hit before**:
-  - `all`, `id`, `score`, `pi`, `floor`, `y`, `power` are built-ins (don't use as variable names); `crop` is an enum
+  - `all`, `id`, `score`, `pi`, `floor`, `y`, `power`, `solid` are built-ins (don't use as variable names; `solid` fails as
+    "malformed assignment"); `crop` is an enum
     (in the crops object); `not` is a keyword - even as a struct key it crashes the compiler with "Stack empty".
   - `static` only works inside functions; JSON `null` may not load as `undefined`.
   - `f()[$ g()[i]]` (an accessor on a call, keyed by an indexed call) crashes the compiler with a bare
@@ -123,11 +124,10 @@ Where things stood at the end of the last session (2026-10-28), and what to know
 - Counters are two cells tall: leave a gap so the keeper can get out (the builder's reach check catches it).
 
 **Known gaps / ideas for next**:
-- Doors aren't locked at night; shops just won't trade out of hours.
-- Villagers walk through the player and each other; rain doesn't change their day; no seasonal or heart-event
-  schedule variants yet.
-- The map shows Whisperwood as generic woods (the real one is generated in game).
-- Unused leftovers: `obj_npc_man` (an old NPC object) and `rm_3` (an empty room nothing leads to).
+- Done since: doors lock at night and out of hours (friends at 2 hearts get in), villagers step around you and
+  each other, rainy days keep most people in, the map shows the real Whisperwood, and the unused `obj_npc_man`,
+  `rm_3` and its label objects are gone.
+- Still open: no seasonal or heart-event schedule variants yet.
 
 **Working with the user**: they want recommendations acted on without asking first ("if you recommend something go
 ahead with it"); they always choose Reload in GameMaker; end each step with a commit and push to `main`.

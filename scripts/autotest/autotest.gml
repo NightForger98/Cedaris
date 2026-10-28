@@ -526,3 +526,22 @@ function autotest_stand_clear(_kind, _dist){
 	}
 	return "no clear side";
 }
+
+/// @description Where a villager is now, as "room x,y" (and whether they're at work).
+function autotest_villager_at(_key){
+	var w = villager_where(_key);
+	return w.room + " " + string(round(w.x)) + "," + string(round(w.y)) + (w.work ? " (work)" : "") + (w.moving ? " (walking)" : "");
+}
+
+/// @description A villager in this room's sidestep offset, after standing the player right where they'd be.
+function autotest_block(_key){
+	with(obj_villager) if(who == _key){ obj_plyr.x = x; obj_plyr.y = y; return "blocking " + _key; }
+	return "not here";
+}
+function autotest_side(_key){
+	with(obj_villager) if(who == _key) return "offset " + string(round(sideX)) + "," + string(round(sideY));
+	return "not here";
+}
+
+/// @description Move the player by (dx, dy).
+function autotest_nudge(_dx, _dy){ obj_plyr.x += real(_dx); obj_plyr.y += real(_dy); return "moved"; }

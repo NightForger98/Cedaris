@@ -17,7 +17,8 @@
 /// @description Homes, jobs and days. work: {at, open, close, off} - hours, and the weekday off (0 Mon - 6 Sun);
 /// they leave an hour before opening. after: their evening once work's done (default: home at closing time).
 /// dayoff: their day off. routine: every day, for those without a job. kid: last on the map's house labels.
-/// hammer: swings a hammer while working (Brom).
+/// hammer: swings a hammer while working (Brom). rainproof: still goes out in the rain (Marlo fishes, Garrick keeps
+/// watch, Pip minds the sheep, Hask hunts, and Elda loves it); everyone else stays in (villager_stops).
 function villager_routines(){
 	static t = {
 		// Shops: the ranch opens first (farm hours), the inn last and latest; each closes one day a week
@@ -44,16 +45,16 @@ function villager_routines(){
 		ida:    {home: "rm_town_home_se.ida_bed", work: {at: "rm_town_inn.ida_work", open: 6, close: 13, off: 6},   // baking for the inn
 		         after: [[13, "rm_town.square_c"], [16, "rm_town_home_se.ida_home"], [21, "home"]],
 		         dayoff: [[9, "rm_village_store.shop_a"], [11, "rm_2.square_d"], [14, "rm_town_home_se.ida_home"], [21, "home"]]},
-		marlo:  {home: "rm_beach_hut.marlo_bed", work: {at: "rm_beach.pier_end", open: 6, close: 12, off: 6},
+		marlo:  {home: "rm_beach_hut.marlo_bed", rainproof: true, work: {at: "rm_beach.pier_end", open: 6, close: 12, off: 6},
 		         after: [[12, "rm_beach_hut.marlo_home"], [16, "rm_town_inn.door_table"], [20.5, "home"]],
 		         dayoff: [[9, "rm_beach.camp"], [12, "rm_village_store.shop_c"], [14, "rm_beach_hut.marlo_home"], [21, "home"]]},
-		pip:    {home: "rm_valley_ranch.pip_bed", work: {at: "rm_valley.pasture", open: 7, close: 16, off: 6},
+		pip:    {home: "rm_valley_ranch.pip_bed", rainproof: true, work: {at: "rm_valley.pasture", open: 7, close: 16, off: 6},
 		         after: [[16, "rm_2.square_b"], [19, "home"]],
 		         dayoff: [[10, "rm_2.square_b"], [13, "rm_beach.camp"], [17, "home"]]},
-		hask:   {home: "rm_town_home_sw.hask_bed", work: {at: "rm_valley.hunt", open: 7, close: 15, off: 3},
+		hask:   {home: "rm_town_home_sw.hask_bed", rainproof: true, work: {at: "rm_valley.hunt", open: 7, close: 15, off: 3},
 		         after: [[15, "rm_town_inn.table_f"], [21, "home"]],
 		         dayoff: [[10, "rm_town_outfitter.shop_a"], [12, "rm_town_home_sw.hask_home"], [17, "rm_town_inn.table_f"], [21, "home"]]},
-		garrick:{home: "rm_town_inn.garrick_bed", work: {at: "rm_town.watch", open: 8, close: 18, off: 6},
+		garrick:{home: "rm_town_inn.garrick_bed", rainproof: true, work: {at: "rm_town.watch", open: 8, close: 18, off: 6},
 		         after: [[18, "rm_town_inn.table_c"], [22, "home"]],
 		         dayoff: [[9, "rm_beach.camp"], [13, "rm_village_smithy.shop_b"], [16, "rm_town_inn.table_c"], [22, "home"]]},
 		nell:   {home: "rm_town_home_e.nell_bed", work: {at: "rm_town_home_e.nell_wheel", open: 8, close: 14, off: 2},
@@ -69,7 +70,7 @@ function villager_routines(){
 		         after: [[17, "rm_2.square_f"], [19, "home"]],
 		         dayoff: [[9, "rm_village_store.shop_b"], [11, "rm_2.riverbank_b"], [15, "home"]]},
 		// No job: every day the same
-		elda:   {home: "rm_village_elda.elda_bed",
+		elda:   {home: "rm_village_elda.elda_bed", rainproof: true,
 		         routine: [[7, "rm_2.riverbank"], [11, "rm_valley.herbs"], [14, "rm_village_elda.elda_table"], [16, "rm_2.square_e"], [18, "home"]]},
 		hesta:  {home: "rm_village_hesta.hesta_bed",
 		         routine: [[7, "rm_village_hesta.hesta_home"], [10, "rm_village_store.shop_b"], [11.5, "rm_village_hesta.hesta_home"], [15, "rm_2.square_a"], [17.5, "rm_village_hesta.hesta_home"], [21, "home"]]},
@@ -119,20 +120,32 @@ function villager_stops(_key){
 	}
 	var stops = [[0, "home"]];
 	var work = r[$ "work"];
-	if(work == undefined) return array_concat(stops, r.routine);
-	if((global.clock.day - 1) mod 7 == work.off) return array_concat(stops, r.dayoff);
-	array_push(stops, [work.open - 1, work.at, "work"]);
-	var after = r[$ "after"];
-	return array_concat(stops, (after != undefined) ? after : [[work.close, "home"]]);
+	if(work == undefined) stops = array_concat(stops, r.routine);
+	else if((global.clock.day - 1) mod 7 == work.off) stops = array_concat(stops, r.dayoff);
+	else {
+		array_push(stops, [work.open - 1, work.at, "work"]);
+		var after = r[$ "after"];
+		stops = array_concat(stops, (after != undefined) ? after : [[work.close, "home"]]);
+	}
+	// Rain: anything outdoors becomes staying in (home), unless they're the kind to go out in it anyway
+	if(weather_is_wet() && !(r[$ "rainproof"] ?? false)){
+		static outdoors = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley"];
+		for(var i = 1; i < array_length(stops); i++){
+			var pl = stops[i][1];
+			if(is_struct(pl) || pl == "home") continue;
+			if(array_get_index(outdoors, string_copy(pl, 1, string_pos(".", pl) - 1)) != -1) stops[i] = [stops[i][0], "home"];
+		}
+	}
+	return stops;
 }
 
 /// @description Today's plan for a villager (made once a day): where they start, and each walk {t0, t1, route, to,
 /// work} in game minutes. A walk that can't start on time (still on the way to the last place) starts on arrival.
 function villager_plan(_key){
 	if(!variable_global_exists("schedPlans")) global.schedPlans = {};
-	var d = day_index(), fest = festival_today() != undefined;
+	var d = day_index(), fest = festival_today() != undefined, wet = weather_is_wet();
 	var p = global.schedPlans[$ _key];
-	if(p != undefined && p.day == d && p.fest == fest) return p;
+	if(p != undefined && p.day == d && p.fest == fest && p.wet == wet) return p;
 	var stops = villager_stops(_key);
 	var at = sched_place(_key, stops[0][1]);
 	var legs = [], free = 0;
@@ -145,7 +158,7 @@ function villager_plan(_key){
 		at = to;
 		free = t1;
 	}
-	p = {day: d, fest: fest, start: sched_place(_key, stops[0][1]), legs: legs};
+	p = {day: d, fest: fest, wet: wet, start: sched_place(_key, stops[0][1]), legs: legs};
 	global.schedPlans[$ _key] = p;
 	return p;
 }
@@ -377,4 +390,32 @@ function building_name(_keys, _noun){
 	if(string_pos("the ", title) == 1) title = string_delete(title, 1, 4);
 	title = string_upper(string_char_at(title, 1)) + string_delete(title, 1, 1);
 	return s + "'s " + _noun + ((title != "") ? " (" + title + ")" : "");
+}
+
+// ---------------------------------------------------------------- doors
+
+/// @description Can you go into this room now? "" if so, else what the locked door tells you. A home is locked while
+/// its people sleep (9pm - 8am); a shop outside its hours and on its day off. Friends (2 hearts with anyone who lives
+/// or works there) are welcome any time. Rooms nobody lives or works in (your house, the mine) are never locked.
+function door_lock_reason(_rm){
+	if(!world_time_ready()) return "";
+	var names = villager_names(), keeper = "", people = [];
+	for(var i = 0; i < array_length(names); i++){
+		var k = names[i], w = villager_routine(k)[$ "work"];
+		if(villager_home_room(k) == _rm) array_push(people, k);
+		if(w != undefined && string_pos(_rm + ".", w.at) == 1){
+			array_push(people, k);
+			if((villager_def(k)[$ "shop"] ?? "") != "") keeper = k;
+		}
+	}
+	if(array_length(people) == 0) return "";
+	for(var i = 0; i < array_length(people); i++) if(people_hearts(people[i]) >= 2) return "";
+	var h = global.clock.minutes / 60;
+	if(keeper != ""){
+		var w = villager_routine(keeper).work;
+		if((global.clock.day - 1) mod 7 != w.off && h >= w.open && h < w.close) return "";
+		return "It's locked. " + villager_hours_text(keeper) + ".";
+	}
+	if(h >= 8 && h < 21) return "";
+	return "It's locked. Everyone's asleep - come back after 8am.";
 }

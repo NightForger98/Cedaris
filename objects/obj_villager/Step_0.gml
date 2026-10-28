@@ -13,8 +13,26 @@ if(w.moving && (dx != 0 || dy != 0)){
 	moveX = 0;
 	moveY = 0;
 }
-x = w.x;
-y = w.y;
+// Step around you and each other. Where they are comes from the clock, so they curve round rather than stop: a nudge
+// off to the side of where they're going (straight away when standing), eased in and out, and never into a wall
+var ax = 0, ay = 0, me = id;
+var bump = function(_fx, _fy, _wx, _wy, _dx, _dy, _moving){
+	var d = point_distance(_fx, _fy, _wx, _wy);
+	if(d >= 26) return [0, 0];
+	var awx = (d >= 1) ? (_wx - _fx) / d : 1, awy = (d >= 1) ? (_wy - _fy) / d : 0; // right on top: step aside to the right
+	if(!_moving) return [awx * (26 - d), awy * (26 - d)];
+	var ml = max(point_distance(0, 0, _dx, _dy), 0.001), px = -_dy / ml, py = _dx / ml;
+	var side = (awx * px + awy * py >= 0) ? 1 : -1;
+	return [px * side * (26 - d) * 1.2, py * side * (26 - d) * 1.2];
+};
+if(instance_exists(obj_plyr)){ var b = bump(obj_plyr.x, obj_plyr.y, w.x, w.y, dx, dy, w.moving); ax += b[0]; ay += b[1]; }
+with(obj_villager) if(id != me){ var b2 = bump(x, y, w.x, w.y, dx, dy, w.moving); ax += b2[0]; ay += b2[1]; }
+sideX = lerp(sideX, ax, 0.15);
+sideY = lerp(sideY, ay, 0.15);
+var blockers = collision_solids(false);
+if(place_meeting(w.x + sideX, w.y + sideY, blockers) && !place_meeting(w.x, w.y, blockers)){ sideX = 0; sideY = 0; }
+x = w.x + sideX;
+y = w.y + sideY;
 atWork = w.work;
 talkRange = atWork ? 100 : 48;   // across a counter at work
 

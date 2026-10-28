@@ -26,3 +26,5 @@ actHit = false;      // the hit step has fired
 baseDepth = depth; // depth of the room layer the player was placed on, used by depth_sort()
 iframes = 0;        // frames of invulnerability after a monster hits (see player_hurt)
 castSpell = "";     // the spell the current action casts (F with a staff), or ""
+charge = undefined; // winding a tool up while the button is held: {item, t, level, max, flash} (charging script)
+actCharge = 0;      // the level the current action was charged to (0: a tap)

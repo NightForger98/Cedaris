@@ -1,0 +1,67 @@
+# Charged tools (docs/CHARGING.md): hold to charge, let go for a bigger area or a harder, wider swing
+start story
+wait 60
+# A basic hoe doesn't charge: a tap tills one cell
+pos 672 700
+face s
+hold 1
+use 1
+call autotest_field
+call autotest_field_reset
+# A Mithril hoe held to level 5 tills a 9x3 patch in front (27 cells, fewer where it runs off the soil)
+call autotest_tool_tier Hoe 5
+call autotest_vitals
+charge 5 01_hoe_level5
+wait 30
+call autotest_field
+call autotest_vitals
+shot 02_hoe_after
+# Level 2: a 5x1 row
+call autotest_field_reset
+charge 2
+wait 30
+call autotest_field
+# The watering can at level 3 waters every tilled cell within 3 of you
+call autotest_field_reset
+call autotest_tool_tier Hoe 5
+charge 5
+wait 30
+call autotest_tool_tier Watering_Can 3
+hold 2
+charge 3 03_can_level3
+wait 30
+call autotest_field
+shot 04_can_after
+# The scythe at level 2 spins: weeds in a ring 3 cells round are cut, a ring 6 out isn't
+pos 600 520
+call autotest_ring weeds 3
+call autotest_ring weeds 6
+call autotest_resources
+call autotest_tool_tier Scythe 2
+hold 7
+charge 2 05_scythe_level2
+wait 30
+call autotest_resources
+shot 06_scythe_after
+# A tap of the same scythe only clears in front
+call autotest_ring weeds 1
+use 1
+call autotest_resources
+# The axe at Mithril, level 5: every tree in a wide arc in front takes a hard hit
+call autotest_tool_tier Axe 5
+hold 5
+call autotest_goto oak
+charge 5 07_axe_level5
+wait 30
+call autotest_resources
+charge 5
+wait 30
+call autotest_resources
+# A charge stops at the tool's own maximum (Iron pickaxe: 2)
+call autotest_tool_tier Pickaxe 2
+hold 6
+charge 9
+wait 30
+call autotest_charge
+call autotest_vitals
+quit

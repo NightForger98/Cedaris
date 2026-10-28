@@ -208,6 +208,8 @@ function player_hurt(_dmg, _fromX, _fromY){
 	popup(obj_plyr.x, obj_plyr.y - 62, "-" + string(dmg), make_colour_rgb(240, 80, 70));
 	with(obj_plyr){
 		iframes = 60;
+		// A hit knocks the wind out of a charge
+		if(charge != undefined){ charge = undefined; act = undefined; }
 		var a = point_direction(_fromX, _fromY, x, y);
 		var solids = collision_solids(false);
 		repeat(12){

@@ -80,6 +80,17 @@ function autotest_step(){
 	global.autotestKey = t.press;
 	t.press = -1;
 	if(t.wait > 0){ t.wait--; return; }
+	// Holding the button to charge (the charge command): let go once the level is reached, or if nothing charges
+	if((t[$ "chargeTo"] ?? -1) >= 0){
+		var c = instance_exists(obj_plyr) ? obj_plyr.charge : undefined;
+		t.chargeWait = (t[$ "chargeWait"] ?? 0) + 1;
+		if(c == undefined ? t.chargeWait > 6 : (c.level >= min(t.chargeTo, c.max) && (t[$ "chargeShot"] ?? "") == "")){
+			t.chargeTo = -1;
+			t.wait = 2;
+		}
+		else if(c != undefined && c.level >= min(t.chargeTo, c.max) && t.chargeShot != ""){ screen_save("autotest/" + t.chargeShot + ".png"); t.chargeShot = ""; }
+		return;
+	}
 	// Nothing happens while an action plays out, so its hit lands where it was aimed
 	if(instance_exists(obj_plyr) && obj_plyr.act != undefined) return;
 	if(t.uses > 0){
@@ -139,6 +150,13 @@ function autotest_step(){
 			// Held keys (walking): keyboard_check sees a simulated press until it's released
 			case "keydown": keyboard_key_press(autotest_key(a[1])); break;
 			case "keyup":   keyboard_key_release(autotest_key(a[1])); break;
+			// charge N [shot]: hold the button until the held tool reaches level N (a screenshot just before letting go)
+			case "charge":
+				t.chargeTo = real(a[1]);
+				t.chargeWait = 0;
+				t.chargeShot = (array_length(a) > 2) ? a[2] : "";
+				t.press = vk_space;
+				break;
 			case "use":  t.uses = (array_length(a) > 1) ? real(a[1]) : 1; break;
 			case "debug": game.debug = (a[1] == "on"); break;
 			case "wait": t.wait = real(a[1]); break;
@@ -545,3 +563,45 @@ function autotest_side(_key){
 
 /// @description Move the player by (dx, dy).
 function autotest_nudge(_dx, _dy){ obj_plyr.x += real(_dx); obj_plyr.y += real(_dy); return "moved"; }
+
+/// @description Set a tool's tier for charging tests ("Watering_Can" for names with spaces).
+function autotest_tool_tier(_name, _tier){
+	var n = string_replace_all(_name, "_", " ");
+	if(!is_struct(global.inv[$ "tools"])) global.inv.tools = {};
+	global.inv.tools[$ n] = real(_tier);
+	if(n == "Watering Can") global.inv.water = tool_water_max();
+	return n + " tier " + string(_tier) + ", charges to " + string(charge_max(n));
+}
+
+/// @description Tilled and watered cells in this room, and the can's water.
+function autotest_field(){
+	var tiles = farm_tiles(), keys = variable_struct_get_names(tiles), w = 0;
+	for(var i = 0; i < array_length(keys); i++) if(tiles[$ keys[i]].watered) w++;
+	return "tilled " + string(array_length(keys)) + "  watered " + string(w) + "  water " + string(global.inv[$ "water"] ?? 0);
+}
+
+/// @description Untill this room's field (between test steps).
+function autotest_field_reset(){
+	var tiles = farm_tiles(), keys = variable_struct_get_names(tiles);
+	for(var i = 0; i < array_length(keys); i++) variable_struct_remove(tiles, keys[i]);
+	return "cleared " + string(array_length(keys));
+}
+
+/// @description Put a resource of a kind on every cell in a ring round the player (radius in cells).
+function autotest_ring(_key, _r){
+	var cs = crops.cellSize, cx = obj_plyr.x div cs, cy = (obj_plyr.y - 4) div cs, r = real(_r), n = 0;
+	for(var i = -r; i <= r; i++) for(var j = -r; j <= r; j++){
+		if(i == 0 && j == 0) continue;
+		var d = sqrt(i * i + j * j);
+		if(d < r - 0.5 || d > r + 0.5) continue;
+		autotest_spawn(_key, cx + i, cy + j);
+		n++;
+	}
+	return n;
+}
+
+/// @description The player's charge right now, for logs.
+function autotest_charge(){
+	var c = obj_plyr.charge;
+	return (c == undefined) ? "not charging (last swing level " + string(obj_plyr.actCharge) + ")" : c.item + " level " + string(c.level) + "/" + string(c.max);
+}

@@ -117,11 +117,11 @@ function tool_tiers(){
 /// @description Tools that can be upgraded, and what an upgrade does for each.
 function tool_upgradable(_name){
 	switch(_name){
-		case "Hoe":          return "Tills a longer row";
-		case "Watering Can": return "Waters a longer row and holds more";
-		case "Axe":          return "Chops faster";
-		case "Pickaxe":      return "Breaks harder rock, faster";
-		case "Scythe":       return "Cuts a wider sweep";
+		case "Hoe":          return "Charges one level further: a bigger patch";
+		case "Watering Can": return "Holds more and charges one level further";
+		case "Axe":          return "Chops harder and charges one level further";
+		case "Pickaxe":      return "Breaks harder rock and charges one level further";
+		case "Scythe":       return "Charges one level further: a wider spin";
 	}
 	return "";
 }
@@ -139,9 +139,6 @@ function tool_display_name(_name){
 }
 
 function tool_tier_colour(_t){ return (_t <= 0) ? c_white : item_material(tool_tiers()[_t].bar).colour; }
-
-/// @description Cells a hoe or watering can works in a row (1 + tier, up to 5).
-function tool_row_length(_name){ return min(5, 1 + tool_tier(_name)); }
 
 /// @description Watering can capacity: 40, plus 15 per tier.
 function tool_water_max(){ return 40 + 15 * tool_tier("Watering Can"); }
@@ -313,7 +310,7 @@ function gather_hit(_user, _item, _dir){
 	var fx = _user.x + [0, -24, 0, 24][_dir];
 	var fy = _user.y + [-24, 0, 24, 0][_dir];
 	if(_item == "Scythe"){
-		var reach = 26 + 18 * tool_tier("Scythe"); // a copper scythe sweeps three cells
+		var reach = 44; // three cells; holding it to charge spins it round (charging script)
 		var list = [];
 		with(obj_resource) if(point_distance(x, y, fx, fy) < reach && resource_tool_ok(def, _item)) array_push(list, id);
 		for(var i = 0; i < array_length(list); i++) gather_damage(list[i], _item);
@@ -335,7 +332,7 @@ function gather_hit(_user, _item, _dir){
 }
 
 /// @description One hit on a resource instance: the tool's tier sets the damage and what it can break.
-function gather_damage(_inst, _item){
+function gather_damage(_inst, _item, _dmg = -1){
 	var def = _inst.def;
 	var tier = tool_tier(_item);
 	if(tier < def.hard){
@@ -343,7 +340,7 @@ function gather_damage(_inst, _item){
 		_inst.shake = 6;
 		return;
 	}
-	_inst.data.hp -= 1 + tier;
+	_inst.data.hp -= (_dmg >= 0) ? _dmg : 1 + tier; // a charged swing hits harder (charge_tool_damage)
 	_inst.shake = 10;
 	if(_inst.data.hp > 0) return;
 	gather_break(_inst);

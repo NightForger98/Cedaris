@@ -76,19 +76,18 @@ function character_item_fits_any(_i, _body){
 }
 
 /// @description Called once per action, on its hit step. Farming, gathering and combat hook in here.
-/// _dir: 0 north, 1 west, 2 south, 3 east. The hoe tills and the watering can waters the cells in front
-/// (a longer row as they're upgraded); everything else hits trees, rocks and weeds (any swing clears weeds).
-function action_hit(_user, _item, _dir){
+/// _dir: 0 north, 1 west, 2 south, 3 east. The hoe tills and the watering can waters the cell in front; everything
+/// else hits trees, rocks and weeds (any swing clears weeds). _level: how far it was charged (charging script).
+function action_hit(_user, _item, _dir, _level = 0){
 	if(!instance_exists(crops)) return;
+	if(_level > 0 && charge_release(_user, _item, _level, _dir)) return;
 	var cell = farm_front_cell(_user, _dir);
-	var dx = [0, -1, 0, 1][_dir], dy = [-1, 0, 1, 0][_dir];
 	switch(_item){
 		case "Hoe":
-			for(var i = 0; i < tool_row_length(_item); i++) farm_till(cell[0] + dx * i, cell[1] + dy * i);
+			farm_till(cell[0], cell[1]);
 			break;
 		case "Watering Can":
-			// Filling up at the pond only needs the first cell
-			for(var i = 0; i < tool_row_length(_item); i++) if(farm_water(_user, cell[0] + dx * i, cell[1] + dy * i) == "refill") break;
+			farm_water(_user, cell[0], cell[1]);
 			break;
 		case "Fishing Rod":
 			fishing_cast(_user, _dir);

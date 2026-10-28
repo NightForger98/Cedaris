@@ -221,6 +221,7 @@
     {"id":{"name":"depth_sort","path":"scripts/depth_sort/depth_sort.yy",},},
     {"id":{"name":"farming","path":"scripts/farming/farming.yy",},},
     {"id":{"name":"festivals","path":"scripts/festivals/festivals.yy",},},
+    {"id":{"name":"charging","path":"scripts/charging/charging.yy",},},
     {"id":{"name":"heart_events","path":"scripts/heart_events/heart_events.yy",},},
     {"id":{"name":"obj_enemy_shot","path":"objects/obj_enemy_shot/obj_enemy_shot.yy",},},
     {"id":{"name":"fishing","path":"scripts/fishing/fishing.yy",},},

@@ -139,7 +139,7 @@ function people_talk(_key){
 	var p = people_state(_key);
 	if(p.talked != day_index()){
 		p.talked = day_index();
-		people_add(_key, 20);
+		people_add(_key, (festival_today() != undefined) ? 40 : 20); // double on festival days
 	}
 	return people_reward(_key);
 }

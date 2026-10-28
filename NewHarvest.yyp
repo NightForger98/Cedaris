@@ -179,6 +179,8 @@
     {"id":{"name":"placeables","path":"scripts/placeables/placeables.yy",},},
     {"id":{"name":"fishing","path":"scripts/fishing/fishing.yy",},},
     {"id":{"name":"animals","path":"scripts/animals/animals.yy",},},
+    {"id":{"name":"festivals","path":"scripts/festivals/festivals.yy",},},
+    {"id":{"name":"obj_festival_decor","path":"objects/obj_festival_decor/obj_festival_decor.yy",},},
     {"id":{"name":"obj_animal","path":"objects/obj_animal/obj_animal.yy",},},
     {"id":{"name":"obj_fishing","path":"objects/obj_fishing/obj_fishing.yy",},},
     {"id":{"name":"obj_placeable","path":"objects/obj_placeable/obj_placeable.yy",},},

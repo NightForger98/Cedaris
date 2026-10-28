@@ -31,6 +31,7 @@ ordered so each one builds on the last.
 - **Festivals**, one per season on a fixed day: the Seedling Fair (spring), Lantern Night on the river
   (summer), the Harvest Weigh-in (fall: your best produce is judged, quality matters), the Frost Market (winter:
   a once-a-year shop). The village is decorated, villagers gather, friendship gains are doubled.
+- **Done:** festivals (`scripts/festivals`: Seedling Fair, Lantern Night, Harvest Weigh-in, Frost Market).
 - **Done:** animals (below, simplified: no buildings - they roam the meadow).
 - **Animals**: a coop and a barn bought from Thorne; chickens, cows and sheep (LPC farm animal art on
   OpenGameArt is CC-BY-SA - check each sheet) giving eggs, milk and wool. Wool makes the clothing chain

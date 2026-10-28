@@ -377,3 +377,13 @@ function autotest_goto_animal(_kind){
 	with(obj_animal) if(data.kind == _kind){ moveX = 0; moveY = 0; wanderT = 600; obj_plyr.x = x; obj_plyr.y = y + 22; return data.name; }
 	return "none";
 }
+
+/// @description Set the calendar (season, day), for tests.
+function autotest_date(_season, _day){ global.clock.season = real(_season); global.clock.day = real(_day); return (festival_today() == undefined) ? "no festival" : festival_today().name; }
+
+/// @description Take part in today's festival event (lantern or weigh-in), as the board's button would.
+function autotest_festival_event(){
+	var f = festival_today();
+	if(f == undefined) return "no festival";
+	return (f.kind == "lanterns") ? festival_light_lantern(f) : festival_weigh_in(f);
+}

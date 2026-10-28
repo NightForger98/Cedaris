@@ -44,6 +44,7 @@ if(autosavePending && instance_exists(obj_plyr)){
 	var saved = (variable_global_exists("saveSlot") && global.saveSlot != undefined) && save_game(global.saveSlot);
 	hudMessage = weekday_name(global.clock.day) + " " + string(global.clock.day) + " of " + season_name(global.clock.season)
 	           + "  -  " + weather_name(weather_now())
+	           + ((festival_today() != undefined) ? "  -  " + festival_today().name + " in the village today!" : "")
 	           + (saved ? "  -  saved to slot " + string(global.saveSlot) : "  -  no free save slot: save from the pause menu")
 	           + ((dayReport.paid > 0) ? "  -  shipping paid " + string(dayReport.paid) + " gold" : "")
 	           + ((dayReport.died > 0) ? "  -  " + string(dayReport.died) + " crops died out of season" : "")

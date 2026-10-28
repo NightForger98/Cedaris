@@ -1,0 +1,44 @@
+# Milestone 11: festivals - the village decorated, everyone there, the board's Festival page, events
+start story
+wait 60
+call autotest_date 2 16
+room rm_2 600 400
+wait 40
+call autotest_people
+shot 01_weighin_village
+give p|gourd|2 1
+pos 982 452
+face n
+key e
+wait 5
+call autotest_board_page festival
+wait 2
+shot 02_festival_page
+call autotest_festival_event
+key esc
+wait 30
+inv
+# Lantern Night after dusk
+call autotest_date 1 20
+time 21
+room rm_2 340 450
+wait 40
+shot 03_lanterns
+call autotest_festival_event
+# The Frost Market's stall
+call autotest_date 3 25
+room rm_2 982 452
+wait 40
+face n
+key e
+wait 5
+call autotest_board_page festival
+wait 2
+shot 04_frost
+key esc
+wait 30
+# Pip isn't home on a festival day
+room rm_1 700 400
+wait 40
+call autotest_people
+quit

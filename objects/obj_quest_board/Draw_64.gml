@@ -14,11 +14,40 @@ ui_text(x1 + 30, y1 + 32, "Notice Board", 0.85, c.accent, fa_left);
 // Tabs
 if(ui_button(x2 - 330, y1 + 14, x2 - 180, y1 + 50, "Requests", page != "requests", 0.5)) page = "requests";
 if(ui_button(x2 - 170, y1 + 14, x2 - 20, y1 + 50, "Projects", page != "projects", 0.5)) page = "projects";
+// On a festival day: its page too
+var fest = festival_today();
+if(fest != undefined && ui_button(x2 - 490, y1 + 14, x2 - 340, y1 + 50, "Festival", page != "festival", 0.5)) page = "festival";
+if(fest == undefined && page == "festival") page = "requests";
 
 var st = quests_state();
 var ry = y1 + 80;
 
-if(page == "requests"){
+if(page == "festival"){
+	// Today's festival: what it is, and its event
+	ui_text(x1 + 24, ry + 10, fest.name + "  -  " + season_name(fest.season) + " " + string(fest.day), 0.75, c.accent, fa_left);
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+	draw_set_colour(c_white);
+	draw_text_ext_transformed(x1 + 24, ry + 40, fest.desc, 34, (x2 - x1 - 48) / 0.55, 0.55, 0.55, 0);
+	var label = "", done = festival_done(fest);
+	switch(fest.kind){
+		case "shop":     label = "Browse the stalls"; break;
+		case "lanterns": label = done ? "Your lantern is lit" : "Light a lantern (50 gold)"; break;
+		case "contest":  label = done ? "You've entered" : "Enter your best crop"; break;
+	}
+	if(ui_button((x1 + x2) / 2 - 170, ry + 150, (x1 + x2) / 2 + 170, ry + 200, label, fest.kind == "shop" || !done, 0.6)){
+		if(fest.kind == "shop"){
+			open = false;
+			var shopInv = instance_create_depth(0, 0, -9000, obj_inventory);
+			shopInv.shop = true;
+			shopInv.shopStock = festival_stock(fest);
+			shopInv.shopTitle = fest.name;
+		} else {
+			message = (fest.kind == "lanterns") ? festival_light_lantern(fest) : festival_weigh_in(fest);
+			messageTime = 300;
+		}
+	}
+} else if(page == "requests"){
 	var rowH = 74;
 	var row = function(_q, _y, _x1, _x2, _c){
 		var v = villager_def(_q.who);

@@ -27,7 +27,7 @@ We're not doing that, because:
     (autotiled edges, collision boxes that match the art, water zones, roofs and tree tops over the player), and
     Claude can design and change rooms without the editor. The ground is still placed by hand, cell by cell:
     the builder only picks which edge tile each cell needs.
-  - The room editor is still fine for a room that isn't built from a spec (interiors so far).
+  - Interiors are built from specs too (`tools/rooms/interior.js`); only the mine and Whisperwood are generated.
 - Before a room is built: a short brief (size, exits, who lives there, what spawns where, what it's for), then the
   map. Named spots go in the spec's `points`/`areas` (`scripts/room_layout`), so scripts never hard-code positions.
 - Every built room gets an autotest (`tools/test/cases/built_rooms.txt`): walk it, use its exits, screenshot it.

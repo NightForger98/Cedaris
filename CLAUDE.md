@@ -59,7 +59,7 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
   by hand. Looks/races/creator: `character_look`, `character_races`. Actions (tool/weapon swings): `actions`
   (`action_hit` is the hook for effects).
 - Items/inventory/crafting/shops: `items`, `inventory`, `obj_inventory` (modes: plain, `shop`, `craft`, `ship`).
-- Time, sleep, energy/health, world store: `world_time`. Farming: `farming`. Saving: `save_system` (SAVE_VERSION 3).
+- Time, sleep, energy/health, world store: `world_time`. Farming: `farming`. Saving: `save_system` (see `SAVE_VERSION` there for what each version added).
 - Gathering, smelting, tool tiers and upgrades: `gathering` (resources are `obj_resource`, spawned per room area;
   the furnace is `obj_furnace`, in Brom's smithy). Art for trees, rocks and weeds is cut from `spr_tile_terrain`.
 - Stats, cooking, food buffs and the cold: `food` (`stat(key)` is how to read any stat; the hearth is `obj_kitchen`).

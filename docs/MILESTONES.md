@@ -12,7 +12,7 @@ ordered so each one builds on the last.
 | No long-term goal | The loops work, but nothing asks you to combine them (crops + ore + monster drops). |
 | No weather | Every day is the same; the watering can is a chore with no break. Phase 0.3 already planned a weather icon. |
 | Pixie dust and moonsilk have no source | The roadmap pinned them on pixies and moths in a night forest, which doesn't exist. |
-| Nowhere new to go | Three outdoor places in total. The village's east edge just ends. |
+| Nowhere new to go | (Was: three outdoor places. Now the farm is a hub with Brindlemoor, the coast, the vale and the village around it - see `docs/LEVELS.md`.) |
 | Watering never gets easier | Stardew's sprinklers are the big mid-game upgrade; ours would come from smelted bars. |
 | The Fishing Rod does nothing | It's in Brom's shop and the catalog, but there's no fishing. |
 
@@ -33,7 +33,7 @@ ordered so each one builds on the last.
   a once-a-year shop). The village is decorated, villagers gather, friendship gains are doubled.
 - **Done:** festivals (`scripts/festivals`: Seedling Fair, Lantern Night, Harvest Weigh-in, Frost Market).
 - **Done:** animals (below, simplified: no buildings - they roam the meadow).
-- **Animals**: a coop and a barn bought from Thorne; chickens, cows and sheep (LPC farm animal art on
+- **Animals**: a coop and a barn (now: livestock from Wren's ranch in Hollow Vale); chickens, cows and sheep (LPC farm animal art on
   OpenGameArt is CC-BY-SA - check each sheet) giving eggs, milk and wool. Wool makes the clothing chain
   complete (it's bought today).
 

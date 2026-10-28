@@ -7,7 +7,7 @@ wait 40
 call autotest_people
 shot 01_weighin_village
 give p|gourd|2 1
-pos 982 452
+pos 976 400
 face n
 key e
 wait 5
@@ -21,13 +21,13 @@ inv
 # Lantern Night after dusk
 call autotest_date 1 20
 time 21
-room rm_2 340 450
+room rm_2 1350 450
 wait 40
 shot 03_lanterns
 call autotest_festival_event
 # The Frost Market's stall
 call autotest_date 3 25
-room rm_2 982 452
+room rm_2 976 400
 wait 40
 face n
 key e

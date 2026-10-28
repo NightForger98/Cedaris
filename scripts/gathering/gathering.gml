@@ -66,18 +66,20 @@ function resource_table(){
 /// day, how many on the first visit, and weighted kinds. Each cell is checked against the room's collisions.
 function resource_areas(){
 	static a = [
-		// Farm: the dirt strip under the cliff, by the cave - rocks and ore
-		{room: "rm_1", cells: [18, 4, 30, 4],   max: 9,  perDay: 2, start: 7,
+		// Farm (areas named in tools/rooms/specs/rm_1.js): the dirt under the cliff, either side of the cave - rocks and ore
+		{room: "rm_1", cells: layout_cells("rm_1", "cliff_west"), max: 6, perDay: 1, start: 4,
 		 kinds: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]]},
-		// Farm: the meadow between the field and the pond - weeds, bushes and stones (no trees: they'd hide the crops)
-		{room: "rm_1", cells: [17, 13, 30, 16], max: 12, perDay: 3, start: 9,
+		{room: "rm_1", cells: layout_cells("rm_1", "cliff_east"), max: 7, perDay: 2, start: 5,
+		 kinds: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]]},
+		// Farm: the meadow between the house and the smithy - weeds, bushes and stones (no trees: they'd block the yard)
+		{room: "rm_1", cells: layout_cells("rm_1", "meadow"), max: 12, perDay: 3, start: 9,
 		 kinds: [["weeds", 55], ["bush", 25], ["stone", 20]]},
-		// Farm: below the pond - a young wood
-		{room: "rm_1", cells: [17, 20, 30, 21], max: 8,  perDay: 2, start: 6,
+		// Farm: the grass west of the field
+		{room: "rm_1", cells: layout_cells("rm_1", "west"), max: 10, perDay: 2, start: 7,
+		 kinds: [["weeds", 40], ["bush", 15], ["stone", 30], ["boulder", 5], ["copper_vein", 5], ["oak", 5]]},
+		// Farm: the edge of the woods in the south - a young wood
+		{room: "rm_1", cells: layout_cells("rm_1", "woods"), max: 10, perDay: 2, start: 7,
 		 kinds: [["oak", 25], ["pine", 25], ["weeds", 30], ["bush", 10], ["stone", 10]]},
-		// Farm: the southern edge
-		{room: "rm_1", cells: [1, 22, 30, 22],  max: 8,  perDay: 2, start: 5,
-		 kinds: [["stone", 45], ["weeds", 25], ["boulder", 10], ["copper_vein", 10], ["oak", 5], ["pine", 5]]},
 		// Whisperwood: its clearings (walls and water are skipped) - wood, forage and a few stones
 		{room: "rm_forest", cells: [2, 2, 45, 27], max: 34, perDay: 8, start: 28,
 		 kinds: [["oak", 16], ["pine", 16], ["bush", 14], ["weeds", 10], ["stone", 6], ["forage_mushroom", 16], ["forage_herb", 12], ["forage_toadstool", 5]]},

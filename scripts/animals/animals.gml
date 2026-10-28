@@ -38,8 +38,8 @@ function animals_list(){
 	return global.world.animals;
 }
 
-/// @description Where animals roam on the farm: the meadow between the field and the pond (room pixels).
-function animal_pasture(){ static p = [560, 420, 980, 540]; return p; }
+/// @description Where animals roam on the farm: the fenced pasture (room pixels, from the farm's layout).
+function animal_pasture(){ static p = layout_area("rm_1", "pasture"); return p; }
 
 /// @description Thorne's livestock: a crate of each kind.
 function animal_stock(){

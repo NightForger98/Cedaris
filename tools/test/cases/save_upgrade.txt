@@ -1,0 +1,5 @@
+# Saves from before the built farm (version < 7): crops move into the new field, sprinklers back to the bag
+start story
+wait 60
+call autotest_upgrade_rooms
+quit

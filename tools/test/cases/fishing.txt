@@ -3,8 +3,8 @@ start story
 wait 60
 give c|held|Fishing Rod
 equip c|held|Fishing Rod
-# The little pond west of Brom (its water zone is at 304,192)
-pos 304 290
+# The pond in the farm's north-east (tools/rooms/specs/rm_1.js)
+pos 1600 470
 face n
 key space
 wait 40

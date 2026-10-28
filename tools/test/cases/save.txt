@@ -1,8 +1,8 @@
 # Save version 3 keeps resources, stumps and tool tiers through a save and load
 start story
 wait 60
-call autotest_spawn pine 22 21
-call autotest_spawn copper_vein 22 4
+call autotest_spawn pine 10 25
+call autotest_spawn copper_vein 10 5
 hold 5
 call autotest_goto pine
 use 10

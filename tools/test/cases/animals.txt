@@ -16,7 +16,7 @@ wait 30
 give n|chicken
 give n|cow
 give n|sheep
-room rm_1 700 480
+room rm_1 1600 850
 wait 40
 equip n|chicken
 use 1
@@ -33,7 +33,7 @@ wait 30
 call autotest_animals
 sleep
 wait 60
-room rm_1 700 480
+room rm_1 1600 850
 wait 40
 call autotest_animals
 call autotest_goto_animal chicken

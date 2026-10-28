@@ -20,10 +20,29 @@ We're not doing that, because:
 
 ## Hand-built rooms: farm, village, town, interiors
 
-- Designed in the GameMaker room editor. Once the GameMaker MCP (`gm-cli resourcetool mcp`) is loaded in a
-  session, Claude can place instances and tiles through it instead of hand-editing `.yy` files.
+- Designed, not generated: each room is a spec in `tools/rooms/specs/` (a text map of the ground, plus the
+  buildings, trees, props and instances placed on it) that `node tools/rooms/build.js <room>` turns into the room
+  file. See `tools/rooms/README.md`. The farm (`rm_1`) and the village (`rm_2`) are built this way.
+  - **Why a spec rather than the room editor**: a layout is reviewable text, the builder does the fiddly parts
+    (autotiled edges, collision boxes that match the art, water zones, roofs and tree tops over the player), and
+    Claude can design and change rooms without the editor. The ground is still placed by hand, cell by cell:
+    the builder only picks which edge tile each cell needs.
+  - The room editor is still fine for a room that isn't built from a spec (interiors so far).
+- Before a room is built: a short brief (size, exits, who lives there, what spawns where, what it's for), then the
+  map. Named spots go in the spec's `points`/`areas` (`scripts/room_layout`), so scripts never hard-code positions.
+- Every built room gets an autotest (`tools/test/cases/built_rooms.txt`): walk it, use its exits, screenshot it.
 - Life comes from runtime systems, not more rooms: trees, rocks and weeds spawn in each room's areas
   (`resource_areas()` in `scripts/gathering`), crops grow, NPCs walk about.
+
+### The world so far
+
+- **Farm** (`rm_1`, 60x40): cliff with the mine's cave along the north, Brom's smithy yard by it; farmhouse in
+  the west (door to `rm_12`); the field in the middle; pond in the north-east; fenced pasture in the south-east;
+  woods along the south. The road east goes to the village.
+- **Village** (`rm_2`, 56x36): the hall on the north side of a cobbled square (notice board by its door);
+  Elda's house in the north-west, Thorne's and a neighbour's on a lane in the south; the road west to the farm;
+  the river down the east side with the bridge to Whisperwood.
+- Not built yet: house interiors beyond `rm_12`/`rm_123`, a town. `rm_3` is an empty test room nothing leads to.
 
 ## Generated rooms: the mine (roadmap phase 4)
 

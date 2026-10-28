@@ -397,6 +397,24 @@ function autotest_festival_event(){
 
 /// @description The player's position, for logs (checking they can walk away from where they start).
 function autotest_where(){
-	with(obj_plyr) return string(x) + "," + string(y) + (place_meeting(x, y, obj_col_box) ? " inside a solid" : "");
+	with(obj_plyr) return room_get_name(room) + " " + string(x) + "," + string(y) + (place_meeting(x, y, obj_col_box) ? " inside a solid" : "");
 	return "no player";
+}
+
+/// @description Pretend the farm came from an old save (crops and a sprinkler on the first test farm's cells), run
+/// the save upgrade, and report where things went.
+function autotest_upgrade_rooms(){
+	var farm = world_room("rm_1");
+	farm.crops = [{gx: 3, gy: 3, type: 0, days: 2}, {gx: 4, gy: 3, type: 0, days: 5}];
+	farm.tiles = {};
+	farm.tiles[$ farm_key(3, 3)] = {watered: true};
+	farm.placed = [{kind: "sprinkler", gx: 6, gy: 6}];
+	save_upgrade_rooms();
+	var s = "";
+	for(var i = 0; i < array_length(farm.crops); i++){
+		var c = farm.crops[i];
+		var t = farm.tiles[$ farm_key(c.gx, c.gy)];
+		s += string(c.gx) + "," + string(c.gy) + (farm_is_soil(c.gx, c.gy) ? " soil" : " NOT SOIL") + (t.watered ? " watered  " : "  ");
+	}
+	return s + "placed " + string(array_length(farm.placed)) + "  sprinklers in bag " + string(inv_count("o|sprinkler"));
 }

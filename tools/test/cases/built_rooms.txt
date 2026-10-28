@@ -1,0 +1,69 @@
+# The built farm and village (tools/rooms): start, walk, exits, the farmhouse door, resources
+start story
+wait 60
+call autotest_where
+call autotest_resources
+shot 01_farm_start
+keydown down
+wait 20
+keyup down
+keydown right
+wait 40
+keyup right
+call autotest_where
+pos 800 190
+wait 15
+shot 02_cave_smithy
+pos 960 560
+wait 15
+shot 03_field_road
+pos 1560 400
+wait 15
+shot 04_pond
+pos 1600 840
+wait 15
+shot 05_pasture
+pos 700 1060
+wait 15
+shot 06_woods
+debug on
+pos 272 600
+wait 10
+shot 07_door_debug
+debug off
+# The farmhouse door: walk up into it
+pos 272 560
+keydown up
+wait 40
+keyup up
+wait 40
+call autotest_where
+# Back on the farm: the road east to the village
+room rm_1 1840 576
+wait 30
+keydown right
+wait 40
+keyup right
+wait 60
+call autotest_where
+shot 08_village_arrive
+pos 600 500
+wait 15
+shot 09_square
+pos 1300 590
+wait 15
+shot 10_bridge
+pos 400 1080
+wait 15
+shot 11_lane
+pos 1200 1000
+wait 15
+shot 12_southeast
+# Back west to the farm
+pos 60 576
+keydown left
+wait 40
+keyup left
+wait 60
+call autotest_where
+quit

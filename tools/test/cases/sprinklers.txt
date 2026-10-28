@@ -10,21 +10,21 @@ call autotest_build o|sprinkler
 call autotest_build o|sprinkler_good
 inv
 # Till a row of soil, put a quality sprinkler in the middle
-pos 640 240
+pos 640 720
 face s
 hold 1
 use 1
-pos 672 240
+pos 672 720
 use 1
-pos 704 240
+pos 704 720
 use 1
-pos 640 304
+pos 640 784
 face n
 use 1
-pos 704 304
+pos 704 784
 use 1
 equip o|sprinkler_good
-pos 672 304
+pos 672 784
 face n
 use 1
 call autotest_crop_front
@@ -32,16 +32,16 @@ wait 5
 shot 01_placed
 sleep
 wait 60
-room rm_1 640 240
+room rm_1 640 720
 wait 40
 face s
 call autotest_crop_front
-pos 704 240
+pos 704 720
 call autotest_crop_front
 shot 02_morning
 # The pickaxe picks it back up
 hold 6
-pos 672 304
+pos 672 784
 face n
 use 1
 inv

@@ -2,8 +2,9 @@
 /// Saves are JSON files in the game's save folder (saves/slotN.json); settings live in settings.ini.
 
 #macro SAVE_SLOTS 3
-#macro SAVE_VERSION 6 // 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine);
-                      // 5: spells (inv.spells) and mana (vitals.mana); 6: weather (clock), projects, people, quests (world)
+#macro SAVE_VERSION 7 // 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine);
+                      // 5: spells (inv.spells) and mana (vitals.mana); 6: weather (clock), projects, people, quests (world);
+                      // 7: the built farm and village (see save_upgrade_rooms)
 
 function save_path(_slot){ return "saves/slot" + string(_slot) + ".json"; }
 
@@ -88,6 +89,8 @@ function load_game(_slot){
 	}
 	global.saveSlot = _slot;
 	crops.loadPending = true; // don't let the farm's Room End overwrite the loaded crops
+	var oldRooms = (data[$ "version"] ?? 1) < 7;
+	if(oldRooms) save_upgrade_rooms();
 
 	// Sheet row back to a facing direction (rows: 8 up, 9 left, 10 down, 11 right)
 	var facing = dir.down;
@@ -96,16 +99,48 @@ function load_game(_slot){
 		case 9:  facing = dir.left;  break;
 		case 11: facing = dir.right; break;
 	}
+	var at = [data.x, data.y];
+	if(oldRooms && rm == rm_1) at = layout_point("rm_1", "start");
+	if(oldRooms && rm == rm_2) at = layout_point("rm_2", "road_west");
 	with(game){
 		spawnRoom = rm;
-		spawnX = data.x;
-		spawnY = data.y;
+		spawnX = at[0];
+		spawnY = at[1];
 		spawnPlayerFacing = facing;
 		doTransition = false;
 		blackAlpha = 0;
 	}
 	room_goto(rm);
 	return true;
+}
+
+/// @description Saves before version 7 were made on the first test farm and village, whose layout is gone. The
+/// farm's crops move into the new field in order (keeping what they are, how old, and whether they were watered),
+/// sprinklers and other placed things go back in the bag, and rocks, weeds and trees are rolled again.
+function save_upgrade_rooms(){
+	var farm = world_room("rm_1");
+	var f = layout_cells("rm_1", "field");
+	var w = f[2] - f[0] + 1, n = w * (f[3] - f[1] + 1);
+	var oldTiles = farm.tiles;
+	farm.tiles = {};
+	if(array_length(farm.crops) > n) array_resize(farm.crops, n);
+	for(var i = 0; i < array_length(farm.crops); i++){
+		var c = farm.crops[i];
+		var old = oldTiles[$ farm_key(c.gx, c.gy)];
+		c.gx = f[0] + (i mod w);
+		c.gy = f[1] + (i div w);
+		farm.tiles[$ farm_key(c.gx, c.gy)] = {watered: (old != undefined) && old.watered};
+	}
+	var names = ["rm_1", "rm_2"];
+	for(var i = 0; i < 2; i++){
+		var r = world_room(names[i]);
+		var p = r[$ "placed"];
+		if(is_array(p)) for(var k = 0; k < array_length(p); k++) inv_add(item_stack("o|" + p[k].kind, 1));
+		r.placed = [];
+		r.objects = [];
+		r.due = {};
+		r.seeded = false;
+	}
 }
 
 function save_delete(_slot){

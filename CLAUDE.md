@@ -26,8 +26,12 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - `docs/ROADMAP.md` - the plan (farming, stats, combat, magic, social) with status per step. **The roadmap's 9 steps are
   done; `docs/MILESTONES.md` has what comes next.**
 - `docs/PROGRESSION.md` - items, materials, recipes, dyes, stats, and the hooks for quests.
-- `docs/LEVELS.md` - **the level creation plan** (agreed): towns and the farm are hand-built rooms; the mine is
+- `docs/LEVELS.md` - **the level creation plan** (agreed): towns and the farm are designed rooms; the mine is
   generated at runtime in GML, seeded per floor. Not a WFC/Python pipeline - read why before proposing one.
+- **Built rooms**: the farm and village come from specs in `tools/rooms/specs/` (text map + things + instances):
+  `node tools/rooms/build.js rm_1` rewrites the room file - edit the spec, never the built `.yy` (see
+  `tools/rooms/README.md`). Named spots live in the specs and reach GML through `layout_point`/`layout_area`
+  (`scripts/room_layout`, generated). GameMaker's `.yy` reader needs keys in alphabetical order.
 - Characters: LPC art converted by `tools/lpc` (see its README); `scripts/lpc_catalog` is generated - don't edit
   by hand. Looks/races/creator: `character_look`, `character_races`. Actions (tool/weapon swings): `actions`
   (`action_hit` is the hook for effects).
@@ -50,7 +54,8 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - People and quests: `people` (villagers, friendship, gifts; `obj_dialogue`), `quests` (`obj_quest_board` in the
   village). Anything usable with E calls `interact_near(range)` and `interact_ready()` (`interact`): only the
   closest thing answers. `ui_blocking()` is true while any window is open.
-- Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm, `rm_2` village, `rm_12` house (bed), `rm_3`, `rm_123`, `rm_mine`.
+- Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm, `rm_2` village (both built), `rm_12` house (bed), `rm_3`
+  (empty, unused), `rm_123`, `rm_mine`. Tilesets: `TS_terrain`, `TS_cottage` (house kit), `TS_town`, `TS_interior`.
 - Placeholder art drawn from `spr_tile_interior`: crafting table, bed, shipping bin, furnace (to be replaced with real assets).
 
 ## Conventions

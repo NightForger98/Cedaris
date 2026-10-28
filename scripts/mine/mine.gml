@@ -273,7 +273,8 @@ function mine_goto(_floor){
 function mine_leave(){
 	with(game){
 		spawnRoom = rm_1;
-		spawnX = 545; spawnY = 160;
+		var p = layout_point("rm_1", "cave");
+		spawnX = p[0]; spawnY = p[1];
 		spawnPlayerFacing = dir.down;
 		restartRoom = false;
 		doTransition = true;

@@ -100,12 +100,12 @@ function festival_room_start(){
 	instance_create_depth(0, 0, 0, obj_festival_decor);
 	var names = variable_struct_get_names(villager_table());
 	array_sort(names, true);
-	var k = 0;
+	var k = 0, crowd = layout_point("rm_2", "crowd");
 	for(var i = 0; i < array_length(names); i++){
 		var v = villager_def(names[i]);
 		if(v.room == "rm_2" || v.slot == "") continue;
 		var o = (v.slot == "man") ? obj_npc_mantest : obj_npc_womantest;
-		instance_create_layer(560 + (k mod 4) * 70, 300 + (k div 4) * 80, obj_plyr.layer, o, {festivalWho: names[i]});
+		instance_create_layer(crowd[0] + (k mod 4) * 70, crowd[1] + (k div 4) * 80, obj_plyr.layer, o, {festivalWho: names[i]});
 		k++;
 	}
 }

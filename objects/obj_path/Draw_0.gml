@@ -1,8 +1,8 @@
 /// @description The bridge (broken or mended) or a signpost back; and the prompt
 if(target == "forest"){
-	// The wooden bridge from the terrain tileset, running off east; broken, only its first planks remain
+	// The wooden bridge from the terrain tileset, across the river (3 cells) to the east; broken, only its first planks remain
 	var mended = project_done("bridge");
-	draw_sprite_part_ext(spr_tile_terrain, 0, 13 * 32, 16 * 32, mended ? 96 : 40, 48, x - 8, y - 30, 0.8, 0.8, mended ? c_white : make_colour_rgb(150, 130, 120), 1);
+	draw_sprite_part_ext(spr_tile_terrain, 0, 13 * 32, 16 * 32, mended ? 96 : 40, 48, x - 8, y - 36, 1, 1, mended ? c_white : make_colour_rgb(150, 130, 120), 1);
 } else {
 	// A post with a sign pointing home
 	draw_set_colour(make_colour_rgb(90, 60, 35));

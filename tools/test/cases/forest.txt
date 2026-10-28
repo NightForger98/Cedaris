@@ -2,14 +2,14 @@
 start story
 wait 60
 # The bridge is out until its project is done
-room rm_2 970 500
+room rm_2 1370 592
 wait 40
 face e
 key e
 wait 5
 shot 01_bridge_out
 # The projects page
-pos 982 452
+pos 976 400
 face n
 key e
 wait 5
@@ -19,7 +19,7 @@ key esc
 wait 30
 give m|wood 30
 call project_give bridge wood
-pos 982 452
+pos 976 400
 face n
 key e
 wait 5
@@ -35,7 +35,7 @@ call project_give bridge stone
 call project_give bridge iron
 call project_done bridge
 # Across to Whisperwood
-pos 970 500
+pos 1370 592
 face e
 key e
 wait 80

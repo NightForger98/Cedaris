@@ -145,7 +145,8 @@ function forest_goto(){
 function forest_leave(){
 	with(game){
 		spawnRoom = rm_2;
-		spawnX = 970; spawnY = 500;
+		var p = layout_point("rm_2", "bridge");
+		spawnX = p[0]; spawnY = p[1];
 		spawnPlayerFacing = dir.left;
 		restartRoom = false;
 		doTransition = true;

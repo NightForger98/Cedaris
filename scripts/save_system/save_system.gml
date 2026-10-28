@@ -20,7 +20,13 @@ function save_room_name(_roomName){
 		case "rm_town": return "Brindlemoor";
 		case "rm_beach": return "Saltmere Coast";
 		case "rm_valley": return "Hollow Vale";
-		default:     return (string_pos("rm_town_", _roomName) == 1) ? "Brindlemoor" : "Indoors"; // the town's houses
+		default:
+			// Houses take their place's name
+			if(string_pos("rm_town_", _roomName) == 1) return "Brindlemoor";
+			if(string_pos("rm_village_", _roomName) == 1) return "Village";
+			if(string_pos("rm_valley_", _roomName) == 1) return "Hollow Vale";
+			if(string_pos("rm_beach_", _roomName) == 1) return "Saltmere Coast";
+			return "Indoors";
 	}
 }
 

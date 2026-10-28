@@ -11,7 +11,8 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - **GML gotchas hit before**: `all`, `id`, `score`, `pi` are built-ins (don't use as variable names); `crop` is an
   enum (in the crops object); `static` only works inside functions; JSON `null` may not load as `undefined`.
   Also `floor`, `y`, `power` (built-ins), and `not` (a keyword: even as a struct key it crashes the compiler with "Stack empty"). `f()[$ g()[i]]` (an accessor on a call, keyed by an indexed call)
-  crashes the compiler with a bare NullReferenceException: split it into two lines.
+  crashes the compiler with a bare NullReferenceException: split it into two lines. `obj_plyr.layer` is -1 in some
+  rooms (the farm makes the player at runtime): create instances on the "Instances" layer instead.
 - **GameMaker open while editing files**: it shows "Project Directory Modified" - choose **Reload**, never Save.
 - **Testing**: `tools/test/autotest.sh tools/test/cases/<case>.txt` builds and runs the game with a test script
   (commands in `scripts/autotest`: start, pos, hold, use, give, call <function>, shot...) and copies its log and
@@ -51,12 +52,16 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - Fishing: `fishing` (`fish_table`, `obj_fishing` is the bite minigame; the rod's hit calls `fishing_cast`).
 - Animals: `animals` (`obj_animal` in the farm's meadow, crates `n|<kind>` from Thorne, products `a|<product>`).
 - Festivals: `festivals` (one a season in the village; the board gets a Festival page; `obj_festival_decor`).
-- People and quests: `people` (villagers, friendship, gifts; `obj_dialogue`; shopkeepers' stock: `people_trade`; where someone is now: `villager_room`), `quests` (`obj_quest_board` in the
-  village). Anything usable with E calls `interact_near(range)` and `interact_ready()` (`interact`): only the
+- People and quests: `people` (villagers, friendship, gifts; `obj_dialogue`; shopkeepers' stock: `people_trade`), `quests` (`obj_quest_board` in the
+  village). Where everyone lives, works and goes all day: `schedules` (`villager_routines`: homes, shop hours, days
+  off; `villager_where` from the clock; walking routes over `room_walk`; `obj_villager` is a villager in your room,
+  made by `villagers_update`). Shop hours are in `docs/LEVELS.md`. The world map (M): `obj_world_map`, `world_map`,
+  `spr_world_map` (made by `node tools/rooms/worldmap.js`). Anything usable with E calls `interact_near(range)` and `interact_ready()` (`interact`): only the
   closest thing answers. `ui_blocking()` is true while any window is open.
 - Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm (the hub), `rm_2` village (east), `rm_town` (north, up the
   ladder), `rm_beach` (west), `rm_valley` (south), `rm_12` farmhouse downstairs, `rm_123` upstairs (`BED_ROOM`),
-  `rm_town_*` (the town's inn, outfitter, apothecary and four homes, from `tools/rooms/interior.js`), `rm_mine`, `rm_forest`, `rm_3` (empty, unused). All but the mine and forest are built from specs; the world map is
+  `rm_town_*` (the town's inn, outfitter, apothecary and four homes, from `tools/rooms/interior.js`), `rm_village_*`
+  (smithy, general store, three homes), `rm_valley_ranch`, `rm_valley_carpentry`, `rm_beach_hut`, `rm_mine`, `rm_forest`, `rm_3` (empty, unused). All but the mine and forest are built from specs; the world map is
   in `docs/LEVELS.md`. A new outdoor room also needs `room_is_outdoors`, `save_room_name` and the debug room list. Tilesets: `TS_terrain`, `TS_cottage` (house kit), `TS_town`, `TS_interior`.
 - Placeholder art drawn from `spr_tile_interior`: crafting table, bed, shipping bin, furnace (to be replaced with real assets).
 

@@ -16,6 +16,7 @@ if(game_is_playing_room()){
 	if(room == rm_mine) mine_room_start();
 	else if(room == rm_forest){ forest_room_start(); resources_room_start(); placeables_room_start(); } // the wood first: spawns skip its trees and water
 	else { global.mineWalls = -1; resources_room_start(); placeables_room_start(); animals_room_start(); festival_room_start(); }
+	villagers_update(); // whoever's here at this hour
 }
 
 // After sleeping: wake up beside the bed, facing down, then autosave. After being knocked out: no autosave,

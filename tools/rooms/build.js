@@ -1,6 +1,7 @@
 // Build a room from a spec in tools/rooms/specs/<room>.js: a text map of the ground, things placed on it (buildings,
 // trees, props), instances, and named spots. Writes rooms/<room>/<room>.yy (tile layers, collision boxes, water
-// zones, instances), regenerates scripts/room_layout, and renders build/rooms/<room>.png to check the result.
+// zones, instances), regenerates scripts/room_layout and scripts/room_walk (where villagers can walk, see walk.js),
+// and renders build/rooms/<room>.png to check the result.
 //
 //   node tools/rooms/build.js rm_1 [rm_2 ...]      (or "all")
 //
@@ -399,4 +400,5 @@ if(require.main === module){
 	if(names.length === 0 || names[0] === "all") names = fs.readdirSync(path.join(__dirname, "specs")).filter(f => f.endsWith(".js")).map(f => f.replace(/\.js$/, ""));
 	for(const n of names) build(n);
 	writeLayout();
+	require("./walk.js").writeWalk();
 }

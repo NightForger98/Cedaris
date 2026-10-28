@@ -1,5 +1,5 @@
 // Edwin the scribe's home (rm_town_home_nw, the cream house in the north-west). node tools/rooms/build.js rm_town_home_nw
-const {interior, resident} = require("../interior.js");
+const {interior} = require("../interior.js");
 module.exports = interior({
 	w: 16, h: 11, door: 7, wall: "blue", floor: "wood",
 	exit: {room: "rm_town", x: 272, y: 404},
@@ -9,5 +9,5 @@ module.exports = interior({
 		{is: "table", at: [6, 5]}, {is: "stool", at: [5, 6]}, {is: "stool", at: [8, 6]}, {is: "candle", at: [6, 6]},
 		{is: "plant", at: [1, 9]}, {is: "vase", at: [14, 9]}, {is: "lamp", at: [3, 4]},
 	],
-	instances: [resident("man", 10, 8)],
+	spots: {edwin_bed: [1, 5], edwin_desk: [6, 8]},
 });

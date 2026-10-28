@@ -1,7 +1,7 @@
 /// Festivals (milestone 11, docs/MILESTONES.md): one a season, on a fixed day, in the village.
 ///
-/// On a festival day the village is decorated (obj_festival_decor), everyone comes (the villagers who live elsewhere
-/// join the crowd), talking counts double, and the notice board has a Festival page with the day's event.
+/// On a festival day the village is decorated (obj_festival_decor), everyone comes (the whole valley spends the day
+/// in the crowd: see villager_stops), talking counts double, and the notice board has a Festival page with the day's event.
 /// global.world.festivals = {<key>_<year>: true} once you've taken part that year.
 
 /// @description The festivals. kind: "shop" (a one-day stall), "lanterns" (light one for luck and friendship) or
@@ -92,20 +92,9 @@ function festival_weigh_in(_f){
 	return "The judges weigh your " + item_def(best).name + "... " + place + "!  +" + string(prize) + " gold, " + item_def(extra[0]).name;
 }
 
-/// @description Villagers who live elsewhere spend the day at the festival: Room Start in the village adds them to
-/// the crowd (and their usual spot at home stays empty, see villager_take).
+/// @description On a festival day the village is decorated; everyone spends the day in its crowd (their schedule
+/// for the day, see villager_stops), so they come in like anyone else.
 function festival_room_start(){
-	var f = festival_today();
-	if(f == undefined || room != rm_2) return;
+	if(festival_today() == undefined || room != rm_2) return;
 	instance_create_depth(0, 0, 0, obj_festival_decor);
-	var names = variable_struct_get_names(villager_table());
-	array_sort(names, true);
-	var k = 0, crowd = layout_point("rm_2", "crowd");
-	for(var i = 0; i < array_length(names); i++){
-		var v = villager_def(names[i]);
-		if(v.room == "rm_2" || v.slot == "") continue;
-		var o = (v.slot == "man") ? obj_npc_mantest : obj_npc_womantest;
-		instance_create_layer(crowd[0] + (k mod 6) * 64, crowd[1] + (k div 6) * 80, obj_plyr.layer, o, {festivalWho: names[i]});
-		k++;
-	}
 }

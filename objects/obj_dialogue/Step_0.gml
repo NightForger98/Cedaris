@@ -8,6 +8,8 @@ if(input_pressed(ord("E")) || input_pressed(vk_escape)){
 	exit;
 }
 if(input_pressed(ord("T")) && (v[$ "shop"] ?? "") != ""){
+	// Only over the counter, in hours (see the schedules)
+	if(!villager_shop_open(who)){ text = "Sorry, we're closed. " + villager_hours_text(who) + "."; exit; }
 	instance_destroy();
 	people_trade(who);
 	exit;

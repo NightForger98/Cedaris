@@ -436,7 +436,7 @@ function autotest_villager_clothes(){
 	var items = lpc_catalog().items, out = "";
 	static slots = ["shirt", "pants", "shoes", "hat", "coat"];
 	for(var i = 0; i < array_length(names); i++){
-		if(villager_def(names[i]).slot == "") continue;
+		if(villager_def(names[i])[$ "look"] != undefined) continue;   // dressed by hand
 		var look = villager_look(names[i]);
 		out += "\n    " + names[i] + " (" + look.body + "):";
 		for(var k = 0; k < array_length(slots); k++){
@@ -445,4 +445,43 @@ function autotest_villager_clothes(){
 		}
 	}
 	return out;
+}
+
+/// @description Where every villager is now, e.g. "brom rm_village_smithy 272,184 work" (walking: "->").
+function autotest_schedules(){
+	var names = villager_names(), out = "";
+	for(var i = 0; i < array_length(names); i++){
+		var w = villager_where(names[i]);
+		out += "\n    " + names[i] + " " + w.room + " " + string(round(w.x)) + "," + string(round(w.y)) + (w.moving ? " ->" : "") + (w.work ? " work" : "");
+	}
+	return out;
+}
+
+/// @description Today's stops for one villager, and their shop's state.
+function autotest_day(_key){
+	var p = villager_plan(_key), out = "start " + p.start.room;
+	for(var i = 0; i < array_length(p.legs); i++){
+		var l = p.legs[i];
+		out += " | " + hour_text(l.t0 / 60) + "-" + hour_text(l.t1 / 60) + " " + l.to.room + (l.work ? " (work)" : "");
+	}
+	return out + ((villager_routine(_key)[$ "work"] != undefined) ? " | shop open now: " + string(villager_shop_open(_key)) : "");
+}
+
+/// @description What the open dialogue says.
+function autotest_dialogue_text(){ return instance_exists(obj_dialogue) ? obj_dialogue.text : "(no dialogue)"; }
+
+/// @description Point the open world map at a building (the room inside), as the mouse would.
+function autotest_map_hover(_room){
+	if(!instance_exists(obj_world_map)) return "no map";
+	obj_world_map.testHover = _room;
+	return building_label(_room);
+}
+
+/// @description Frame rate now (fps_real: how fast a frame could run), and how long the schedules' first plans took.
+function autotest_fps(){
+	var t0 = get_timer();
+	global.schedPlans = {};
+	var names = villager_names();
+	for(var i = 0; i < array_length(names); i++) villager_plan(names[i]);
+	return "fps " + string(fps) + " real " + string(round(fps_real)) + "  plans " + string(round((get_timer() - t0) / 1000)) + " ms, routes kept " + string(variable_struct_names_count(global.schedRoutes));
 }

@@ -9,6 +9,8 @@
 //   exit        {room, x, y}: where the doorway leads (you arrive facing down)
 //   furniture   [{is, at, ...}]: pieces from the table below; a piece can be repeated ("repeat": [nx, ny]),
 //               walk: true leaves it walkable (rugs), wall: true hangs it on the back wall (not solid)
+//   spots       {name: [col, row]}: named places villagers stand at (see the schedules in scripts/people): a point
+//               where someone standing in that cell has their feet
 //   instances, points, areas: added to the spec as they are
 const pieces = {
 	// Back wall and windows (2 x 2)
@@ -135,22 +137,9 @@ function interior(o){
 		 code: `targetRoom = ${o.exit.room};\ntargetX = ${o.exit.x};\ntargetY = ${o.exit.y};\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;`},
 		...(o.instances || []),
 	];
+	const spots = Object.fromEntries(Object.entries(o.spots || {}).map(([k, [c, r]]) => [k, [c * 32 + 16, r * 32 + 24]]));
 	return {base: "none", view: [375, 210], legend: {".": {}, "#": {solid: true}}, map, things, instances,
-	        points: Object.assign({door: [doorX, arriveY]}, o.points || {}), areas: o.areas || {}};
+	        points: Object.assign({door: [doorX, arriveY]}, spots, o.points || {}), areas: o.areas || {}};
 }
 
-// A shopkeeper or resident who stands still at their post (behind a counter), facing down, and can be talked to
-// across it. slot: "man" or "woman" (the villager living in this room takes it, see villager_take in people).
-function keeper(slot, cx, cy){
-	return {obj: slot === "woman" ? "obj_npc_womantest" : "obj_npc_mantest", x: cx * 32 + 16, y: cy * 32 + 24,
-	        code: "alarm[1] = -1; // stays at the counter\nmoveX = 0;\nmoveY = 0;\ny_frame = 10;\ntalkRange = 96;"};
-}
-
-// Someone who lives here and wanders about the room - only while they're home: by day townsfolk are out in the
-// square (villager_room), and the NPC object, finding nobody to be, goes away rather than stand in as a stranger.
-function resident(slot, cx, cy){
-	return {obj: slot === "woman" ? "obj_npc_womantest" : "obj_npc_mantest", x: cx * 32 + 16, y: cy * 32 + 24,
-	        code: "if(who == \"\") instance_destroy(); // out for the day"};
-}
-
-module.exports = {interior, keeper, resident, pieces};
+module.exports = {interior, pieces};

@@ -1,5 +1,5 @@
 // Ida the baker and her son Fen (rm_town_home_se, the cream house in the south-east). node tools/rooms/build.js rm_town_home_se
-const {interior, resident} = require("../interior.js");
+const {interior} = require("../interior.js");
 module.exports = interior({
 	w: 16, h: 11, door: 7, wall: "paper", floor: "checker",
 	exit: {room: "rm_town", x: 1648, y: 1300},
@@ -9,5 +9,5 @@ module.exports = interior({
 		{is: "table", at: [5, 5]}, {is: "stool", at: [4, 6]}, {is: "stool", at: [7, 6]}, {is: "bowl", at: [5, 6]},
 		{is: "plant", at: [1, 9]}, {is: "vase", at: [14, 9]}, {is: "flower_box", at: [1, 6]},
 	],
-	instances: [resident("woman", 12, 6), resident("man", 10, 8)],
+	spots: {ida_bed: [13, 5], fen_bed: [10, 5], ida_home: [5, 8], fen_home: [9, 7]},
 });

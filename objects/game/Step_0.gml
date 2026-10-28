@@ -66,6 +66,9 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 	if(resumeLock > 0) {resumeLock--;}
 	else if(!invOpen && input_pressed(vk_escape)) {game_pause();}
 	else if(!invOpen && input_pressed(ord("I")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_inventory);}
+	else if(!invOpen && input_pressed(ord("M")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_world_map);}
+	// Villagers walking into this room on their schedules
+	if(world_time_ready()) villagers_update();
 	
 	// Hotbar: 1-9 and 0 pick the held item
 	for(var k = 0; k < INV_HOTBAR; k++){
@@ -80,7 +83,7 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 
 	// Debug (Insert): Page Up / Page Down hop between play rooms
 	if(debug && (keyboard_check_pressed(vk_pageup) || keyboard_check_pressed(vk_pagedown))){
-		var rooms = [rm_1, rm_2, rm_12, rm_123, rm_town, rm_town_inn, rm_town_outfitter, rm_town_apothecary, rm_beach, rm_valley, rm_mine, rm_forest];
+		var rooms = [rm_1, rm_2, rm_village_smithy, rm_village_store, rm_12, rm_123, rm_town, rm_town_inn, rm_town_outfitter, rm_town_apothecary, rm_beach, rm_valley, rm_valley_ranch, rm_valley_carpentry, rm_mine, rm_forest];
 		var n = array_length(rooms);
 		var i = array_get_index(rooms, room);
 		spawnRoom = -1; // use the room's own player position

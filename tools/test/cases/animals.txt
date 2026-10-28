@@ -1,10 +1,11 @@
-# Milestone 11: Thorne sells livestock; release them on the farm; pet them; eggs, milk and wool
+# Milestone 11: Wren sells livestock at her ranch in Hollow Vale; release them on the farm; pet them; eggs, milk and wool
 start story
 wait 60
 gold 5000
-room rm_2 320 260
+time 10
+room rm_valley_ranch 288 344
 wait 40
-call autotest_goto_person thorne
+call autotest_goto_person wren
 key e
 wait 5
 key t

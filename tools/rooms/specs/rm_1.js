@@ -1,7 +1,8 @@
 // The farm (rm_1). Build with: node tools/rooms/build.js rm_1
-// 60 x 40 cells of 32px. The cliff with the mine's cave runs along the north; Brom's smithy is by the cave; the
-// farmhouse is in the west, the field in the middle, the pond in the north-east, the pasture in the south-east and
-// woods along the south. The road east leads to the village.
+// 60 x 40 cells of 32px. The cliff with the mine's cave runs along the north, a yard with your workbench by the cave;
+// the farmhouse is in the west, the field in the middle, the pond in the north-east, the pasture in the south-east and
+// woods along the south. The road east leads to the village. Only you live here: villagers cross the farm on their
+// way between the town, the village, the coast and the vale (see the schedules in scripts/people).
 //
 // Map: . grass  , dirt  = field soil  ~ water  X cliff (solid). See tools/rooms/tiles.js for the rest.
 module.exports = {
@@ -59,7 +60,7 @@ module.exports = {
 		{is: "barrels", at: [15, 13]}, {is: "barrel", at: [1, 14]}, {is: "wheelbarrow", at: [15, 9]},
 		{is: "hay_bale", at: [0, 19]}, {is: "clothesline", at: [3, 20]},
 
-		// Brom's smithy yard
+		// The yard under the cliff, by the workbench
 		{is: "barrels", at: [37, 6]}, {is: "crate_open", at: [30, 7]}, {is: "chest", at: [29, 7]},
 
 		// The field: a scarecrow, and the cart at its corner
@@ -92,13 +93,8 @@ module.exports = {
 		{obj: "obj_plyr", x: 272, y: 592},
 		{obj: "camera", x: 272, y: 592},
 		{obj: "obj_mine_door", x: 800, y: 140},
-		{obj: "obj_npc_blacksmith", x: 1024, y: 256},
-		{obj: "obj_furnace", x: 1128, y: 264},
 		{obj: "obj_crafting_table", x: 1064, y: 312},
 		{obj: "obj_shipping_bin", x: 540, y: 520},
-		{obj: "obj_npc_seller", x: 720, y: 520},
-		{obj: "obj_npc_mantest", x: 640, y: 664},
-		{obj: "obj_npc_womantest", x: 1350, y: 560},
 		// The farmhouse door, the road to the village
 		{obj: "obj_transition", x: 272, y: 528, sx: 2, sy: 1,
 		 code: "targetRoom = rm_12;\ntargetX = 160;\ntargetY = 472;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
@@ -126,7 +122,7 @@ module.exports = {
 	areas: {
 		cliff_west: [2, 4, 21, 6],    // rocks and ore under the cliff, either side of the cave
 		cliff_east: [28, 4, 57, 6],
-		meadow: [16, 8, 28, 15],      // weeds and bushes between the house and the smithy
+		meadow: [16, 8, 28, 15],      // weeds and bushes between the house and the yard
 		west: [1, 21, 16, 31],        // the grass west of the field
 		woods: [1, 32, 16, 34],       // a young wood at the woods' edge, west of the field
 		pasture: [44, 22, 56, 30],    // where animals roam

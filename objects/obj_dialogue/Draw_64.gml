@@ -38,7 +38,7 @@ var held = inv_held_stack();
 var keys = "[E] Bye";
 if(held != undefined && people_state(who).gifted != day_index() && item_def(held.id).type != "held" && item_def(held.id).type != "clothing")
 	keys += "     [G] Give " + item_def(held.id).name;
-if((v[$ "shop"] ?? "") != "") keys += "     [T] Trade";
+if((v[$ "shop"] ?? "") != "") keys += villager_shop_open(who) ? "     [T] Trade" : "     [T] Hours";
 ui_text(tx, y2 - 28, keys, 0.5, c.dim, fa_left);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);

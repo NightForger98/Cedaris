@@ -11,6 +11,9 @@ It writes:
   `obj_water_zone`s over water, and the spec's instances. Exits (`obj_transition`) go on the hidden Collisions layer.
 - `scripts/room_layout/room_layout.gml`: every spec's named `points` and `areas`, read by scripts with
   `layout_point("rm_1", "cave")`, `layout_cells(...)` and `layout_area(...)` instead of hard-coded coordinates.
+- `scripts/room_walk/room_walk.gml` (`walk.js`): where villagers can walk in every built room (a cost per cell:
+  roads cheap, grass dearer, field soil dearest, solid blocked) and its exits, for their schedules. It also warns
+  about named points that can't be reached from the room's door.
 - `build/rooms/<room>.png`: a render of the room (blue: collision, cyan: water, yellow: exits, red: instances).
 
 If GameMaker is open it will say "Project Directory Modified": choose **Reload**. Edits made to these rooms in the
@@ -57,13 +60,19 @@ To find a tile's coordinates, look at the sheet in a viewer with a 32px grid; `[
 
 ## Rooms built this way
 
-`rm_1` farm, `rm_2` village, `rm_12`/`rm_123` the farmhouse, `rm_town` and its seven interiors (`rm_town_*`),
-`rm_beach`, `rm_valley` (the world map is in `docs/LEVELS.md`). A spec for a room that doesn't exist yet creates it and adds it to `NewHarvest.yyp`. Interiors
+`rm_1` farm, `rm_2` village and its houses (`rm_village_*`), `rm_12`/`rm_123` the farmhouse, `rm_town` and its seven
+interiors (`rm_town_*`), `rm_beach` and Marlo's hut, `rm_valley` with the ranch and the carpentry (the world map is in `docs/LEVELS.md`). A spec for a room that doesn't exist yet creates it and adds it to `NewHarvest.yyp`. Interiors
 use `base: "none"` and a furnished stamp, with the map only saying where you can walk. `node tools/rooms/paint.js`
 paints rectangles of a character into a spec's map.
 
 Interiors without a captured stamp come from `interior.js`: `interior({w, h, wall, floor, door, exit, furniture})`
 gives a spec with a cream border, a back wall, a floor, a doorway in the bottom edge (and its exit), and furniture
 from its `pieces` table of `TS_interior` tiles (counters, shelves, beds, tables, things for the wall and for
-counter tops). Every piece draws under the player and is solid over its art. `keeper(slot, col, row)` stands a
-shopkeeper behind a counter. A spec's `view: [w, h]` sets the camera's view (interiors use 375 x 210).
+counter tops). Every piece draws under the player and is solid over its art. `spots: {name: [col, row]}` names the
+places villagers stand (behind the counter, by the bed; their schedules use them as `"room.name"`). A counter is
+two cells tall: leave a gap at one end so the keeper can get out. A spec's `view: [w, h]` sets the camera's view
+(interiors use 375 x 210).
+
+`node tools/rooms/worldmap.js` makes the world map (M in game): `spr_world_map` from the outdoor rooms, and
+`scripts/world_map` with where each room, building and indoor room's door is on it. Run it after changing an
+outdoor room.

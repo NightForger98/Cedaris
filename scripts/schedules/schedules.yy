@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"schedules",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"schedules",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

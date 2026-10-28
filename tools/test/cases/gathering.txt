@@ -39,10 +39,13 @@ call autotest_goto iron_vein
 use 1
 wait 5
 shot 06_too_hard
-# Smelt at the furnace
+# Smelt at the furnace in Brom's smithy (in the village; he opens at 9)
+time 10
+room rm_village_smithy 288 344
+wait 30
 give m|copper_ore 10
 give m|coal 2
-pos 520 262
+pos 80 204
 face n
 wait 5
 key e
@@ -56,8 +59,7 @@ wait 10
 # Upgrade the pickaxe at Brom's
 give m|copper 3
 gold 1000
-pos 470 262
-face n
+call autotest_goto_person brom
 wait 5
 key e
 wait 10
@@ -69,6 +71,8 @@ call tool_upgrade Hoe
 key esc
 wait 10
 inv
+room rm_1 700 300
+wait 30
 hold 6
 call autotest_goto iron_vein
 use 3

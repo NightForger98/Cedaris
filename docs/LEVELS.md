@@ -48,22 +48,56 @@ The farm is the middle of the map; a way out on each side:
                          path through the woods
 ```
 
-- **Farm** (`rm_1`, 60x40): the cliff along the north with the ladder up to town and the mine's cave, Brom's
-  smithy yard by it; farmhouse in the west; the field in the middle; pond in the north-east; fenced pasture in the
-  south-east; woods along the south with a path through them. Roads east (village) and west (coast).
-- **Farmhouse** (`rm_12` downstairs: kitchen, dining room, the hearth, Hesta and Tobin; `rm_123` upstairs: your
-  bedroom - `BED_ROOM`, you wake up there). Furnished stamps from the first versions; all furniture is under the
-  player and solid over its art.
-- **Village** (`rm_2`, 56x36): the hall on a cobbled square (notice board), Elda's and Thorne's houses, the river
-  with the bridge to Whisperwood.
+- **Farm** (`rm_1`, 60x40): the cliff along the north with the ladder up to town and the mine's cave, a yard with
+  your workbench by it; farmhouse in the west; the field in the middle; pond in the north-east; fenced pasture in
+  the south-east; woods along the south with a path through them. Roads east (village) and west (coast). Only you
+  live here; villagers cross it on their way between places.
+- **Farmhouse** (`rm_12` downstairs: kitchen, dining room, the hearth; `rm_123` upstairs: your bedroom -
+  `BED_ROOM`, you wake up there). Furnished stamps from the first versions; all furniture is under the player and
+  solid over its art.
+- **Village** (`rm_2`, 56x50): the hall on a cobbled square (notice board), the river with the bridge to
+  Whisperwood. Houses (`rm_village_*`): Elda's (north-west, potion sign), Brom's smithy (sword sign; the furnace is
+  inside) and Mara's general store on the lane south of the square, and on a second lane below, Aunt Hesta and
+  Tobin's house and Rowan's.
 - **Brindlemoor** (`rm_town`, 64x44): the town hall over a big market square, six houses; Garrick the watchman.
   Every door leads inside (`rm_town_*`, built with `tools/rooms/interior.js`): the hall is the Brindle Inn (Lysa sells
   a daily menu of meals), the sword sign Bryn's Outfitters (clothes and armour that fit you), the potion sign Morga's
   Apothecary (Heal and Fireball scrolls, staves, forage, tonics); the other four are homes.
-- **Saltmere Coast** (`rm_beach`, 48x40): sea, a beach, a pier to fish from (sea fish); Old Marlo the fisher.
-- **Hollow Vale** (`rm_valley`, 60x44): Wren the shepherd's hut, a river with a bridge, a lake (river fish), wood
-  and forage on both banks.
-- Townsfolk: Edwin, Nell, Hask, and Ida with her son Fen live in the four homes. A villager with a `day` room (`villager_room`) spends 9 am - 5 pm there (the square), so homes are empty by day; NPC spots placed with `resident()` (interior.js) or the square's extra spots go away when nobody is there to fill them. Posy sells flowers in the square. `rm_3` is an empty test room nothing leads to.
+- **Saltmere Coast** (`rm_beach`, 48x40): sea, a beach, a pier to fish from (sea fish); Old Marlo's hut by the
+  road (`rm_beach_hut`).
+- **Hollow Vale** (`rm_valley`, 60x44): Wren's ranch at the top of the path (`rm_valley_ranch`: livestock; Pip
+  works and lives there too), Thorne's carpentry in the woods east of the path (`rm_valley_carpentry`: timber and
+  stone; Rowan works its yard), a river with a bridge, a lake (river fish), wood and forage on both banks.
+- `rm_3` is an empty test room nothing leads to.
+- The world map (M in game) is `spr_world_map` and `scripts/world_map`, made by `node tools/rooms/worldmap.js` from
+  the built rooms (run it again after changing an outdoor room): rooms laid out as their exits join, every building
+  with a door, and where each indoor room's door is.
+
+### People and their days
+
+Everyone lives somewhere and goes about a day (`villager_routines` in `scripts/schedules`), as in Stardew Valley and
+Harvest Moon. Each stop is an hour and a named spot; they set off at that hour and walk there through the rooms'
+doors (routes found at runtime over `scripts/room_walk`, which the room builder writes), so a shopkeeper who opens
+at 9 leaves home at 8 and gets in around 9. A shop only trades while its keeper is behind the counter, in hours;
+otherwise T in their dialogue gives the hours. Each has a day off with its own routine. On a festival day everyone
+is in the village crowd instead.
+
+| Shop | Keeper (lives) | Hours | Closed | Day off |
+| --- | --- | --- | --- | --- |
+| Wren's Ranch (livestock) | Wren (the ranch) | 8am - 4pm | Tuesday | groceries at Mara's, the village square |
+| Brom's Smithy (tools, upgrades, furnace) | Brom (the smithy) | 9am - 5pm | Thursday | fishing off the pier, the inn |
+| Thorne's Carpentry (timber, stone) | Thorne (the carpentry) | 9am - 5pm | Sunday | the river, the square, Brom's |
+| Mara's General Store (seeds) | Mara (the store) | 9am - 6pm | Wednesday | Bryn's, the town square, Elda's |
+| Morga's Apothecary | Morga (the apothecary) | 10am - 6pm | Friday | herbs in the vale, Elda's, the inn |
+| Bryn's Outfitters | Bryn (the outfitter) | 10am - 7pm | Saturday | Brom's, the square, Wren's ranch |
+| The Brindle Inn (meals) | Lysa (the inn) | 10am - 10pm | Monday | Mara's, Wren's ranch, the squares |
+
+Jobs without a counter: Ida bakes at the inn (6am - 1pm), Marlo fishes off the pier (6am - noon), Pip minds Wren's
+sheep (7am - 4pm), Hask hunts across the vale's river (7am - 3pm), Garrick keeps watch at the top of the town's
+street (8am - 6pm), Nell weaves at home (8am - 2pm, then takes cloth to Bryn), Posy sells flowers in the town square
+(9am - 5pm), Edwin keeps the village notices (9am - 3pm), Rowan works Thorne's yard (9am - 5pm). Elda (herbs by the
+river and in the vale), Aunt Hesta (Mara's, then the square) and the children Tobin and Fen (the squares, together
+after noon) keep the same day every day. Evenings, many end up at the inn; Lysa, Posy and Garrick lodge there.
 
 ## Generated rooms: the mine (roadmap phase 4)
 

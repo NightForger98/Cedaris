@@ -36,8 +36,6 @@ module.exports = {
 		{obj: "obj_plyr", x: 160, y: 472},
 		{obj: "camera", x: 160, y: 472},
 		{obj: "obj_kitchen", x: 304, y: 268},
-		{obj: "obj_npc_womantest", x: 400, y: 300},
-		{obj: "obj_npc_mantest", x: 96, y: 420},
 		// The front door, and the stairs up
 		{obj: "obj_transition", x: 160, y: 496, sx: 4, sy: 2,
 		 code: "targetRoom = rm_1;\ntargetX = 272;\ntargetY = 564;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},

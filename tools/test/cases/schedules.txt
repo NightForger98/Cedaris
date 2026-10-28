@@ -1,0 +1,87 @@
+# Villager schedules: homes, walks to work, shop hours and days off (scripts/schedules), and the world map (M)
+start story
+wait 60
+log --- Monday 6:00
+call autotest_schedules
+call autotest_day brom
+call autotest_day rowan
+call autotest_day ida
+# Before opening: Brom's still at home in the smithy; the shop is shut
+time 7
+room rm_village_smithy 288 344
+wait 30
+call autotest_people
+call autotest_goto_person brom
+key e
+wait 5
+key t
+wait 5
+call autotest_dialogue_text
+shot 01_smithy_closed
+key esc
+wait 10
+# 8:30: on the way to work across the farm (Edwin to the village, Rowan to the vale)
+time 8.5
+room rm_1 1720 520
+wait 30
+log --- Monday 8:30
+call autotest_schedules
+call autotest_people
+shot 02_farm_commute
+wait 120
+call autotest_people
+shot 03_farm_commute_later
+# 10:00: shops open, keepers behind their counters
+time 10
+room rm_village_smithy 288 344
+wait 30
+log --- Monday 10:00
+call autotest_schedules
+call autotest_goto_person brom
+key e
+wait 5
+key t
+wait 5
+call autotest_ui
+shot 04_smithy_open
+key esc
+wait 10
+room rm_town 1024 700
+wait 30
+call autotest_people
+shot 05_town_10am
+room rm_valley 700 400
+wait 30
+call autotest_people
+shot 06_valley_10am
+# Evening: the inn fills up
+time 20
+room rm_town_inn 352 408
+wait 30
+log --- Monday 20:00
+call autotest_people
+shot 07_inn_evening
+# Tuesday: Wren's day off - she shops at Mara's
+call autotest_date 0 2
+time 9.8
+room rm_village_store 288 344
+wait 30
+log --- Tuesday 9:50
+call autotest_day wren
+call autotest_people
+shot 08_store_tuesday
+# The map
+room rm_town 1024 700
+wait 30
+key m
+wait 10
+call autotest_map_hover rm_town_home_se
+wait 3
+shot 09_map
+call autotest_map_hover rm_village_smithy
+wait 3
+shot 10_map_smithy
+key m
+wait 10
+call autotest_ui
+quit

@@ -1,6 +1,10 @@
 # Phase 6: villagers with names and fixed looks, talking, gifts, hearts and rewards, trading, the notice board
 start story
 wait 60
+# Pip minds Wren's sheep in Hollow Vale from 7
+time 10
+room rm_valley 560 480
+wait 30
 call autotest_people
 # Talk to Pip, then give him a gold carrot (he loves carrots)
 give p|carrot|2
@@ -19,7 +23,9 @@ shot 02_gift
 key e
 wait 20
 call autotest_ui
-# Brom: talk, then trade
+# Brom: talk, then trade, at his smithy in the village
+room rm_village_smithy 288 344
+wait 30
 call autotest_goto_person brom
 key e
 wait 5
@@ -29,6 +35,8 @@ call autotest_ui
 key esc
 wait 10
 # A heart reward: at 2 hearts Pip has something for you
+room rm_valley 560 480
+wait 30
 call autotest_set_friend pip 520
 call autotest_goto_person pip
 key e

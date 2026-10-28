@@ -1,5 +1,5 @@
 // Hask the hunter's home (rm_town_home_sw, the thatched house in the south-west). node tools/rooms/build.js rm_town_home_sw
-const {interior, resident} = require("../interior.js");
+const {interior} = require("../interior.js");
 module.exports = interior({
 	w: 16, h: 11, door: 7, wall: "stone", floor: "wood",
 	exit: {room: "rm_town", x: 336, y: 1300},
@@ -9,5 +9,5 @@ module.exports = interior({
 		{is: "table_round", at: [7, 5]}, {is: "chair_left", at: [6, 5]}, {is: "chair_right", at: [8, 5]},
 		{is: "chest", at: [1, 9]}, {is: "tree_pot", at: [14, 9]}, {is: "lamp", at: [4, 5]},
 	],
-	instances: [resident("man", 10, 8)],
+	spots: {hask_bed: [1, 5], hask_home: [7, 7]},
 });

@@ -2,7 +2,7 @@
 // 64 x 44 cells. The town hall stands over a cobbled square in the middle; six houses around it, each with a lane to
 // the square; the main street runs south to the top of the farm's ladder. Garrick keeps the watch. Every door leads
 // inside (rm_town_*): the hall is Lysa's inn, the sword sign the outfitter, the potion sign the apothecary, the rest homes
-// (Edwin, Nell, Hask, and Ida with her son Fen). Posy sells flowers in the square.
+// (Edwin, Nell, Hask, and Ida with her son Fen). Posy sells flowers in the square; Garrick keeps the watch.
 //
 // Map: . grass  : cobbles
 module.exports = {
@@ -85,13 +85,6 @@ module.exports = {
 	instances: [
 		{obj: "obj_plyr", x: 1024, y: 1320},
 		{obj: "camera", x: 1024, y: 1320},
-		{obj: "obj_npc_womantest", x: 960, y: 420},
-		{obj: "obj_npc_mantest", x: 1080, y: 1100},
-		// Townsfolk who live in the homes are out in the square from 9 to 5 (villager_room); the rest of the day these
-		// spots find nobody and go away
-		...[["man", 680, 620], ["man", 1300, 660], ["man", 820, 820], ["woman", 1100, 700], ["woman", 1420, 560]]
-			.map(([slot, x, y]) => ({obj: slot === "woman" ? "obj_npc_womantest" : "obj_npc_mantest", x, y,
-				code: "if(who == \"\") instance_destroy(); // the townsfolk are home"})),
 		// Down the main street to the ladder onto the farm
 		{obj: "obj_transition", x: 1024, y: 1392, sx: 8, sy: 2,
 		 code: "targetRoom = rm_1;\ntargetX = 496;\ntargetY = 152;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
@@ -106,6 +99,11 @@ module.exports = {
 	points: {
 		street_south: [1024, 1320],   // coming up the ladder from the farm
 		inn_door: [1056, 340], outfitter_door: [1776, 404], apothecary_door: [272, 852],
+		// Where the townsfolk spend the day (their schedules in scripts/people)
+		watch: [1088, 1250],     // Garrick, at the top of the street down to the farm
+		stall: [736, 600],       // Posy's flowers, by the market carts
+		square_a: [880, 720], square_b: [960, 760], square_c: [1300, 560], square_d: [1180, 820], square_e: [760, 820],
+		square_f: [1120, 480], board: [1150, 430],
 	},
 	areas: {
 		square: [16, 12, 47, 27],

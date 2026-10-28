@@ -17,6 +17,19 @@ if(sleeping){
 		room_goto(BED_ROOM);
 	}
 }
+// Knocked out in the mine: fade out, pay the penalty, wake beside the bed (no new day, no autosave)
+if(dying){
+	blackAlpha = min(1, blackAlpha + 0.025);
+	if(blackAlpha >= 1 && !sleepDone){
+		sleepDone = true;
+		deathReport = death_penalty();
+		revived = true;
+		wakeAtBed = true;
+		spawnRoom = -1;
+		doTransition = false;
+		room_goto(BED_ROOM);
+	}
+}
 if(waking){
 	blackAlpha = max(0, blackAlpha - 0.025);
 	if(blackAlpha <= 0) waking = false;
@@ -41,13 +54,13 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 	playtime += delta_time / 1000000;
 	var invOpen = instance_exists(obj_inventory);
 	// The clock runs while you play (not in the inventory, menus or fades); at 2:00 am you pass out
-	if(world_time_ready() && !invOpen && !sleeping && !waking && !doTransition){
+	if(world_time_ready() && !invOpen && !sleeping && !dying && !waking && !doTransition){
 		var before = global.clock.minutes;
 		if(clock_tick()) sleep_now(true);
 		food_tick(global.clock.minutes - before); // food buffs wear off; the cold drains energy outdoors
 	}
 	if(resumeLock > 0) {resumeLock--;}
-	else if(!invOpen && input_pressed(vk_escape)) {game_pause();}
+	else if(!invOpen && !mine_menu_open() && input_pressed(vk_escape)) {game_pause();}
 	else if(!invOpen && input_pressed(ord("I")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_inventory);}
 	
 	// Hotbar: 1-9 and 0 pick the held item
@@ -63,7 +76,7 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 
 	// Debug (Insert): Page Up / Page Down hop between play rooms
 	if(debug && (keyboard_check_pressed(vk_pageup) || keyboard_check_pressed(vk_pagedown))){
-		var rooms = [rm_1, rm_2, rm_3, rm_12, rm_123];
+		var rooms = [rm_1, rm_2, rm_3, rm_12, rm_123, rm_mine];
 		var n = array_length(rooms);
 		var i = array_get_index(rooms, room);
 		spawnRoom = -1; // use the room's own player position

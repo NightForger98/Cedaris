@@ -103,17 +103,24 @@ function food_tick(_minutes){
 // ---------------------------------------------------------------- the cold
 
 /// @description How cold it is here: 0 indoors; outdoors by season (spring 1, summer 0, fall 2, winter 5),
-/// colder from 8 pm. Heat zones (the mine's lava floors, phase 4) can return a negative value here.
+/// colder from 8 pm; in the mine, its band (the Frozen Halls are cold). Negative means heat: the Ember Depths
+/// are -2, where any Warmth over 2 tires you instead.
 function climate_cold(){
-	if(!world_time_ready() || !room_is_outdoors()) return 0;
+	if(!world_time_ready()) return 0;
+	if(room == rm_mine) return mine_band(mine_state().floor).cold;
+	if(!room_is_outdoors()) return 0;
 	var s = global.clock.season mod 4;
 	var c = [1, 0, 2, 5][s];
 	if(global.clock.minutes >= 1200 || global.clock.minutes < DAY_START) c += (s == 1) ? 1 : 2;
 	return c;
 }
 
-/// @description Cold your Warmth doesn't cover (0 if you're dressed for it). Each point drains energy.
-function climate_chill(){ return max(0, climate_cold() - stat("warmth")); }
+/// @description Cold your Warmth doesn't cover, or in heat, Warmth beyond what the heat allows (0 if you're dressed
+/// for it). Each point drains energy.
+function climate_chill(){
+	var c = climate_cold();
+	return (c >= 0) ? max(0, c - stat("warmth")) : max(0, stat("warmth") + c);
+}
 
 // ---------------------------------------------------------------- shared costs (materials and produce)
 

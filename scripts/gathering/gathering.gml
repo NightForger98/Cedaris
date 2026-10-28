@@ -41,6 +41,13 @@ function resource_table(){
 		// Not spawned on the surface: waiting for the mine's deepest floors (phase 4)
 		mithril_vein: {name: "Mithril Vein", tools: ["Pickaxe"], hp: 14, hard: 4, art: [578, 392, 56, 53],  anchor: [28, 46],  foot: [1.5, 1.25], scale: 0.75,
 		               ore: make_colour_rgb(180, 240, 255), drops: [["m|mithril_ore", 1, 3, 1], ["m|gem", 1, 1, 0.1]]},
+		// Mine only: rocks tinted by their band, and gem nodes (see mine_bands)
+		ice_rock:     {name: "Frozen Rock",  tools: ["Pickaxe"], hp: 4,  hard: 1, art: [864, 845, 60, 50],  anchor: [30, 42],  foot: [1.25, 1], scale: 0.7,
+		               tint: make_colour_rgb(170, 210, 255), drops: [["m|stone", 1, 3, 1], ["m|frost_crystal", 1, 1, 0.06]]},
+		ember_rock:   {name: "Ember Rock",   tools: ["Pickaxe"], hp: 6,  hard: 2, art: [864, 845, 60, 50],  anchor: [30, 42],  foot: [1.25, 1], scale: 0.7,
+		               tint: make_colour_rgb(255, 140, 100), drops: [["m|stone", 1, 3, 1], ["m|coal", 1, 2, 0.3], ["m|ember_core", 1, 1, 0.05]]},
+		gem_node:     {name: "Gem Node",     tools: ["Pickaxe"], hp: 5,  hard: 1, art: [578, 392, 56, 53],  anchor: [28, 46],  foot: [1.5, 1.25], scale: 0.75,
+		               ore: make_colour_rgb(90, 220, 230),  drops: [["m|gem", 1, 2, 1]]},
 		weeds:        {name: "Weeds",        tools: ["any"],     hp: 1,  hard: 0, art: [191, 767, 30, 33],  anchor: [15, 30],  foot: [1.25, 1],
 		               drops: [["m|fibre", 1, 2, 1]]},
 		bush:         {name: "Bush",         tools: ["Scythe", "Axe"], hp: 2, hard: 0, art: [289, 447, 29, 33], anchor: [14, 30], foot: [1.5, 1],

@@ -195,7 +195,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 | 4 | 1 Farming loop | L | **done**: till, seeds (Mara), plant, water (pond refill), watered-only growth, seasons, harvest with Luck quality, regrowing crops, eating, shipping bin |
 | 5 | 2 Gathering + smelting + upgrades | M | **done**: trees/stumps (axe), rocks and ore veins (pickaxe, hardness by tier), weeds and bushes (scythe) spawning in farm areas and regrowing daily; wood, stone, fibre, coal, 5 ores; smelting at Brom's furnace, weaving fibre at the crafting table; Copper to Mithril tool upgrades at Brom's (save v3) |
 | 6 | 3 Stats wiring (Warmth, buffs) | S | **done**: `stat()` with food buffs, cooking at the hearth (8 dishes), winter/night cold vs Warmth, Charm selling bonus |
-| 7 | 4 Combat + mine | XL | Defence, Luck drops, the fantasy material sources |
+| 7 | 4 Combat + mine | XL | **done (core)**: 30-floor mine generated at runtime (earth, ice, lava bands; lift every 5), weapons table, 11 monsters (LPC humanoids + [LPC] Monsters creatures), Defence, Luck crits/drops, heat and cold, knock-outs; still to come: dragon boss, pixies and moths, ranged monsters (save v4) |
 | 8 | 5 Magic | M | reuses the action system and spellcast art |
 | 9 | 6 Social and quests | L | Charm, rewards; ties progression together |
 

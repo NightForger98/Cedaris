@@ -42,3 +42,5 @@ Then run `./build.sh` from the project folder.
 
 LPC art is CC-BY-SA 3.0, GPL 3.0 and/or OGA-BY 3.0, depending on the piece. `LPC_CREDITS.csv` in the
 project root lists the authors and licences for every piece used; the game's credits must include them.
+After adding rows to it (e.g. art from outside the generator, like the mine monsters), regenerate the credits
+screen's list with `python -I tools/lpc/credits_gml.py .` or, without Python, `node tools/lpc/credits_gml.js .`.

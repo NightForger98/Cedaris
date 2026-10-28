@@ -1,0 +1,51 @@
+# Phase 4: into the mine, fighting, going down, the bands, being knocked out (story mode, so penalties apply)
+start story
+wait 60
+gold 1000
+pos 552 168
+face n
+wait 5
+shot 00_cave
+key e
+wait 80
+call autotest_mine
+call autotest_monsters
+call autotest_resources
+shot 01_floor1
+# Fight with a sword
+give c|held|Arming Sword
+equip c|held|Arming Sword
+call autotest_goto_monster
+use 4
+call autotest_monsters
+shot 02_fight
+# Stand still and get hit
+call autotest_goto_monster
+wait 150
+call autotest_mine
+shot 03_hurt
+# Down the ladder
+call autotest_goto_ladder
+key e
+wait 80
+call autotest_mine
+shot 04_floor2
+# The Frozen Halls and the Ember Depths
+mine 12
+wait 40
+call autotest_mine
+call autotest_monsters
+shot 05_ice
+mine 23
+wait 40
+call autotest_mine
+call autotest_monsters
+shot 06_lava
+# Knocked out: wake at home, lose gold and some items
+inv
+call autotest_hurt 999
+wait 220
+call autotest_mine
+inv
+shot 07_knocked_out
+quit

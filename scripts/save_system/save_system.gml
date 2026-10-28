@@ -2,7 +2,7 @@
 /// Saves are JSON files in the game's save folder (saves/slotN.json); settings live in settings.ini.
 
 #macro SAVE_SLOTS 3
-#macro SAVE_VERSION 3 // 3: resources in the world store, tool tiers and water in the inventory
+#macro SAVE_VERSION 4 // 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine)
 
 function save_path(_slot){ return "saves/slot" + string(_slot) + ".json"; }
 
@@ -13,6 +13,7 @@ function save_room_name(_roomName){
 	switch(_roomName){
 		case "rm_1": return "The Farm";
 		case "rm_2": return "Village";
+		case "rm_mine": return "The Mine";
 		default:     return "Indoors";
 	}
 }

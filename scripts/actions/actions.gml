@@ -91,7 +91,8 @@ function action_hit(_user, _item, _dir){
 			for(var i = 0; i < tool_row_length(_item); i++) if(farm_water(_user, cell[0] + dx * i, cell[1] + dy * i) == "refill") break;
 			break;
 		default:
+			// Monsters first (a weapon or tool hits what's in its arc, a bow fires), then trees, rocks and weeds
+			combat_player_hit(_user, _item, _dir);
 			gather_hit(_user, _item, _dir);
-			// Combat (phase 4) hooks in here too
 	}
 }

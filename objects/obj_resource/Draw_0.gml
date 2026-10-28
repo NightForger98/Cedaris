@@ -3,7 +3,7 @@ var a = def.art;
 var sc = def[$ "scale"] ?? 1;
 var wob = (shake > 0) ? sin(shake * 1.7) * shake * 0.25 : 0;
 var x1 = round(x - def.anchor[0] * sc + wob), y1 = round(y - def.anchor[1] * sc);
-draw_sprite_part_ext(spr_tile_terrain, 0, a[0], a[1], a[2], a[3], x1, y1, sc, sc, c_white, 1);
+draw_sprite_part_ext(spr_tile_terrain, 0, a[0], a[1], a[2], a[3], x1, y1, sc, sc, def[$ "tint"] ?? c_white, 1);
 if(variable_struct_exists(def, "ore")){
 	// Specks of ore on the rock face, placed from the cell so they don't move between visits
 	var dark = merge_colour(def.ore, c_black, 0.5);

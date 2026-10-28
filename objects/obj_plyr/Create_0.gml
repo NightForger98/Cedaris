@@ -24,3 +24,4 @@ actStep = 0;         // current step of it
 actDir = 2;          // facing while acting: 0 north, 1 west, 2 south, 3 east
 actHit = false;      // the hit step has fired
 baseDepth = depth; // depth of the room layer the player was placed on, used by depth_sort()
+iframes = 0;        // frames of invulnerability after a monster hits (see player_hurt)

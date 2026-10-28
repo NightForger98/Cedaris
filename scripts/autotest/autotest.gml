@@ -16,6 +16,7 @@
 ///   time <hour>               set the clock (6-25)
 ///   gold <n>                  set gold
 ///   season <0-3>              set the season
+///   mine <floor>              go down to a mine floor
 ///   equip <item id>           put that item on hotbar slot 10 and hold it
 ///   sleep                     sleep in bed (ends the day)
 ///   call <function> [args]    call a script function, e.g. call smelt m|copper (strings only)
@@ -113,8 +114,12 @@ function autotest_step(){
 			case "pos":  with(obj_plyr){ x = real(a[1]); y = real(a[2]); } break;
 			case "face": with(obj_plyr){ y_frame = 8 + string_pos(a[1], "nwse") - 1; facing = -1; } break;
 			case "give":
-				var n = (array_length(a) > 2) ? real(a[2]) : 1;
-				inv_add(item_stack(a[1], n));
+				// Item names can have spaces ("c|held|Arming Sword"); a number at the end is the count
+				var n = 1, last = array_length(a) - 1;
+				if(last > 1 && string_digits(a[last]) == a[last]){ n = real(a[last]); last--; }
+				var gid = a[1];
+				for(var i = 2; i <= last; i++) gid += " " + a[i];
+				inv_add(item_stack(gid, n));
 				inv_apply_look(global.look);
 				break;
 			case "hold":
@@ -133,11 +138,13 @@ function autotest_step(){
 			case "time": global.clock.minutes = real(a[1]) * 60; break;
 			case "gold": global.inv.gold = real(a[1]); break;
 			case "season": global.clock.season = real(a[1]); break;
+			case "mine": mine_goto(real(a[1])); t.wait = 40; break;
 			case "equip":
 				// Move the first stack of an item onto hotbar slot 10 and hold it
+				var eid = string_delete(line, 1, 6);
 				for(var i = 0; i < INV_SIZE; i++){
 					var st = global.inv.slots[i];
-					if(st == undefined || st.id != a[1]) continue;
+					if(st == undefined || st.id != eid) continue;
 					global.inv.slots[i] = global.inv.slots[9];
 					global.inv.slots[9] = st;
 					break;
@@ -220,4 +227,38 @@ function autotest_vitals(){
 	var b = food_buff();
 	return "energy " + string_format(global.vitals.energy, 1, 1) + "/" + string(vitals_max_energy()) + "  cold " + string(climate_cold())
 	       + "  warmth " + string(stat("warmth")) + "  buff " + ((b == undefined) ? "none" : b.dish + " until " + string(b.until));
+}
+
+/// @description Stand just south of the nearest monster (of a kind, or any), facing it. Returns what it is.
+function autotest_goto_monster(_kind = ""){
+	var best = noone, bd = infinity;
+	with(obj_monster){
+		if(dying || (_kind != "" && kind != _kind) || !instance_exists(obj_plyr)) continue;
+		var d = point_distance(x, y, obj_plyr.x, obj_plyr.y);
+		if(d < bd){ bd = d; best = id; }
+	}
+	if(best == noone) return "none";
+	with(obj_plyr){ x = best.x; y = best.y + 24; y_frame = 8; facing = -1; }
+	return best.kind + " hp " + string(best.hp) + "/" + string(best.hpMax);
+}
+
+/// @description Count of each monster kind here.
+function autotest_monsters(){
+	var counts = {};
+	with(obj_monster) if(!dying) counts[$ kind] = (counts[$ kind] ?? 0) + 1;
+	return json_stringify(counts);
+}
+
+/// @description Stand on the mine's ladder down.
+function autotest_goto_ladder(){
+	with(obj_mine_ladder) if(down){ obj_plyr.x = x; obj_plyr.y = y + 10; return "ladder at " + string(x) + "," + string(y); }
+	return "none";
+}
+
+/// @description A monster-sized hit on the player, for testing being knocked out.
+function autotest_hurt(_n){ obj_plyr.iframes = 0; player_hurt(real(_n), obj_plyr.x, obj_plyr.y - 30); return global.vitals.health; }
+
+/// @description Where the mine is: floor, deepest, health.
+function autotest_mine(){
+	return "floor " + string(mine_state().floor) + " deepest " + string(mine_state().deepest) + "  health " + string(global.vitals.health) + "  cold " + string(climate_cold());
 }

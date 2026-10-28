@@ -9,12 +9,34 @@ if(game_is_playing_room() && world_time_ready() && room_is_outdoors()){
 	}
 }
 
+// The mine is dark away from you: a dark layer with a soft circle of light cut out around the player
+var dark = mine_darkness();
+if(dark > 0 && instance_exists(obj_plyr)){
+	if(!surface_exists(lightSurf)) lightSurf = surface_create(guiWidth, guiHeight);
+	var cam = view_camera[0];
+	var lx = (obj_plyr.x - camera_get_view_x(cam)) * guiWidth / camera_get_view_width(cam);
+	var ly = (obj_plyr.y - 24 - camera_get_view_y(cam)) * guiHeight / camera_get_view_height(cam);
+	var r = guiWidth * 0.3;
+	surface_set_target(lightSurf);
+	draw_clear_alpha(c_black, dark);
+	gpu_set_blendmode(bm_subtract);
+	draw_primitive_begin(pr_trianglefan);
+	draw_vertex_colour(lx, ly, c_black, dark);
+	for(var a = 0; a <= 360; a += 15) draw_vertex_colour(lx + lengthdir_x(r, a), ly + lengthdir_y(r, a), c_black, 0);
+	draw_primitive_end();
+	gpu_set_blendmode(bm_normal);
+	surface_reset_target();
+	draw_surface(lightSurf, 0, 0);
+}
+
 if(doTransition){
 	//handle transition
-	if(room != spawnRoom){
+	// restartRoom: going to the room you're in (the next mine floor) rebuilds it
+	if(room != spawnRoom || restartRoom){
 		blackAlpha += 0.1;
 		if(blackAlpha >= 1){
-			room_goto(spawnRoom)}
+			if(restartRoom){ restartRoom = false; room_restart(); }
+			else room_goto(spawnRoom)}
 			}else{blackAlpha -= 0.1;
 				if(blackAlpha <= 0)
 			doTransition=false;
@@ -73,15 +95,15 @@ if(game_is_playing_room() && variable_global_exists("inv") && is_struct(global.i
 	draw_set_valign(fa_top);
 }
 
-// Sleeping / waking fade
-if(sleeping || waking){
+// Sleeping / knocked out / waking fade
+if(sleeping || dying || waking){
 	draw_set_alpha(blackAlpha);
 	draw_rectangle_colour(0, 0, guiWidth, guiHeight, c_black, c_black, c_black, c_black, false);
 	draw_set_alpha(1);
 }
 
 // Clock and energy/health bars while playing
-if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) && !sleeping){
+if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) && !sleeping && !dying){
 	var c = ui_colours();
 	draw_set_font(fnt_eq);
 	// Clock box, top right
@@ -92,6 +114,8 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 	draw_set_alpha(1);
 	ui_text(bx + 14, by + 20, weekday_name(global.clock.day) + " " + string(global.clock.day) + "  " + season_name(global.clock.season) + "  Y" + string(global.clock.year), 0.55, c.accent, fa_left);
 	ui_text(bx + 14, by + 54, clock_text(), 0.8, c_white, fa_left);
+	// In the mine: which floor and band, top centre
+	if(room == rm_mine) ui_text(guiWidth / 2, 30, "Mine floor " + string(mine_state().floor) + "  -  " + mine_band(mine_state().floor).name, 0.6, c.accent);
 
 	// Food buff under the clock: what it gives and how long it has left
 	var buff = food_buff();
@@ -121,7 +145,11 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 	}
 	if(vitals_exhausted()) ui_text(guiWidth - 64, guiHeight - 270, "Exhausted", 0.5, make_colour_rgb(230, 110, 90), fa_right);
 	// Too cold for what you're wearing: energy drains (warmer clothes or a warming dish fix it)
-	else if(climate_chill() > 0) ui_text(guiWidth - 100, guiHeight - 262, "Cold " + string(climate_cold()) + "  Warmth " + string(stat("warmth")), 0.5, make_colour_rgb(150, 200, 255), fa_right);
+	else if(climate_chill() > 0){
+		var hot = climate_cold() < 0;
+		ui_text(guiWidth - 100, guiHeight - 262, (hot ? "Hot - Warmth " + string(stat("warmth")) + " is too much" : "Cold " + string(climate_cold()) + "  Warmth " + string(stat("warmth"))),
+		        0.5, hot ? make_colour_rgb(255, 150, 90) : make_colour_rgb(150, 200, 255), fa_right);
+	}
 
 	// Message line (day start, saves, warnings)
 	if(hudTime > 0) ui_text(guiWidth / 2, 110, hudMessage, 0.7, c_white);

@@ -1,7 +1,8 @@
 /// @description Insert description here
 // You can write your code in this editor
-// Stand still while the inventory is open
-if(instance_exists(obj_inventory)){ moveX = 0; moveY = 0; facing = -1; exit; }
+// Stand still while the inventory or the mine lift is open; blink for a moment after being hit
+if(iframes > 0) iframes--;
+if(instance_exists(obj_inventory) || mine_menu_open() || game.dying){ moveX = 0; moveY = 0; facing = -1; exit; }
 
 // Using the held item: play the action through, firing its effect once on the hit step
 if(act != undefined){
@@ -92,7 +93,7 @@ case -1: facing = dir.up; break;
 
 ///collisions
 // NPCs block too, unless already overlapping one (so the player can walk out)
-var solids = place_meeting(x,y,obj_npc_parent) ? obj_col_box : [obj_col_box, obj_npc_parent];
+var solids = collision_solids(!place_meeting(x,y,obj_npc_parent)); // in the mine, its rock too
 
 if(moveX != 0){
 	if(place_meeting(x+moveX,y,solids)){

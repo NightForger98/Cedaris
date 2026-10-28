@@ -11,17 +11,26 @@ if(game_is_playing_room()){
 	if(!world_time_ready()) world_time_new();
 	inv_apply_look(global.look);
 	with(obj_plyr) look = global.look;
-	// Trees, rocks and weeds: this room's from the world store, plus any that are due to spawn
-	resources_room_start();
+	// The mine builds its floor (and puts you at the entrance); elsewhere trees, rocks and weeds from the world store,
+	// plus any that are due to spawn
+	if(room == rm_mine) mine_room_start();
+	else { global.mineWalls = -1; resources_room_start(); }
 }
- 
-// After sleeping: wake up beside the bed, facing down, then autosave
+
+// After sleeping: wake up beside the bed, facing down, then autosave. After being knocked out: no autosave,
+// and the morning message says what it cost.
 if(wakeAtBed){
 	wakeAtBed = false;
 	sleeping = false;
+	dying = false;
 	sleepDone = false;
 	waking = true;
-	autosavePending = true;
+	autosavePending = !revived;
+	if(revived){
+		revived = false;
+		hudMessage = deathReport;
+		hudTime = game_get_speed(gamespeed_fps) * 7;
+	}
 	if(instance_exists(obj_bed) && instance_exists(obj_plyr)){
 		obj_plyr.x = obj_bed.x;
 		obj_plyr.y = obj_bed.y + 56;

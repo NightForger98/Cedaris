@@ -24,6 +24,8 @@ if(facing != -1){
 	if(x_frame >= anim_length) {x_frame = 1}
 }
 
+// Blink while invulnerable after a hit
+if(iframes > 0 && (iframes div 4) mod 2 == 0) exit;
 // All layers, palettes and draw order live in character_draw (character_look script)
 if(act != undefined) character_draw(look, 0, 0, xx, yy, 1, {act: act, i: floor(actStep), dir: actDir});
 else character_draw(look, floor(x_frame), y_frame, xx, yy, 1);

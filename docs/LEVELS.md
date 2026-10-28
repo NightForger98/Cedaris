@@ -32,15 +32,19 @@ We're not doing that, because:
 - **Layout**: a cave carved by cellular automata (random fill, then a few smoothing passes), or stitched
   from small hand-drawn chunks written as text grids. Then a flood fill checks the entrance can reach the
   ladder down; unreachable pockets are filled in or opened up.
-- **Tiles** drawn with `tilemap_set` on the room's tile layers. GameMaker's autotiling handles where cave
-  wall meets floor, so there are no adjacency rules to maintain.
+- **Tiles** drawn with `tilemap_set` on tile layers made at Room Start: a wall with open floor below shows a
+  cliff face, other walls dark rock, so there are no adjacency rules to maintain. An invisible tilemap of the
+  walls is what the player and monsters collide with.
 - **Contents** reuse what exists: rocks and ore veins from the gathering system (mine floors are just
   another kind of spawn area, with harder veins deeper down, which ties into the pickaxe tiers; mithril
   near the bottom), and monsters from the LPC look system (goblins, skeletons, trolls...).
 - **Bands of floors** change the look and the finds: earth, ice (frost crystals), lava (ember cores), with
   a lift every 5 floors.
 - **Seeded per floor**: the layout comes from the save's seed plus the floor number, so a floor looks the
-  same when you come back, and the save only stores what you changed (rocks broken, chests opened).
+  same when you come back. Its contents (rocks, ore, monsters) are rolled fresh on every visit, like Stardew,
+  so nothing per floor is saved: only the seed, the deepest floor reached and the floor you're on.
+- **Built** (step 7): `scripts/mine` (generation, bands, the lift), `scripts/combat` (weapons, monsters,
+  knock-outs), `rm_mine`; entered from the cave on the farm (`obj_mine_door`).
 
 ## If WFC is wanted later
 

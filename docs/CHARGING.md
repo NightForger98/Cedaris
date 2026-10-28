@@ -1,8 +1,8 @@
 # Charged tools and weapons (plan)
 
 Hold the use button to charge a tool or weapon, then let go for a stronger action, like Harvest Moon: Friends of
-Mineral Town (the look) and Stardew Valley (the timing). Status: **planned, waiting on the up/down reference
-frames** for the wind-up poses (right is from the video; left mirrors it).
+Mineral Town (the look) and Stardew Valley (the timing). Status: **planned**. Reference frames are in for right
+(left mirrors it), up and down.
 
 ## What the player sees
 
@@ -27,6 +27,36 @@ frames** for the wind-up poses (right is from the video; left mirrors it).
 (a tap is still free).
 
 **Getting hit** (`player_hurt`) cancels the charge.
+
+## Charge stages (the same in every direction)
+
+From the reference frames for facing right, up and down. Left is the mirror of right, including the flames. Every
+direction goes through the same stages in the same order; only where the tool sits changes.
+
+| Stage | Level | Down | Up | Right (left mirrored) |
+|---|---|---|---|---|
+| Wind-up 1 | press | blade raised above the head, tipped back-left | back of head; blade held across the waist in front | blade raised upright |
+| Wind-up 2 | 1 | blade tips further back behind the head | blade drops lower, out to the side | blade tilts back and down |
+| Wind-up 3 | 2 | blade swings upright over the right shoulder | blade further back and lower | blade pulled furthest back |
+| Red face | 3 | face tinted red | ears and neck red (the face can't be seen) | face and cheek red |
+| Anger mark | 4 | on the front of the cap | on the back of the cap | on the side of the head |
+| Full glow | 5 (Mithril) | the tool glows at its brightest | | |
+| Golden outline | 6 (Cursed/Blessed) | a thin yellow outline round the whole character for about 0.3 s | | |
+| Flames | 6, held | two flame frames swapped to flicker, golden (dark purple when cursed) | | |
+
+- A tool stops at its own maximum. A Copper tool only reaches wind-up 2, and only Cursed and Blessed tools get the
+  outline and flames.
+- **Weapons** (2 levels) use the wind-up, then red face at level 1 and the anger mark at level 2.
+- **Flames:**
+  - One flame frame is drawn by hand (small tongues around the body outline).
+  - The second is the same with the tongues shifted slightly, since the down reference only shows one frame.
+  - At the moment of release the two frames play twice, then the spin starts.
+  - Flame sprites for left are the right ones mirrored.
+- **The outline** is the character's own sprite drawn 4 times, offset 1 px, flat yellow (`gpu_set_fog`), behind the
+  character, so it fits any look.
+- **Spin order:** the spin always starts from the way you're facing, then turns through the other facings. The frame
+  it started on is added again at the end, so it finishes facing the way it began. For example, facing up: up, right,
+  down, left, up.
 
 ## Releases
 
@@ -168,4 +198,3 @@ and priest can be built any time.
 - **The blessing's price**, and **where the temple goes** (the town, by the inn, or the village).
 - **Hammer and Shovel:** these aren't upgradable and don't do anything of their own yet. Should they charge like
   weapons (fixed 2 levels, a large swing), or not charge?
-- **Up/down reference frames** (the user is fetching them).

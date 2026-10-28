@@ -1,6 +1,6 @@
 /// @description Wander until you come close, then chase and attack; stunned and pushed back when hit
 // The world holds still in menus and fades
-if(instance_exists(obj_inventory) || instance_exists(obj_menu) || game.doTransition || game.dying || game.sleeping) exit;
+if(ui_blocking() || instance_exists(obj_menu) || game.doTransition || game.dying || game.sleeping) exit;
 if(dying){ if(++deathT > 24) instance_destroy(); exit; }
 if(flash > 0) flash--;
 if(cooldown > 0) cooldown--;

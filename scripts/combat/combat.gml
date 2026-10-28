@@ -174,6 +174,7 @@ function monster_kill(_inst){
 		inv_add(item_stack(dr[0], n));
 		got += ",  +" + string(n) + " " + item_def(dr[0]).name;
 	}
+	quests_on_kill(_inst.kind);
 	farm_message(m.name + " defeated  " + got);
 }
 

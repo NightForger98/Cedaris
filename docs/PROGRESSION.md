@@ -76,6 +76,15 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
 - **The mine's treasure**: a chest on each lift floor (5, 10 ... 30) the first time you get there
   (`mine_chest_loot()`): bars, gems, staffs, the Fireball and Heal scrolls, and legendary materials at 30.
 
+- **People**: 8 villagers (Brom, Mara, Pip and Rowan on the farm, Elda and Thorne in the village, Aunt Hesta and
+  Tobin at home), each with a fixed look (`villager_table()` in `scripts/people`). E talks (+20 friendship once a
+  day); G gives what you're holding (once a day: loved +80, liked +45, neutral +20, disliked -20, hated -40;
+  better produce counts more). Charm adds 3% per point. Every 2 hearts (250 points each) they give you something:
+  dyes, materials, a scroll, and a legendary material at 10 hearts. Brom and Mara trade from the dialogue (T).
+- **Requests**: the notice board in the village offers 3 a day (`quest_templates()` in `scripts/quests`); carry up
+  to 3. Deliveries are handed in at the board; hunts count monsters beaten after you take them. Rewards: gold,
+  +60 friendship with whoever asked, and often a dye (story mode's main source of dyes) or a material.
+
 ## Hooks for quests and events
 
 ```gml

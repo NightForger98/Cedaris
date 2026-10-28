@@ -1,8 +1,8 @@
 /// @description Insert description here
 // You can write your code in this editor
-// Stand still while the inventory or the mine lift is open; blink for a moment after being hit
+// Stand still while a window is open (inventory, dialogue, notice board, lift); blink for a moment after being hit
 if(iframes > 0) iframes--;
-if(instance_exists(obj_inventory) || mine_menu_open() || game.dying){ moveX = 0; moveY = 0; facing = -1; exit; }
+if(ui_blocking() || game.dying){ moveX = 0; moveY = 0; facing = -1; exit; }
 
 // Using the held item: play the action through, firing its effect once on the hit step
 if(act != undefined){

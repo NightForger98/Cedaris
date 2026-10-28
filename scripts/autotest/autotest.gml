@@ -280,3 +280,43 @@ function autotest_goto_chest(){
 
 /// @description Select a known spell and fill the mana pool, for tests.
 function autotest_spell(_key){ global.inv.spell = _key; global.vitals.mana = mana_max(); return spell_selected(); }
+
+/// @description Villagers in this room.
+function autotest_people(){
+	var s = "";
+	with(obj_npc_parent) if(who != "") s += who + "@" + string(round(x)) + "," + string(round(y)) + " ";
+	return s;
+}
+
+/// @description Stand just below a villager, facing them.
+function autotest_goto_person(_key){
+	with(obj_npc_parent) if(who == _key){ obj_plyr.x = x; obj_plyr.y = y + 30; obj_plyr.y_frame = 8; return _key; }
+	return "none";
+}
+
+function autotest_friend(_key){
+	var p = people_state(_key);
+	return _key + " points " + string(p.points) + " hearts " + string(people_hearts(_key)) + " rewarded " + string(p.rewarded) + " taste of held: "
+	       + ((inv_held_stack() == undefined) ? "-" : people_taste(_key, inv_held_stack().id));
+}
+
+function autotest_set_friend(_key, _pts){ people_state(_key).points = real(_pts); return people_hearts(_key); }
+
+function autotest_quest_accept(_i){ return quest_accept(real(_i)); }
+function autotest_quest_hand_in(_i){ return quest_hand_in(real(_i)); }
+
+/// @description Make the first taken request ready: give the items, or count the kills.
+function autotest_quest_fill(){
+	var act = quests_state().active;
+	if(array_length(act) == 0) return "no requests";
+	var q = act[0];
+	if(q.kind == "slay") q.got = q.n;
+	else inv_add(item_stack(cost_item_id(q.item), q.n));
+	return quest_goal_text(q);
+}
+
+/// @description What's open: dialogue, inventory (shop), board.
+function autotest_ui(){
+	return "dialogue " + string(instance_exists(obj_dialogue)) + " inventory " + string(instance_exists(obj_inventory))
+	       + " board " + string(instance_exists(obj_quest_board) && obj_quest_board.open);
+}

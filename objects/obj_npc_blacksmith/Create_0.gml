@@ -1,6 +1,8 @@
 /// @description Brom the blacksmith: stands at his post and sells tools and weapons (press E nearby)
 event_inherited();
 npcName = "Brom";
+who = "brom";     // a villager: friendship, gifts (see the people script)
+talkRange = 80;   // he stands back from his anvil
 alarm[1] = -1;   // no wandering
 moveX = 0;
 moveY = 0;

@@ -1,0 +1,59 @@
+# Phase 6: villagers with names and fixed looks, talking, gifts, hearts and rewards, trading, the notice board
+start story
+wait 60
+call autotest_people
+# Talk to Pip, then give him a gold carrot (he loves carrots)
+give p|carrot|2
+equip p|carrot|2
+call autotest_goto_person pip
+wait 2
+call autotest_friend pip
+key e
+wait 5
+call autotest_ui
+shot 01_talk
+key g
+wait 5
+call autotest_friend pip
+shot 02_gift
+key e
+wait 20
+call autotest_ui
+# Brom: talk, then trade
+call autotest_goto_person brom
+key e
+wait 5
+key t
+wait 5
+call autotest_ui
+key esc
+wait 10
+# A heart reward: at 2 hearts Pip has something for you
+call autotest_set_friend pip 520
+call autotest_goto_person pip
+key e
+wait 5
+shot 03_reward
+key e
+wait 20
+inv
+# The notice board in the village
+room rm_2 982 452
+wait 40
+call autotest_people
+face n
+key e
+wait 5
+call autotest_ui
+call autotest_quest_accept 0
+call autotest_quest_fill
+wait 2
+shot 04_board
+call autotest_quest_hand_in 0
+wait 2
+shot 05_done
+inv
+key e
+wait 10
+call autotest_ui
+quit

@@ -183,6 +183,8 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 - Dialogue boxes with portraits (an LPC look drawn large) and simple per-day and per-heart lines.
 - Quest board and requests, rewarding the materials and dyes already planned (`docs/PROGRESSION.md`).
 - Villagers get saved looks and homes, so the village stays the same people (they're random today).
+- Built (step 9): `scripts/people` (villagers, friendship, gifts), `scripts/quests` (the notice board), `obj_dialogue`,
+  `obj_quest_board`; `scripts/interact` makes only the closest usable thing answer E.
 
 ---
 
@@ -198,7 +200,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 | 6 | 3 Stats wiring (Warmth, buffs) | S | **done**: `stat()` with food buffs, cooking at the hearth (8 dishes), winter/night cold vs Warmth, Charm selling bonus |
 | 7 | 4 Combat + mine | XL | **done (core)**: 30-floor mine generated at runtime (earth, ice, lava bands; lift every 5), weapons table, 11 monsters (LPC humanoids + [LPC] Monsters creatures), Defence, Luck crits/drops, heat and cold, knock-outs; still to come: dragon boss, pixies and moths, ranged monsters (save v4) |
 | 8 | 5 Magic | M | **done**: mana (30 + 10/Magic), 5 spells from scrolls (Grow, Rain from Mara; Light from Brom; Fireball, Heal from the mine), cast with a staff (F, Q to change), staff power; treasure chests on mine lift floors (save v5) |
-| 9 | 6 Social and quests | L | Charm, rewards; ties progression together |
+| 9 | 6 Social and quests | L | **done**: 8 named villagers with fixed looks and homes, dialogue with portraits and hearts, daily talk and gifts (loves/likes/dislikes/hates), Charm boosts friendship, heart rewards every 2 hearts, a village notice board with daily delivery and hunting requests (gold, friendship, dyes) |
 
 S = a session, M = 1-2 sessions, L = 2-4 sessions, XL = 4+ sessions.
 

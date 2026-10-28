@@ -1,6 +1,8 @@
 /// @description Mara the seed seller: stands at her stall and sells seeds for the season (press E nearby)
 event_inherited();
 npcName = "Mara";
+who = "mara";
+talkRange = 70;   // across her stall
 alarm[1] = -1;   // no wandering
 moveX = 0;
 moveY = 0;

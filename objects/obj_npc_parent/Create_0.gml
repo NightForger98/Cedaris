@@ -16,3 +16,8 @@ x_offset = sprite_get_xoffset(mask_index);
 y_offset = sprite_get_yoffset(mask_index);
 
 alarm[1] = 1;
+
+// A named villager (see the people script) once a child or villager_take sets it; "" is a passing stranger
+who = "";
+talkRange = 48;      // how close you need to be to talk (Brom and Mara stand behind counters)
+near = false;

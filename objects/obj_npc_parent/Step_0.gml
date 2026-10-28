@@ -1,5 +1,9 @@
-/// @description Insert description here
-// You can write your code in this editor
+/// @description Walk about (bumping into things); stand still while talking; E nearby talks to a villager
+// Hold still in a conversation with you
+if(instance_exists(obj_dialogue) && obj_dialogue.npc == id){ moveX = 0; moveY = 0; exit; }
+// Talk: villagers answer E when you're the closest thing in reach (see interact_near)
+near = (who != "") && interact_near(talkRange);
+if(near && input_pressed(ord("E")) && interact_ready()) people_open(id);
 
 
 ///collisions

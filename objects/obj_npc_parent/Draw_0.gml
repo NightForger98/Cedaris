@@ -20,3 +20,17 @@ var xx = round(x-x_offset);
 var yy = round(y- y_offset);
 
 character_draw(look, floor(x_frame), y_frame, xx, yy, 1);
+
+// Villagers: their name, and a prompt when you're close (Brom and Mara draw their own)
+if(who != "" && !variable_instance_exists(id, "npcName")){
+	var v = villager_def(who);
+	var top = y - y_offset + 10;
+	draw_set_font(fnt_eq);
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_bottom);
+	draw_text_transformed_colour(x, top, v.name, 0.3, 0.3, 0, c_white, c_white, c_white, c_white, 1);
+	if(near)
+		draw_text_transformed_colour(x, top - 12, "[E] Talk", 0.3, 0.3, 0, c_yellow, c_yellow, c_yellow, c_yellow, 1);
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+}

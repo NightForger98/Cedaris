@@ -52,7 +52,7 @@ if(autosavePending && instance_exists(obj_plyr)){
 
 if(game_is_playing_room() && !instance_exists(obj_menu)){
 	playtime += delta_time / 1000000;
-	var invOpen = instance_exists(obj_inventory);
+	var invOpen = ui_blocking(); // any window: inventory, dialogue, notice board, lift
 	// The clock runs while you play (not in the inventory, menus or fades); at 2:00 am you pass out
 	if(world_time_ready() && !invOpen && !sleeping && !dying && !waking && !doTransition){
 		var before = global.clock.minutes;
@@ -61,7 +61,7 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 		mana_tick(global.clock.minutes - before);  // mana trickles back
 	}
 	if(resumeLock > 0) {resumeLock--;}
-	else if(!invOpen && !mine_menu_open() && input_pressed(vk_escape)) {game_pause();}
+	else if(!invOpen && input_pressed(vk_escape)) {game_pause();}
 	else if(!invOpen && input_pressed(ord("I")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_inventory);}
 	
 	// Hotbar: 1-9 and 0 pick the held item

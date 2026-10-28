@@ -41,11 +41,11 @@ direction goes through the same stages in the same order; only where the tool si
 | Red face | 3 | face tinted red | ears and neck red (the face can't be seen) | face and cheek red |
 | Anger mark | 4 | on the front of the cap | on the back of the cap | on the side of the head |
 | Full glow | 5 (Mithril) | the tool glows at its brightest | | |
-| Golden outline | 6 (Cursed/Blessed) | a thin yellow outline round the whole character for about 0.3 s | | |
-| Flames | 6, held | two flame frames swapped to flicker, golden (dark purple when cursed) | | |
+| Yellow outline | 6 (Cursed) | a thin yellow outline round the whole character, pulsing while held | | |
+| Flames | 6 (Blessed) | the outline for about 0.3 s, then two golden flame frames swapped to flicker | | |
 
-- A tool stops at its own maximum. A Copper tool only reaches wind-up 2, and only Cursed and Blessed tools get the
-  outline and flames.
+- A tool stops at its own maximum. A Copper tool only reaches wind-up 2, only Cursed tools get the outline, and only
+  Blessed tools get the flames.
 - **Weapons** (2 levels) use the wind-up, then red face at level 1 and the anger mark at level 2.
 - **Flames:**
   - One flame frame is drawn by hand (small tongues around the body outline).
@@ -64,7 +64,7 @@ direction goes through the same stages in the same order; only where the tool si
 |---|---|---|
 | Scythe | front sweep (as now) | **Spin**: cuts everything within a radius of `1 + level` cells around you |
 | Watering Can | waters 1 cell (refills at water) | **Spin**: waters every tilled cell within a radius of `level` cells, 1 water each |
-| Axe | one chop | **Large swing**: hits every tree/stump in a wide arc in front; damage `(1 + tier) × (1 + 0.5 × level)`; screen shake at level 3+ |
+| Axe | one chop | **Large swing**: hits every tree/stump in a wide arc in front; damage grows with level up to the full-charge share in the Cursed and blessed section; screen shake at level 3+ |
 | Pickaxe | one strike | **Large swing**: the same for rocks and ores (it still can't break rock harder than its tier) |
 | Hoe | tills 1 cell | Stardew area in front: L1 3×1, L2 5×1, L3 3×3, L4 6×3, L5 9×3 |
 | Swords | slash | **Spin slash**: hits all around you, ×1.5 / ×2 damage |
@@ -149,9 +149,26 @@ the normal full-charge pose (red face, anger mark):
 3. The release is the normal spin with no flames, but it **cuts a larger area**.
 
 **Tiers:** two new tiers after Mithril in `tool_tiers`: **Cursed** and **Blessed**.
-- Both charge **6 levels**. Level 6 is the flame aura, and its release is one size bigger than Mithril's
-  (scythe/can spin radius 7, hoe 9×5, a wider axe/pickaxe arc).
-- Both have the same animation and strength. Only the curse rules below differ.
+- Both charge **6 levels**, with the same wind-up, red face and anger mark.
+- **Level 6 looks different:**
+  - **Cursed** gets the **yellow glow outline**, pulsing for as long as you hold it. No flames.
+  - **Blessed** shows the outline briefly, then the **flames** (the two flickering frames).
+- **Blessed is stronger than Cursed.** Each step up gives a bigger area, or more damage for tools that hit a single
+  target:
+
+  | Full charge (top level) | Mithril (L5) | Cursed (L6) | Blessed (L6) |
+  |---|---|---|---|
+  | Scythe spin radius | 6 cells | 7 cells | 9 cells |
+  | Watering can spin radius | 5 cells | 6 cells | 8 cells |
+  | Hoe area | 9×3 | 9×5 | 11×7 |
+  | Axe / Pickaxe arc | 150° | 180° | 240° |
+  | Axe / Pickaxe damage on the **biggest** tree or rock | 3 swings | **2 swings** | **1 swing** |
+
+- **Axe and pickaxe damage at full charge** is set as a share of the biggest thing that tool breaks:
+  - The table today: trees are 10 hp (axe), and a void node is 16 hp (pickaxe).
+  - Blessed does 100% of that, so one swing. Cursed does 50%, so two swings. Mithril does 35%, so three swings.
+  - Lower tiers do at least their tap damage plus their level.
+  - It's worked out from the resource table, so a bigger tree or rock added later keeps the same rule.
 - Only a **Mithril** tool (the last tier) can become Cursed. A Cursed tool can only become Blessed. Brom can't
   upgrade either one.
 
@@ -159,7 +176,7 @@ the normal full-charge pose (red face, anger mark):
 - The tool **can't be unequipped**: it stays in your hand and blocks the hotbar keys and scroll, inventory moves,
   chests, selling and the bin (see open questions).
 - It **drains energy faster**: `tool_energy_cost × 2`, so a charged swing costs `× 2 × (1 + level)`.
-- Its icon gets a purple dot, a purple glint in the hand, and a dark purple flame aura at level 6 instead of gold.
+- Its icon gets a purple dot and a purple glint in the hand. A Blessed tool's icon dot is gold.
 - Saved as `global.inv.tools[name] = 6` (Cursed) or `7` (Blessed). Save version goes to 10, and older saves load
   unchanged.
 

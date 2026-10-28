@@ -363,3 +363,17 @@ function autotest_fish_ready(){
 	with(obj_fishing){ state = "bite"; marker = zoneAt + zone / 2; markerSpeed = 0; return fish; }
 	return "not fishing";
 }
+
+/// @description The farm's animals, in short.
+function autotest_animals(){
+	var s = "";
+	var list = animals_list();
+	for(var i = 0; i < array_length(list); i++) s += list[i].name + "(" + list[i].kind + " love " + string(list[i].love) + (list[i].ready ? " ready" : "") + ") ";
+	return s + " instances " + string(instance_number(obj_animal));
+}
+
+/// @description Stand beside the first animal of a kind.
+function autotest_goto_animal(_kind){
+	with(obj_animal) if(data.kind == _kind){ moveX = 0; moveY = 0; wanderT = 600; obj_plyr.x = x; obj_plyr.y = y + 22; return data.name; }
+	return "none";
+}

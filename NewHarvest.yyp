@@ -10,6 +10,7 @@
   },
   "defaultScriptType":1,
   "Folders":[
+    {"$GMFolder":"","%Name":"Animals","folderPath":"folders/Sprites/Animals.yy","name":"Animals","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Monsters","folderPath":"folders/Sprites/Monsters.yy","name":"Monsters","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"LPC","folderPath":"folders/Sprites/LPC.yy","name":"LPC","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Palettes","folderPath":"folders/Sprites/LPC/Palettes.yy","name":"Palettes","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -141,6 +142,9 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"spr_animal_sheep","path":"sprites/spr_animal_sheep/spr_animal_sheep.yy",},},
+    {"id":{"name":"spr_animal_cow","path":"sprites/spr_animal_cow/spr_animal_cow.yy",},},
+    {"id":{"name":"spr_animal_chicken","path":"sprites/spr_animal_chicken/spr_animal_chicken.yy",},},
     {"id":{"name":"spr_moth","path":"sprites/spr_moth/spr_moth.yy",},},
     {"id":{"name":"spr_mon_slime_shot","path":"sprites/spr_mon_slime_shot/spr_mon_slime_shot.yy",},},
     {"id":{"name":"spr_mon_eyeball","path":"sprites/spr_mon_eyeball/spr_mon_eyeball.yy",},},
@@ -174,6 +178,8 @@
     {"id":{"name":"forest","path":"scripts/forest/forest.yy",},},
     {"id":{"name":"placeables","path":"scripts/placeables/placeables.yy",},},
     {"id":{"name":"fishing","path":"scripts/fishing/fishing.yy",},},
+    {"id":{"name":"animals","path":"scripts/animals/animals.yy",},},
+    {"id":{"name":"obj_animal","path":"objects/obj_animal/obj_animal.yy",},},
     {"id":{"name":"obj_fishing","path":"objects/obj_fishing/obj_fishing.yy",},},
     {"id":{"name":"obj_placeable","path":"objects/obj_placeable/obj_placeable.yy",},},
     {"id":{"name":"obj_shrine","path":"objects/obj_shrine/obj_shrine.yy",},},

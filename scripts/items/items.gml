@@ -9,6 +9,7 @@
 ///   "w|<forage>"               something wild from Whisperwood (see forest)
 ///   "o|<kind>"                 something you place, like a sprinkler (see placeables)
 ///   "x|<fish>"                 a fish (see fishing)
+///   "n|<animal>", "a|<product>"  a crate of livestock, eggs and milk (see animals)
 /// A stack is {id, count, pal} - pal is an optional palette name giving clothing its own colour.
 ///
 /// Stats: clothing gets its stats from the materials in its recipe (item_stats), and everything
@@ -137,6 +138,20 @@ function item_def(_id){
 				d = {id: _id, type: "produce", crop: ci, quality: q, max: 99, price: produce_price(ci, q) * 2, tier: q, stats: {},
 				     name: ["", "Silver ", "Gold "][q] + ct.name,
 				     desc: "Ship it, or hold it and use it to eat (+" + string(round(ct.energy * (1 + q * 0.4))) + " energy)."};
+			}
+			break;
+		case "n":
+			var ak = animal_def(p[1]);
+			if(ak != undefined){
+				d = {id: _id, type: "crate", kind: p[1], name: ak.name + " (crate)", max: 1, price: ak.price, tier: 1, stats: {},
+				     desc: "Hold it on your farm and use it to let your new " + string_lower(ak.name) + " out into the meadow."};
+			}
+			break;
+		case "a":
+			var ap = animal_products()[$ p[1]];
+			if(ap != undefined){
+				d = {id: _id, type: "animalproduct", product: p[1], name: ap.name, max: 99, price: ap.sell * 2, tier: 0, stats: {}, colour: ap.colour,
+				     desc: ap.desc + " Cook with it, or hold it and use it (+" + string(ap.energy) + " energy)."};
 			}
 			break;
 		case "x":
@@ -485,6 +500,31 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			break;
 		case "fish":
 			fish_draw_icon(d.fish, cx, cy, _size * 0.36);
+			break;
+		case "crate":
+			// A slatted crate with the animal peeking out (its facing-down frame)
+			var ad = animal_def(d.kind), as = (_size * 0.7) / ((ad.fw > 64) ? ad.fw * 0.6 : ad.fw);
+			draw_set_colour(make_colour_rgb(120, 85, 50));
+			draw_rectangle(cx - _size * 0.38, cy - _size * 0.1, cx + _size * 0.38, cy + _size * 0.36, false);
+			draw_sprite_part_ext(ad.spr, 0, 0, 2 * ad.fw, ad.fw, ad.fw, cx - ad.fw * as / 2, cy - ad.fw * as * 0.75, as, as, c_white, 1);
+			draw_set_colour(make_colour_rgb(160, 120, 70));
+			for(var l = 0; l < 3; l++) draw_rectangle(cx - _size * 0.38, cy + l * _size * 0.12, cx + _size * 0.38, cy + l * _size * 0.12 + 3, false);
+			break;
+		case "animalproduct":
+			if(d.product == "egg"){
+				draw_set_colour(merge_colour(d.colour, c_black, 0.3));
+				draw_ellipse(cx - _size * 0.24, cy - _size * 0.32, cx + _size * 0.24, cy + _size * 0.3, false);
+				draw_set_colour(d.colour);
+				draw_ellipse(cx - _size * 0.2, cy - _size * 0.28, cx + _size * 0.2, cy + _size * 0.26, false);
+			} else {
+				// A milk bottle
+				draw_set_colour(make_colour_rgb(150, 170, 190));
+				draw_roundrect_ext(cx - _size * 0.2, cy - _size * 0.2, cx + _size * 0.2, cy + _size * 0.36, 6, 6, false);
+				draw_rectangle(cx - _size * 0.1, cy - _size * 0.36, cx + _size * 0.1, cy - _size * 0.2, false);
+				draw_set_colour(d.colour);
+				draw_roundrect_ext(cx - _size * 0.16, cy - _size * 0.08, cx + _size * 0.16, cy + _size * 0.32, 5, 5, false);
+			}
+			draw_set_colour(c_white);
 			break;
 		case "forage":
 			// The plant itself, from the terrain tileset

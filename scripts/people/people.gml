@@ -45,7 +45,7 @@ function villager_table(){
 		                ["Your hands smell of soil. Good. Honest.", "There's frost deep in the mine that never melts. I'd love a piece.", "Magic grows like crops: slowly, then all at once."],
 		                ["I've seen four hundred springs. This one's my favourite.", "You listen to the land. Few do.", "Take this - for the road, and the dark under it."]],
 		        rewards: [["k|rain", 1], ["d|cloth|teal", 1], ["m|moonsilk", 1], ["d|cloth|lavender", 1], ["m|pixie_dust", 2]]},
-		thorne:{name: "Thorne", title: "the Carpenter", room: "rm_2", slot: "man", race: "Orc", body: "male", seed: 2202,
+		thorne:{name: "Thorne", title: "the Carpenter", room: "rm_2", slot: "man", race: "Orc", body: "male", seed: 2202, shop: "animals",
 		        loves: ["m|wood", "m|iron", "f|hash_browns", "f|fiery_chilli"], likes: ["m|stone", "m|copper", "f|"], dislikes: ["p|tomato", "f|tomato_salad"], hates: ["m|silk", "m|feather"],
 		        lines: [["Measure twice. Cut once. Shout if you miss.", "Good oak is getting hard to find.", "Mind your feet, there's nails everywhere."],
 		                ["You've got calluses. I respect that.", "I'm building the village a new bridge. Need wood. Lots of it.", "Orcs don't smile. This is my smile."],
@@ -205,6 +205,10 @@ function people_trade(_key){
 	var inv = instance_create_depth(0, 0, -9000, obj_inventory);
 	inv.shop = true;
 	if(v.shop == "smith") inv.smith = true;
+	if(v.shop == "animals"){
+		inv.shopStock = animal_stock();
+		inv.shopTitle = "Thorne's Livestock";
+	}
 	if(v.shop == "seeds"){
 		inv.shopStock = item_seed_stock();
 		inv.shopTitle = "Mara's Seeds - " + season_name(global.clock.season);

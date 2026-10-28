@@ -103,6 +103,11 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
   (rain), Frost Pike (winter), Moonfin (Whisperwood at night) - and the odd Old Boot. Eat them raw or cook
   Grilled Perch and Moonfin Soup (+5 Luck).
 
+- **Animals** (`scripts/animals`): Thorne sells crates (T in his dialogue): chicken 400, sheep 1200, cow 1500 gold.
+  Use a crate on the farm to let the animal into the meadow (up to 8). E beside one pets it (once a day: +15 love;
+  a day without costs 5) and collects what's ready: an egg a day, milk a day, wool every 3 days - well-loved
+  animals sometimes give two. Eggs and milk are eaten or cooked (Omelette, Pancakes); wool goes into clothing.
+
 ## Hooks for quests and events
 
 ```gml

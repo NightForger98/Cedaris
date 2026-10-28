@@ -1,0 +1,47 @@
+# Milestone 11: Thorne sells livestock; release them on the farm; pet them; eggs, milk and wool
+start story
+wait 60
+gold 5000
+room rm_2 320 260
+wait 40
+call autotest_goto_person thorne
+key e
+wait 5
+key t
+wait 5
+call autotest_ui
+shot 01_livestock
+key esc
+wait 30
+give n|chicken
+give n|cow
+give n|sheep
+room rm_1 700 480
+wait 40
+equip n|chicken
+use 1
+equip n|cow
+use 1
+equip n|sheep
+use 1
+call autotest_animals
+wait 30
+shot 02_meadow
+call autotest_goto_animal cow
+key e
+wait 30
+call autotest_animals
+sleep
+wait 60
+room rm_1 700 480
+wait 40
+call autotest_animals
+call autotest_goto_animal chicken
+key e
+wait 30
+call autotest_goto_animal cow
+key e
+wait 30
+inv
+shot 03_collect
+quit

@@ -123,6 +123,7 @@ function day_advance(_passedOut){
 	var died = farm_new_day(ck.season);
 	weather_new_day(); // today's weather; rain waters the soil that just dried
 	placeables_new_day(); // sprinklers water their patches
+	animals_new_day();    // eggs, milk and wool come along
 	var blessed = project_pixie_blessing(); // the shrine's pixies
 	resources_new_day(); // stumps regrow, rocks and weeds come back
 	var paid = shipping_payout();

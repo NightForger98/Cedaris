@@ -29,6 +29,8 @@ function dish_table(){
 		{key: "gourd_pie",    name: "Gourd Pie",         ing: [["gourd", 1], ["carrot", 1]],                energy: 120, buff: {charm: 2, luck: 2},   minutes: 360, colour: make_colour_rgb(220, 130, 60)},
 		{key: "forest_stew",  name: "Forest Stew",       ing: [["w|mushroom", 2], ["w|herb", 1], ["potato", 1]], energy: 110, buff: {magic: 3, stamina: 2}, minutes: 360, colour: make_colour_rgb(130, 110, 80)},
 		{key: "grilled_perch", name: "Grilled Perch",     ing: [["x|perch", 1]],                            energy: 70,  buff: {speed: 1, stamina: 2}, minutes: 300, colour: make_colour_rgb(190, 150, 90)},
+		{key: "omelette",      name: "Omelette",          ing: [["a|egg", 2]],                             energy: 90,  buff: {stamina: 3},          minutes: 300, colour: make_colour_rgb(250, 220, 110)},
+		{key: "pancakes",      name: "Pancakes",          ing: [["a|egg", 1], ["a|milk", 1], ["corn", 1]], energy: 130, buff: {speed: 2, charm: 2}, minutes: 360, colour: make_colour_rgb(220, 170, 100)},
 		{key: "moonfin_soup",  name: "Moonfin Soup",      ing: [["x|moonfin", 1], ["w|herb", 1]],          energy: 120, buff: {luck: 5, magic: 2},   minutes: 480, colour: make_colour_rgb(170, 160, 230)},
 	];
 	return t;

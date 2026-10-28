@@ -1,5 +1,5 @@
 /// @description Shipping bin: put produce and goods in; they're paid for overnight
-// Placeholder art: a chest from spr_tile_interior until there's a proper asset.
+// Art: a banded chest from [LPC] Containers (spr_shipping_chest).
 mask_index = spr_collision_check;
 image_xscale = 3.5;
 image_yscale = 2;

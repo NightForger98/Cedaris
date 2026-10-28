@@ -100,7 +100,7 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
   homes), `rm_valley_ranch`, `rm_valley_carpentry`, `rm_beach_hut`, `rm_mine`, `rm_forest`. A new outdoor room also
   needs `room_is_outdoors`, `save_room_name` and the debug room list. Tilesets: `TS_terrain`, `TS_cottage` (house
   kit), `TS_town`, `TS_interior`.
-- Placeholder art drawn from `spr_tile_interior`: crafting table, bed, shipping bin, furnace (to be replaced with real
+- Placeholder art drawn from `spr_tile_interior`: the bed (the crafting table, shipping bin and furnace now use LPC art; replace with real
   assets).
 
 ## Conventions

@@ -1,0 +1,36 @@
+# The LPC furniture art: the workbench and shipping chest on the farm, the forge at Brom's, ore and bar icons
+start story
+wait 60
+time 10
+pos 1064 360
+face n
+wait 10
+shot 01_workbench
+pos 540 570
+wait 10
+shot 02_shipping_chest
+give m|coal 3
+give m|copper_ore 5
+give m|iron_ore 5
+give m|silver_ore 5
+give m|gold_ore 5
+give m|mithril_ore 5
+give m|copper 2
+give m|iron 2
+give m|steel 2
+give m|silver 2
+give m|gold 2
+give m|mithril 2
+give m|stone 4
+key i
+wait 10
+shot 03_icons
+key esc
+wait 10
+room rm_village_smithy 120 260
+wait 30
+pos 80 220
+face n
+wait 10
+shot 04_forge
+quit

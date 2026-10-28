@@ -1,0 +1,4 @@
+"[LPC] Ore and Forge" by bluecarrot16, commissioned by Pierre Vigier (pvigier).
+License: CC-BY 4.0 / CC-BY 3.0 / GPL 3.0 / OGA-BY 3.0
+https://opengameart.org/content/lpc-ore-and-forge
+Used: the ore, coal and ingot icons (spr_ore_icons).

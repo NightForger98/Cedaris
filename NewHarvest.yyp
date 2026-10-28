@@ -10,6 +10,8 @@
   },
   "defaultScriptType":1,
   "Folders":[
+    {"$GMFolder":"","%Name":"Items","folderPath":"folders/Sprites/Items.yy","name":"Items","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Furniture","folderPath":"folders/Sprites/Furniture.yy","name":"Furniture","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Effects","folderPath":"folders/Sprites/Effects.yy","name":"Effects","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"UI","folderPath":"folders/Sprites/UI.yy","name":"UI","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Animation Curves","folderPath":"folders/Animation Curves.yy","name":"Animation Curves","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -144,6 +146,10 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"spr_ore_icons","path":"sprites/spr_ore_icons/spr_ore_icons.yy",},},
+    {"id":{"name":"spr_shipping_chest","path":"sprites/spr_shipping_chest/spr_shipping_chest.yy",},},
+    {"id":{"name":"spr_workbench","path":"sprites/spr_workbench/spr_workbench.yy",},},
+    {"id":{"name":"spr_forge","path":"sprites/spr_forge/spr_forge.yy",},},
     {"id":{"name":"spr_fx_anger","path":"sprites/spr_fx_anger/spr_fx_anger.yy",},},
     {"id":{"name":"obj_world_map","path":"objects/obj_world_map/obj_world_map.yy",},},
     {"id":{"name":"obj_villager","path":"objects/obj_villager/obj_villager.yy",},},

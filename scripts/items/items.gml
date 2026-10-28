@@ -52,22 +52,22 @@ function item_materials(){
 		{key: "fur",     name: "Fur",         tier: 0, shape: "hide",    colour: make_colour_rgb(175, 135, 95),  price: 8,  stats: {warmth: 2.5},              desc: "Keeps the winter out."},
 		{key: "feather", name: "Feather",     tier: 0, shape: "feather", colour: make_colour_rgb(240, 240, 250), price: 5,  stats: {speed: 0.75},              desc: "Light as air. Plumes and trims."},
 		{key: "bone",    name: "Bone",        tier: 0, shape: "bone",    colour: make_colour_rgb(232, 226, 200), price: 5,  stats: {defense: 0.75},            desc: "Horns, toggles and grim decorations."},
-		{key: "copper",  name: "Copper Bar",  tier: 0, shape: "bar",     colour: make_colour_rgb(205, 120, 70),  price: 10, stats: {defense: 1},               desc: "Soft metal for fittings and trims."},
-		{key: "iron",    name: "Iron Bar",    tier: 0, shape: "bar",     colour: make_colour_rgb(150, 155, 165), price: 15, stats: {defense: 2, speed: -0.25}, desc: "Chainmail, helmets and armour. Heavy."},
+		{key: "copper",  name: "Copper Bar",  tier: 0, shape: "bar",     colour: make_colour_rgb(205, 120, 70),  price: 10, stats: {defense: 1},               icon: [3, 2], desc: "Soft metal for fittings and trims."},
+		{key: "iron",    name: "Iron Bar",    tier: 0, shape: "bar",     colour: make_colour_rgb(150, 155, 165), price: 15, stats: {defense: 2, speed: -0.25}, icon: [1, 2], desc: "Chainmail, helmets and armour. Heavy."},
 		// Gathered (phase 2): wood, stone and fibre from the land, ore and coal from rocks; ore is smelted into bars
 		{key: "wood",       name: "Wood",        tier: 0, shape: "log",   colour: make_colour_rgb(150, 100, 55),  price: 2,  stats: {}, desc: "Chopped from trees and stumps."},
 		{key: "stone",      name: "Stone",       tier: 0, shape: "rock",  colour: make_colour_rgb(140, 138, 145), price: 2,  stats: {}, desc: "Broken from rocks. Good for building."},
 		{key: "fibre",      name: "Fibre",       tier: 0, shape: "fibre", colour: make_colour_rgb(120, 175, 70),  price: 1,  stats: {}, desc: "Cut from weeds and bushes. Weave it into linen or cotton at a crafting table."},
-		{key: "coal",       name: "Coal",        tier: 0, shape: "rock",  colour: make_colour_rgb(40, 38, 44),    price: 4,  stats: {}, desc: "Fuel for the furnace."},
-		{key: "copper_ore", name: "Copper Ore",  tier: 0, shape: "ore",   colour: make_colour_rgb(225, 130, 70),  price: 2,  stats: {}, desc: "Smelt 5 with a coal at Brom's furnace for a copper bar."},
-		{key: "iron_ore",   name: "Iron Ore",    tier: 0, shape: "ore",   colour: make_colour_rgb(200, 175, 160), price: 3,  stats: {}, desc: "Smelt 5 with a coal at Brom's furnace for an iron bar."},
+		{key: "coal",       name: "Coal",        tier: 0, shape: "rock",  colour: make_colour_rgb(40, 38, 44),    price: 4,  stats: {}, icon: [0, 0], desc: "Fuel for the furnace."},
+		{key: "copper_ore", name: "Copper Ore",  tier: 0, shape: "ore",   colour: make_colour_rgb(225, 130, 70),  price: 2,  stats: {}, icon: [3, 0], desc: "Smelt 5 with a coal at Brom's furnace for a copper bar."},
+		{key: "iron_ore",   name: "Iron Ore",    tier: 0, shape: "ore",   colour: make_colour_rgb(200, 175, 160), price: 3,  stats: {}, icon: [1, 0], desc: "Smelt 5 with a coal at Brom's furnace for an iron bar."},
 		// Uncommon
 		{key: "silk",    name: "Silk",        tier: 1, shape: "cloth",   colour: make_colour_rgb(230, 150, 200), price: 14, stats: {charm: 1.5},               desc: "Fine fabric for robes, dresses and capes."},
-		{key: "silver_ore", name: "Silver Ore",  tier: 1, shape: "ore",   colour: make_colour_rgb(235, 240, 250), price: 6,  stats: {}, desc: "Smelt 5 with a coal at Brom's furnace for a silver bar."},
-		{key: "gold_ore",   name: "Gold Ore",    tier: 1, shape: "ore",   colour: make_colour_rgb(250, 210, 60),  price: 9,  stats: {}, desc: "Smelt 5 with a coal at Brom's furnace for a gold bar."},
-		{key: "silver",  name: "Silver Bar",  tier: 1, shape: "bar",     colour: make_colour_rgb(215, 220, 230), price: 30, stats: {charm: 1, magic: 0.5},     desc: "Jewellery, lenses and fine fittings."},
-		{key: "steel",   name: "Steel Bar",   tier: 1, shape: "bar",     colour: make_colour_rgb(115, 130, 150), price: 35, stats: {defense: 3, speed: -0.25}, desc: "Refined iron for plate and great helms."},
-		{key: "gold",    name: "Gold Bar",    tier: 1, shape: "bar",     colour: make_colour_rgb(245, 205, 60),  price: 45, stats: {charm: 2},                 desc: "For crowns, rings and showing off."},
+		{key: "silver_ore", name: "Silver Ore",  tier: 1, shape: "ore",   colour: make_colour_rgb(235, 240, 250), price: 6,  stats: {}, icon: [4, 0], desc: "Smelt 5 with a coal at Brom's furnace for a silver bar."},
+		{key: "gold_ore",   name: "Gold Ore",    tier: 1, shape: "ore",   colour: make_colour_rgb(250, 210, 60),  price: 9,  stats: {}, icon: [5, 0], desc: "Smelt 5 with a coal at Brom's furnace for a gold bar."},
+		{key: "silver",  name: "Silver Bar",  tier: 1, shape: "bar",     colour: make_colour_rgb(215, 220, 230), price: 30, stats: {charm: 1, magic: 0.5},     icon: [4, 2], desc: "Jewellery, lenses and fine fittings."},
+		{key: "steel",   name: "Steel Bar",   tier: 1, shape: "bar",     colour: make_colour_rgb(115, 130, 150), price: 35, stats: {defense: 3, speed: -0.25}, icon: [7, 2], desc: "Refined iron for plate and great helms."},
+		{key: "gold",    name: "Gold Bar",    tier: 1, shape: "bar",     colour: make_colour_rgb(245, 205, 60),  price: 45, stats: {charm: 2},                 icon: [5, 2], desc: "For crowns, rings and showing off."},
 		{key: "gem",     name: "Gemstone",    tier: 1, shape: "gem",     colour: make_colour_rgb(90, 220, 230),  price: 40, stats: {luck: 1.5, charm: 1},      desc: "Sparkly. Jewellers love it."},
 		// Rare
 		{key: "troll_hide",    name: "Troll Hide",    tier: 2, shape: "hide",  colour: make_colour_rgb(105, 140, 90),  price: 90,  stats: {defense: 2, stamina: 2}, desc: "Thick, rubbery and it never quite stops healing."},
@@ -76,8 +76,8 @@ function item_materials(){
 		{key: "moonsilk",      name: "Moonsilk",      tier: 2, shape: "cloth", colour: make_colour_rgb(185, 195, 255), price: 120, stats: {magic: 2.5, charm: 1},   desc: "Spun by moths under a full moon."},
 		{key: "pixie_dust",    name: "Pixie Dust",    tier: 2, shape: "dust",  colour: make_colour_rgb(255, 170, 240), price: 120, stats: {luck: 2.5, speed: 1},    desc: "Sneeze-inducing and wildly lucky."},
 		// Legendary
-		{key: "mithril_ore",     name: "Mithril Ore",     tier: 3, shape: "ore",     colour: make_colour_rgb(180, 240, 255), price: 60,  stats: {},                            desc: "From the deepest rock. Smelt 5 with 2 coal for a mithril bar."},
-		{key: "mithril",         name: "Mithril Bar",     tier: 3, shape: "bar",     colour: make_colour_rgb(200, 235, 245), price: 300, stats: {defense: 3, speed: 0.25},      desc: "Stronger than steel and light as linen."},
+		{key: "mithril_ore",     name: "Mithril Ore",     tier: 3, shape: "ore",     colour: make_colour_rgb(180, 240, 255), price: 60,  stats: {},                            icon: [2, 0], desc: "From the deepest rock. Smelt 5 with 2 coal for a mithril bar."},
+		{key: "mithril",         name: "Mithril Bar",     tier: 3, shape: "bar",     colour: make_colour_rgb(200, 235, 245), price: 300, stats: {defense: 3, speed: 0.25},      icon: [2, 2], desc: "Stronger than steel and light as linen."},
 		{key: "dragon_scale",    name: "Dragon Scale",    tier: 3, shape: "scale",   colour: make_colour_rgb(205, 50, 40),   price: 350, stats: {defense: 4, warmth: 2},        desc: "Shed by a dragon. Shrugs off flame."},
 		{key: "phoenix_feather", name: "Phoenix Feather", tier: 3, shape: "feather", colour: make_colour_rgb(255, 140, 30),  price: 350, stats: {magic: 2, warmth: 2, speed: 1}, desc: "Warm, and it glows at night."},
 		{key: "unicorn_hair",    name: "Unicorn Hair",    tier: 3, shape: "feather", colour: make_colour_rgb(250, 235, 255), price: 350, stats: {luck: 3, magic: 2, charm: 1}, desc: "A single silvery strand. Utterly charming."},
@@ -118,7 +118,7 @@ function item_def(_id){
 			var mt = item_material(p[1]);
 			if(mt != undefined){
 				d = {id: _id, type: "material", name: mt.name, desc: mt.desc, max: 99, price: mt.price, colour: mt.colour,
-				     shape: mt.shape, tier: mt.tier, stats: {}};
+				     shape: mt.shape, tier: mt.tier, stats: {}, icon: mt[$ "icon"]};   // icon: [column, row] on spr_ore_icons, if it has art
 			}
 			break;
 		case "s":
@@ -478,7 +478,9 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			character_draw_item(d.cat, _body, pal, 0, 10, r, cx - r[2] * sc / 2, cy - r[3] * sc / 2, sc);
 			break;
 		case "material":
-			item_draw_material(d.shape, d.colour, cx, cy, _size * 0.34);
+			// Ores, coal and bars: [LPC] Ore and Forge by bluecarrot16 (spr_ore_icons, 32 x 32 cells); the rest drawn
+			if(d.icon != undefined){ var isz = _size * 0.85; draw_sprite_part_ext(spr_ore_icons, 0, d.icon[0] * 32, d.icon[1] * 32, 32, 32, cx - isz / 2, cy - isz / 2, isz / 32, isz / 32, c_white, 1); }
+			else item_draw_material(d.shape, d.colour, cx, cy, _size * 0.34);
 			break;
 		case "produce":
 			draw_sprite_stretched(spr_crops_picked, d.crop, cx - _size * 0.4, cy - _size * 0.4, _size * 0.8, _size * 0.8);
@@ -574,7 +576,7 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 	}
 }
 
-/// @description Simple drawn icons for materials (placeholders until there's art), centred on (_cx, _cy).
+/// @description Simple drawn icons for materials without art (ores and bars have spr_ore_icons), centred on (_cx, _cy).
 function item_draw_material(_shape, _col, _cx, _cy, _r){
 	var light = merge_colour(_col, c_white, 0.5), dark = merge_colour(_col, c_black, 0.45);
 	switch(_shape){

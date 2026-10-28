@@ -105,7 +105,7 @@ function festival_room_start(){
 		var v = villager_def(names[i]);
 		if(v.room == "rm_2" || v.slot == "") continue;
 		var o = (v.slot == "man") ? obj_npc_mantest : obj_npc_womantest;
-		instance_create_layer(crowd[0] + (k mod 4) * 70, crowd[1] + (k div 4) * 80, obj_plyr.layer, o, {festivalWho: names[i]});
+		instance_create_layer(crowd[0] + (k mod 6) * 64, crowd[1] + (k div 6) * 80, obj_plyr.layer, o, {festivalWho: names[i]});
 		k++;
 	}
 }

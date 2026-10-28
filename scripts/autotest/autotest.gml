@@ -428,3 +428,21 @@ function autotest_shop_stock(){
 	}
 	return "no shop";
 }
+
+/// @description Every villager's shirt, legs and shoes, e.g. "fen: Tunic / Child pants / Basic Shoes".
+function autotest_villager_clothes(){
+	var names = variable_struct_get_names(villager_table());
+	array_sort(names, true);
+	var items = lpc_catalog().items, out = "";
+	static slots = ["shirt", "pants", "shoes", "hat", "coat"];
+	for(var i = 0; i < array_length(names); i++){
+		if(villager_def(names[i]).slot == "") continue;
+		var look = villager_look(names[i]);
+		out += "\n    " + names[i] + " (" + look.body + "):";
+		for(var k = 0; k < array_length(slots); k++){
+			var it = look.parts[$ slots[k]].item;
+			out += " " + ((it == -1) ? "-" : items[it].name) + (character_item_fits(max(it, 0), look.body) || it == -1 ? "" : "(!)") + " /";
+		}
+	}
+	return out;
+}

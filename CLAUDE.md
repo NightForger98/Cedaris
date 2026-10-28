@@ -10,7 +10,7 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
   functions - check names against the runtime's `GmlSpec.xml` when using new built-ins.
 - **GML gotchas hit before**: `all`, `id`, `score`, `pi` are built-ins (don't use as variable names); `crop` is an
   enum (in the crops object); `static` only works inside functions; JSON `null` may not load as `undefined`.
-  Also `floor`, `y`, `power` (built-ins). `f()[$ g()[i]]` (an accessor on a call, keyed by an indexed call)
+  Also `floor`, `y`, `power` (built-ins), and `not` (a keyword: even as a struct key it crashes the compiler with "Stack empty"). `f()[$ g()[i]]` (an accessor on a call, keyed by an indexed call)
   crashes the compiler with a bare NullReferenceException: split it into two lines.
 - **GameMaker open while editing files**: it shows "Project Directory Modified" - choose **Reload**, never Save.
 - **Testing**: `tools/test/autotest.sh tools/test/cases/<case>.txt` builds and runs the game with a test script

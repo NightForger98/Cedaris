@@ -179,9 +179,62 @@ function villager_look(_key){
 	static plain = ["face", "bauldron", "shoulders", "back", "held"];
 	for(var i = 0; i < array_length(plain); i++){ look.parts[$ plain[i]].item = -1; look.parts[$ plain[i]].want = -1; }
 	if(v.body != "male"){ look.parts.beard.item = -1; look.parts.beard.want = -1; }
+	villager_dress(look);
 	character_validate(look);
 	randomize();
 	return look;
+}
+
+/// @description What villagers wear day to day: a shirt, legs and shoes always (never bandages, armour or bare
+/// hose), only everyday hats and coats, no gauntlets or bracers. need: never left empty; only: the allowed items
+/// (anything else is swapped for one of them, or left off); never: items never worn; none: always left off.
+function villager_wardrobe(){
+	static w = {
+		shirt:  {need: true, never: ["Bandages"]},
+		pants:  {need: true, never: ["Armour", "Hose", "Pregnancy pants", "Legion skirt"]},
+		shoes:  {need: true, never: ["Armour", "Hoofs"]},
+		vest:   {never: ["Chainmail"]},
+		coat:   {only: ["Collared coat", "Frock coat", "Iverness cloak", "Trench coat", "Tabard"]},
+		hat:    {only: ["Bandana", "Bordered Bandana", "Bonnie", "Hood", "Kerchief", "Leather Cap", "Large Hat",
+		                "Formal Bowler Hat", "Sack Cloth Hood", "Thick Headband", "Tied Headband", "Hijab"]},
+		gloves: {none: true},
+		wrist:  {none: true},
+	};
+	return w;
+}
+
+/// @description Swap anything in a random look that isn't everyday wear (see villager_wardrobe). Uses the random
+/// state, so inside villager_look it stays the same for each villager's seed.
+function villager_dress(_look){
+	var w = villager_wardrobe();
+	var keys = variable_struct_get_names(w);
+	array_sort(keys, true); // the same order every time, so the seed gives the same clothes
+	var items = lpc_catalog().items;
+	for(var k = 0; k < array_length(keys); k++){
+		var rule = w[$ keys[k]];
+		var part = _look.parts[$ keys[k]];
+		var only = variable_struct_exists(rule, "only") ? rule.only : [];
+		var never = variable_struct_exists(rule, "never") ? rule.never : [];
+		var need = variable_struct_exists(rule, "need");
+		if(variable_struct_exists(rule, "none")){ part.item = -1; part.want = -1; continue; }
+		// What this body and race can wear from the allowed list
+		var opts = character_slot_options(character_slot_by_key(keys[k]), _look);
+		var ok = [];
+		for(var i = 0; i < array_length(opts); i++){
+			var n = items[opts[i]].name;
+			if(!character_item_fits(opts[i], _look.body)) continue; // walking art for this body, not just a tool swing
+			if(array_length(only) > 0 && array_get_index(only, n) == -1) continue;
+			if(array_get_index(never, n) != -1) continue;
+			array_push(ok, opts[i]);
+		}
+		if(array_get_index(ok, part.item) != -1 || (part.item == -1 && !need)){ part.want = part.item; continue; }
+		// Not everyday wear (or missing and needed): something that is, in one of its colours
+		part.item = (array_length(ok) > 0 && (need || part.item != -1)) ? ok[irandom(array_length(ok) - 1)] : -1;
+		part.want = part.item;
+		var cols = character_palettes_for(keys[k], part.item, _look);
+		var np = array_length(cols.pals);
+		part.pal = (np > 0) ? cols.pals[irandom(np - 1)] : -1;
+	}
 }
 
 /// @description Where a villager is right now: their home room, or for townsfolk with a "day" room, out there from

@@ -63,8 +63,9 @@ if(game_is_playing_room() && variable_global_exists("inv") && is_struct(global.i
 	}
 	var held = inv_held_stack();
 	if(held != undefined){
-		var label = item_def(held.id).name;
-		if(held.id == "c|held|Watering Can") label += "  -  water " + string(global.inv[$ "water"] ?? 40) + "/40";
+		var hd = item_def(held.id);
+		var label = (hd.type == "held") ? tool_display_name(hd.name) : hd.name;
+		if(held.id == "c|held|Watering Can") label += "  -  water " + string(global.inv[$ "water"] ?? 40) + "/" + string(tool_water_max());
 		ui_text(hx, hy + hs + 16, label, 0.5, c_white, fa_left);
 	}
 	ui_text(hx + INV_HOTBAR * (hs + hg) + 8, hy + hs / 2, global.inv.mode == "free" ? "I: inventory" : "Gold " + string(global.inv.gold) + "   I: inventory", 0.5, c.accent, fa_left);

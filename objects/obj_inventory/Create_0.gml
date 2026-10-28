@@ -7,6 +7,9 @@ shopStock = item_shop_stock(); // [{id, price}] - Brom's by default
 shopTitle = "Brom's Smithy";
 ship = false;   // set by the shipping bin: right-click items to ship them (paid overnight)
 craft = false;  // set by a crafting table: the left panel is the crafting list
+smith = false;  // set by Brom: his shop panel has an Upgrades tab for your tools
+upgrades = false; // showing that tab
+fixedFilter = false; // set by the furnace: the crafting list stays on its recipes (filter = "furnace")
 justOpened = true;  // ignore the key press that opened us
 guiW = display_get_gui_width();
 guiH = display_get_gui_height();
@@ -146,6 +149,8 @@ returnCursor = function(){
 /// Crafting list for the current filter: free mode shows everything; story mode shows what you can make,
 /// or with a filter, everything for that slot (dimmed if you lack materials) so you can see what to collect.
 recipeList = function(){
+	// Station recipes (smelting, weaving) are always all shown, dimmed when you lack materials
+	if(filter == "furnace" || filter == "weave") return station_recipes(filter);
 	var out = [];
 	if(filter == "dye" || (inv_is_free() && filter == "")){
 		if(inv_is_free()){

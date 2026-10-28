@@ -7,10 +7,12 @@ if(act != undefined){
 	act = character_action_for(look);
 	actStep = 0;
 }
-// Only the closest thing you can use answers E (the crafting table stands nearby)
+// Only the closest thing you can use answers E (the crafting table and furnace stand nearby)
 near = instance_exists(obj_plyr) && point_distance(x, y, obj_plyr.x, obj_plyr.y) < 80
-       && (!instance_exists(obj_crafting_table) || point_distance(x, y, obj_plyr.x, obj_plyr.y) < point_distance(obj_crafting_table.x, obj_crafting_table.y, obj_plyr.x, obj_plyr.y));
-if(near && keyboard_check_pressed(ord("E")) && !instance_exists(obj_inventory) && !instance_exists(obj_menu)){
+       && (!instance_exists(obj_crafting_table) || point_distance(x, y, obj_plyr.x, obj_plyr.y) < point_distance(obj_crafting_table.x, obj_crafting_table.y, obj_plyr.x, obj_plyr.y))
+       && (!instance_exists(obj_furnace) || point_distance(x, y, obj_plyr.x, obj_plyr.y) <= point_distance(obj_furnace.x, obj_furnace.y, obj_plyr.x, obj_plyr.y));
+if(near && input_pressed(ord("E")) && !instance_exists(obj_inventory) && !instance_exists(obj_menu)){
 	var inv = instance_create_depth(0, 0, -9000, obj_inventory);
 	inv.shop = true;
+	inv.smith = true; // his panel also has the tool upgrades
 }

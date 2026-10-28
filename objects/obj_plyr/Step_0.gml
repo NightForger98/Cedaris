@@ -9,7 +9,7 @@ if(act != undefined){
 	if(!actHit && actStep >= act.hit){
 		actHit = true;
 		var itemName = lpc_catalog().items[look.parts.held.item].name;
-		if(item_is_tool(itemName) && world_time_ready()) global.vitals.energy = max(0, global.vitals.energy - tool_energy_cost());
+		if(item_is_tool(itemName) && world_time_ready()) global.vitals.energy = max(0, global.vitals.energy - tool_energy_cost(itemName));
 		action_hit(id, itemName, actDir);
 	}
 	if(actStep >= act.frames) act = undefined;
@@ -17,7 +17,7 @@ if(act != undefined){
 	exit;
 }
 var planting = instance_exists(crops) && crops.planting;
-if(!planting && (mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_space))){
+if(!planting && (mouse_check_button_pressed(mb_left) || input_pressed(vk_space))){
 	var faceDir = clamp(y_frame - 8, 0, 3);
 	var cell = instance_exists(crops) ? farm_front_cell(id, faceDir) : [0, 0];
 	var cropHere = instance_exists(crops) ? farm_crop_at(cell[0], cell[1]) : noone;

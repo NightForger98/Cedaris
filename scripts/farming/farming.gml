@@ -94,15 +94,16 @@ function farm_till(_gx, _gy){
 	if(!variable_struct_exists(tiles, k)) tiles[$ k] = {watered: false};
 }
 
-/// @description Watering can: refill at water, else water a tilled cell. Uses global.inv.water (40 uses).
+/// @description Watering can: refill at water, else water a tilled cell. Uses global.inv.water (40 uses, more
+/// when upgraded). Returns "refill" if it was filled up.
 function farm_water(_user, _gx, _gy){
 	var inv = global.inv;
-	if(!variable_struct_exists(inv, "water")) inv.water = 40;
+	if(!variable_struct_exists(inv, "water")) inv.water = tool_water_max();
 	var cs = crops.cellSize;
 	if(collision_point(_gx * cs + cs / 2, _gy * cs + cs / 2, obj_water_zone, false, true) != noone){
-		inv.water = 40;
+		inv.water = tool_water_max();
 		farm_message("Watering can refilled");
-		return;
+		return "refill";
 	}
 	var tiles = farm_tiles();
 	var k = farm_key(_gx, _gy);

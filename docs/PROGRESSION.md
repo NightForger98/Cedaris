@@ -32,7 +32,18 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
   recipe for that slot, dimmed until you have the materials.
 - **Colours** come from dyes. Story mode has no dye recipes: dyes are quest and event rewards.
 - **Tools and weapons** are bought from Brom (`item_shop_stock()` sets stock and prices). Right-click
-  an item while trading to sell it.
+  an item while trading to sell it. Every new game starts with a hoe, watering can, axe, pickaxe and scythe.
+- **Gathering** (`scripts/gathering`): trees, stumps, rocks, ore veins, weeds and bushes spawn in areas
+  of a room (`resource_areas()`), a few more each day up to a cap. The axe fells trees (they leave stumps
+  that grow back in 7 days), the pickaxe breaks rocks and veins, and the scythe (or any swing) clears
+  weeds. Drops go straight into the bag; Luck adds to the gem and coal chances.
+- **Smelting** at Brom's furnace (`obj_furnace`, press E): 5 ore and a coal make a bar (copper, iron,
+  silver, gold; mithril takes 2 coal); steel is an iron bar and 2 coal. **Weaving** at the crafting table
+  (the Weave button): fibre into linen (4) or cotton (6). Recipes: `station_recipes()`.
+- **Tool upgrades** at Brom's (the Upgrades tab): Copper, Iron, Steel, Gold and Mithril (`tool_tiers()`),
+  each costing bars of that metal plus gold. Each tier does +1 damage and costs 10% less energy; the hoe
+  and watering can work a row of 1 + tier cells (the can also holds 15 more water per tier), the scythe
+  sweeps wider, and harder veins need a better pickaxe (iron needs Copper, silver Iron, gold Steel, mithril Gold).
 
 ## Materials, recipes and stats
 
@@ -40,6 +51,9 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
   iron), uncommon (silk, silver, steel, gold, gemstone), rare (troll hide, frost crystal, ember core,
   moonsilk, pixie dust) and legendary (mithril, dragon scale, phoenix feather, unicorn hair, void pearl).
   Brom sells the metal bars; rare and legendary ones are meant as quest and event rewards.
+- **Gathered materials** (no stats; they feed smelting, weaving and later building): wood, stone,
+  fibre, coal and copper, iron, silver, gold and mithril ore. Mithril ore isn't on the surface: it waits
+  for the mine's deepest floors (phase 4).
 - **Recipes** follow what the item is: `item_recipe_named()` for specific items (the Crown needs a void
   pearl), then keyword rules in `item_recipe_rules()` (anything with "chain" or "mail" takes iron, plate
   and great helms take steel, wizard hats take moonsilk and pixie dust), then a default per slot.

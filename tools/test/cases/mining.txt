@@ -1,0 +1,46 @@
+# Ore: basic pickaxe on copper, iron too hard until the pickaxe is upgraded; scythe sweep; copper hoe row
+start story
+wait 60
+call autotest_spawn copper_vein 22 4
+call autotest_spawn iron_vein 24 4
+call autotest_spawn weeds 20 14
+call autotest_spawn weeds 21 14
+call autotest_spawn weeds 22 14
+wait 5
+hold 6
+call autotest_goto copper_vein
+use 4
+inv
+call autotest_goto iron_vein
+use 1
+wait 3
+shot 01_too_hard
+call autotest_goto iron_vein
+give m|copper 10
+gold 2000
+call tool_upgrade Pickaxe
+call tool_upgrade Hoe
+call tool_upgrade Scythe
+hold 6
+call autotest_goto iron_vein
+use 3
+inv
+call autotest_goto iron_vein
+# Copper scythe sweeps the three weeds in one swing
+hold 7
+pos 672 488
+face n
+use 1
+call autotest_resources
+inv
+# Copper hoe tills two cells
+hold 1
+pos 640 200
+face s
+use 1
+wait 5
+shot 02_hoe_row
+key i
+wait 10
+shot 03_inventory
+quit

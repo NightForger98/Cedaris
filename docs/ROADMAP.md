@@ -55,7 +55,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 4. **One world-state store per room** (tiles, crops, resources), saved with the game, replacing the
    crops object's ds_grids.
 5. **Bump `SAVE_VERSION` with every phase** and migrate old saves in `load_game`.
-6. **Test with the automated run** (`build.sh run` plus the input-driving script used so far) at the end of each phase.
+6. **Test with the automated run** (`tools/test/autotest.sh` with a case from `tools/test/cases`) at the end of each phase.
 
 ---
 
@@ -126,6 +126,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 - **Tool upgrades** at Brom, using our bars as tiers: copper, iron, steel, gold, mithril.
   Higher tiers hit bigger areas or harder rocks and cost less energy (as in Stardew).
 - Fibre can become linen and cotton at a loom (crafting station), so clothing gets a full supply chain.
+  (Done at the crafting table for now; a loom can take it over once there's art for one.)
 
 ## Phase 3: Stats come alive
 
@@ -192,7 +193,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 | 2 | 0.1 Action system | M | **done**: click/Space uses the held item; `action_hit` is the hook for effects |
 | 3 | 0.3 Time + 0.4 Energy/Health + 0.5 World state | L | **done**: clock, seasons, night tint, bed and passing out, new-day event with autosave, energy/health HUD, per-room world store (save v2) |
 | 4 | 1 Farming loop | L | **done**: till, seeds (Mara), plant, water (pond refill), watered-only growth, seasons, harvest with Luck quality, regrowing crops, eating, shipping bin |
-| 5 | 2 Gathering + smelting + upgrades | M | feeds crafting with real materials |
+| 5 | 2 Gathering + smelting + upgrades | M | **done**: trees/stumps (axe), rocks and ore veins (pickaxe, hardness by tier), weeds and bushes (scythe) spawning in farm areas and regrowing daily; wood, stone, fibre, coal, 5 ores; smelting at Brom's furnace, weaving fibre at the crafting table; Copper to Mithril tool upgrades at Brom's (save v3) |
 | 6 | 3 Stats wiring (Warmth, buffs) | S | small once the loops exist |
 | 7 | 4 Combat + mine | XL | Defence, Luck drops, the fantasy material sources |
 | 8 | 5 Magic | M | reuses the action system and spellcast art |

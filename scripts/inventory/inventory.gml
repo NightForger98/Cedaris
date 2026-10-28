@@ -10,7 +10,7 @@
 #macro INV_HOTBAR 10
 
 function inv_new(_mode){
-	var inv = {mode: _mode, slots: array_create(INV_SIZE, undefined), equip: {}, dyes: {}, trash: undefined, gold: 0, hotbar: 0};
+	var inv = {mode: _mode, slots: array_create(INV_SIZE, undefined), equip: {}, dyes: {}, trash: undefined, gold: 0, hotbar: 0, tools: {}, water: 40};
 	var keys = item_equip_slots();
 	for(var i = 0; i < array_length(keys); i++){ inv.equip[$ keys[i]] = undefined; inv.dyes[$ keys[i]] = undefined; }
 	return inv;
@@ -31,11 +31,14 @@ function inv_new_story(){
 	inv.equip.shoes = item_stack("c|shoes|Basic Shoes", 1, inv_pal_name("cloth", "brown"));
 	inv.gold = 120;
 	inv.water = 40;
-	// Every farmer starts with a hoe, a watering can and some seeds (as in Stardew)
+	// Every farmer starts with the basic tools and some seeds (as in Stardew)
 	inv.slots[0] = item_stack("c|held|Hoe");
 	inv.slots[1] = item_stack("c|held|Watering Can");
 	inv.slots[2] = item_stack("s|potato", 5);
 	inv.slots[3] = item_stack("s|carrot", 10);
+	inv.slots[4] = item_stack("c|held|Axe");
+	inv.slots[5] = item_stack("c|held|Pickaxe");
+	inv.slots[6] = item_stack("c|held|Scythe");
 	global.inv = inv;
 	inv_add(item_stack("m|linen", 6));
 	inv_add(item_stack("m|leather", 4));
@@ -64,8 +67,12 @@ function inv_new_free(_look){
 	inv.slots[1] = item_stack("c|held|Watering Can");
 	inv.slots[2] = item_stack("s|potato", 20);
 	inv.slots[3] = item_stack("s|carrot", 20);
-	if(held.item != -1 && cat[held.item].name != "Hoe" && cat[held.item].name != "Watering Can")
-		inv.slots[4] = item_stack("c|held|" + cat[held.item].name, 1, (held.pal == -1) ? "" : sprite_get_name(held.pal));
+	inv.slots[4] = item_stack("c|held|Axe");
+	inv.slots[5] = item_stack("c|held|Pickaxe");
+	inv.slots[6] = item_stack("c|held|Scythe");
+	var starters = ["Hoe", "Watering Can", "Axe", "Pickaxe", "Scythe"];
+	if(held.item != -1 && array_get_index(starters, cat[held.item].name) == -1)
+		inv.slots[7] = item_stack("c|held|" + cat[held.item].name, 1, (held.pal == -1) ? "" : sprite_get_name(held.pal));
 	return inv;
 }
 
@@ -252,7 +259,8 @@ function inv_stack_to_save(_s){ return (_s == undefined) ? undefined : {id: _s.i
 
 function inv_to_save(){
 	var inv = global.inv;
-	var out = {mode: inv.mode, gold: inv.gold, hotbar: inv.hotbar, slots: [], equip: {}, dyes: {}, trash: inv_stack_to_save(inv.trash)};
+	var out = {mode: inv.mode, gold: inv.gold, hotbar: inv.hotbar, slots: [], equip: {}, dyes: {}, trash: inv_stack_to_save(inv.trash),
+	           tools: inv.tools, water: inv.water};
 	for(var i = 0; i < INV_SIZE; i++) array_push(out.slots, inv_stack_to_save(inv.slots[i]));
 	var keys = item_equip_slots();
 	for(var i = 0; i < array_length(keys); i++){
@@ -270,6 +278,9 @@ function inv_from_save(_data){
 	inv.gold = _data.gold;
 	inv.hotbar = _data.hotbar;
 	inv.trash = inv_stack_from_save(_data.trash);
+	// Tool tiers and the watering can came with save version 3
+	inv.tools = is_struct(_data[$ "tools"]) ? _data.tools : {};
+	inv.water = _data[$ "water"] ?? 40;
 	for(var i = 0; i < min(INV_SIZE, array_length(_data.slots)); i++) inv.slots[i] = inv_stack_from_save(_data.slots[i]);
 	var keys = item_equip_slots();
 	for(var i = 0; i < array_length(keys); i++){

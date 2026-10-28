@@ -3,6 +3,7 @@
 if(keyboard_check_pressed(vk_insert)) {debug = !debug}
 if(keyboard_check_pressed(vk_home)) {game_restart();}
 if(hudTime > 0) hudTime--;
+autotest_step();
 
 // Ending the day: fade out, run the new day, wake up beside the bed
 if(sleeping){
@@ -42,8 +43,8 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 	// The clock runs while you play (not in the inventory, menus or fades); at 2:00 am you pass out
 	if(world_time_ready() && !invOpen && !sleeping && !waking && !doTransition && clock_tick()) sleep_now(true);
 	if(resumeLock > 0) {resumeLock--;}
-	else if(!invOpen && keyboard_check_pressed(vk_escape)) {game_pause();}
-	else if(!invOpen && keyboard_check_pressed(ord("I")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_inventory);}
+	else if(!invOpen && input_pressed(vk_escape)) {game_pause();}
+	else if(!invOpen && input_pressed(ord("I")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_inventory);}
 	
 	// Hotbar: 1-9 and 0 pick the held item
 	for(var k = 0; k < INV_HOTBAR; k++){

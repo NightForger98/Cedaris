@@ -11,6 +11,8 @@ if(game_is_playing_room()){
 	if(!world_time_ready()) world_time_new();
 	inv_apply_look(global.look);
 	with(obj_plyr) look = global.look;
+	// Trees, rocks and weeds: this room's from the world store, plus any that are due to spawn
+	resources_room_start();
 }
  
 // After sleeping: wake up beside the bed, facing down, then autosave

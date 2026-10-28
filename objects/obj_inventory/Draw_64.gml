@@ -78,10 +78,49 @@ var listTop = panelY1 + 56;
 var listBottom = panelY2 - 30;
 var overPanel = (mx >= panelX1 && mx < panelX2 && my >= listTop && my < listBottom);
 
-if(shop){
+if(shop && upgrades){
+	// Brom's tool upgrades: each tool you carry, its next tier and what it costs
+	ui_text(panelX1 + 16, panelY1 + 26, "Tool Upgrades", 0.8, c.accent, fa_left);
+	if(ui_button(panelX2 - 130, panelY1 + 10, panelX2 - 14, panelY1 + 42, "Shop", true, 0.5)){ upgrades = false; scroll = 0; }
+	ui_text(panelX2 - 144, panelY1 + 26, "Faster work, less energy", 0.42, c.dim, fa_right);
+	var tools = tool_upgrade_list();
+	var tiers = tool_tiers();
+	if(array_length(tools) == 0) ui_text((panelX1 + panelX2) / 2, (listTop + listBottom) / 2, "Bring a hoe, watering can, axe, pickaxe or scythe", 0.55, c.dim);
+	for(var i = 0; i < array_length(tools); i++){
+		var name = tools[i], cur = tool_tier(name);
+		var y1 = listTop + i * rowH;
+		item_draw_icon(item_stack("c|held|" + name), panelX1 + 14, y1 + 2, 44, body);
+		if(cur >= array_length(tiers) - 1){
+			ui_text(panelX1 + 70, y1 + rowH / 2, tool_display_name(name) + "  -  as good as it gets", 0.58, c.accent, fa_left);
+			continue;
+		}
+		var nx = tiers[cur + 1];
+		var haveBars = inv_is_free() || inv_count("m|" + nx.bar) >= nx.bars;
+		var haveGold = inv_is_free() || inv.gold >= nx.gold;
+		var over = overPanel && my >= y1 && my < y1 + rowH;
+		if(over){ draw_set_colour(c.hover); draw_roundrect_ext(panelX1 + 8, y1, panelX2 - 8, y1 + rowH - 4, 8, 8, false); }
+		ui_text(panelX1 + 70, y1 + rowH / 2 - 9, tool_display_name(name) + "  >  " + nx.name + " " + name, 0.56, (haveBars && haveGold) ? c_white : c.dim, fa_left);
+		ui_text(panelX1 + 70, y1 + rowH / 2 + 12, tool_upgradable(name), 0.4, c.dim, fa_left);
+		var red = make_colour_rgb(230, 110, 90);
+		ui_text(panelX2 - 20, y1 + rowH / 2, inv_is_free() ? "free" : string(nx.gold) + " gold", 0.55, haveGold ? c.accent : red, fa_right);
+		var cx2 = panelX2 - 130;
+		ui_text(cx2, y1 + rowH / 2, string(nx.bars), 0.5, haveBars ? c_white : red, fa_right);
+		item_draw_icon(item_stack("m|" + nx.bar), cx2 - 44, y1 + 8, 30, body);
+		if(over && mouse_check_button_pressed(mb_left) && cursor == undefined){
+			var why = tool_upgrade(name);
+			showMessage((why == "") ? "Your " + string_lower(name) + " is now " + tool_display_name(name) : why);
+			changed();
+		}
+	}
+} else if(shop){
 	ui_text(panelX1 + 16, panelY1 + 26, shopTitle, 0.8, c.accent, fa_left);
+	var hdrRight = panelX2 - 16;
+	if(smith){
+		if(ui_button(panelX2 - 130, panelY1 + 10, panelX2 - 14, panelY1 + 42, "Upgrades", true, 0.5)){ upgrades = true; scroll = 0; }
+		hdrRight = panelX2 - 144;
+	}
 	var charm = inv.stats.charm;
-	ui_text(panelX2 - 16, panelY1 + 26, (charm > 0 && !inv_is_free()) ? "Charm discount " + string(min(30, charm)) + "%  -  right-click to sell" : "Right-click your items to sell", 0.45, c.dim, fa_right);
+	ui_text(hdrRight, panelY1 + 26, (charm > 0 && !inv_is_free()) ? "Charm discount " + string(min(30, charm)) + "%  -  right-click to sell" : "Right-click your items to sell", 0.45, c.dim, fa_right);
 	var stock = shopStock;
 	scroll = min(scroll, max(0, array_length(stock) * rowH - (listBottom - listTop)));
 	for(var i = 0; i < array_length(stock); i++){
@@ -117,13 +156,19 @@ if(shop){
 	ui_text(panelX2 - 20, listBottom - 6, "Pays tomorrow: " + string(shipping_value()) + " gold", 0.6, c.accent, fa_right);
 } else if(craft){
 	var title = "Crafting Table";
-	if(filter == "dye") title += " - dyes";
+	if(filter == "furnace") title = "Brom's Furnace";
+	else if(filter == "weave") title += " - weaving";
+	else if(filter == "dye") title += " - dyes";
 	else if(filter != "") title += " - " + item_slot_label(filter);
 	ui_text(panelX1 + 16, panelY1 + 26, title, 0.8, c.accent, fa_left);
-	if(filter != ""){
+	if(fixedFilter){
+		ui_text(panelX2 - 16, panelY1 + 26, "Click a bar to smelt it from ore and coal", 0.42, c.dim, fa_right);
+	} else if(filter != ""){
 		if(ui_button(panelX2 - 110, panelY1 + 10, panelX2 - 14, panelY1 + 42, "Show all", true, 0.5)){ filter = ""; scroll = 0; }
 	} else {
-		ui_text(panelX2 - 16, panelY1 + 26, "Click an equipment slot to see its recipes", 0.42, c.dim, fa_right);
+		// Weaving: fibre into cloth
+		if(ui_button(panelX2 - 110, panelY1 + 10, panelX2 - 14, panelY1 + 42, "Weave", true, 0.5)){ filter = "weave"; scroll = 0; }
+		ui_text(panelX2 - 124, panelY1 + 26, "Click an equipment slot to see its recipes", 0.42, c.dim, fa_right);
 	}
 	var list = recipeList();
 	scroll = min(scroll, max(0, array_length(list) * rowH - (listBottom - listTop)));
@@ -164,15 +209,16 @@ if(shop){
 	// Plain inventory: what you're carrying for crafting, and where to craft
 	ui_text(panelX1 + 16, panelY1 + 26, "Materials", 0.8, c.accent, fa_left);
 	var mats = item_materials();
-	var colW = (panelX2 - panelX1) / 2;
-	var perCol = ceil(array_length(mats) / 2);
+	// Three columns, so the gathered materials fit too
+	var colW = (panelX2 - panelX1) / 3;
+	var perCol = ceil(array_length(mats) / 3);
 	for(var m = 0; m < array_length(mats); m++){
-		var x1 = panelX1 + (m div perCol) * colW, y1 = listTop - 10 + (m mod perCol) * 31;
+		var x1 = panelX1 + (m div perCol) * colW, y1 = listTop - 14 + (m mod perCol) * 28;
 		var have = inv_count("m|" + mats[m].key);
-		item_draw_icon(item_stack("m|" + mats[m].key), x1 + 10, y1, 30, body);
-		ui_text(x1 + 46, y1 + 15, mats[m].name, 0.46, (have > 0) ? item_tier_colour(mats[m].tier) : c.dim, fa_left);
-		ui_text(x1 + colW - 16, y1 + 15, string(have), 0.5, (have > 0) ? c.accent : c.dim, fa_right);
-		if(mx >= x1 && mx < x1 + colW && my >= y1 && my < y1 + 30) tip = item_stack("m|" + mats[m].key);
+		item_draw_icon(item_stack("m|" + mats[m].key), x1 + 8, y1, 28, body);
+		ui_text(x1 + 40, y1 + 14, mats[m].name, 0.4, (have > 0) ? item_tier_colour(mats[m].tier) : c.dim, fa_left);
+		ui_text(x1 + colW - 10, y1 + 14, string(have), 0.45, (have > 0) ? c.accent : c.dim, fa_right);
+		if(mx >= x1 && mx < x1 + colW && my >= y1 && my < y1 + 28) tip = item_stack("m|" + mats[m].key);
 	}
 	ui_text((panelX1 + panelX2) / 2, panelY2 - 18, "Use a crafting table [E] to make clothing and dyes", 0.45, c.dim);
 }
@@ -188,7 +234,12 @@ if(tip != undefined && cursor == undefined){
 			if(!character_item_fits(d.cat, body)) array_push(lines, "Doesn't come in your size");
 			else if(!character_race_allows(character_race(global.look.race), d.slot, d.cat)) array_push(lines, "Your race can't wear this");
 			break;
-		case "held":     array_push(lines, "Tool / weapon"); break;
+		case "held":
+			lines[0] = tool_display_name(d.name);
+			array_push(lines, "Tool / weapon");
+			if(tool_upgradable(d.name) != "" && tool_tier(d.name) < array_length(tool_tiers()) - 1)
+				array_push(lines, "Brom can upgrade it: " + string_lower(tool_upgradable(d.name)));
+			break;
 		case "material": array_push(lines, "Material"); break;
 		case "dye":      array_push(lines, "Dye"); break;
 	}

@@ -15,6 +15,7 @@ autosavePending = false;
 dayReport = {lost: 0, died: 0, paid: 0}; // what the last new day did, for the morning message
 hudMessage = "";
 hudTime = 0;
+autotest_start(); // automated test run, if autotest.txt is in the save folder
 room_goto_next(); // the main menu
 
 guiWidth = display_get_gui_width();

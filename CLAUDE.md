@@ -11,23 +11,28 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - **GML gotchas hit before**: `all`, `id`, `score`, `pi` are built-ins (don't use as variable names); `crop` is an
   enum (in the crops object); `static` only works inside functions; JSON `null` may not load as `undefined`.
 - **GameMaker open while editing files**: it shows "Project Directory Modified" - choose **Reload**, never Save.
-- **Testing**: run the game and check screenshots. The user's settings may be fullscreen
-  (`%LOCALAPPDATA%/NewHarvest/settings.ini`) - back it up and restore it if you switch to windowed for tests.
-  Autosave must never overwrite another game's save slot.
+- **Testing**: `tools/test/autotest.sh tools/test/cases/<case>.txt` builds and runs the game with a test script
+  (commands in `scripts/autotest`: start, pos, hold, use, give, call <function>, shot...) and copies its log and
+  screenshots to `build/autotest/` - read the PNGs to check. Simulated key presses don't reach
+  `keyboard_check_pressed`, so keys a test needs go through `input_pressed()`. Test runs never write real saves
+  (only a "test" slot). The user's settings may be fullscreen (`%LOCALAPPDATA%/NewHarvest/settings.ini`) - back it
+  up and restore it if you switch to windowed for tests. Autosave must never overwrite another game's save slot.
 - **Debug mode in game**: Insert toggles it - PgUp/PgDn hop rooms, T skips an hour, G grows crops, position readout.
 
 ## Where things are
 
-- `docs/ROADMAP.md` - the plan (farming, stats, combat, magic, social) with status per step. **Next: step 5,
-  gathering + smelting + tool upgrades.**
+- `docs/ROADMAP.md` - the plan (farming, stats, combat, magic, social) with status per step. **Next: step 6,
+  stats wiring (Warmth, food buffs).**
 - `docs/PROGRESSION.md` - items, materials, recipes, dyes, stats, and the hooks for quests.
 - Characters: LPC art converted by `tools/lpc` (see its README); `scripts/lpc_catalog` is generated - don't edit
   by hand. Looks/races/creator: `character_look`, `character_races`. Actions (tool/weapon swings): `actions`
   (`action_hit` is the hook for effects).
 - Items/inventory/crafting/shops: `items`, `inventory`, `obj_inventory` (modes: plain, `shop`, `craft`, `ship`).
-- Time, sleep, energy/health, world store: `world_time`. Farming: `farming`. Saving: `save_system` (SAVE_VERSION 2).
+- Time, sleep, energy/health, world store: `world_time`. Farming: `farming`. Saving: `save_system` (SAVE_VERSION 3).
+- Gathering, smelting, tool tiers and upgrades: `gathering` (resources are `obj_resource`, spawned per room area;
+  Brom's furnace is `obj_furnace`). Art for trees, rocks and weeds is cut from `spr_tile_terrain`.
 - Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm, `rm_2` village, `rm_12` house (bed), `rm_3`, `rm_123`.
-- Placeholder art drawn from `spr_tile_interior`: crafting table, bed, shipping bin (to be replaced with real assets).
+- Placeholder art drawn from `spr_tile_interior`: crafting table, bed, shipping bin, furnace (to be replaced with real assets).
 
 ## Conventions
 

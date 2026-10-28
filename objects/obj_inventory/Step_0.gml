@@ -8,7 +8,7 @@ var my = device_mouse_y_to_gui(0);
 var loc = slotAt(mx, my);
 
 // Close with I or Esc (game's Step opened us this frame on the same I press, so skip the first frame)
-if(!justOpened && (keyboard_check_pressed(ord("I")) || keyboard_check_pressed(vk_escape))){
+if(!justOpened && (input_pressed(ord("I")) || input_pressed(vk_escape))){
 	returnCursor();
 	game.resumeLock = 2;
 	instance_destroy();
@@ -75,7 +75,7 @@ if(mouse_check_button_pressed(mb_right) && loc != undefined && loc.area == "inv"
 }
 
 // Clicking an equipment or dye slot filters the crafting list to it
-if(mouse_check_button_pressed(mb_left) && loc != undefined && cursor == undefined && craft){
+if(mouse_check_button_pressed(mb_left) && loc != undefined && cursor == undefined && craft && !fixedFilter){
 	if(loc.area == "equip"){ filter = loc.key; scroll = 0; }
 	if(loc.area == "dye"){ filter = "dye"; scroll = 0; }
 }

@@ -1,0 +1,99 @@
+# Phase 2: gathering, smelting, tool upgrades (story mode, so costs apply)
+start story
+wait 60
+call autotest_resources
+shot 01_farm_start
+pos 760 200
+wait 10
+shot 02_cliff_strip
+pos 700 470
+wait 10
+shot 03_meadow
+pos 700 680
+wait 10
+shot 04_woods
+# Pickaxe (slot 6) on copper, then stone
+hold 6
+call autotest_goto copper_vein
+use 4
+call autotest_goto stone
+use 2
+inv
+# Scythe (slot 7) on weeds
+hold 7
+call autotest_goto weeds
+use 1
+# Axe (slot 5) fells a tree, leaving a stump
+hold 5
+call autotest_goto oak
+use 10
+wait 10
+shot 05_stump
+call autotest_goto oak_stump
+call autotest_goto pine
+use 10
+inv
+# Iron is too hard for a basic pickaxe
+hold 6
+call autotest_goto iron_vein
+use 1
+wait 5
+shot 06_too_hard
+# Smelt at the furnace
+give m|copper_ore 10
+give m|coal 2
+pos 520 262
+face n
+wait 5
+key e
+wait 10
+shot 07_furnace
+call autotest_station furnace m|copper
+call autotest_station furnace m|copper
+inv
+key esc
+wait 10
+# Upgrade the pickaxe at Brom's
+give m|copper 3
+gold 1000
+pos 470 262
+face n
+wait 5
+key e
+wait 10
+call autotest_upgrades_tab
+wait 5
+shot 08_upgrades
+call tool_upgrade Pickaxe
+call tool_upgrade Hoe
+key esc
+wait 10
+inv
+hold 6
+call autotest_goto iron_vein
+use 3
+inv
+# Copper hoe tills two cells
+hold 1
+pos 700 240
+face e
+use 1
+wait 10
+shot 09_hoe_row
+# Weave fibre at the crafting table
+give m|fibre 8
+call autotest_station weave m|linen
+inv
+key i
+wait 10
+shot 10_inventory
+key i
+wait 10
+# Next day: stumps age, more resources come back
+sleep
+wait 60
+room rm_1 700 300
+wait 30
+call autotest_resources
+shot 11_next_day
+quit

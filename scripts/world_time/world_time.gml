@@ -2,7 +2,7 @@
 ///
 /// global.clock  {minutes, day, season, year}   minutes since midnight: 360 = 6:00 am, 1560 = 2:00 am
 /// global.vitals {energy, health}
-/// global.world  {rooms: {<room name>: {crops: [{gx, gy, type, days}]}}}
+/// global.world  {rooms: {<room name>: {crops: [{gx, gy, type, days}], tiles, objects: [resources], due, seeded}}}
 /// The new-day event (day_advance) grows crops, refills energy and health and autosaves; later systems hook in there.
 
 #macro DAY_START 360        // 6:00 am
@@ -67,8 +67,11 @@ function vitals_stat(_key){
 
 function vitals_exhausted(){ return global.vitals.energy <= 0; }
 
-/// @description Energy a tool swing costs: 2, minus 2% per point of Stamina (down to half).
-function tool_energy_cost(){ return 2 * (1 - clamp(vitals_stat("stamina") * 0.02, 0, 0.5)); }
+/// @description Energy a tool swing costs: 2, minus 2% per point of Stamina (down to half), minus 10% per tool tier.
+function tool_energy_cost(_name = ""){
+	// Each tool upgrade saves another 10%
+	return 2 * (1 - clamp(vitals_stat("stamina") * 0.02, 0, 0.5)) * (1 - 0.1 * tool_tier(_name));
+}
 
 /// @description True for farm tools (they cost energy); weapons are free to swing, as in Stardew.
 function item_is_tool(_name){
@@ -81,8 +84,10 @@ function item_is_tool(_name){
 /// @description The saved state of a room (created on first use).
 function world_room(_name){
 	var r = global.world.rooms[$ _name];
-	if(r == undefined){ r = {crops: [], tiles: {}}; global.world.rooms[$ _name] = r; }
+	if(r == undefined){ r = {crops: [], tiles: {}, objects: [], due: {}, seeded: false}; global.world.rooms[$ _name] = r; }
 	if(!variable_struct_exists(r, "tiles")) r.tiles = {};
+	if(!variable_struct_exists(r, "objects")) r.objects = []; // saves before version 3
+	if(!variable_struct_exists(r, "due")) r.due = {};
 	return r;
 }
 
@@ -118,8 +123,9 @@ function day_advance(_passedOut){
 	if(ck.day > SEASON_DAYS){ ck.day = 1; ck.season += 1; if(ck.season > 3){ ck.season = 0; ck.year += 1; } }
 	ck.luck = random_range(-0.05, 0.05); // today's luck, added to the Luck stat for harvest quality
 
-	// Farm: watered crops grow, out-of-season crops die, soil dries; then shipping pays out
+	// Farm: watered crops grow, out-of-season crops die, soil dries; resources return; then shipping pays out
 	var died = farm_new_day(ck.season);
+	resources_new_day(); // stumps regrow, rocks and weeds come back
 	var paid = shipping_payout();
 
 	// You: passing out costs gold and leaves you half rested

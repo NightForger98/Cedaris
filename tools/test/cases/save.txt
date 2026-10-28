@@ -1,0 +1,27 @@
+# Save version 3 keeps resources, stumps and tool tiers through a save and load
+start story
+wait 60
+call autotest_spawn pine 22 21
+call autotest_spawn copper_vein 22 4
+hold 5
+call autotest_goto pine
+use 10
+give m|copper 5
+gold 500
+call tool_upgrade Axe
+call autotest_resources
+call save_game test
+# A fresh game forgets all that...
+start story
+wait 60
+call autotest_goto pine_stump
+call tool_display_name Axe
+# ...and loading brings it back
+call load_game test
+wait 60
+call autotest_goto pine_stump
+call autotest_goto copper_vein
+call tool_display_name Axe
+call autotest_resources
+call save_delete test
+quit

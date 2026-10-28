@@ -2,7 +2,7 @@
 /// Saves are JSON files in the game's save folder (saves/slotN.json); settings live in settings.ini.
 
 #macro SAVE_SLOTS 3
-#macro SAVE_VERSION 2
+#macro SAVE_VERSION 3 // 3: resources in the world store, tool tiers and water in the inventory
 
 function save_path(_slot){ return "saves/slot" + string(_slot) + ".json"; }
 
@@ -30,6 +30,8 @@ function save_read(_slot){
 
 /// @description Save the current game. Only works in a room with the player in it.
 function save_game(_slot){
+	// Automated test runs never write real saves (only the "test" slot, which no menu shows)
+	if(autotest_running() && _slot != "test") return false;
 	// The pause menu deactivates the world; wake it up long enough to read it
 	var frozen = instance_exists(obj_menu) && obj_menu.isPause;
 	instance_activate_all();

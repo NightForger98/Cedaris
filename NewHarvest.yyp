@@ -10,6 +10,7 @@
   },
   "defaultScriptType":1,
   "Folders":[
+    {"$GMFolder":"","%Name":"Effects","folderPath":"folders/Sprites/Effects.yy","name":"Effects","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"UI","folderPath":"folders/Sprites/UI.yy","name":"UI","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Animation Curves","folderPath":"folders/Animation Curves.yy","name":"Animation Curves","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -143,6 +144,7 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"spr_fx_anger","path":"sprites/spr_fx_anger/spr_fx_anger.yy",},},
     {"id":{"name":"obj_world_map","path":"objects/obj_world_map/obj_world_map.yy",},},
     {"id":{"name":"obj_villager","path":"objects/obj_villager/obj_villager.yy",},},
     {"id":{"name":"schedules","path":"scripts/schedules/schedules.yy",},},

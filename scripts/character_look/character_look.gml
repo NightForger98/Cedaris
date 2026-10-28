@@ -223,7 +223,9 @@ function character_set_body(_look, _body){
 /// @description Draw one 64x64 frame of a look. _frame is the sheet column, _row the sheet row.
 /// _action (optional) = {act, i, dir}: draw step i of an action (see the actions script) facing dir 0-3;
 /// then _frame and _row are ignored.
-function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined){
+/// _action: {act, i, dir} while acting, plus fx while charging (charge_fx: the tool moved, tilted and glowing, the
+/// face blushing). _sil: a colour to draw the whole look flat in (the cursed outline), or -1.
+function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined, _sil = -1){
 	var cat = lpc_catalog();
 	var parts = _look.parts;
 	var skin = parts.body.pal;
@@ -270,18 +272,44 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 				else if(kind == -3) p = eyes;
 				// -4 = fixed colours, drawn without the palette shader
 				array_push(list, {order: layers[l].z * 1000 + s * 10 + k, spr: subs[k].spr, pal: p,
-				                  sx: lsx, sy: lsy, sw: lsw, dx: ldx, dy: ldy});
+				                  sx: lsx, sy: lsy, sw: lsw, dx: ldx, dy: ldy, slot: slots[s].key});
 			}
 		}
 	}
 	array_sort(list, function(a, b){ return a.order - b.order; });
 
+	var fx = (_action != undefined) ? _action[$ "fx"] : undefined;
+	if(_sil != -1) gpu_set_fog(true, _sil, 0, 1);
 	for(var i = 0; i < array_length(list); i++){
 		var e = list[i];
-		if(e.pal != -4) lorikeet_set(e.pal);
-		draw_sprite_part_ext(e.spr, 0, e.sx, e.sy, e.sw, e.sw, e.dx, e.dy, _scale, _scale, c_white, 1);
-		if(e.pal != -4) lorikeet_reset();
+		var held = (fx != undefined && e.slot == "held");
+		if(e.pal != -4 && _sil == -1) lorikeet_set(e.pal);
+		if(held) character_draw_held(e, _x, _y, _scale, fx, 1);
+		else draw_sprite_part_ext(e.spr, 0, e.sx, e.sy, e.sw, e.sw, e.dx, e.dy, _scale, _scale, c_white, 1);
+		// A charging tool glows (drawn again, added on top)
+		if(held && fx.glow > 0){
+			gpu_set_blendmode(bm_add);
+			character_draw_held(e, _x, _y, _scale, fx, fx.glow);
+			gpu_set_blendmode(bm_normal);
+		}
+		if(e.pal != -4 && _sil == -1) lorikeet_reset();
+		// Straining: the head goes red (under the hair, which is drawn after it)
+		if(fx != undefined && fx.blush > 0 && e.slot == "head" && _sil == -1){
+			gpu_set_fog(true, make_colour_rgb(235, 40, 40), 0, 1);
+			draw_sprite_part_ext(e.spr, 0, e.sx, e.sy, e.sw, e.sw, e.dx, e.dy, _scale, _scale, c_white, fx.blush);
+			gpu_set_fog(false, c_white, 0, 1);
+		}
 	}
+	if(_sil != -1) gpu_set_fog(false, c_white, 0, 1);
+}
+
+/// @description The held item while charging: shifted and turned about the hands by fx (dx, dy, ang).
+function character_draw_held(_e, _x, _y, _scale, _fx, _alpha){
+	var px = _x + 32 * _scale, py = _y + 38 * _scale;            // the hands
+	var ox = _e.dx - px, oy = _e.dy - py, a = _fx.ang;
+	var rx = ox * dcos(a) + oy * dsin(a), ry = -ox * dsin(a) + oy * dcos(a);
+	draw_sprite_general(_e.spr, 0, _e.sx, _e.sy, _e.sw, _e.sw, px + rx + _fx.dx * _scale, py + ry + _fx.dy * _scale,
+	                    _scale, _scale, a, c_white, c_white, c_white, c_white, _alpha);
 }
 
 /// @description Draw one catalog item on its own (inventory icons). _crop = [x, y, w, h] of the frame.

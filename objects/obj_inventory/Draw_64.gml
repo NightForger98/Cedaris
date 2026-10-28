@@ -92,7 +92,7 @@ if(shop && upgrades){
 		var name = tools[i], cur = tool_tier(name);
 		var y1 = listTop + i * rowH;
 		item_draw_icon(item_stack("c|held|" + name), panelX1 + 14, y1 + 2, 44, body);
-		if(cur >= array_length(tiers) - 1){
+		if(cur >= TOOL_MITHRIL){
 			ui_text(panelX1 + 70, y1 + rowH / 2, tool_display_name(name) + "  -  as good as it gets", 0.58, c.accent, fa_left);
 			continue;
 		}
@@ -258,7 +258,7 @@ if(tip != undefined && cursor == undefined){
 		case "held":
 			lines[0] = tool_display_name(d.name);
 			array_push(lines, "Tool / weapon");
-			if(tool_upgradable(d.name) != "" && tool_tier(d.name) < array_length(tool_tiers()) - 1)
+			if(tool_upgradable(d.name) != "" && tool_tier(d.name) < TOOL_MITHRIL)
 				array_push(lines, "Brom can upgrade it: " + string_lower(tool_upgradable(d.name)));
 			break;
 		case "material": array_push(lines, "Material"); break;

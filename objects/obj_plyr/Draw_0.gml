@@ -29,5 +29,12 @@ if(iframes > 0 && (iframes div 4) mod 2 == 0) exit;
 // Charging: the cells the release will work, under your feet
 if(charge != undefined) charge_draw_cells(id);
 // All layers, palettes and draw order live in character_draw (character_look script)
-if(act != undefined) character_draw(look, 0, 0, xx, yy, 1, {act: act, i: floor(actStep), dir: actDir});
+if(charge != undefined){
+	// Held on the wind-up: the tool pulled back and glowing, the strain on the face (charging script)
+	var a = {act: act, i: 0, dir: actDir, fx: charge_fx(charge, actDir)};
+	charge_draw_behind(id, xx, yy, a);
+	character_draw(look, 0, 0, xx, yy, 1, a);
+	charge_draw_front(id, xx, yy, actDir);
+}
+else if(act != undefined) character_draw(look, 0, 0, xx, yy, 1, {act: act, i: floor(actStep), dir: actDir});
 else character_draw(look, floor(x_frame), y_frame, xx, yy, 1);

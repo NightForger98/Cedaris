@@ -135,10 +135,21 @@ function tool_tier(_name){
 /// @description "Copper Axe"; basic tools keep their plain name.
 function tool_display_name(_name){
 	var t = tool_tier(_name);
-	return (t == 0 || tool_upgradable(_name) == "") ? _name : tool_tiers()[t].name + " " + _name;
+	return (t == 0 || tool_upgradable(_name) == "") ? _name : tool_tier_name(t) + " " + _name;
 }
 
-function tool_tier_colour(_t){ return (_t <= 0) ? c_white : item_material(tool_tiers()[_t].bar).colour; }
+/// @description Past Mithril (the last tier Brom forges, TOOL_MITHRIL) a tool can only be Cursed (6, by a witch) and then
+/// Blessed (7, by the priest) - see docs/CHARGING.md.
+#macro TOOL_MITHRIL 5
+#macro TOOL_CURSED 6
+#macro TOOL_BLESSED 7
+function tool_tier_name(_t){ return (_t == TOOL_CURSED) ? "Cursed" : ((_t == TOOL_BLESSED) ? "Blessed" : tool_tiers()[_t].name); }
+
+function tool_tier_colour(_t){
+	if(_t == TOOL_CURSED) return make_colour_rgb(150, 60, 200);
+	if(_t == TOOL_BLESSED) return make_colour_rgb(255, 215, 90);
+	return (_t <= 0) ? c_white : item_material(tool_tiers()[_t].bar).colour;
+}
 
 /// @description Watering can capacity: 40, plus 15 per tier.
 function tool_water_max(){ return 40 + 15 * tool_tier("Watering Can"); }
@@ -147,7 +158,8 @@ function tool_water_max(){ return 40 + 15 * tool_tier("Watering Can"); }
 function tool_upgrade(_name){
 	var cur = tool_tier(_name);
 	var tiers = tool_tiers();
-	if(cur >= array_length(tiers) - 1) return "Your " + string_lower(_name) + " can't get any better";
+	if(cur == TOOL_CURSED) return "Brom won't touch a cursed tool. The priest can lift it";
+	if(cur >= TOOL_MITHRIL) return "Your " + string_lower(_name) + " can't get any better";
 	if(inv_count("c|held|" + _name) <= 0) return "Bring your " + string_lower(_name) + " first";
 	var next = tiers[cur + 1];
 	if(!inv_is_free()){

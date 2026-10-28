@@ -1,0 +1,48 @@
+# How a charge looks (docs/CHARGING.md, "Charge stages"): wind-up, glow, red face, anger mark in every direction,
+# then a Cursed tool's yellow outline and a Blessed tool's flames
+start story
+wait 60
+time 12
+pos 600 470
+call autotest_tool_tier Scythe 5
+hold 7
+face s
+charge 0 s0
+charge 2 s2
+charge 3 s3
+charge 4 s4
+face e
+charge 2 e2
+charge 4 e4
+face n
+charge 2 n2
+charge 4 n4
+face w
+charge 2 w2
+charge 4 w4
+call autotest_tool_tier Scythe 6
+face s
+charge 6 s6_cursed
+face e
+charge 6 e6_cursed
+call autotest_tool_tier Scythe 7
+face s
+charge 6 s6_blessed
+face n
+charge 6 n6_blessed
+face w
+charge 6 w6_blessed
+# Other tools' wind-ups at the anger stage
+call autotest_tool_tier Axe 5
+hold 5
+face e
+charge 4 axe_e4
+call autotest_tool_tier Hoe 5
+hold 1
+face s
+charge 4 hoe_s4
+call autotest_tool_tier Watering_Can 5
+hold 2
+face w
+charge 4 can_w4
+quit

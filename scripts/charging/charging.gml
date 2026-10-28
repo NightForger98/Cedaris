@@ -169,3 +169,90 @@ function charge_draw_cells(_user){
 	}
 	draw_set_alpha(1);
 }
+
+// ---------------------------------------------------------------- how a charge looks (docs/CHARGING.md, "Charge stages")
+
+/// @description The stage a charge has reached, the same in every direction: windup (0-2: the tool pulled further back),
+/// blush (the face red), anger (the mark on the head), outline (a Cursed tool's yellow glow), flames (a Blessed tool's).
+/// Tools go wind-up, wind-up, red face at 3, anger at 4; weapons and the hammer and shovel (2 levels) red at 1, anger at 2.
+function charge_stage(_c){
+	var short = (_c.max <= 2 && tool_upgradable(_c.item) == "");
+	var redAt = short ? 1 : 3, angerAt = short ? 2 : 4;
+	var top = charge_top(_c.item, _c.level);
+	return {windup: min(_c.level, 2), blush: _c.level >= redAt, anger: _c.level >= angerAt, outline: top >= 1, flames: top == 2};
+}
+
+/// @description The fx for character_draw while charging: the tool shifted and tilted back a little more at each wind-up
+/// level (which way is "back" depends on the facing), glowing brighter each level, and the face's blush.
+function charge_fx(_c, _dir){
+	static back = [[0, 2, 6], [2, 1, -10], [0, -2, -8], [-2, 1, 10]];  // per wind-up level: dx, dy, degrees (n, w, s, e)
+	var st = charge_stage(_c), b = back[_dir], k = st.windup;
+	var glow = (_c.level > 0) ? 0.12 + 0.07 * _c.level + 0.06 * sin(current_time / 120) : 0;
+	if(_c.flash > 0) glow += 0.05 * _c.flash;
+	return {dx: b[0] * k, dy: b[1] * k, ang: b[2] * k, glow: clamp(glow, 0, 1), blush: st.blush ? (st.anger ? 0.36 : 0.26) : 0};
+}
+
+/// @description Behind the player while charging: a Cursed tool's yellow outline (the look drawn flat, a pixel out each
+/// way, pulsing), and the back half of a Blessed tool's flames.
+function charge_draw_behind(_user, _xx, _yy, _action){
+	var st = charge_stage(_user.charge);
+	if(st.outline){
+		var a = st.flames ? 1 : 0.65 + 0.35 * sin(current_time / 90);
+		draw_set_alpha(a);
+		var col = make_colour_rgb(255, 226, 90);
+		character_draw(_user.look, 0, 0, _xx - 1, _yy, 1, _action, col);
+		character_draw(_user.look, 0, 0, _xx + 1, _yy, 1, _action, col);
+		character_draw(_user.look, 0, 0, _xx, _yy - 1, 1, _action, col);
+		character_draw(_user.look, 0, 0, _xx, _yy + 1, 1, _action, col);
+		draw_set_alpha(1);
+	}
+	if(st.flames) charge_draw_flames(_xx, _yy, true);
+}
+
+/// @description In front of the player while charging: the front flames and the anger mark on the head.
+function charge_draw_front(_user, _xx, _yy, _dir){
+	static spot = [[32, 15], [27, 16], [39, 16], [37, 16]];
+	var st = charge_stage(_user.charge);
+	if(st.flames) charge_draw_flames(_xx, _yy, false);
+	if(st.anger){
+		// On the cap: the back of it facing up, the front facing down, the side facing left or right
+		draw_sprite(spr_fx_anger, 0, _xx + spot[_dir][0] - 4, _yy + spot[_dir][1] - 4);
+	}
+}
+
+/// @description A Blessed tool's fire: golden tongues licking up round the body, two frames swapped to flicker (the
+/// second is the first with its tongues nudged), and sparks over the head. Symmetric, so it's the same mirrored left
+/// and right. _back: the tongues behind the body (drawn first), else the ones in front.
+function charge_draw_flames(_xx, _yy, _back){
+	static tongues = [ // base angle round the body (0 right, 90 up), length, lean; behind = the top half
+		[0, 9, 4], [35, 10, 2], [70, 11, 1], [110, 11, -1], [145, 10, -2], [180, 9, -4],
+		[205, 8, -3], [235, 7, -1], [-55, 7, 1], [-25, 8, 3]];
+	var f = (current_time div 110) mod 2, cx = _xx + 32, cy = _yy + 40, rx = 12, ry = 21;
+	var inner = make_colour_rgb(255, 240, 140), outer = make_colour_rgb(255, 140, 30);
+	gpu_set_blendmode(bm_add);
+	draw_primitive_begin(pr_trianglelist);
+	for(var i = 0; i < array_length(tongues); i++){
+		var t = tongues[i];
+		var behind = (t[0] > 0 && t[0] < 180);
+		if(behind != _back) continue;
+		var len = t[1] + ((f + i) mod 2 ? 2 : -1), lean = t[2] + ((f + i) mod 2 ? -1 : 1);
+		var bx = cx + lengthdir_x(rx, t[0]), by = cy + lengthdir_y(ry, t[0]);
+		var tx = bx + lean, ty = by - len - 3;
+		draw_vertex_colour(bx - 3, by, outer, 0.6);
+		draw_vertex_colour(bx + 3, by, outer, 0.6);
+		draw_vertex_colour(tx, ty, inner, 0);
+		draw_vertex_colour(bx - 1, by, inner, 0.6);
+		draw_vertex_colour(bx + 1, by, inner, 0.6);
+		draw_vertex_colour(tx * 0.6 + bx * 0.4, ty * 0.6 + by * 0.4, inner, 0.2);
+	}
+	draw_primitive_end();
+	if(_back){
+		// Sparks over the head
+		for(var s = 0; s < 3; s++){
+			var sx = cx - 8 + s * 8 + ((f + s) mod 2) * 2, sy = _yy + 2 - ((f * 3 + s * 5) mod 7);
+			draw_set_colour(inner);
+			draw_rectangle(sx, sy, sx + 1, sy + 1, false);
+		}
+	}
+	gpu_set_blendmode(bm_normal);
+}

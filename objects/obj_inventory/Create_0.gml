@@ -151,6 +151,7 @@ returnCursor = function(){
 recipeList = function(){
 	// Station recipes (smelting, weaving, cooking) are always all shown, dimmed when you lack materials
 	if(filter == "furnace" || filter == "weave" || filter == "cook") return station_recipes(filter);
+	if(filter == "build") return placeable_recipes();
 	var out = [];
 	if(filter == "dye" || (inv_is_free() && filter == "")){
 		if(inv_is_free()){

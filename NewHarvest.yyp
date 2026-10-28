@@ -172,6 +172,8 @@
     {"id":{"name":"weather","path":"scripts/weather/weather.yy",},},
     {"id":{"name":"projects","path":"scripts/projects/projects.yy",},},
     {"id":{"name":"forest","path":"scripts/forest/forest.yy",},},
+    {"id":{"name":"placeables","path":"scripts/placeables/placeables.yy",},},
+    {"id":{"name":"obj_placeable","path":"objects/obj_placeable/obj_placeable.yy",},},
     {"id":{"name":"obj_shrine","path":"objects/obj_shrine/obj_shrine.yy",},},
     {"id":{"name":"obj_path","path":"objects/obj_path/obj_path.yy",},},
     {"id":{"name":"quests","path":"scripts/quests/quests.yy",},},

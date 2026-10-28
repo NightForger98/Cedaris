@@ -7,6 +7,7 @@
 ///   "s|<crop>", "p|<crop>|<quality>"  seeds and produce (see farming); "f|<dish>" cooked food (see food)
 ///   "k|<spell>"                spell scroll (see magic)
 ///   "w|<forage>"               something wild from Whisperwood (see forest)
+///   "o|<kind>"                 something you place, like a sprinkler (see placeables)
 /// A stack is {id, count, pal} - pal is an optional palette name giving clothing its own colour.
 ///
 /// Stats: clothing gets its stats from the materials in its recipe (item_stats), and everything
@@ -135,6 +136,13 @@ function item_def(_id){
 				d = {id: _id, type: "produce", crop: ci, quality: q, max: 99, price: produce_price(ci, q) * 2, tier: q, stats: {},
 				     name: ["", "Silver ", "Gold "][q] + ct.name,
 				     desc: "Ship it, or hold it and use it to eat (+" + string(round(ct.energy * (1 + q * 0.4))) + " energy)."};
+			}
+			break;
+		case "o":
+			var pl = placeable_def(p[1]);
+			if(pl != undefined){
+				d = {id: _id, type: "placeable", kind: p[1], name: pl.name, max: 20, price: item_cost_value(pl.cost), tier: 1, stats: {},
+				     desc: pl.desc + " Hold it and use it to place it in front of you; a pickaxe picks it back up."};
 			}
 			break;
 		case "w":
@@ -463,6 +471,9 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			draw_set_colour(make_colour_rgb(120, 90, 55));
 			draw_roundrect_ext(cx - _size * 0.3, cy - _size * 0.36, cx + _size * 0.3, cy + _size * 0.36, 6, 6, true);
 			draw_sprite_stretched(spr_crops_picked, d.crop, cx - _size * 0.24, cy - _size * 0.26, _size * 0.48, _size * 0.48);
+			break;
+		case "placeable":
+			placeable_draw(d.kind, cx, cy + _size * 0.2, _size / 30);
 			break;
 		case "forage":
 			// The plant itself, from the terrain tileset

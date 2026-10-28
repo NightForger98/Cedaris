@@ -93,6 +93,10 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
   forage come back daily: wild mushrooms and herbs (eat or cook them: Forest Stew gives +3 Magic) and red
   toadstools (Elda loves them). At night, pixies (pixie dust) and moon moths (moonsilk) - catch them with a swing.
 
+- **Sprinklers** (`scripts/placeables`): once the Old Well is raised, the crafting table's Build list makes the
+  Sprinkler (2 copper, 1 iron: the 4 cells around it), Quality Sprinkler (2 iron, 1 gold: 3x3) and Great Sprinkler
+  (2 gold, 1 steel, 1 gem: 5x5). Hold one and use it to place it; it waters every morning; a pickaxe picks it up.
+
 ## Hooks for quests and events
 
 ```gml

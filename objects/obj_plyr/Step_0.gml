@@ -56,6 +56,7 @@ if(!planting && (mouse_check_button_pressed(mb_left) || input_pressed(vk_space))
 	if(heldType == "food"){ food_eat(held); exit; }
 	if(heldType == "scroll"){ spell_learn(held); exit; }
 	if(heldType == "forage"){ forage_eat(held); exit; }
+	if(heldType == "placeable"){ placeable_place(held, cell[0], cell[1]); exit; }
 	act = character_action_for(look);
 	// Too tired to swing a tool (weapons still work)
 	if(act != undefined && world_time_ready() && vitals_exhausted() && item_is_tool(lpc_catalog().items[look.parts.held.item].name)){

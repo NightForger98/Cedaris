@@ -43,6 +43,7 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - Weather: `weather`. Village projects: `projects` (the board's Projects page). Whisperwood: `forest` (`rm_forest`,
   generated from a fixed seed at Room Start like the mine; `obj_path` is the bridge / the way back, `obj_shrine`).
   Rooms built at runtime keep walls and water in the `global.mineWalls` tilemap (see `collision_solids`).
+- Placed things (sprinklers): `placeables` (`obj_placeable`, items `o|<kind>`, saved in `world_room().placed`).
 - People and quests: `people` (villagers, friendship, gifts; `obj_dialogue`), `quests` (`obj_quest_board` in the
   village). Anything usable with E calls `interact_near(range)` and `interact_ready()` (`interact`): only the
   closest thing answers. `ui_blocking()` is true while any window is open.

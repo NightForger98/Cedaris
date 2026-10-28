@@ -90,6 +90,9 @@ function action_hit(_user, _item, _dir){
 			// Filling up at the pond only needs the first cell
 			for(var i = 0; i < tool_row_length(_item); i++) if(farm_water(_user, cell[0] + dx * i, cell[1] + dy * i) == "refill") break;
 			break;
+		case "Pickaxe":
+			// A placed sprinkler in front comes back up; otherwise the pickaxe hits like any tool
+			if(placeable_pick_up(cell[0], cell[1])) break;
 		default:
 			// Monsters first (a weapon or tool hits what's in its arc, a bow fires), then trees, rocks and weeds
 			combat_player_hit(_user, _item, _dir);

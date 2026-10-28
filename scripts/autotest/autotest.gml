@@ -350,3 +350,10 @@ function autotest_goto_shrine(){ with(obj_shrine){ obj_plyr.x = x; obj_plyr.y = 
 
 /// @description Switch the open notice board to a page ("requests" / "projects").
 function autotest_board_page(_page){ with(obj_quest_board) page = _page; return instance_exists(obj_quest_board) && obj_quest_board.open; }
+
+/// @description Make one of the Build list (sprinklers) as a click would.
+function autotest_build(_id){
+	var list = placeable_recipes();
+	for(var i = 0; i < array_length(list); i++) if(list[i].id == _id) return inv_craft(_id, list[i].cost);
+	return "not on the list";
+}

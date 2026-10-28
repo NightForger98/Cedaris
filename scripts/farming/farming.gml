@@ -118,6 +118,7 @@ function farm_plant(_gx, _gy, _type){
 	var tiles = farm_tiles();
 	if(!variable_struct_exists(tiles, farm_key(_gx, _gy))){ farm_message("Till the soil with a hoe first"); return false; }
 	if(farm_crop_at(_gx, _gy) != noone) return false;
+	if(placed_at(_gx, _gy) != undefined) return false; // a sprinkler stands there
 	if(!crop_in_season(_type, global.clock.season)){
 		farm_message(crop_table()[_type].name + " only grows in " + crop_seasons_text(_type));
 		return false;

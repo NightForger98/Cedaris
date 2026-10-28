@@ -1,0 +1,48 @@
+# Milestone 10.4: the Old Well unlocks sprinklers; place one; it waters its patch in the morning; pick it up
+start story
+wait 60
+call autotest_build o|sprinkler
+call autotest_project_finish well
+give m|copper 4
+give m|iron 4
+give m|gold 2
+call autotest_build o|sprinkler
+call autotest_build o|sprinkler_good
+inv
+# Till a row of soil, put a quality sprinkler in the middle
+pos 640 240
+face s
+hold 1
+use 1
+pos 672 240
+use 1
+pos 704 240
+use 1
+pos 640 304
+face n
+use 1
+pos 704 304
+use 1
+equip o|sprinkler_good
+pos 672 304
+face n
+use 1
+call autotest_crop_front
+wait 5
+shot 01_placed
+sleep
+wait 60
+room rm_1 640 240
+wait 40
+face s
+call autotest_crop_front
+pos 704 240
+call autotest_crop_front
+shot 02_morning
+# The pickaxe picks it back up
+hold 6
+pos 672 304
+face n
+use 1
+inv
+quit

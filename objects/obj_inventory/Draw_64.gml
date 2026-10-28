@@ -161,6 +161,7 @@ if(shop && upgrades){
 	if(filter == "furnace") title = "Brom's Furnace";
 	else if(filter == "cook") title = "Hearth - cooking";
 	else if(filter == "weave") title += " - weaving";
+	else if(filter == "build") title += " - building";
 	else if(filter == "dye") title += " - dyes";
 	else if(filter != "") title += " - " + item_slot_label(filter);
 	ui_text(panelX1 + 16, panelY1 + 26, title, 0.8, c.accent, fa_left);
@@ -169,9 +170,14 @@ if(shop && upgrades){
 	} else if(filter != ""){
 		if(ui_button(panelX2 - 110, panelY1 + 10, panelX2 - 14, panelY1 + 42, "Show all", true, 0.5)){ filter = ""; scroll = 0; }
 	} else {
-		// Weaving: fibre into cloth
+		// Weaving: fibre into cloth; Build: sprinklers, once the Old Well is raised
 		if(ui_button(panelX2 - 110, panelY1 + 10, panelX2 - 14, panelY1 + 42, "Weave", true, 0.5)){ filter = "weave"; scroll = 0; }
-		ui_text(panelX2 - 124, panelY1 + 26, "Click an equipment slot to see its recipes", 0.42, c.dim, fa_right);
+		var hintX = panelX2 - 124;
+		if(project_done("well")){
+			if(ui_button(panelX2 - 214, panelY1 + 10, panelX2 - 118, panelY1 + 42, "Build", true, 0.5)){ filter = "build"; scroll = 0; }
+			hintX = panelX2 - 228;
+		}
+		ui_text(hintX, panelY1 + 26, "Click an equipment slot to see its recipes", 0.42, c.dim, fa_right);
 	}
 	var list = recipeList();
 	scroll = min(scroll, max(0, array_length(list) * rowH - (listBottom - listTop)));
@@ -259,6 +265,7 @@ if(tip != undefined && cursor == undefined){
 		case "dye":      array_push(lines, "Dye"); break;
 		case "scroll":   array_push(lines, "Spell scroll"); break;
 		case "forage":   array_push(lines, "Forage"); break;
+		case "placeable": array_push(lines, "Place it"); break;
 		case "food":     array_push(lines, "Food"); break;
 	}
 	if(tierLine != "") lines[1] = tierLine + " " + string_lower(lines[1]);

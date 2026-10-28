@@ -14,8 +14,8 @@ if(game_is_playing_room()){
 	// The mine builds its floor (and puts you at the entrance); elsewhere trees, rocks and weeds from the world store,
 	// plus any that are due to spawn
 	if(room == rm_mine) mine_room_start();
-	else if(room == rm_forest){ forest_room_start(); resources_room_start(); } // the wood first: spawns skip its trees and water
-	else { global.mineWalls = -1; resources_room_start(); }
+	else if(room == rm_forest){ forest_room_start(); resources_room_start(); placeables_room_start(); } // the wood first: spawns skip its trees and water
+	else { global.mineWalls = -1; resources_room_start(); placeables_room_start(); }
 }
 
 // After sleeping: wake up beside the bed, facing down, then autosave. After being knocked out: no autosave,

@@ -19,7 +19,8 @@ frames** for the wind-up poses (right is from the video; left mirrors it).
 5. **Letting go** plays the release. Letting go before the first level fills is the normal tap action, as now.
 
 **Max levels:**
-- Upgradable tools: one level per tier (Basic 0, Copper 1 ... Mithril 5). A Basic tool can't charge.
+- Upgradable tools: one level per tier (Basic 0, Copper 1 ... Mithril 5, Cursed/Blessed 6; see below). A Basic tool
+  can't charge.
 - Weapons: a fixed 2 levels, since weapons can't be upgraded.
 
 **Energy:** a charged tool costs `tool_energy_cost × (1 + level)`. A charged weapon release costs 2 energy per level
@@ -108,7 +109,63 @@ New script **`scripts/charge/charge.gml`**:
 6. Up/down poses from the reference frames.
 7. The test case, the full suite, and doc updates (`MILESTONES.md` and the upgrade text at Brom's).
 
+## Cursed and blessed tools
+
+Based on Friends of Mineral Town's cursed and blessed tools. These are the reference frames for their charge, after
+the normal full-charge pose (red face, anger mark):
+1. A thin **yellow glow outline** traces the whole character.
+2. It grows into **small golden flames** licking up around the body. They get taller and fuller over a few frames
+   until the character stands in a fire aura with sparks above the head.
+3. The release is the normal spin with no flames, but it **cuts a larger area**.
+
+**Tiers:** two new tiers after Mithril in `tool_tiers`: **Cursed** and **Blessed**.
+- Both charge **6 levels**. Level 6 is the flame aura, and its release is one size bigger than Mithril's
+  (scythe/can spin radius 7, hoe 9×5, a wider axe/pickaxe arc).
+- Both have the same animation and strength. Only the curse rules below differ.
+- Only a **Mithril** tool (the last tier) can become Cursed. A Cursed tool can only become Blessed. Brom can't
+  upgrade either one.
+
+**The curse:**
+- The tool **can't be unequipped**: it stays in your hand and blocks the hotbar keys and scroll, inventory moves,
+  chests, selling and the bin (see open questions).
+- It **drains energy faster**: `tool_energy_cost × 2`, so a charged swing costs `× 2 × (1 + level)`.
+- Its icon gets a purple dot, a purple glint in the hand, and a dark purple flame aura at level 6 instead of gold.
+- Saved as `global.inv.tools[name] = 6` (Cursed) or `7` (Blessed). Save version goes to 10, and older saves load
+  unchanged.
+
+**The temple and the priest:**
+- **The temple:** a new building. Outside, a room spec in `tools/rooms/specs/` (a plot in `rm_town` or `rm_2`),
+  then `node tools/rooms/worldmap.js`. Inside, `rm_town_temple` with pews, an altar and a door; built with
+  `node tools/rooms/build.js`. The temple is open 8am–6pm, and its doors lock outside those hours through
+  `door_lock_reason`, like the shops.
+- **The priest:** a new villager in `people.gml`, with an LPC look, dialogue, gifts and hearts. Their routine in
+  `villager_routines`:
+  - every day at the temple, working at the altar;
+  - **Friday sermon from 9am to 10am**, with a few villagers' Friday routines sending them to the pews.
+- **Blessing:** talk to the priest **on a Friday after the sermon (10am) and before the temple closes (6pm)**,
+  holding a Cursed tool. A choice offers to bless it for **gold** (amount to be decided). The priest prays with the
+  altar glowing, and the tool becomes Blessed.
+  - At any other time the priest says when to come back: "Come on Friday, after the sermon."
+  - Uses `obj_dialogue`'s existing choice mode, as heart events do.
+
+**Built in** `scripts/gathering/gathering.gml` (tiers, `tool_cursed`, `tool_bless`), the hotbar and inventory code
+(the lock), `scripts/people` and `scripts/schedules` (the priest and the sermon), the room specs, and
+`tools/test/cases/curse.txt`. That test case covers: cursing a Mithril tool, the lock, the double energy, a blessing
+refused on a Thursday or before the sermon, a Friday blessing working and taking the gold, and the 6th level's spin
+radius.
+
+**Build order:** this goes after step 3 of the steps above, since it needs the spin and level visuals; the temple
+and priest can be built any time.
+
 ## Still to decide
+- **How a tool becomes cursed.** The plan says only Mithril tools can be, but not how. One option is a cursed altar
+  or chest in the Deep (past the bottom of the mine) that curses the Mithril tool you offer it, in exchange for the
+  6th level.
+- **What "can't be unequipped" means here.** Our held item is whichever hotbar slot is selected.
+  - Stricter: the hotbar can't move off the cursed tool at all, so you can't eat, plant or use another tool until
+    it's blessed.
+  - Looser: the tool can't leave its slot or the bag (no storing, selling, binning), but you can still switch slots.
+- **The blessing's price**, and **where the temple goes** (the town, by the inn, or the village).
 - **Hammer and Shovel:** these aren't upgradable and don't do anything of their own yet. Should they charge like
   weapons (fixed 2 levels, a large swing), or not charge?
 - **Up/down reference frames** (the user is fetching them).

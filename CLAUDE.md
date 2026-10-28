@@ -21,9 +21,11 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 
 ## Where things are
 
-- `docs/ROADMAP.md` - the plan (farming, stats, combat, magic, social) with status per step. **Next: step 6,
-  stats wiring (Warmth, food buffs).**
+- `docs/ROADMAP.md` - the plan (farming, stats, combat, magic, social) with status per step. **Next: step 7,
+  combat and the mine (XL; the mine follows `docs/LEVELS.md`).**
 - `docs/PROGRESSION.md` - items, materials, recipes, dyes, stats, and the hooks for quests.
+- `docs/LEVELS.md` - **the level creation plan** (agreed): towns and the farm are hand-built rooms; the mine is
+  generated at runtime in GML, seeded per floor. Not a WFC/Python pipeline - read why before proposing one.
 - Characters: LPC art converted by `tools/lpc` (see its README); `scripts/lpc_catalog` is generated - don't edit
   by hand. Looks/races/creator: `character_look`, `character_races`. Actions (tool/weapon swings): `actions`
   (`action_hit` is the hook for effects).
@@ -31,6 +33,7 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - Time, sleep, energy/health, world store: `world_time`. Farming: `farming`. Saving: `save_system` (SAVE_VERSION 3).
 - Gathering, smelting, tool tiers and upgrades: `gathering` (resources are `obj_resource`, spawned per room area;
   Brom's furnace is `obj_furnace`). Art for trees, rocks and weeds is cut from `spr_tile_terrain`.
+- Stats, cooking, food buffs and the cold: `food` (`stat(key)` is how to read any stat; the hearth is `obj_kitchen`).
 - Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm, `rm_2` village, `rm_12` house (bed), `rm_3`, `rm_123`.
 - Placeholder art drawn from `spr_tile_interior`: crafting table, bed, shipping bin, furnace (to be replaced with real assets).
 

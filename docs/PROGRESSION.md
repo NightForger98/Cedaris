@@ -60,9 +60,14 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
 - **Stats** come from the recipe: each material adds its per-unit stats (iron: +2 Defence, -0.25 Speed;
   fur: +2.5 Warmth; pixie dust: +2.5 Luck, +1 Speed...). An item's rarity is its rarest ingredient.
   Everything equipped adds up (`inv_stats()`), shown under the character in the inventory.
-- **Stats in use now**: Speed changes walking speed (+5% per point, -30% to +40%); Charm lowers Brom's
-  prices (1% per point, up to 30%). Defence, Warmth, Stamina, Luck and Magic are ready for combat,
-  seasons, energy, crop quality and spells.
+- **Stats in use now** (`stat()` = what you wear plus your food buff): Speed changes walking speed (+5% per
+  point, -30% to +40%); Charm lowers shop prices (1% per point, up to 30%) and raises selling prices (1% per
+  point, up to 20%); Stamina adds max energy and lowers tool energy cost; Luck improves crop quality and gem
+  and coal chances; Warmth keeps the cold off outdoors (cold beyond it drains energy). Defence and Magic wait
+  for combat and spells.
+- **Cooking** at the hearth in the house (`obj_kitchen`, press E): 8 dishes from produce of any quality (the
+  lowest quality is used first), in `dish_table()` (`scripts/food`). Eating one gives energy and a timed buff
+  (e.g. Carrot Soup: +4 Warmth for 6 hours); one buff at a time, and it ends when you sleep.
 
 ## Hooks for quests and events
 

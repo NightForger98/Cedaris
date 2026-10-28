@@ -41,7 +41,11 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 	playtime += delta_time / 1000000;
 	var invOpen = instance_exists(obj_inventory);
 	// The clock runs while you play (not in the inventory, menus or fades); at 2:00 am you pass out
-	if(world_time_ready() && !invOpen && !sleeping && !waking && !doTransition && clock_tick()) sleep_now(true);
+	if(world_time_ready() && !invOpen && !sleeping && !waking && !doTransition){
+		var before = global.clock.minutes;
+		if(clock_tick()) sleep_now(true);
+		food_tick(global.clock.minutes - before); // food buffs wear off; the cold drains energy outdoors
+	}
 	if(resumeLock > 0) {resumeLock--;}
 	else if(!invOpen && input_pressed(vk_escape)) {game_pause();}
 	else if(!invOpen && input_pressed(ord("I")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_inventory);}

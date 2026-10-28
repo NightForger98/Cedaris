@@ -1,17 +1,11 @@
-# Screenshots of the farm with debug on (grid, collision boxes, position readout), for placing things
+# Screenshots of rooms with debug on (grid, collision boxes, position readout), for placing things
 start free
 wait 40
 debug on
-pos 880 250
-wait 20
-shot farm_ne
-pos 880 650
-wait 20
-shot farm_se
-pos 150 650
-wait 20
-shot farm_sw
-pos 200 200
-wait 20
-shot farm_nw
+room rm_12 350 400
+wait 30
+shot house
+pos 600 300
+wait 10
+shot house_e
 quit

@@ -149,6 +149,8 @@
     {"id":{"name":"gathering","path":"scripts/gathering/gathering.yy",},},
     {"id":{"name":"obj_resource","path":"objects/obj_resource/obj_resource.yy",},},
     {"id":{"name":"obj_furnace","path":"objects/obj_furnace/obj_furnace.yy",},},
+    {"id":{"name":"food","path":"scripts/food/food.yy",},},
+    {"id":{"name":"obj_kitchen","path":"objects/obj_kitchen/obj_kitchen.yy",},},
     {"id":{"name":"obj_bed","path":"objects/obj_bed/obj_bed.yy",},},
     {"id":{"name":"world_time","path":"scripts/world_time/world_time.yy",},},
     {"id":{"name":"lpc_pal_body_light","path":"sprites/lpc_pal_body_light/lpc_pal_body_light.yy",},},

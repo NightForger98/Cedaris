@@ -147,7 +147,7 @@ function tool_upgrade_list(){
 
 // ---------------------------------------------------------------- stations
 
-/// @description Recipes made from materials at a station: the furnace smelts ore, the crafting table weaves fibre.
+/// @description Recipes made at a station: the furnace smelts ore, the crafting table weaves fibre, the hearth cooks.
 function station_recipes(_station){
 	static r = {
 		furnace: [
@@ -163,6 +163,7 @@ function station_recipes(_station){
 			{id: "m|cotton", cost: {fibre: 6}},
 		],
 	};
+	if(_station == "cook") return dish_recipes(); // built from the dish table (scripts/food)
 	return r[$ _station] ?? [];
 }
 
@@ -322,7 +323,7 @@ function gather_damage(_inst, _item){
 /// becomes (a stump) or removed.
 function gather_break(_inst){
 	var def = _inst.def, d = _inst.data;
-	var luck = vitals_stat("luck") * 0.002 + (global.clock[$ "luck"] ?? 0) * 0.1;
+	var luck = stat("luck") * 0.002 + (global.clock[$ "luck"] ?? 0) * 0.1;
 	var got = "", lost = false;
 	for(var i = 0; i < array_length(def.drops); i++){
 		var dr = def.drops[i];

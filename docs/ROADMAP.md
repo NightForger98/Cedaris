@@ -133,15 +133,15 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 | Stat | Effect | Hooks into |
 |---|---|---|
 | Speed | done | |
-| Charm | done for buying; add selling bonus and friendship gain | Phase 6 |
-| Stamina | +max energy, -tool energy cost | Phase 0.4 |
-| Luck | crop quality, ore/gem chance, monster drops, crit chance | Phases 1, 2, 4 |
-| Warmth | winter and cold nights drain energy faster outdoors unless Warmth is high enough; fire-zone heat reverses it | Phase 0.3 seasons |
+| Charm | done: buying (-1%/point) and selling (+1%/point, up to 20%); friendship gain still to come | Phase 6 |
+| Stamina | done: +max energy, -tool energy cost | Phase 0.4 |
+| Luck | done for crop quality and gem/coal chance; monster drops and crit chance to come | Phases 1, 2, 4 |
+| Warmth | done: outdoors, cold (spring 1, summer 0, fall 2, winter 5, +2 after 8 pm) beyond your Warmth drains energy; `climate_cold()` can go negative for heat zones later | Phase 0.3 seasons |
 | Defence | damage taken = damage - Defence (minimum 1), as in Stardew | Phase 4 |
 | Magic | mana pool and spell power | Phase 5 |
 
-- One function `stat(key)` = equipment + food buffs + race perks (an optional idea from the race system).
-- Food buffs: timed `{stat: amount, minutes}` from cooked dishes, shown as HUD icons.
+- One function `stat(key)` = equipment + food buffs (`scripts/food`). Race perks are still an optional idea.
+- Food buffs: 8 dishes cooked at the hearth in the house (`obj_kitchen`) from produce of any quality; one buff at a time, timed `{stat: amount}` until a time of day or sleep, shown under the clock.
 
 ## Phase 4: Combat and the mine
 
@@ -154,7 +154,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
   - Humanoids reuse LPC looks: goblins, orcs, skeletons, zombies, trolls, wolfkin. They're random looks from the race table.
   - Creatures (slimes, bats, pixies, dragons) need other art. LPC-compatible monster sets exist on
     OpenGameArt; check each licence and add it to `LPC_CREDITS.csv`.
-- **The mine:** floors with rocks (ore), monsters and a ladder down, a lift every 5 floors, deeper floors
+- **The mine:** generated while the game runs, one seeded layout per floor (see `docs/LEVELS.md`): floors with rocks (ore), monsters and a ladder down, a lift every 5 floors, deeper floors
   with tougher monsters. This is the main source of the **rare and legendary materials**:
 
 | Material | Source |
@@ -194,7 +194,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 | 3 | 0.3 Time + 0.4 Energy/Health + 0.5 World state | L | **done**: clock, seasons, night tint, bed and passing out, new-day event with autosave, energy/health HUD, per-room world store (save v2) |
 | 4 | 1 Farming loop | L | **done**: till, seeds (Mara), plant, water (pond refill), watered-only growth, seasons, harvest with Luck quality, regrowing crops, eating, shipping bin |
 | 5 | 2 Gathering + smelting + upgrades | M | **done**: trees/stumps (axe), rocks and ore veins (pickaxe, hardness by tier), weeds and bushes (scythe) spawning in farm areas and regrowing daily; wood, stone, fibre, coal, 5 ores; smelting at Brom's furnace, weaving fibre at the crafting table; Copper to Mithril tool upgrades at Brom's (save v3) |
-| 6 | 3 Stats wiring (Warmth, buffs) | S | small once the loops exist |
+| 6 | 3 Stats wiring (Warmth, buffs) | S | **done**: `stat()` with food buffs, cooking at the hearth (8 dishes), winter/night cold vs Warmth, Charm selling bonus |
 | 7 | 4 Combat + mine | XL | Defence, Luck drops, the fantasy material sources |
 | 8 | 5 Magic | M | reuses the action system and spellcast art |
 | 9 | 6 Social and quests | L | Charm, rewards; ties progression together |

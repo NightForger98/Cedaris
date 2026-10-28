@@ -4,6 +4,7 @@
 ///   "c|<slot>|<catalog name>"  clothing or held item from the LPC catalog, e.g. "c|shirt|Longsleeve", "c|held|Hoe"
 ///   "m|<material>"             crafting material, e.g. "m|linen", "m|dragon_scale"
 ///   "d|<palette material>|<colour>"  dye that recolours equipment, e.g. "d|cloth|red", "d|metal|gold"
+///   "s|<crop>", "p|<crop>|<quality>"  seeds and produce (see farming); "f|<dish>" cooked food (see food)
 /// A stack is {id, count, pal} - pal is an optional palette name giving clothing its own colour.
 ///
 /// Stats: clothing gets its stats from the materials in its recipe (item_stats), and everything
@@ -132,6 +133,13 @@ function item_def(_id){
 				d = {id: _id, type: "produce", crop: ci, quality: q, max: 99, price: produce_price(ci, q) * 2, tier: q, stats: {},
 				     name: ["", "Silver ", "Gold "][q] + ct.name,
 				     desc: "Ship it, or hold it and use it to eat (+" + string(round(ct.energy * (1 + q * 0.4))) + " energy)."};
+			}
+			break;
+		case "f":
+			var dt = dish_def(p[1]);
+			if(dt != undefined){
+				d = {id: _id, type: "food", dish: dt, name: dt.name, max: 99, price: dish_price(dt), tier: 1, stats: {}, colour: dt.colour,
+				     desc: "Hold it and use it to eat: +" + string(dt.energy) + " energy, " + dish_buff_text(dt) + "."};
 			}
 			break;
 		case "d":
@@ -380,11 +388,11 @@ function item_shop_price(_id){
 	return 50;
 }
 
-/// @description What a stack sells for, per item.
+/// @description What a stack sells for, per item (shops and the shipping bin). Charm adds 1% per point, up to 20%.
 function item_sell_price(_id){
 	var d = item_def(_id);
-	if(d.type == "produce") return produce_price(d.crop, d.quality);
-	return max(1, floor(d.price / 2));
+	var base = (d.type == "produce") ? produce_price(d.crop, d.quality) : max(1, floor(d.price / 2));
+	return max(1, round(base * (1 + clamp(stat("charm") * 0.01, 0, 0.2))));
 }
 
 // ---------------------------------------------------------------- icons
@@ -438,6 +446,19 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			draw_set_colour(make_colour_rgb(120, 90, 55));
 			draw_roundrect_ext(cx - _size * 0.3, cy - _size * 0.36, cx + _size * 0.3, cy + _size * 0.36, 6, 6, true);
 			draw_sprite_stretched(spr_crops_picked, d.crop, cx - _size * 0.24, cy - _size * 0.26, _size * 0.48, _size * 0.48);
+			break;
+		case "food":
+			// A bowl of it, steaming
+			var bw = _size * 0.36;
+			draw_set_colour(merge_colour(d.colour, c_white, 0.6));
+			draw_line_width(cx - bw * 0.3, cy - _size * 0.12, cx - bw * 0.15, cy - _size * 0.32, 2);
+			draw_line_width(cx + bw * 0.2, cy - _size * 0.12, cx + bw * 0.35, cy - _size * 0.3, 2);
+			draw_set_colour(make_colour_rgb(110, 75, 45));
+			draw_ellipse(cx - bw, cy - _size * 0.08, cx + bw, cy + _size * 0.3, false);
+			draw_set_colour(d.colour);
+			draw_ellipse(cx - bw * 0.85, cy - _size * 0.1, cx + bw * 0.85, cy + _size * 0.08, false);
+			draw_set_colour(merge_colour(d.colour, c_white, 0.35));
+			draw_ellipse(cx - bw * 0.5, cy - _size * 0.07, cx - bw * 0.05, cy + _size * 0.0, false);
 			break;
 		case "dye":
 			// A little bottle filled with the palette's colours

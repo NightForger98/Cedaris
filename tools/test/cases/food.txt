@@ -1,0 +1,41 @@
+# Phase 3: winter cold drains energy outdoors, cooking at the hearth, food buffs, Charm selling bonus
+start story
+wait 60
+season 3
+time 9
+pos 700 470
+call autotest_vitals
+wait 600
+call autotest_vitals
+shot 01_cold
+# Cook carrot soup at the hearth: the plain carrots go first, the gold one stays
+give p|carrot|0 2
+give p|carrot|2 2
+room rm_12 496 392
+wait 30
+face n
+key e
+wait 10
+shot 02_hearth
+call autotest_station cook f|carrot_soup
+inv
+key esc
+wait 10
+# Eat it: +4 Warmth covers a winter day
+equip f|carrot_soup
+use 1
+call autotest_vitals
+room rm_1 700 470
+wait 30
+call autotest_vitals
+wait 600
+call autotest_vitals
+shot 03_buff
+# Charm raises selling prices: a potato sells for 80 at Charm 0
+call item_sell_price p|potato|0
+# The buff wears off at its time
+time 16
+wait 5
+call autotest_vitals
+shot 04_wore_off
+quit

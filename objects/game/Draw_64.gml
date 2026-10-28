@@ -93,6 +93,18 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 	ui_text(bx + 14, by + 20, weekday_name(global.clock.day) + " " + string(global.clock.day) + "  " + season_name(global.clock.season) + "  Y" + string(global.clock.year), 0.55, c.accent, fa_left);
 	ui_text(bx + 14, by + 54, clock_text(), 0.8, c_white, fa_left);
 
+	// Food buff under the clock: what it gives and how long it has left
+	var buff = food_buff();
+	if(buff != undefined){
+		var left = max(0, buff.until - global.clock.minutes);
+		draw_set_alpha(0.85);
+		draw_set_colour(c.panel);
+		draw_roundrect_ext(bx, by + 84, guiWidth - 14, by + 140, 10, 10, false);
+		draw_set_alpha(1);
+		ui_text(bx + 14, by + 101, dish_def(buff.dish).name, 0.48, make_colour_rgb(130, 200, 255), fa_left);
+		ui_text(bx + 14, by + 124, item_stats_text(buff.stats) + "   " + string(left div 60) + "h " + string(floor(left) mod 60) + "m", 0.42, c_white, fa_left);
+	}
+
 	// Energy and health, bottom right (vertical bars like Stardew)
 	var bars = [["E", global.vitals.energy / vitals_max_energy(), make_colour_rgb(110, 200, 90)],
 	            ["H", global.vitals.health / vitals_max_health(), make_colour_rgb(220, 70, 60)]];
@@ -108,6 +120,8 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 		ui_text((x1 + x2) / 2, y1 - 18, bars[i][0], 0.6, c_white);
 	}
 	if(vitals_exhausted()) ui_text(guiWidth - 64, guiHeight - 270, "Exhausted", 0.5, make_colour_rgb(230, 110, 90), fa_right);
+	// Too cold for what you're wearing: energy drains (warmer clothes or a warming dish fix it)
+	else if(climate_chill() > 0) ui_text(guiWidth - 100, guiHeight - 262, "Cold " + string(climate_cold()) + "  Warmth " + string(stat("warmth")), 0.5, make_colour_rgb(150, 200, 255), fa_right);
 
 	// Message line (day start, saves, warnings)
 	if(hudTime > 0) ui_text(guiWidth / 2, 110, hudMessage, 0.7, c_white);

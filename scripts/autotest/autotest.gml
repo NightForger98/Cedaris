@@ -15,6 +15,8 @@
 ///   wait <frames>             let the game run
 ///   time <hour>               set the clock (6-25)
 ///   gold <n>                  set gold
+///   season <0-3>              set the season
+///   equip <item id>           put that item on hotbar slot 10 and hold it
 ///   sleep                     sleep in bed (ends the day)
 ///   call <function> [args]    call a script function, e.g. call smelt m|copper (strings only)
 ///   log <text>                write a line to autotest/log.txt
@@ -130,6 +132,20 @@ function autotest_step(){
 			case "wait": t.wait = real(a[1]); break;
 			case "time": global.clock.minutes = real(a[1]) * 60; break;
 			case "gold": global.inv.gold = real(a[1]); break;
+			case "season": global.clock.season = real(a[1]); break;
+			case "equip":
+				// Move the first stack of an item onto hotbar slot 10 and hold it
+				for(var i = 0; i < INV_SIZE; i++){
+					var st = global.inv.slots[i];
+					if(st == undefined || st.id != a[1]) continue;
+					global.inv.slots[i] = global.inv.slots[9];
+					global.inv.slots[9] = st;
+					break;
+				}
+				global.inv.hotbar = 9;
+				inv_apply_look(global.look);
+				with(obj_plyr) look = global.look;
+				break;
 			case "sleep": sleep_now(false); t.wait = 150; break;
 			case "call":
 				var fn = asset_get_index(a[1]);
@@ -197,4 +213,11 @@ function autotest_spawn(_key, _gx, _gy){
 	array_push(objs, d);
 	resource_create_instance(d);
 	return _key;
+}
+
+/// @description Energy, warmth and the food buff, for logs.
+function autotest_vitals(){
+	var b = food_buff();
+	return "energy " + string_format(global.vitals.energy, 1, 1) + "/" + string(vitals_max_energy()) + "  cold " + string(climate_cold())
+	       + "  warmth " + string(stat("warmth")) + "  buff " + ((b == undefined) ? "none" : b.dish + " until " + string(b.until));
 }

@@ -1,7 +1,7 @@
 /// Time, energy/health, sleeping and the per-room world store (roadmap phase 0.3 - 0.5).
 ///
 /// global.clock  {minutes, day, season, year}   minutes since midnight: 360 = 6:00 am, 1560 = 2:00 am
-/// global.vitals {energy, health}
+/// global.vitals {energy, health, buff}   buff: the food buff (see the food script)
 /// global.world  {rooms: {<room name>: {crops: [{gx, gy, type, days}], tiles, objects: [resources], due, seeded}}}
 /// The new-day event (day_advance) grows crops, refills energy and health and autosaves; later systems hook in there.
 
@@ -13,7 +13,7 @@
 
 function world_time_new(){
 	global.clock = {minutes: DAY_START, day: 1, season: 0, year: 1};
-	global.vitals = {energy: 270, health: 100};
+	global.vitals = {energy: 270, health: 100, buff: undefined};
 	global.world = {rooms: {}};
 	global.vitals.energy = vitals_max_energy();
 	global.vitals.health = vitals_max_health();
@@ -57,20 +57,15 @@ function night_amount(){
 // ---------------------------------------------------------------- energy and health
 
 /// @description Max energy: 270 (as in Stardew) plus 10 per point of Stamina.
-function vitals_max_energy(){ return 270 + 10 * vitals_stat("stamina"); }
+function vitals_max_energy(){ return 270 + 10 * stat("stamina"); }
 function vitals_max_health(){ return 100; }
-
-function vitals_stat(_key){
-	if(!variable_global_exists("inv") || !is_struct(global.inv) || !variable_struct_exists(global.inv, "stats")) return 0;
-	return global.inv.stats[$ _key] ?? 0;
-}
 
 function vitals_exhausted(){ return global.vitals.energy <= 0; }
 
 /// @description Energy a tool swing costs: 2, minus 2% per point of Stamina (down to half), minus 10% per tool tier.
 function tool_energy_cost(_name = ""){
 	// Each tool upgrade saves another 10%
-	return 2 * (1 - clamp(vitals_stat("stamina") * 0.02, 0, 0.5)) * (1 - 0.1 * tool_tier(_name));
+	return 2 * (1 - clamp(stat("stamina") * 0.02, 0, 0.5)) * (1 - 0.1 * tool_tier(_name));
 }
 
 /// @description True for farm tools (they cost energy); weapons are free to swing, as in Stardew.
@@ -134,6 +129,7 @@ function day_advance(_passedOut){
 		lost = min(100, floor(global.inv.gold * 0.1));
 		global.inv.gold -= lost;
 	}
+	global.vitals.buff = undefined; // food buffs last the day (cleared first: a Stamina buff raises max energy)
 	global.vitals.energy = vitals_max_energy() * (_passedOut ? 0.5 : 1);
 	global.vitals.health = vitals_max_health();
 	return {lost: lost, died: died, paid: paid};

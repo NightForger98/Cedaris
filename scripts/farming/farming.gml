@@ -130,7 +130,7 @@ function farm_plant(_gx, _gy, _type){
 function farm_harvest(_inst){
 	var type = _inst.cropType;
 	var c = crop_table()[type];
-	var luck = vitals_stat("luck") * 0.01 + (global.clock[$ "luck"] ?? 0);
+	var luck = stat("luck") * 0.01 + (global.clock[$ "luck"] ?? 0);
 	var r = random(1);
 	var q = (r < 0.02 + luck) ? 2 : ((r < 0.12 + luck * 2) ? 1 : 0);
 	if(inv_add(item_stack("p|" + c.key + "|" + string(q))) > 0){ farm_message("Your inventory is full"); return; }

@@ -59,12 +59,14 @@ var pcx = (previewX1 + previewX2) / 2;
 ui_text(pcx, previewY1 + 20, global.look.race + " " + global.look.body, 0.55, c.dim);
 character_draw(global.look, floor(frame), 10, pcx - 128, previewY1 + 18, 4);
 // Total stats of everything worn (they stack)
-var st = inv.stats, keys = STAT_KEYS;
+// Stats right now: what you wear plus your food buff (buffed stats in blue)
+var keys = STAT_KEYS, buff = food_buff();
 for(var i = 0; i < array_length(keys); i++){
 	var col = i mod 4, row = i div 4;
 	var sx = previewX1 + 16 + col * 68 + (row == 1 ? 34 : 0), sy = previewY2 - 52 + row * 26;
-	var v = st[$ keys[i]];
+	var v = stat(keys[i]);
 	var vc = (v > 0) ? c.accent : ((v < 0) ? make_colour_rgb(230, 110, 90) : c.dim);
+	if(buff != undefined && (buff.stats[$ keys[i]] ?? 0) != 0) vc = make_colour_rgb(130, 200, 255);
 	var abbr = ["DEF", "WRM", "SPD", "STA", "LCK", "CHA", "MAG"];
 	ui_text(sx, sy, abbr[i] + " " + string(v), 0.45, vc, fa_left);
 }
@@ -119,7 +121,7 @@ if(shop && upgrades){
 		if(ui_button(panelX2 - 130, panelY1 + 10, panelX2 - 14, panelY1 + 42, "Upgrades", true, 0.5)){ upgrades = true; scroll = 0; }
 		hdrRight = panelX2 - 144;
 	}
-	var charm = inv.stats.charm;
+	var charm = stat("charm");
 	ui_text(hdrRight, panelY1 + 26, (charm > 0 && !inv_is_free()) ? "Charm discount " + string(min(30, charm)) + "%  -  right-click to sell" : "Right-click your items to sell", 0.45, c.dim, fa_right);
 	var stock = shopStock;
 	scroll = min(scroll, max(0, array_length(stock) * rowH - (listBottom - listTop)));
@@ -157,12 +159,13 @@ if(shop && upgrades){
 } else if(craft){
 	var title = "Crafting Table";
 	if(filter == "furnace") title = "Brom's Furnace";
+	else if(filter == "cook") title = "Hearth - cooking";
 	else if(filter == "weave") title += " - weaving";
 	else if(filter == "dye") title += " - dyes";
 	else if(filter != "") title += " - " + item_slot_label(filter);
 	ui_text(panelX1 + 16, panelY1 + 26, title, 0.8, c.accent, fa_left);
 	if(fixedFilter){
-		ui_text(panelX2 - 16, panelY1 + 26, "Click a bar to smelt it from ore and coal", 0.42, c.dim, fa_right);
+		ui_text(panelX2 - 16, panelY1 + 26, (filter == "cook") ? "Click a dish to cook it. Any quality of produce will do" : "Click a bar to smelt it from ore and coal", 0.42, c.dim, fa_right);
 	} else if(filter != ""){
 		if(ui_button(panelX2 - 110, panelY1 + 10, panelX2 - 14, panelY1 + 42, "Show all", true, 0.5)){ filter = ""; scroll = 0; }
 	} else {
@@ -198,6 +201,18 @@ if(shop && upgrades){
 			draw_set_colour(mats[m].colour);
 			draw_roundrect_ext(cx2 - 16, y1 + rowH / 2 - 9, cx2, y1 + rowH / 2 + 7, 4, 4, false);
 			cx2 -= 26;
+		}
+		// Cooking ingredients: produce of any quality, shown as the crop
+		var keys = variable_struct_get_names(rc.cost);
+		array_sort(keys, false);
+		for(var k = 0; k < array_length(keys); k++){
+			if(string_pos("p|", keys[k]) != 1) continue;
+			var need = rc.cost[$ keys[k]];
+			var col = (cost_count(keys[k]) >= need || inv_is_free()) ? c_white : make_colour_rgb(230, 110, 90);
+			ui_text(cx2, y1 + rowH / 2, string(need), 0.5, col, fa_right);
+			cx2 -= 20;
+			item_draw_icon(item_stack(cost_item_id(keys[k])), cx2 - 30, y1 + rowH / 2 - 15, 30, body);
+			cx2 -= 40;
 		}
 		if(over && mouse_check_button_pressed(mb_left) && cursor == undefined){
 			var why = inv_craft(rc.id, rc.cost);
@@ -242,6 +257,7 @@ if(tip != undefined && cursor == undefined){
 			break;
 		case "material": array_push(lines, "Material"); break;
 		case "dye":      array_push(lines, "Dye"); break;
+		case "food":     array_push(lines, "Food"); break;
 	}
 	if(tierLine != "") lines[1] = tierLine + " " + string_lower(lines[1]);
 	var statLine = item_stats_text(d.stats);

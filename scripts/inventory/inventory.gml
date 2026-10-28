@@ -216,14 +216,14 @@ function inv_stats(){
 
 /// @description Walking speed multiplier from the Speed stat: +5% per point, between -30% and +40%.
 function inv_speed_multiplier(){
-	if(!variable_global_exists("inv") || !is_struct(global.inv) || !variable_struct_exists(global.inv, "stats")) return 1;
-	return 1 + clamp(global.inv.stats.speed * 0.05, -0.3, 0.4);
+	if(!variable_global_exists("inv") || !is_struct(global.inv)) return 1;
+	return 1 + clamp(stat("speed") * 0.05, -0.3, 0.4);
 }
 
 /// @description A shop price after the Charm discount: 1% off per point, up to 30%.
 function inv_charmed_price(_price){
 	if(inv_is_free()) return 0;
-	var charm = variable_struct_exists(global.inv, "stats") ? global.inv.stats.charm : 0;
+	var charm = stat("charm");
 	return max(1, round(_price * (1 - clamp(charm * 0.01, 0, 0.3))));
 }
 
@@ -232,12 +232,12 @@ function inv_recipe_ok(_r, _look){
 	return character_item_fits(_r.cat, _look.body) && character_race_allows(character_race(_look.race), _r.slot, _r.cat);
 }
 
-/// @description True if the player has the materials (always true in free mode).
+/// @description True if the player has the materials, or produce for cooking (always true in free mode).
 function inv_can_afford(_cost){
 	if(inv_is_free()) return true;
 	var names = variable_struct_get_names(_cost);
 	for(var i = 0; i < array_length(names); i++){
-		if(inv_count("m|" + names[i]) < _cost[$ names[i]]) return false;
+		if(cost_count(names[i]) < _cost[$ names[i]]) return false;
 	}
 	return true;
 }
@@ -247,7 +247,7 @@ function inv_craft(_id, _cost){
 	if(!inv_can_afford(_cost)) return "Not enough materials";
 	if(!inv_is_free()){
 		var names = variable_struct_get_names(_cost);
-		for(var i = 0; i < array_length(names); i++) inv_take("m|" + names[i], _cost[$ names[i]]);
+		for(var i = 0; i < array_length(names); i++) cost_take(names[i], _cost[$ names[i]]);
 	}
 	if(inv_add(item_stack(_id, 1)) > 0) return "Your inventory is full";
 	return "";

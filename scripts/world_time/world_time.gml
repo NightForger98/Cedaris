@@ -45,7 +45,7 @@ function clock_tick(){
 }
 
 /// @description Rooms that get the day/night tint.
-function room_is_outdoors(){ return room == rm_1 || room == rm_2 || room == rm_forest || room == rm_town || room == rm_beach || room == rm_valley; }
+function room_is_outdoors(){ return room == rm_1 || room == rm_2 || room == rm_forest || room == rm_town || room == rm_beach || room == rm_valley || room == rm_north; }
 
 /// @description Darkness 0-1: evening from 6 pm, full night by 10 pm, light again by 7 am.
 function night_amount(){

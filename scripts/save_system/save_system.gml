@@ -21,6 +21,7 @@ function save_room_name(_roomName){
 		case "rm_town": return "Brindlemoor";
 		case "rm_beach": return "Saltmere Coast";
 		case "rm_valley": return "Hollow Vale";
+		case "rm_north": return "North Road";
 		default:
 			// Houses take their place's name
 			if(string_pos("rm_town_", _roomName) == 1) return "Brindlemoor";

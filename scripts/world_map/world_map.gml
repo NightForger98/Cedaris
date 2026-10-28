@@ -6,7 +6,7 @@
 function world_map(){
 	static t = {
 		scale: 0.25, w: 1744, h: 1056,
-		rooms: {rm_1: [400, 368, 480, 320], rm_2: [896, 368, 448, 400], rm_town: [268, 0, 512, 352], rm_beach: [0, 368, 384, 320], rm_valley: [408, 704, 480, 352], rm_forest: [1360, 368, 384, 240]},
+		rooms: {rm_1: [400, 368, 480, 320], rm_2: [896, 368, 448, 400], rm_town: [268, 0, 512, 352], rm_beach: [0, 368, 384, 320], rm_valley: [408, 704, 480, 352], rm_north: [796, 0, 544, 352], rm_forest: [1360, 368, 384, 240]},
 		inside: {rm_12: [468, 500], rm_village_elda: [964, 468], rm_village_smithy: [972, 612], rm_village_store: [1092, 628], rm_village_hesta: [988, 732], rm_village_rowan: [1092, 732], rm_town_inn: [532, 76], rm_town_home_nw: [336, 92], rm_town_outfitter: [712, 92], rm_town_apothecary: [336, 204], rm_town_home_e: [712, 204], rm_town_home_sw: [352, 316], rm_town_home_se: [680, 316], rm_beach_hut: [308, 476], rm_valley_ranch: [492, 780], rm_valley_carpentry: [660, 796], rm_123: [468, 500], rm_mine: [600, 410]},
 		buildings: [
 			{room: "rm_12", rect: [416, 424, 104, 80]},

@@ -20,8 +20,8 @@ module.exports = {
 		"................................................................",
 		"...............................:::..............................",
 		"...............................:::..............................",
-		".......::::::::::::::::::::::::::::::::::::::::::::::::::.......",
-		".......::::::::::::::::::::::::::::::::::::::::::::::::::.......",
+		".......:::::::::::::::::::::::::::::::::::::::::::::::::::::::::",
+		".......:::::::::::::::::::::::::::::::::::::::::::::::::::::::::",
 		"................::::::::::::::::::::::::::::::::................",
 		"................::::::::::::::::::::::::::::::::................",
 		"................::::::::::::::::::::::::::::::::................",
@@ -72,7 +72,7 @@ module.exports = {
 		// Gardens and the edges of town
 		{is: "clothesline", at: [9, 15]}, {is: "clothesline", at: [52, 29]},
 		{is: "oak", at: [16, 1]}, {is: "pine", at: [20, 2]}, {is: "oak", at: [41, 1]}, {is: "pine", at: [45, 3]},
-		{is: "bush_big", at: [0, 13]}, {is: "bush_big2", at: [60, 13]}, {is: "oak", at: [61, 27]}, {is: "pine", at: [0, 26]},
+		{is: "bush_big", at: [0, 13]}, {is: "bush_big2", at: [60, 16]}, {is: "oak", at: [61, 27]}, {is: "pine", at: [0, 26]},
 		{is: "oak", at: [18, 34]}, {is: "pine", at: [24, 33]}, {is: "sapling", at: [27, 35]}, {is: "oak", at: [36, 34]},
 		{is: "pine", at: [40, 33]}, {is: "sapling", at: [36, 30]}, {is: "bush_big", at: [19, 29]}, {is: "bush_big2", at: [41, 29]},
 		{is: "pine", at: [0, 40]}, {is: "oak", at: [59, 40]}, {is: "pine", at: [62, 37]},
@@ -85,6 +85,9 @@ module.exports = {
 	instances: [
 		{obj: "obj_plyr", x: 1024, y: 1320},
 		{obj: "camera", x: 1024, y: 1320},
+		// East along the lane to North Road (rm_north)
+		{obj: "obj_transition", x: 2040, y: 416, sx: 1, sy: 4,
+		 code: "targetRoom = rm_north;\ntargetX = 64;\ntargetY = 416;\nPlayerFacingBefore = dir.right;\nPlayerFacingAfter = dir.right;"},
 		// Down the main street to the ladder onto the farm
 		{obj: "obj_transition", x: 1024, y: 1392, sx: 8, sy: 2,
 		 code: "targetRoom = rm_1;\ntargetX = 496;\ntargetY = 152;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},

@@ -2,6 +2,21 @@
 
 A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/NightForger98/HarvestValley (branch `main`).
 
+## README
+
+**Harvest Valley** is a Stardew-like farming RPG in GameMaker LTS 2026. You inherit your grandmother's farm in a valley:
+grow crops, keep animals, mine and fight down a generated mine, learn magic, fish, cook, craft and dye clothes, and
+befriend the people of the village, the town of Brindlemoor, the coast and the vale, who live their own days.
+
+- **Run it**: open `NewHarvest.yyp` in GameMaker LTS 2026, or `./build.sh run` from Git Bash (see Working on it).
+- **Controls**: arrows move (Shift runs, Ctrl walks); left click or Space uses the held tool; 1-9, 0 pick the hotbar
+  slot; E talks / uses (in a dialogue: G gives what you hold, T trades or tells you the shop's hours); I inventory;
+  M world map; F casts with a staff, Q changes spell; Esc pauses; Insert toggles debug mode.
+- **The world**: the farm is the hub; Brindlemoor (north, up the ladder), the village (east, with Whisperwood beyond
+  the river), the Saltmere Coast (west) and Hollow Vale (south). Map and who lives where: `docs/LEVELS.md`.
+- **The plan**: `docs/ROADMAP.md` (done), `docs/MILESTONES.md` (next), `docs/PROGRESSION.md` (items and stats).
+- **Art**: LPC (CC-BY-SA / GPL / OGA-BY), credited in `LPC_CREDITS.csv` and in game.
+
 ## Working on it
 
 - **Build / check**: `./build.sh` (Git Bash) compiles with GameMaker's Igor and prints compiler errors; `./build.sh run`
@@ -29,7 +44,7 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - `docs/PROGRESSION.md` - items, materials, recipes, dyes, stats, and the hooks for quests.
 - `docs/LEVELS.md` - **the level creation plan** (agreed): towns and the farm are designed rooms; the mine is
   generated at runtime in GML, seeded per floor. Not a WFC/Python pipeline - read why before proposing one.
-- **Built rooms**: the farm and village come from specs in `tools/rooms/specs/` (text map + things + instances):
+- **Built rooms**: every room but the mine and the forest comes from a spec in `tools/rooms/specs/` (text map + things + instances):
   `node tools/rooms/build.js rm_1` rewrites the room file - edit the spec, never the built `.yy` (see
   `tools/rooms/README.md`). Named spots live in the specs and reach GML through `layout_point`/`layout_area`
   (`scripts/room_layout`, generated). GameMaker's `.yy` reader needs keys in alphabetical order.
@@ -50,7 +65,7 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
   Rooms built at runtime keep walls and water in the `global.mineWalls` tilemap (see `collision_solids`).
 - Placed things (sprinklers): `placeables` (`obj_placeable`, items `o|<kind>`, saved in `world_room().placed`).
 - Fishing: `fishing` (`fish_table`, `obj_fishing` is the bite minigame; the rod's hit calls `fishing_cast`).
-- Animals: `animals` (`obj_animal` in the farm's meadow, crates `n|<kind>` from Thorne, products `a|<product>`).
+- Animals: `animals` (`obj_animal` in the farm's meadow, crates `n|<kind>` from Wren's ranch, products `a|<product>`).
 - Festivals: `festivals` (one a season in the village; the board gets a Festival page; `obj_festival_decor`).
 - People and quests: `people` (villagers, friendship, gifts; `obj_dialogue`; shopkeepers' stock: `people_trade`), `quests` (`obj_quest_board` in the
   village). Where everyone lives, works and goes all day: `schedules` (`villager_routines`: homes, shop hours, days
@@ -70,3 +85,38 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - Data tables over code (crops, materials, recipes, races, shop stock).
 - Comment the why, match surrounding style; commit with a clear message and push to `main` when a step is done.
 - LPC art licences (CC-BY-SA / GPL / OGA-BY): keep `LPC_CREDITS.csv` and the in-game credits up to date.
+
+## Handoff
+
+Where things stood at the end of the last session (2026-10-28), and what to know before picking it up.
+
+**Done that session** (all pushed to `main`, newest last):
+- `cb00317` A new game no longer starts the player stuck in Brom's furnace.
+- `cbf6186` The room builder (`tools/rooms`): rooms are written from text specs instead of the room editor.
+- `60843fc` The farmhouse (layering fixed, bed upstairs), and Brindlemoor, the coast and the vale around the farm.
+- `e58c93e` / `b1f4cd3` Brindlemoor's interiors (`tools/rooms/interior.js`): the inn, outfitter, apothecary, homes.
+- `fe24c60` Villagers always wear everyday clothes (`villager_wardrobe` in `people`).
+- `bb48748` Schedules and the world map: everyone has a home, a job or routine and a day off; shops trade only
+  in hours; nobody lives on the farm (Brom's smithy and Mara's store moved to the village, Wren's ranch and Thorne's
+  carpentry are in the vale, Marlo has a hut); M opens the world map with house tooltips. All 21 test cases passed.
+
+**How the new parts fit**:
+- After changing a room spec: `node tools/rooms/build.js <room>` (also rewrites `scripts/room_layout` and
+  `scripts/room_walk`, and warns if a named spot can't be reached from the door). After changing an outdoor room,
+  also `node tools/rooms/worldmap.js` (the map sprite and `scripts/world_map`).
+- A new villager needs an entry in `villager_table` (`people`: looks, lines, gifts) and in `villager_routines`
+  (`schedules`: home, work hours and day off, routine), and named spots in the room specs they use. A new house is a
+  house thing in an outdoor spec with an `obj_transition` at its door, plus an interior spec; `building_label` names
+  it on the map (add a noun there for a shop).
+- Counters are two cells tall: leave a gap so the keeper can get out (the builder's reach check catches it).
+- Villagers are positions computed from the clock (`villager_where`); nothing about them is saved.
+
+**Known gaps / ideas for next**:
+- Doors aren't locked at night; shops just won't trade out of hours.
+- Villagers walk through the player and each other; rain doesn't change their day; no seasonal or heart-event
+  schedule variants yet.
+- Brom's and Mara's counters and the furnace use placeholder interior art; the map shows Whisperwood as generic woods.
+- `obj_npc_man` is an old unused object; `rm_3` is an empty unused room.
+
+**Working with the user**: they want recommendations acted on without asking first ("if you recommend something go
+ahead with it"); they always choose Reload in GameMaker; end each step with a commit and push to `main`.

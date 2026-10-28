@@ -17,6 +17,9 @@ function save_room_name(_roomName){
 		case "rm_2": return "Village";
 		case "rm_mine": return "The Mine";
 		case "rm_forest": return "Whisperwood";
+		case "rm_town": return "Brindlemoor";
+		case "rm_beach": return "Saltmere Coast";
+		case "rm_valley": return "Hollow Vale";
 		default:     return "Indoors";
 	}
 }

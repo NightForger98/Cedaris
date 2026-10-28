@@ -107,7 +107,11 @@ function thingGrids(def){
 		for(let x = 0; x < w; x++) row.push((def.skip || []).some(([sx, sy]) => sx === x && sy === y) ? 0 : tileIndex(ts, c + x, r + y));
 		tiles.push(row);
 	}
-	return {w, h, layers: [{tileset: ts, tiles}]};
+	// repeat: [nx, ny] tiles the rectangle (a pier of planks, a long fence)
+	const [nx, ny] = def.repeat || [1, 1];
+	const big = [];
+	for(let j = 0; j < h * ny; j++) big.push(Array.from({length: w * nx}, (_, i) => tiles[j % h][i % w]));
+	return {w: w * nx, h: h * ny, layers: [{tileset: ts, tiles: big}]};
 }
 
 // Recolour a stamp by moving tiles in a block of the tileset by some rows (the cottage kit repeats its walls and
@@ -182,10 +186,13 @@ function build(roomName, opts = {}){
 	const solid = new Uint8Array(W * H), water = new Uint8Array(W * H), busy = new Uint8Array(W * H);
 
 	// Ground: the base terrain everywhere, then each terrain over it, in the order of T.terrains
-	const base = T.terrains[spec.base || "grass"];
-	const g = layers.get("ground", base.tileset, 0, "Ground");
-	const bf = base.fill || [[base.block[0] + 1, base.block[1] + 3]];
-	for(let i = 0; i < W * H; i++){ const [c, r] = bf[Math.floor(rand() * bf.length)]; g.tiles[i] = tileIndex(base.tileset, c, r); }
+	// (base: "none" for interiors, whose floors come with their stamps)
+	if(spec.base !== "none"){
+		const base = T.terrains[spec.base || "grass"];
+		const g = layers.get("ground", base.tileset, 0, "Ground");
+		const bf = base.fill || [[base.block[0] + 1, base.block[1] + 3]];
+		for(let i = 0; i < W * H; i++){ const [c, r] = bf[Math.floor(rand() * bf.length)]; g.tiles[i] = tileIndex(base.tileset, c, r); }
+	}
 	Object.entries(T.terrains).forEach(([tname, def], ti) => {
 		if(tname === (spec.base || "grass")) return;
 		const has = (x, y) => (cellDef(x, y).terrain || "") === tname || (cellDef(x, y).under || []).includes(tname);
@@ -268,7 +275,14 @@ function build(roomName, opts = {}){
 
 	// Write the room: views and settings kept from the existing room, layers replaced
 	const file = `rooms/${roomName}/${roomName}.yy`;
-	const room = readYy(fs.existsSync(path.join(root, file)) ? file : "rooms/rm_2/rm_2.yy");
+	// A new room starts from the village's settings (views, physics) and is registered in the project
+	const isNew = !fs.existsSync(path.join(root, file));
+	const room = readYy(isNew ? "rooms/rm_2/rm_2.yy" : file);
+	if(isNew){
+		room["%Name"] = room.name = roomName;
+		room.creationCodeFile = "";
+		if(!opts.preview) registerRoom(roomName);
+	}
 	room.roomSettings.Width = W * CELL;
 	room.roomSettings.Height = H * CELL;
 	const instLayer = Object.assign(layerBase("GMRInstanceLayer", "Instances", 1000), {instances: insts});
@@ -309,6 +323,18 @@ function build(roomName, opts = {}){
 	fs.mkdirSync(path.join(root, "build", "rooms"), {recursive: true});
 	writePng(path.join(root, "build", "rooms", roomName + ".png"), img);
 	console.log(`${roomName}: ${W}x${H} cells, ${layers.list.length} tile layers, ${cols.length} collision boxes, ${insts.length} instances`);
+}
+
+// Add a new room to NewHarvest.yyp: its resource entry and its place in the room order (after the others)
+function registerRoom(name){
+	const yypPath = path.join(root, "NewHarvest.yyp");
+	let yyp = fs.readFileSync(yypPath, "utf8");
+	const nl = yyp.includes("\r\n") ? "\r\n" : "\n";
+	const ref = `{"name":"${name}","path":"rooms/${name}/${name}.yy",}`;
+	if(!yyp.includes(`{"id":${ref},}`)) yyp = yyp.replace('"resources":[' + nl, '"resources":[' + nl + `    {"id":${ref},},` + nl);
+	if(!yyp.includes(`{"roomId":${ref},}`)) yyp = yyp.replace(/("RoomOrderNodes":\[[\s\S]*?)(\s*\],)/, (m, a, b) => a + nl + `    {"roomId":${ref},},` + b);
+	fs.writeFileSync(yypPath, yyp);
+	fs.mkdirSync(path.join(root, "rooms", name), {recursive: true});
 }
 
 // scripts/room_layout: every spec's named points and areas, for scripts that need to know where things are

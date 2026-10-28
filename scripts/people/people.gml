@@ -63,6 +63,33 @@ function villager_table(){
 		                ["Can I hold your sword? Just for a second?", "I counted all the chickens. There aren't any. We need chickens.", "Bring me a feather! A big one!"],
 		                ["You're the coolest cousin ever.", "When I grow up I'm going to dig to floor thirty. Like you.", "I made you a map of the house. It's mostly the kitchen."]],
 		        rewards: [["m|feather", 5], ["d|cloth|sky", 1], ["m|gem", 1], ["d|cloth|red", 1], ["m|void_pearl", 1]]},
+		// Brindlemoor, the town up the cliff path north of the farm
+		lysa:  {name: "Lysa", title: "the Innkeeper", room: "rm_town", slot: "woman", race: "Human", body: "female", seed: 4101,
+		        loves: ["f|veg_stew", "f|gourd_pie", "x|salmon"], likes: ["f|", "p|", "x|"], dislikes: ["m|bone", "m|coal"], hates: ["m|troll_hide"],
+		        lines: [["Welcome to Brindlemoor! Mind the cobbles, they bite ankles.", "The inn's always got a pot on. Usually.", "Farmers come up the ladder with the best appetites."],
+		                ["You again! The usual? We don't have a usual. We should.", "Garrick says the road west is all salt and gulls now.", "A traveller paid me in fish once. Best tip I ever had."],
+		                ["You're practically family at this inn.", "I've kept a room for you, if you ever want to stay in town.", "Here - my grandmother's recipe. Don't tell a soul."]],
+		        rewards: [["f|veg_stew", 2], ["d|cloth|rose", 1], ["m|wool", 6], ["d|cloth|teal", 1], ["m|gem", 2]]},
+		garrick:{name: "Garrick", title: "the Watchman", room: "rm_town", slot: "man", race: "Dwarf", body: "male", seed: 4202,
+		        loves: ["m|iron", "m|steel", "f|fiery_chilli"], likes: ["m|", "f|"], dislikes: ["p|artichoke"], hates: ["m|silk", "m|pixie_dust"],
+		        lines: [["Halt! Oh. Just a farmer. Carry on.", "Nothing gets past me. Except pigeons.", "Quiet night. I like quiet nights."],
+		                ["You walk like someone who's been down a mine. Respect.", "Saw lights over the sea again. Don't like it.", "Brom makes a fine blade. Tell him I said so. Don't."],
+		                ["If trouble ever follows you up that ladder, I'll be waiting for it.", "You've earned the town's trust. Mine too.", "Take this. A watchman's spare. Keep it sharp."]],
+		        rewards: [["m|iron", 5], ["d|cloth|charcoal", 1], ["m|coal", 10], ["d|cloth|maroon", 1], ["m|steel", 3]]},
+		// The Saltmere Coast, west of the farm
+		marlo: {name: "Old Marlo", title: "the Fisher", room: "rm_beach", slot: "man", race: "Human", body: "male", seed: 5101,
+		        loves: ["x|mooneel", "x|seabass", "f|grilled_perch"], likes: ["x|", "f|"], dislikes: ["p|potato"], hates: ["m|ember_core"],
+		        lines: [["Fish don't care how early you got up. But it helps.", "Cast past the end of the pier. That's where the big ones sulk.", "Salt in the air, salt in the beard."],
+		                ["You've got patience. The sea likes that.", "Eels come up at night when the moon's on the water.", "Crabs walk sideways 'cause they're shy. Like me."],
+		                ["You're a better fisher than I was at your age. Don't let it go to your head.", "This old rod caught a whale. Well. A big sardine.", "The sea gives back to those who wait. Here."]],
+		        rewards: [["x|sardine", 5], ["d|cloth|sky", 1], ["m|leather", 5], ["d|cloth|teal", 1], ["x|mooneel", 1]]},
+		// Hollow Vale, through the woods south of the farm
+		wren:  {name: "Wren", title: "the Shepherd", room: "rm_valley", slot: "woman", race: "Halfling", body: "teen", seed: 6101,
+		        loves: ["m|wool", "w|herb", "f|carrot_soup"], likes: ["p|", "w|", "m|fibre"], dislikes: ["m|coal"], hates: ["m|bone", "m|troll_hide"],
+		        lines: [["The vale's quiet. That's why I like it.", "My sheep wander off. I wander after them. It works.", "Herbs grow thick by the river. Help yourself."],
+		                ["You came all the way down here again? You must like the view.", "The old willows by the bridge are older than the town.", "If you hear singing in the trees, don't follow it."],
+		                ["You're always welcome at my hut, rain or shine.", "I spun this from the softest fleece I had. For you.", "The vale knows you now. It'll look after you."]],
+		        rewards: [["m|wool", 8], ["d|cloth|green", 1], ["w|herb", 5], ["d|cloth|lavender", 1], ["m|unicorn_hair", 1]]},
 	};
 	return t;
 }

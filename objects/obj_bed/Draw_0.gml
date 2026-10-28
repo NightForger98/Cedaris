@@ -1,5 +1,5 @@
 /// @description Draw the bed and the prompt
-draw_sprite_part(spr_tile_interior, 0, 672, 12, 64, 84, x - 32, y - 48);
+if(art) draw_sprite_part(spr_tile_interior, 0, 672, 12, 64, 84, x - 32, y - 48);
 if(near){
 	draw_set_font(fnt_eq);
 	draw_set_halign(fa_center);

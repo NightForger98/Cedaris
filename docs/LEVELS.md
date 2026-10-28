@@ -36,13 +36,33 @@ We're not doing that, because:
 
 ### The world so far
 
-- **Farm** (`rm_1`, 60x40): cliff with the mine's cave along the north, Brom's smithy yard by it; farmhouse in
-  the west (door to `rm_12`); the field in the middle; pond in the north-east; fenced pasture in the south-east;
-  woods along the south. The road east goes to the village.
-- **Village** (`rm_2`, 56x36): the hall on the north side of a cobbled square (notice board by its door);
-  Elda's house in the north-west, Thorne's and a neighbour's on a lane in the south; the road west to the farm;
-  the river down the east side with the bridge to Whisperwood.
-- Not built yet: house interiors beyond `rm_12`/`rm_123`, a town. `rm_3` is an empty test room nothing leads to.
+The farm is the middle of the map; a way out on each side:
+
+```
+                     Brindlemoor (rm_town)
+                            | ladder up the cliff
+  Saltmere Coast  ----   The Farm (rm_1)   ----  Village (rm_2)  ----  Whisperwood (rm_forest)
+   (rm_beach)    road       |  door  \ cave         road            bridge (a village project)
+                            |   rm_12 <-> rm_123   rm_mine
+                     Hollow Vale (rm_valley)
+                         path through the woods
+```
+
+- **Farm** (`rm_1`, 60x40): the cliff along the north with the ladder up to town and the mine's cave, Brom's
+  smithy yard by it; farmhouse in the west; the field in the middle; pond in the north-east; fenced pasture in the
+  south-east; woods along the south with a path through them. Roads east (village) and west (coast).
+- **Farmhouse** (`rm_12` downstairs: kitchen, dining room, the hearth, Hesta and Tobin; `rm_123` upstairs: your
+  bedroom - `BED_ROOM`, you wake up there). Furnished stamps from the first versions; all furniture is under the
+  player and solid over its art.
+- **Village** (`rm_2`, 56x36): the hall on a cobbled square (notice board), Elda's and Thorne's houses, the river
+  with the bridge to Whisperwood.
+- **Brindlemoor** (`rm_town`, 64x44): the town hall over a big market square, six houses; Lysa the innkeeper and
+  Garrick the watchman.
+- **Saltmere Coast** (`rm_beach`, 48x40): sea, a beach, a pier to fish from (sea fish); Old Marlo the fisher.
+- **Hollow Vale** (`rm_valley`, 60x44): Wren the shepherd's hut, a river with a bridge, a lake (river fish), wood
+  and forage on both banks.
+- Next: interiors for the town's houses (the doors are art only), more people, and shops in the town.
+  `rm_3` is an empty test room nothing leads to.
 
 ## Generated rooms: the mine (roadmap phase 4)
 

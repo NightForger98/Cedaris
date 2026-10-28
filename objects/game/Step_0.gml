@@ -80,7 +80,7 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 
 	// Debug (Insert): Page Up / Page Down hop between play rooms
 	if(debug && (keyboard_check_pressed(vk_pageup) || keyboard_check_pressed(vk_pagedown))){
-		var rooms = [rm_1, rm_2, rm_3, rm_12, rm_123, rm_mine, rm_forest];
+		var rooms = [rm_1, rm_2, rm_12, rm_123, rm_town, rm_beach, rm_valley, rm_mine, rm_forest];
 		var n = array_length(rooms);
 		var i = array_get_index(rooms, room);
 		spawnRoom = -1; // use the room's own player position

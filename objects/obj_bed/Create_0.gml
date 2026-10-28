@@ -6,4 +6,5 @@ image_xscale = 3.75;
 image_yscale = 4.25;
 event_inherited();
 near = false;
+art = true; // false where the room's tiles already show a bed (set in the room)
 sorted = false;

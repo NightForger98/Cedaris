@@ -5,6 +5,9 @@
 // LPC terrain blocks: 3 cells wide, 6 tall, top-left at "block" (see autotile in build.js). Drawn in this order,
 // later ones over earlier ones. "fill" lists the cells used for the middle (picked at random for variety).
 const terrains = {
+	// The coast: the open sea (a fill, used as the coast's base) and sand meeting it (an LPC block of sand on water)
+	sea:   {tileset: "TS_terrain", block: [3, 9],  fill: [[5, 14]]},
+	shore: {tileset: "TS_terrain", block: [3, 9],  fill: [[4, 12]]},
 	grass: {tileset: "TS_terrain", block: [21, 0], fill: [[21, 5], [22, 5], [23, 5], [22, 3], [22, 3], [22, 3]]},
 	dirt:  {tileset: "TS_terrain", block: [15, 0], fill: [[16, 3]]},
 	path:  {tileset: "TS_terrain", block: [18, 0], fill: [[19, 3]]},

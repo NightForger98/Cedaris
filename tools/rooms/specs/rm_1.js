@@ -7,10 +7,10 @@
 module.exports = {
 	seed: 11,
 	map: [
-		"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-		"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-		"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-		"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+		"XXXXXXXXXXXXXXX,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+		"XXXXXXXXXXXXXXX,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+		"XXXXXXXXXXXXXXX,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+		"XXXXXXXXXXXXXXX,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
 		",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
 		",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
 		",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
@@ -24,8 +24,8 @@ module.exports = {
 		"............................................................",
 		"............................................................",
 		"............................................................",
-		".,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
-		".,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
+		",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
+		",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
 		".,,,,,,,,,,,,,,,,,..........................................",
 		"............................................................",
 		"..................========================..................",
@@ -39,19 +39,19 @@ module.exports = {
 		"..................========================..................",
 		"..................========================..................",
 		"..................========================..................",
-		"............................................................",
-		"............................................................",
-		"............................................................",
-		"............................................................",
-		"............................................................",
-		"............................................................",
-		"............................................................",
-		"............................................................",
+		"......................,,....................................",
+		"......................,,....................................",
+		"......................,,....................................",
+		"......................,,....................................",
+		"......................,,....................................",
+		"......................,,....................................",
+		"......................,,....................................",
+		"......................,,....................................",
 	],
 
 	things: [
-		// The cliff along the north edge, with the cave in it
-		{is: "cliff", at: [0, 0]}, {is: "cliff", at: [12, 0]}, {is: "cliff_cave", at: [24, 0]},
+		// The cliff along the north edge: the ladder up to Brindlemoor (the town), and the cave into the mine
+		{is: "cliff", at: [0, 0]}, {is: "cliff_ladder", at: [12, 0]}, {is: "cliff", at: [18, 0]}, {is: "cliff_cave", at: [24, 0]},
 		{is: "cliff", at: [26, 0]}, {is: "cliff", at: [38, 0]}, {is: "cliff", at: [50, 0]},
 
 		// Home
@@ -76,7 +76,7 @@ module.exports = {
 		// Woods along the south edge, and a few trees around the edges
 		{is: "pine", at: [0, 34]}, {is: "oak", at: [2, 35]}, {is: "pine", at: [5, 33]}, {is: "oak", at: [8, 36]},
 		{is: "pine", at: [11, 34]}, {is: "sapling", at: [13, 36]}, {is: "oak", at: [15, 35]}, {is: "pine", at: [18, 34]},
-		{is: "oak", at: [21, 36]}, {is: "pine", at: [24, 34]}, {is: "oak", at: [27, 35]}, {is: "pine", at: [30, 33]},
+		{is: "oak", at: [19, 36]}, {is: "pine", at: [25, 35]}, {is: "oak", at: [27, 35]}, {is: "pine", at: [30, 33]},
 		{is: "sapling", at: [33, 36]}, {is: "oak", at: [35, 35]}, {is: "pine", at: [38, 34]}, {is: "oak", at: [41, 36]},
 		{is: "pine", at: [44, 35]}, {is: "oak", at: [47, 35]}, {is: "pine", at: [50, 34]}, {is: "oak", at: [53, 36]},
 		{is: "pine", at: [56, 34]}, {is: "pine", at: [58, 35]},
@@ -101,9 +101,16 @@ module.exports = {
 		{obj: "obj_npc_womantest", x: 1350, y: 560},
 		// The farmhouse door, the road to the village
 		{obj: "obj_transition", x: 272, y: 528, sx: 2, sy: 1,
-		 code: "targetRoom = rm_12;\ntargetX = 350;\ntargetY = 570;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
+		 code: "targetRoom = rm_12;\ntargetX = 160;\ntargetY = 472;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
 		{obj: "obj_transition", x: 1912, y: 576, sx: 1, sy: 4,
 		 code: "targetRoom = rm_2;\ntargetX = 48;\ntargetY = 576;\nPlayerFacingBefore = dir.right;\nPlayerFacingAfter = dir.right;"},
+		// Up the ladder to Brindlemoor, the road west to the coast, the path south to Hollow Vale
+		{obj: "obj_transition", x: 496, y: 16, sx: 2, sy: 2,
+		 code: "targetRoom = rm_town;\ntargetX = 1024;\ntargetY = 1320;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
+		{obj: "obj_transition", x: 8, y: 576, sx: 1, sy: 4,
+		 code: "targetRoom = rm_beach;\ntargetX = 1480;\ntargetY = 576;\nPlayerFacingBefore = dir.left;\nPlayerFacingAfter = dir.left;"},
+		{obj: "obj_transition", x: 736, y: 1272, sx: 4, sy: 1,
+		 code: "targetRoom = rm_valley;\ntargetX = 704;\ntargetY = 72;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
 	],
 
 	// Named spots for scripts (scripts/room_layout): points in pixels, areas in cells [c1, r1, c2, r2]
@@ -112,6 +119,9 @@ module.exports = {
 		door: [272, 564],       // back out of the farmhouse
 		cave: [800, 168],       // climbing out of the mine
 		road_east: [1856, 576], // arriving from the village
+		ladder: [496, 152],     // down the ladder from the town
+		road_west: [56, 576],   // arriving from the coast
+		path_south: [736, 1208],// back from the valley
 	},
 	areas: {
 		cliff_west: [2, 4, 21, 6],    // rocks and ore under the cliff, either side of the cave

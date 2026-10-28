@@ -80,6 +80,14 @@ function resource_areas(){
 		// Farm: the edge of the woods in the south - a young wood
 		{room: "rm_1", cells: layout_cells("rm_1", "woods"), max: 10, perDay: 2, start: 7,
 		 kinds: [["oak", 25], ["pine", 25], ["weeds", 30], ["bush", 10], ["stone", 10]]},
+		// Saltmere Coast: stones and driftwood scrub on the sand and the grass behind it
+		{room: "rm_beach", cells: layout_cells("rm_beach", "shore"), max: 10, perDay: 2, start: 7,
+		 kinds: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]]},
+		// Hollow Vale: a wild valley - wood and forage
+		{room: "rm_valley", cells: layout_cells("rm_valley", "west"), max: 16, perDay: 4, start: 12,
+		 kinds: [["oak", 20], ["pine", 15], ["bush", 15], ["weeds", 15], ["stone", 10], ["forage_herb", 15], ["forage_mushroom", 10]]},
+		{room: "rm_valley", cells: layout_cells("rm_valley", "east"), max: 14, perDay: 3, start: 10,
+		 kinds: [["oak", 20], ["pine", 20], ["bush", 10], ["forage_herb", 20], ["forage_mushroom", 15], ["forage_toadstool", 10], ["stone", 5]]},
 		// Whisperwood: its clearings (walls and water are skipped) - wood, forage and a few stones
 		{room: "rm_forest", cells: [2, 2, 45, 27], max: 34, perDay: 8, start: 28,
 		 kinds: [["oak", 16], ["pine", 16], ["bush", 14], ["weeds", 10], ["stone", 6], ["forage_mushroom", 16], ["forage_herb", 12], ["forage_toadstool", 5]]},

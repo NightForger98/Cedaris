@@ -2,17 +2,24 @@
 /// sweeping marker is in the green zone (obj_fishing). Which fish bite depends on the water, season, time and weather.
 /// Fish are items "x|<fish>": sell them, eat them, or cook them.
 
-/// @description Fish. where: the waters it lives in ("farm" pond, "forest" pond); seasons ([] = all); time: "day",
+/// @description Fish. where: the waters it lives in ("farm" pond, "forest" pond, "sea" off the coast, "river" in the valley); seasons ([] = all); time: "day",
 /// "night" or "any"; rain: only when it's raining; hard: 0-1 (a narrower zone and a faster marker); weight: how common.
 function fish_table(){
 	static t = {
-		perch:    {name: "Pond Perch",    where: ["farm", "forest"], seasons: [],     time: "any",   rain: false, hard: 0.15, weight: 30, sell: 30,  energy: 20, colour: make_colour_rgb(150, 170, 90)},
+		perch:    {name: "Pond Perch",    where: ["farm", "forest", "river"], seasons: [],     time: "any",   rain: false, hard: 0.15, weight: 30, sell: 30,  energy: 20, colour: make_colour_rgb(150, 170, 90)},
 		carp:     {name: "Mud Carp",      where: ["farm"],           seasons: [0, 2], time: "any",   rain: false, hard: 0.3,  weight: 20, sell: 45,  energy: 25, colour: make_colour_rgb(150, 120, 70)},
 		sunfish:  {name: "Sunfish",       where: ["farm", "forest"], seasons: [1],    time: "day",   rain: false, hard: 0.35, weight: 18, sell: 55,  energy: 25, colour: make_colour_rgb(240, 190, 60)},
-		trout:    {name: "Glimmer Trout", where: ["forest"],         seasons: [],     time: "any",   rain: true,  hard: 0.55, weight: 14, sell: 95,  energy: 35, colour: make_colour_rgb(160, 200, 230)},
-		pike:     {name: "Frost Pike",    where: ["farm", "forest"], seasons: [3],    time: "any",   rain: false, hard: 0.5,  weight: 16, sell: 80,  energy: 35, colour: make_colour_rgb(190, 220, 240)},
+		trout:    {name: "Glimmer Trout", where: ["forest", "river"], seasons: [],     time: "any",   rain: true,  hard: 0.55, weight: 14, sell: 95,  energy: 35, colour: make_colour_rgb(160, 200, 230)},
+		pike:     {name: "Frost Pike",    where: ["farm", "forest", "river"], seasons: [3],    time: "any",   rain: false, hard: 0.5,  weight: 16, sell: 80,  energy: 35, colour: make_colour_rgb(190, 220, 240)},
 		moonfin:  {name: "Moonfin",       where: ["forest"],         seasons: [],     time: "night", rain: false, hard: 0.75, weight: 8,  sell: 150, energy: 40, colour: make_colour_rgb(200, 190, 255)},
-		boot:     {name: "Old Boot",      where: ["farm", "forest"], seasons: [],     time: "any",   rain: false, hard: 0.05, weight: 6,  sell: 1,   energy: 0,  colour: make_colour_rgb(110, 80, 55), junk: true},
+		// The valley's river and the sea off the west coast
+		salmon:   {name: "Valley Salmon", where: ["river"],          seasons: [2],    time: "any",   rain: false, hard: 0.45, weight: 16, sell: 85,  energy: 35, colour: make_colour_rgb(230, 130, 110)},
+		sardine:  {name: "Sardine",       where: ["sea"],            seasons: [],     time: "any",   rain: false, hard: 0.1,  weight: 30, sell: 25,  energy: 15, colour: make_colour_rgb(170, 190, 210)},
+		mackerel: {name: "Mackerel",      where: ["sea"],            seasons: [0, 1], time: "day",   rain: false, hard: 0.3,  weight: 20, sell: 50,  energy: 25, colour: make_colour_rgb(90, 140, 160)},
+		seabass:  {name: "Sea Bass",      where: ["sea"],            seasons: [],     time: "any",   rain: true,  hard: 0.5,  weight: 14, sell: 90,  energy: 35, colour: make_colour_rgb(120, 130, 140)},
+		tidecrab: {name: "Tide Crab",     where: ["sea"],            seasons: [2, 3], time: "any",   rain: false, hard: 0.35, weight: 14, sell: 70,  energy: 30, colour: make_colour_rgb(220, 90, 60)},
+		mooneel:  {name: "Moon Eel",      where: ["sea"],            seasons: [],     time: "night", rain: false, hard: 0.8,  weight: 6,  sell: 180, energy: 45, colour: make_colour_rgb(180, 200, 240)},
+		boot:     {name: "Old Boot",      where: ["farm", "forest", "sea", "river"], seasons: [],     time: "any",   rain: false, hard: 0.05, weight: 6,  sell: 1,   energy: 0,  colour: make_colour_rgb(110, 80, 55), junk: true},
 	};
 	return t;
 }
@@ -22,6 +29,8 @@ function fish_def(_key){ return fish_table()[$ _key]; }
 /// @description Which water this room's fishing is in.
 function fishing_place(){
 	if(room == rm_forest) return "forest";
+	if(room == rm_beach) return "sea";
+	if(room == rm_valley) return "river";
 	return "farm";
 }
 

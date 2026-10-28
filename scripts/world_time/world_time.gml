@@ -9,7 +9,7 @@
 #macro DAY_END 1560         // 2:00 am: pass out
 #macro GAME_MIN_SECONDS 0.7 // real seconds per game minute (10 game minutes every 7 seconds)
 #macro SEASON_DAYS 28
-#macro BED_ROOM rm_12          // the room with your bed (obj_bed); you wake up next to it
+#macro BED_ROOM rm_123         // the room with your bed (obj_bed, upstairs in the farmhouse); you wake up next to it
 
 function world_time_new(){
 	global.clock = {minutes: DAY_START, day: 1, season: 0, year: 1, weather: "sun"}; // a sunny first day
@@ -45,7 +45,7 @@ function clock_tick(){
 }
 
 /// @description Rooms that get the day/night tint.
-function room_is_outdoors(){ return room == rm_1 || room == rm_2 || room == rm_forest; }
+function room_is_outdoors(){ return room == rm_1 || room == rm_2 || room == rm_forest || room == rm_town || room == rm_beach || room == rm_valley; }
 
 /// @description Darkness 0-1: evening from 6 pm, full night by 10 pm, light again by 7 am.
 function night_amount(){

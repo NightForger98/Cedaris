@@ -23,7 +23,7 @@ key space
 wait 40
 # Cook grilled perch at the hearth
 give x|perch 1
-room rm_12 496 392
+room rm_12 304 300
 wait 40
 call autotest_station cook f|grilled_perch
 inv

@@ -3,8 +3,13 @@
 
 function room_layout(){
 	static t = {
-		rm_1: {points: {start: [272, 592], door: [272, 564], cave: [800, 168], road_east: [1856, 576]}, areas: {cliff_west: [2, 4, 21, 6], cliff_east: [28, 4, 57, 6], meadow: [16, 8, 28, 15], west: [1, 21, 16, 31], woods: [1, 32, 16, 34], pasture: [44, 22, 56, 30], field: [18, 21, 41, 31]}},
+		rm_1: {points: {start: [272, 592], door: [272, 564], cave: [800, 168], road_east: [1856, 576], ladder: [496, 152], road_west: [56, 576], path_south: [736, 1208]}, areas: {cliff_west: [2, 4, 21, 6], cliff_east: [28, 4, 57, 6], meadow: [16, 8, 28, 15], west: [1, 21, 16, 31], woods: [1, 32, 16, 34], pasture: [44, 22, 56, 30], field: [18, 21, 41, 31]}},
+		rm_12: {points: {door: [160, 472], stairs: [160, 180]}, areas: {}},
+		rm_123: {points: {stairs: [96, 180]}, areas: {}},
 		rm_2: {points: {road_west: [64, 576], bridge: [1370, 592], crowd: [560, 400], river: [1456, 0]}, areas: {square: [14, 10, 41, 21]}},
+		rm_beach: {points: {road_east: [1480, 576], pier_end: [160, 576]}, areas: {shore: [14, 1, 28, 38]}},
+		rm_town: {points: {street_south: [1024, 1320]}, areas: {square: [16, 12, 47, 27]}},
+		rm_valley: {points: {path_north: [704, 72]}, areas: {west: [1, 14, 36, 26], east: [42, 4, 58, 36]}},
 	};
 	return t;
 }

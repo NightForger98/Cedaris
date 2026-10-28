@@ -1,0 +1,102 @@
+# The world map: every exit between the built rooms, the farmhouse's two floors, sleeping upstairs, sea fishing
+start story
+wait 60
+give c|held|Fishing Rod
+# Into the farmhouse, up the stairs, sleep, back down and out
+pos 272 560
+keydown up
+wait 30
+keyup up
+wait 40
+call autotest_where
+shot 01_downstairs
+pos 160 150
+keydown up
+wait 15
+keyup up
+wait 40
+call autotest_where
+shot 02_upstairs
+sleep
+wait 60
+call autotest_where
+pos 96 150
+keydown up
+wait 15
+keyup up
+wait 40
+call autotest_where
+pos 160 470
+keydown down
+wait 30
+keyup down
+wait 40
+call autotest_where
+# Up the ladder to Brindlemoor and back
+room rm_1 496 170
+wait 30
+keydown up
+wait 80
+keyup up
+wait 40
+call autotest_where
+call autotest_people
+shot 03_town_arrive
+pos 1024 700
+wait 15
+shot 04_town_square
+pos 1024 1340
+keydown down
+wait 30
+keyup down
+wait 40
+call autotest_where
+# West to the coast: the pier, a cast for sea fish
+room rm_1 64 576
+wait 30
+keydown left
+wait 30
+keyup left
+wait 40
+call autotest_where
+call autotest_resources
+shot 05_coast
+equip c|held|Fishing Rod
+pos 150 576
+face w
+key space
+wait 40
+call autotest_fish_ready
+shot 06_pier
+wait 2
+key space
+wait 10
+pos 1500 576
+keydown right
+wait 30
+keyup right
+wait 40
+call autotest_where
+# South to Hollow Vale, over the bridge, and back
+room rm_1 736 1220
+wait 30
+keydown down
+wait 30
+keyup down
+wait 40
+call autotest_where
+call autotest_resources
+shot 07_valley
+pos 1180 640
+keydown right
+wait 50
+keyup right
+call autotest_where
+shot 08_bridge
+pos 704 60
+keydown up
+wait 30
+keyup up
+wait 40
+call autotest_where
+quit

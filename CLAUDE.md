@@ -54,8 +54,10 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - People and quests: `people` (villagers, friendship, gifts; `obj_dialogue`), `quests` (`obj_quest_board` in the
   village). Anything usable with E calls `interact_near(range)` and `interact_ready()` (`interact`): only the
   closest thing answers. `ui_blocking()` is true while any window is open.
-- Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm, `rm_2` village (both built), `rm_12` house (bed), `rm_3`
-  (empty, unused), `rm_123`, `rm_mine`. Tilesets: `TS_terrain`, `TS_cottage` (house kit), `TS_town`, `TS_interior`.
+- Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm (the hub), `rm_2` village (east), `rm_town` (north, up the
+  ladder), `rm_beach` (west), `rm_valley` (south), `rm_12` farmhouse downstairs, `rm_123` upstairs (`BED_ROOM`),
+  `rm_mine`, `rm_forest`, `rm_3` (empty, unused). All but the mine and forest are built from specs; the world map is
+  in `docs/LEVELS.md`. A new outdoor room also needs `room_is_outdoors`, `save_room_name` and the debug room list. Tilesets: `TS_terrain`, `TS_cottage` (house kit), `TS_town`, `TS_interior`.
 - Placeholder art drawn from `spr_tile_interior`: crafting table, bed, shipping bin, furnace (to be replaced with real assets).
 
 ## Conventions

@@ -41,7 +41,7 @@ function renderRoom(roomName, opts = {}){
 			// Collision-check-sized objects are 16x16 centred; others get a small marker
 			const sized = ["obj_col_box", "obj_water_zone", "obj_transition"].includes(o);
 			const w = sized ? 16 * inst.scaleX : 12, h = sized ? 16 * inst.scaleY : 12;
-			const x0 = Math.round(inst.x - (o === "obj_transition" ? 0 : w / 2)), y0 = Math.round(inst.y - (o === "obj_transition" ? 0 : h / 2));
+			const x0 = Math.round(inst.x - w / 2), y0 = Math.round(inst.y - h / 2);
 			rect(out, x0, y0, w, h, col);
 		}));
 	}

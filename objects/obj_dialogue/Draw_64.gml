@@ -33,6 +33,20 @@ draw_set_colour(c_white);
 draw_text_ext_transformed(tx, y1 + 90, text, 34, (x2 - tx - 30) / 0.6, 0.6, 0.6, 0);
 if(note != "") ui_text(tx, y2 - 66, note, 0.55, make_colour_rgb(255, 200, 120), fa_left);
 
+// Keys (a heart event has its own: next, a choice, or done)
+if(event != undefined){
+	var ek = "[E] Next";
+	if(eventDone) ek = "[E] Done";
+	else if(line >= array_length(event.lines) - 1 && variable_struct_exists(event, "choice")){
+		ui_text(tx, y2 - 66, event.choice.ask, 0.5, make_colour_rgb(255, 200, 120), fa_left);
+		ek = "[1] " + event.choice.options[0][0] + "     [2] " + event.choice.options[1][0];
+	}
+	ui_text(tx, y2 - 28, ek, 0.45, c.dim, fa_left);
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+	draw_set_colour(c_white);
+	exit;
+}
 // Keys
 var held = inv_held_stack();
 var keys = "[E] Bye";

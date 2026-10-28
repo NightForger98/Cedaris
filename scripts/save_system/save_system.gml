@@ -2,9 +2,10 @@
 /// Saves are JSON files in the game's save folder (saves/slotN.json); settings live in settings.ini.
 
 #macro SAVE_SLOTS 3
-#macro SAVE_VERSION 8 // 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine);
+#macro SAVE_VERSION 9 // 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine);
                       // 5: spells (inv.spells) and mana (vitals.mana); 6: weather (clock), projects, people, quests (world);
-                      // 7: the built farm and village (see save_upgrade_rooms); 8: beaten mine bosses (world.mine.bosses)
+                      // 7: the built farm and village (see save_upgrade_rooms); 8: beaten mine bosses (world.mine.bosses);
+                      // 9: heart events seen (world.events)
 
 function save_path(_slot){ return "saves/slot" + string(_slot) + ".json"; }
 

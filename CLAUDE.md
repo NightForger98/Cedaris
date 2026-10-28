@@ -24,7 +24,8 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 - **GML gotchas hit before**:
   - `all`, `id`, `score`, `pi`, `floor`, `y`, `power`, `solid` are built-ins (don't use as variable names; `solid` fails as
     "malformed assignment"); `crop` is an enum
-    (in the crops object); `not` is a keyword - even as a struct key it crashes the compiler with "Stack empty".
+    (in the crops object); `not` is a keyword - even as a struct key it crashes the compiler with "Stack empty", and
+    so does an accessor on a parenthesised `??` (`(a ?? b)[$ k]`): put the `??` in its own variable first.
   - `static` only works inside functions; JSON `null` may not load as `undefined`.
   - `f()[$ g()[i]]` (an accessor on a call, keyed by an indexed call) crashes the compiler with a bare
     NullReferenceException: split it into two lines.
@@ -79,6 +80,7 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 - Festivals: `festivals` (one a season in the village; the board gets a Festival page; `obj_festival_decor`).
 - People: `people` (villagers, looks, everyday clothes, friendship, gifts; `obj_dialogue`; shopkeepers' stock:
   `people_trade`). Quests: `quests` (`obj_quest_board` in the village).
+- Heart events: `heart_events` (`heart_event_table`; checked a few times a second, played by `obj_dialogue` in event mode).
 - Schedules: `schedules` (`villager_routines`: homes, shop hours, days off; `villager_where` works out where someone
   is from the clock, so nothing is saved; walking routes over `room_walk`; `obj_villager` is a villager in your room,
   made by `villagers_update`; a shop trades only while `villager_shop_open`).
@@ -127,7 +129,7 @@ Where things stood at the end of the last session (2026-10-28), and what to know
 - Done since: doors lock at night and out of hours (friends at 2 hearts get in), villagers step around you and
   each other, rainy days keep most people in, the map shows the real Whisperwood, and the unused `obj_npc_man`,
   `rm_3` and its label objects are gone.
-- Still open: no seasonal or heart-event schedule variants yet.
+- Also done: seasonal schedule variants and heart events (`scripts/heart_events`).
 
 **Working with the user**: they want recommendations acted on without asking first ("if you recommend something go
 ahead with it"); they always choose Reload in GameMaker; end each step with a commit and push to `main`.

@@ -1,0 +1,57 @@
+# Seasonal schedules and heart events
+start story
+wait 60
+# Seasons: summer days at the beach for Tobin; winter evenings indoors; Posy's winter stall at the inn
+call autotest_date 1 2
+time 11
+call autotest_villager_at tobin
+call autotest_date 0 2
+call autotest_villager_at tobin
+call autotest_date 3 2
+time 11
+call autotest_villager_at posy
+time 18
+call autotest_villager_at brom
+call autotest_date 0 2
+call autotest_villager_at brom
+# Elda's 2-heart event at the river, with a choice
+call autotest_set_friend elda 520
+time 8
+room rm_2 600 400
+wait 40
+call autotest_goto_person elda
+wait 40
+call autotest_ui
+shot 01_elda_event
+key e
+wait 5
+key e
+wait 5
+shot 02_choice
+key 1
+wait 5
+shot 03_reply
+key e
+wait 30
+call autotest_ui
+call autotest_friend elda
+# Brom's 4-heart event: a gift
+call autotest_set_friend brom 1020
+time 10
+room rm_village_smithy 300 300
+wait 40
+call autotest_goto_person brom
+wait 40
+call autotest_ui
+key e
+wait 5
+key e
+wait 5
+key e
+wait 5
+shot 04_gift
+key e
+wait 30
+inv
+call autotest_ui
+quit

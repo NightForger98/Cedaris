@@ -81,6 +81,11 @@ at 9 leaves home at 8 and gets in around 9. A shop only trades while its keeper 
 otherwise T in their dialogue gives the hours. Each has a day off with its own routine. On a festival day everyone
 is in the village crowd instead. On a rainy day most stay in (anything outdoors becomes home), except
 the `rainproof`: Marlo fishes, Garrick keeps watch, Pip minds the sheep, Hask hunts, and Elda loves the rain.
+Seasons change some weeks (`seasons` in `villager_routines`): summer days at the beach for the children, Thorne's
+evening swims, Elda mushrooming in the vale in fall, Posy's winter flower stall at the inn, Marlo by the inn's fire in
+winter, Aunt Hesta's spring seed shopping - and in winter nobody lingers outdoors after 5pm.
+Heart events (`scripts/heart_events`): ten short scenes with a friend, met in the right place and hours with enough
+hearts; some end with a choice that matters to them, some with a gift.
 Doors lock: homes while their people sleep (9pm - 8am), shops outside hours and on their day off - unless you have
 2 hearts with someone who lives or works there (`door_lock_reason`). Villagers step around you and each other.
 

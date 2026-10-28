@@ -69,10 +69,12 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 	else if(!invOpen && input_pressed(ord("M")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_world_map);}
 	// Villagers walking into this room on their schedules
 	if(world_time_ready()) villagers_update();
+	// Heart events: a scene with a friend, when they're near you at the right place and hour
+	if(world_time_ready() && (current_time div 250) != (current_time - delta_time / 1000) div 250) heart_events_check();
 	
 	// Hotbar: 1-9 and 0 pick the held item
 	for(var k = 0; k < INV_HOTBAR; k++){
-		if(keyboard_check_pressed(ord(string((k + 1) mod 10)))){
+		if(!invOpen && keyboard_check_pressed(ord(string((k + 1) mod 10)))){ // not while a window takes the number keys
 			global.inv.hotbar = k;
 			inv_apply_look(global.look);
 		}

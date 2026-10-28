@@ -17,6 +17,7 @@
 /// @description Homes, jobs and days. work: {at, open, close, off} - hours, and the weekday off (0 Mon - 6 Sun);
 /// they leave an hour before opening. after: their evening once work's done (default: home at closing time).
 /// dayoff: their day off. routine: every day, for those without a job. kid: last on the map's house labels.
+/// seasons: {spring | summer | fall | winter: {routine | work | after | dayoff}} - the parts of their week that change.
 /// hammer: swings a hammer while working (Brom). rainproof: still goes out in the rain (Marlo fishes, Garrick keeps
 /// watch, Pip minds the sheep, Hask hunts, and Elda loves it); everyone else stays in (villager_stops).
 function villager_routines(){
@@ -28,7 +29,8 @@ function villager_routines(){
 		brom:   {home: "rm_village_smithy.brom_bed", work: {at: "rm_village_smithy.brom_work", open: 9, close: 17, off: 3}, hammer: true,
 		         after: [[17.5, "rm_2.square_c"], [19, "rm_town_inn.table_a"], [21.5, "home"]],
 		         dayoff: [[8, "rm_beach.pier_b"], [13, "rm_town_inn.table_a"], [18, "rm_2.square_c"], [20, "home"]]},
-		thorne: {home: "rm_valley_carpentry.thorne_bed", work: {at: "rm_valley_carpentry.thorne_work", open: 9, close: 17, off: 6},
+		thorne: {home: "rm_valley_carpentry.thorne_bed", seasons: {summer: {after: [[17, "rm_beach.camp"], [19.5, "rm_town_inn.table_b"], [21.5, "home"]]}},   // summer evenings: a swim
+		         work: {at: "rm_valley_carpentry.thorne_work", open: 9, close: 17, off: 6},
 		         after: [[17, "rm_valley.yard"], [18.5, "rm_town_inn.table_b"], [21.5, "home"]],
 		         dayoff: [[8, "rm_valley.riverbank"], [12, "rm_2.square_e"], [15, "rm_village_smithy.shop_a"], [18, "rm_town_inn.table_b"], [21, "home"]]},
 		mara:   {home: "rm_village_store.mara_bed", work: {at: "rm_village_store.mara_work", open: 9, close: 18, off: 2},
@@ -45,7 +47,8 @@ function villager_routines(){
 		ida:    {home: "rm_town_home_se.ida_bed", work: {at: "rm_town_inn.ida_work", open: 6, close: 13, off: 6},   // baking for the inn
 		         after: [[13, "rm_town.square_c"], [16, "rm_town_home_se.ida_home"], [21, "home"]],
 		         dayoff: [[9, "rm_village_store.shop_a"], [11, "rm_2.square_d"], [14, "rm_town_home_se.ida_home"], [21, "home"]]},
-		marlo:  {home: "rm_beach_hut.marlo_bed", rainproof: true, work: {at: "rm_beach.pier_end", open: 6, close: 12, off: 6},
+		marlo:  {home: "rm_beach_hut.marlo_bed", rainproof: true, seasons: {winter: {after: [[12, "rm_town_inn.door_table"], [20.5, "home"]]}},   // winter: warm by the inn's fire
+		         work: {at: "rm_beach.pier_end", open: 6, close: 12, off: 6},
 		         after: [[12, "rm_beach_hut.marlo_home"], [16, "rm_town_inn.door_table"], [20.5, "home"]],
 		         dayoff: [[9, "rm_beach.camp"], [12, "rm_village_store.shop_c"], [14, "rm_beach_hut.marlo_home"], [21, "home"]]},
 		pip:    {home: "rm_valley_ranch.pip_bed", rainproof: true, work: {at: "rm_valley.pasture", open: 7, close: 16, off: 6},
@@ -60,7 +63,8 @@ function villager_routines(){
 		nell:   {home: "rm_town_home_e.nell_bed", work: {at: "rm_town_home_e.nell_wheel", open: 8, close: 14, off: 2},
 		         after: [[14, "rm_town_outfitter.shop_b"], [15.5, "rm_town.square_d"], [18, "home"]],   // cloth for Bryn
 		         dayoff: [[9.5, "rm_valley_ranch.shop_a"], [13, "rm_2.square_e"], [16, "rm_town.square_d"], [18, "home"]]},
-		posy:   {home: "rm_town_inn.posy_bed", work: {at: "rm_town.stall", open: 9, close: 17, off: 0},
+		posy:   {home: "rm_town_inn.posy_bed", seasons: {winter: {work: {at: "rm_town_inn.bar_a", open: 10, close: 16, off: 0}, after: [[16, "home"]]}},   // winter: dried flowers at the inn
+		         work: {at: "rm_town.stall", open: 9, close: 17, off: 0},
 		         after: [[17, "rm_town_inn.bar_a"], [21, "home"]],
 		         dayoff: [[9, "rm_valley.herbs"], [14, "rm_2.square_a"], [17, "rm_town_inn.bar_a"], [21, "home"]]},
 		edwin:  {home: "rm_town_home_nw.edwin_bed", work: {at: "rm_2.board", open: 9, close: 15, off: 6},   // the village notices
@@ -71,12 +75,16 @@ function villager_routines(){
 		         dayoff: [[9, "rm_village_store.shop_b"], [11, "rm_2.riverbank_b"], [15, "home"]]},
 		// No job: every day the same
 		elda:   {home: "rm_village_elda.elda_bed", rainproof: true,
+		         seasons: {fall: {routine: [[7, "rm_valley.herbs"], [13, "rm_village_elda.elda_table"], [16, "rm_2.square_e"], [18, "home"]]}},   // fall: mushrooms in the vale
 		         routine: [[7, "rm_2.riverbank"], [11, "rm_valley.herbs"], [14, "rm_village_elda.elda_table"], [16, "rm_2.square_e"], [18, "home"]]},
 		hesta:  {home: "rm_village_hesta.hesta_bed",
+		         seasons: {spring: {routine: [[7, "rm_village_hesta.hesta_home"], [9, "rm_village_store.shop_b"], [10.5, "rm_2.square_a"], [17.5, "rm_village_hesta.hesta_home"], [21, "home"]]}},   // spring: seeds, and a long chat on the square
 		         routine: [[7, "rm_village_hesta.hesta_home"], [10, "rm_village_store.shop_b"], [11.5, "rm_village_hesta.hesta_home"], [15, "rm_2.square_a"], [17.5, "rm_village_hesta.hesta_home"], [21, "home"]]},
 		tobin:  {home: "rm_village_hesta.tobin_bed", kid: true,
+		         seasons: {summer: {routine: [[8, "rm_village_hesta.tobin_home"], [10, "rm_beach.camp"], [16, "rm_village_hesta.tobin_home"], [21, "home"]]}},   // summer: the beach
 		         routine: [[8, "rm_village_hesta.tobin_home"], [9, "rm_2.square_d"], [12, "rm_town.square_a"], [16.5, "rm_village_hesta.tobin_home"], [21, "home"]]},
 		fen:    {home: "rm_town_home_se.fen_bed", kid: true,
+		         seasons: {summer: {routine: [[8, "rm_town_home_se.fen_home"], [10, "rm_beach.camp"], [16, "rm_town_home_se.fen_home"], [20.5, "home"]]}},
 		         routine: [[8, "rm_town_home_se.fen_home"], [10, "rm_town.square_b"], [12, "rm_town.square_e"], [17, "rm_town_home_se.fen_home"], [20.5, "home"]]},
 	};
 	return t;
@@ -118,6 +126,17 @@ function villager_stops(_key){
 		var k = array_get_index(villager_names(), _key), c = layout_point("rm_2", "crowd");
 		return [[0, {room: "rm_2", x: c[0] + (k mod 6) * 64, y: c[1] + (k div 6) * 80}]];
 	}
+	// This season's changes to their week, if they have any
+	static seasonKeys = ["spring", "summer", "fall", "winter"];
+	var seasonal = r[$ "seasons"] ?? {};
+	var sr = seasonal[$ seasonKeys[global.clock.season mod 4]];
+	if(sr != undefined){
+		var merged = {}, keys = variable_struct_get_names(r);
+		for(var i = 0; i < array_length(keys); i++) merged[$ keys[i]] = r[$ keys[i]];
+		keys = variable_struct_get_names(sr);
+		for(var i = 0; i < array_length(keys); i++) merged[$ keys[i]] = sr[$ keys[i]];
+		r = merged;
+	}
 	var stops = [[0, "home"]];
 	var work = r[$ "work"];
 	if(work == undefined) stops = array_concat(stops, r.routine);
@@ -126,6 +145,15 @@ function villager_stops(_key){
 		array_push(stops, [work.open - 1, work.at, "work"]);
 		var after = r[$ "after"];
 		stops = array_concat(stops, (after != undefined) ? after : [[work.close, "home"]]);
+	}
+	// Winter evenings: nobody lingers outdoors after 5pm (it's dark and freezing)
+	static outside = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley"];
+	if(global.clock.season mod 4 == 3){
+		for(var i = 1; i < array_length(stops); i++){
+			var pl = stops[i][1];
+			if(stops[i][0] < 17 || is_struct(pl) || pl == "home" || array_length(stops[i]) > 2) continue;
+			if(array_get_index(outside, string_copy(pl, 1, string_pos(".", pl) - 1)) != -1) stops[i] = [stops[i][0], "home"];
+		}
 	}
 	// Rain: anything outdoors becomes staying in (home), unless they're the kind to go out in it anyway
 	if(weather_is_wet() && !(r[$ "rainproof"] ?? false)){

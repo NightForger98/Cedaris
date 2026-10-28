@@ -64,6 +64,10 @@ function autotest_key(_name){
 		case "pgup":   return vk_pageup;
 		case "pgdn":   return vk_pagedown;
 		case "shift":  return vk_shift;
+		case "left":   return vk_left;
+		case "right":  return vk_right;
+		case "up":     return vk_up;
+		case "down":   return vk_down;
 	}
 	return ord(string_upper(_name));
 }
@@ -132,6 +136,9 @@ function autotest_step(){
 				t.press = k;
 				t.wait = 2;
 				break;
+			// Held keys (walking): keyboard_check sees a simulated press until it's released
+			case "keydown": keyboard_key_press(autotest_key(a[1])); break;
+			case "keyup":   keyboard_key_release(autotest_key(a[1])); break;
 			case "use":  t.uses = (array_length(a) > 1) ? real(a[1]) : 1; break;
 			case "debug": game.debug = (a[1] == "on"); break;
 			case "wait": t.wait = real(a[1]); break;
@@ -386,4 +393,10 @@ function autotest_festival_event(){
 	var f = festival_today();
 	if(f == undefined) return "no festival";
 	return (f.kind == "lanterns") ? festival_light_lantern(f) : festival_weigh_in(f);
+}
+
+/// @description The player's position, for logs (checking they can walk away from where they start).
+function autotest_where(){
+	with(obj_plyr) return string(x) + "," + string(y) + (place_meeting(x, y, obj_col_box) ? " inside a solid" : "");
+	return "no player";
 }

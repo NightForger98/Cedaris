@@ -1,0 +1,23 @@
+# A new game starts the player somewhere clear, and they can walk off in every direction
+start story
+wait 60
+call autotest_where
+shot 01_spawn
+keydown right
+wait 30
+keyup right
+call autotest_where
+keydown down
+wait 30
+keyup down
+call autotest_where
+keydown left
+wait 30
+keyup left
+call autotest_where
+keydown up
+wait 30
+keyup up
+call autotest_where
+shot 02_walked
+quit

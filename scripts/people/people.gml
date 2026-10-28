@@ -88,6 +88,44 @@ function villager_table(){
 		                ["You've a feel for magic, farmer. I can smell it on you. Also soil.", "Heal is the first spell anyone should learn. Fireball is the second.", "The forest across the river grows things even I can't name."],
 		                ["You're my favourite customer. You actually read the labels.", "I brewed this for you. Don't ask what's in it.", "Magic is just patience with a staff. You have both."]],
 		        rewards: [["w|herb", 5], ["d|cloth|lavender", 1], ["m|pixie_dust", 2], ["d|cloth|teal", 1], ["k|heal", 1]]},
+		// Brindlemoor's townsfolk: Posy keeps a flower stall in the square; the rest live in the town's homes and spend
+		// the day (9 am - 5 pm, see villager_room) out in the square
+		posy:  {name: "Posy", title: "the Flower-seller", room: "rm_town", slot: "woman", race: "Halfling", body: "female", seed: 4505,
+		        loves: ["w|herb", "m|pixie_dust", "f|gourd_pie"], likes: ["w|", "p|", "f|"], dislikes: ["m|stone"], hates: ["m|coal", "m|bone"],
+		        lines: [["Flowers! Fresh flowers! Well. Fresh-ish.", "Everything I sell, I picked on the cliff path this morning.", "You've got soil under your nails. I like you already."],
+		                ["Daisies for luck, roses for trouble. You look like a daisy person.", "Garrick pretends he doesn't like flowers. He buys one every week.", "The valley's full of herbs this time of year. Bring me some?"],
+		                ["You make this town brighter, you know.", "I saved you the best bunch. Don't let it wilt.", "If I ever have a garden as big as your farm I'll never leave it."]],
+		        rewards: [["w|herb", 4], ["d|cloth|rose", 1], ["m|fibre", 10], ["d|cloth|lavender", 1], ["m|pixie_dust", 2]]},
+		edwin: {name: "Edwin", title: "the Scribe", room: "rm_town_home_nw", day: "rm_town", slot: "man", race: "Elf", body: "male", seed: 4606,
+		        loves: ["m|silk", "m|gem", "f|moonfin_soup"], likes: ["m|", "x|", "f|"], dislikes: ["p|corn"], hates: ["m|troll_hide", "f|fiery_chilli"],
+		        lines: [["Mind the ink. It's older than you.", "I copy the town's records. Births, deaths, the price of turnips.", "Quiet, please. I'm thinking in Elvish."],
+		                ["Ah, the farmer. I wrote you down in the ledger. Favourably.", "Brindlemoor was a waystation once, before the ladder. I have the maps.", "Morga borrows my books and returns them smelling of toadstools."],
+		                ["I've started a chapter about you. It's mostly about turnips.", "You're the most interesting thing to happen to this town in a century.", "Here. A page from my own collection. Treat it kindly."]],
+		        rewards: [["m|fibre", 10], ["d|cloth|navy", 1], ["m|silk", 3], ["d|cloth|charcoal", 1], ["m|gem", 2]]},
+		nell:  {name: "Nell", title: "the Weaver", room: "rm_town_home_e", day: "rm_town", slot: "woman", race: "Human", body: "female", seed: 4707,
+		        loves: ["m|wool", "m|silk", "m|moonsilk", "f|carrot_soup"], likes: ["m|fibre", "m|", "f|"], dislikes: ["m|coal"], hates: ["m|bone", "m|ember_core"],
+		        lines: [["Wool in, cloth out. That's the whole secret.", "Bryn sells what I weave. He takes the credit, too.", "My wheel's been going since before you were born."],
+		                ["Bring me wool and I'll be your friend for life. Probably.", "That's a good stitch on your sleeve. Did you do it? No? Shame.", "The sheep in the vale make the softest fleece. Wren knows it."],
+		                ["I wove this pattern after you. It's mostly green and stubborn.", "You've got a weaver's patience. Ever thought of trying?", "Take this. It's the best I've made all year."]],
+		        rewards: [["m|wool", 8], ["d|cloth|teal", 1], ["m|silk", 3], ["d|cloth|maroon", 1], ["m|moonsilk", 2]]},
+		hask:  {name: "Hask", title: "the Hunter", room: "rm_town_home_sw", day: "rm_town", slot: "man", race: "Human", body: "male", seed: 4808,
+		        loves: ["m|fur", "m|leather", "f|veg_stew"], likes: ["m|bone", "m|", "f|"], dislikes: ["m|silk"], hates: ["m|pixie_dust", "w|toadstool"],
+		        lines: [["Tracks in the valley again. Big ones.", "Don't bother me before the sun's up. Or after.", "The forest over the river's no place for a farmer."],
+		                ["You've been in the mine? Then you know what it's like to be hunted.", "Wolves keep to the woods. Mostly.", "Garrick watches the gate. I watch the trees."],
+		                ["You'd make a fair hunter, if you ever put down the hoe.", "I'd trust you at my back in the forest. That's rare.", "Here. Good hide, well cured. Make something warm."]],
+		        rewards: [["m|leather", 5], ["d|cloth|walnut", 1], ["m|fur", 5], ["d|cloth|forest", 1], ["m|troll_hide", 1]]},
+		ida:   {name: "Ida", title: "the Baker", room: "rm_town_home_se", day: "rm_town", slot: "woman", race: "Dwarf", body: "female", seed: 4909,
+		        loves: ["p|corn", "f|corn_fritters", "f|gourd_pie"], likes: ["p|", "a|", "f|"], dislikes: ["m|stone"], hates: ["m|coal", "f|fiery_chilli"],
+		        lines: [["Bread's up at dawn and so am I.", "Fen! Stop climbing the - oh, hello.", "Flour everywhere. Always. You get used to it."],
+		                ["Lysa buys my loaves for the inn. Says they're the best in the north.", "Your corn makes a fine fritter. Bring me more.", "Fen talks about you all day. 'The farmer this, the farmer that.'"],
+		                ["You're welcome at our table any night.", "I've baked you a loaf with your name on it. Literally. Look.", "Fen's drawn you a picture. It's on the wall. Next to the stove."]],
+		        rewards: [["f|corn_fritters", 2], ["d|cloth|red", 1], ["p|corn", 6], ["d|cloth|rose", 1], ["f|gourd_pie", 2]]},
+		fen:   {name: "Fen", title: "Ida's son", room: "rm_town_home_se", day: "rm_town", slot: "man", race: "Dwarf", body: "teen", seed: 5010,
+		        loves: ["m|gem", "m|feather", "f|corn_fritters"], likes: ["m|bone", "x|", "f|"], dislikes: ["p|artichoke"], hates: ["f|veg_stew", "m|coal"],
+		        lines: [["Are you the farmer? From down the ladder? Is it true you've got a cave?", "Mum says I can't go to the mine till I'm tall. Dwarves don't get tall!", "I found a shiny rock. It's probably a diamond."],
+		                ["Tobin's my friend. We're going to be knights together.", "I climbed the town hall. Don't tell Garrick.", "Can you bring me a feather? For my hat?"],
+		                ["When I grow up I'm going to have a farm. And a dragon.", "You're the best grown-up in Brindlemoor. Don't tell Mum.", "I made you this! It's a... it's a thing. It's for you."]],
+		        rewards: [["m|feather", 4], ["d|cloth|sky", 1], ["m|gem", 1], ["d|cloth|green", 1], ["m|void_pearl", 1]]},
 		// The Saltmere Coast, west of the farm
 		marlo: {name: "Old Marlo", title: "the Fisher", room: "rm_beach", slot: "man", race: "Human", body: "male", seed: 5101,
 		        loves: ["x|mooneel", "x|seabass", "f|grilled_perch"], likes: ["x|", "f|"], dislikes: ["p|potato"], hates: ["m|ember_core"],
@@ -146,6 +184,15 @@ function villager_look(_key){
 	return look;
 }
 
+/// @description Where a villager is right now: their home room, or for townsfolk with a "day" room, out there from
+/// 9 am to 5 pm (homes stand empty by day, the square fills up).
+function villager_room(_key){
+	var v = villager_def(_key);
+	var day = v[$ "day"];
+	if(day != undefined && global.clock.minutes >= 540 && global.clock.minutes < 1020) return day;
+	return v.room;
+}
+
 /// @description For a placed NPC object (Create): the next villager of this slot living in this room who isn't
 /// here yet, or "" (it stays a passing stranger).
 function villager_take(_slot){
@@ -154,7 +201,7 @@ function villager_take(_slot){
 	var here = room_get_name(room);
 	for(var i = 0; i < array_length(names); i++){
 		var v = villager_def(names[i]);
-		if(v.room != here || v.slot != _slot) continue;
+		if(villager_room(names[i]) != here || v.slot != _slot) continue;
 		var taken = false;
 		with(obj_npc_parent) if(id != other.id && variable_instance_exists(id, "who") && who == names[i]) taken = true;
 		if(!taken) return names[i];

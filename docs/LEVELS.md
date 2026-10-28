@@ -63,7 +63,7 @@ The farm is the middle of the map; a way out on each side:
 - **Saltmere Coast** (`rm_beach`, 48x40): sea, a beach, a pier to fish from (sea fish); Old Marlo the fisher.
 - **Hollow Vale** (`rm_valley`, 60x44): Wren the shepherd's hut, a river with a bridge, a lake (river fish), wood
   and forage on both banks.
-- Next: people living in the town's homes. `rm_3` is an empty test room nothing leads to.
+- Townsfolk: Edwin, Nell, Hask, and Ida with her son Fen live in the four homes. A villager with a `day` room (`villager_room`) spends 9 am - 5 pm there (the square), so homes are empty by day; NPC spots placed with `resident()` (interior.js) or the square's extra spots go away when nobody is there to fill them. Posy sells flowers in the square. `rm_3` is an empty test room nothing leads to.
 
 ## Generated rooms: the mine (roadmap phase 4)
 

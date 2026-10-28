@@ -51,7 +51,7 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - Fishing: `fishing` (`fish_table`, `obj_fishing` is the bite minigame; the rod's hit calls `fishing_cast`).
 - Animals: `animals` (`obj_animal` in the farm's meadow, crates `n|<kind>` from Thorne, products `a|<product>`).
 - Festivals: `festivals` (one a season in the village; the board gets a Festival page; `obj_festival_decor`).
-- People and quests: `people` (villagers, friendship, gifts; `obj_dialogue`; shopkeepers' stock: `people_trade`), `quests` (`obj_quest_board` in the
+- People and quests: `people` (villagers, friendship, gifts; `obj_dialogue`; shopkeepers' stock: `people_trade`; where someone is now: `villager_room`), `quests` (`obj_quest_board` in the
   village). Anything usable with E calls `interact_near(range)` and `interact_ready()` (`interact`): only the
   closest thing answers. `ui_blocking()` is true while any window is open.
 - Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm (the hub), `rm_2` village (east), `rm_town` (north, up the

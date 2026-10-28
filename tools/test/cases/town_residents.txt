@@ -1,0 +1,33 @@
+# Brindlemoor's townsfolk: at home in the evening, out in the square by day (villager_room)
+start story
+wait 60
+time 19
+room rm_town 1024 1320
+wait 30
+call autotest_people
+shot 01_square_evening
+room rm_town_home_nw 256 312
+wait 30
+call autotest_people
+shot 02_home_nw
+room rm_town_home_e 256 312
+wait 30
+call autotest_people
+room rm_town_home_sw 256 312
+wait 30
+call autotest_people
+room rm_town_home_se 256 312
+wait 30
+call autotest_people
+shot 03_home_se
+# Talk to whoever is home
+call autotest_where
+time 12
+room rm_town_home_se 256 312
+wait 30
+call autotest_people
+room rm_town 1024 700
+wait 30
+call autotest_people
+shot 04_square_noon
+quit

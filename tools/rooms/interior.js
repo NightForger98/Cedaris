@@ -146,4 +146,11 @@ function keeper(slot, cx, cy){
 	        code: "alarm[1] = -1; // stays at the counter\nmoveX = 0;\nmoveY = 0;\ny_frame = 10;\ntalkRange = 96;"};
 }
 
-module.exports = {interior, keeper, pieces};
+// Someone who lives here and wanders about the room - only while they're home: by day townsfolk are out in the
+// square (villager_room), and the NPC object, finding nobody to be, goes away rather than stand in as a stranger.
+function resident(slot, cx, cy){
+	return {obj: slot === "woman" ? "obj_npc_womantest" : "obj_npc_mantest", x: cx * 32 + 16, y: cy * 32 + 24,
+	        code: "if(who == \"\") instance_destroy(); // out for the day"};
+}
+
+module.exports = {interior, keeper, resident, pieces};

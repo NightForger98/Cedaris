@@ -8,21 +8,32 @@
 
 /// @description The highest level an item charges to (0: it doesn't charge, a press acts straight away).
 function charge_max(_name){
+	if(weapon_class(_name) != "") return 2; // weapons can't be upgraded: always two levels
 	switch(_name){
 		case "Hoe": case "Watering Can": case "Axe": case "Pickaxe": case "Scythe": return min(6, tool_tier(_name));
 		case "Hammer": case "Shovel": return 2;
+		case "Fishing Rod": return 3;
 	}
 	return 0;
 }
 
 /// @description What a charged release does: spin (scythe), water_spin, hoe_area, big_swing (axe, pickaxe, hammer,
-/// shovel), or none.
+/// shovel), cast (the rod throws further); for weapons spin_slash (swords), lunge (spears), slam (clubs, maces, flails,
+/// waraxes), flurry (the dagger), draw (bows and slings shoot harder); or none.
 function charge_kind(_name){
+	switch(weapon_class(_name)){
+		case "sword":  return "spin_slash";
+		case "spear":  return "lunge";
+		case "heavy":  return "slam";
+		case "dagger": return "flurry";
+		case "ranged": return "draw";
+	}
 	switch(_name){
 		case "Scythe":       return "spin";
 		case "Watering Can": return "water_spin";
 		case "Hoe":          return "hoe_area";
 		case "Axe": case "Pickaxe": case "Hammer": case "Shovel": return "big_swing";
+		case "Fishing Rod":  return "cast";
 	}
 	return "none";
 }
@@ -107,6 +118,12 @@ function charge_cells(_name, _level, _user, _dir){
 function charge_release(_user, _name, _level, _dir){
 	var kind = charge_kind(_name);
 	switch(kind){
+		case "spin_slash": case "lunge": case "slam": case "flurry": case "draw":
+			charge_weapon_hit(_user, _name, _level, _dir);
+			return true;
+		case "cast":
+			fishing_cast(_user, _dir, _level);
+			return true;
 		case "hoe_area":
 			var cells = charge_cells(_name, _level, _user, _dir);
 			for(var i = 0; i < array_length(cells); i++) farm_till(cells[i][0], cells[i][1]);
@@ -273,6 +290,13 @@ function charge_release_motion(_c, _dir){
 		return {type: "spin", t: 0, pre: pre, total: pre + turn, hitAt: pre + turn div 3, start: _dir, water: kind == "water_spin", c: _c};
 	}
 	if(kind == "big_swing") return {type: "swing", t: 0, arc: charge_arc(_c.item, _c.level), c: _c};
+	if(kind == "spin_slash"){
+		var turn = 4 * CHARGE_SPIN_STEP * 2 + CHARGE_SPIN_STEP;  // a sword spins twice
+		return {type: "spin", t: 0, pre: 0, total: turn, hitAt: turn div 2, start: _dir, water: false, white: true, c: _c};
+	}
+	if(kind == "lunge") return {type: "lunge", left: 56, dx: [0, -1, 0, 1][_dir], dy: [-1, 0, 1, 0][_dir], c: _c};
+	if(kind == "flurry") return {type: "flurry", left: _c.level, c: _c};   // extra stabs after the first
+	if(kind == "slam") return {type: "slam", c: _c};
 	return undefined;
 }
 
@@ -302,11 +326,12 @@ function charge_draw_spin(_user, _xx, _yy){
 /// @description A spin's trail: a flat oval swept round the feet behind the blade, fading as it goes - white-green
 /// for the scythe, blue with droplets for the watering can. _back: the far half (behind the body).
 function charge_draw_ring(_user, _m, _back){
+	var turns = (_m.total - _m.pre - CHARGE_SPIN_STEP) / (4 * CHARGE_SPIN_STEP);
 	var p = (_m.t - _m.pre) / (_m.total - _m.pre);
 	var startAng = [90, 180, 270, 0][_m.start];
-	var head = startAng - 360 * CHARGE_SPIN_TURNS * p - 360 * p / (4 * CHARGE_SPIN_TURNS);
+	var head = startAng - 360 * (turns + 0.25) * p;
 	var cx = _user.x, cy = _user.y - 8, rx = 30, ry = 12;
-	var col = _m.water ? make_colour_rgb(120, 190, 255) : make_colour_rgb(215, 255, 190);
+	var col = _m.water ? make_colour_rgb(120, 190, 255) : ((_m[$ "white"] ?? false) ? c_white : make_colour_rgb(215, 255, 190));
 	var fade = 1 - max(0, p - 0.85) / 0.15;   // the trail fades out as the spin ends
 	for(var s = 0; s < 18; s++){
 		var a1 = head + s * 9, a2 = a1 + 9;
@@ -339,5 +364,45 @@ function charge_draw_swing(_user){
 		draw_set_alpha(0.25 + 0.6 * (s + 1) / steps);
 		draw_line_width_colour(cx + dcos(a1) * r, cy - dsin(a1) * r * 0.8, cx + dcos(a2) * r, cy - dsin(a2) * r * 0.8, 1 + 2 * (s + 1) / steps, c_white, c_white);
 	}
+	draw_set_alpha(1);
+}
+
+// ---------------------------------------------------------------- weapons
+
+/// @description A charged weapon lands (from charge_release): stronger stats for its kind, then the usual hit.
+/// Swords spin (all round, x1.5 / x2), spears lunge (longer reach, x1.5 / x2), heavy weapons slam the ground (all
+/// round, double knockback, a one-second stun), the dagger stabs again (flurry - each stab a normal one), and bows and
+/// slings shoot faster, further and harder (x1.35 a level).
+function charge_weapon_hit(_user, _name, _level, _dir){
+	var w = variable_clone(weapon_def(_name)), mult = 1 + 0.5 * _level;
+	switch(charge_kind(_name)){
+		case "spin_slash":
+			w.arc = 360; w.reach *= 1.2; w.dmg = [round(w.dmg[0] * mult), round(w.dmg[1] * mult)];
+			break;
+		case "lunge":
+			w.reach *= 1.5; w.dmg = [round(w.dmg[0] * mult), round(w.dmg[1] * mult)];
+			break;
+		case "slam":
+			w.arc = 360; w.reach *= 1.3; w.knock = (w[$ "knock"] ?? 3) * 2; w.stun = 60;
+			w.dmg = [round(w.dmg[0] * (1 + 0.25 * _level)), round(w.dmg[1] * (1 + 0.25 * _level))];
+			break;
+		case "draw":
+			var b = 1 + 0.35 * _level;
+			w.speed *= b; w.range *= b; w.dmg = [round(w.dmg[0] * b), round(w.dmg[1] * b)];
+			break;
+	}
+	combat_player_hit(_user, _name, _dir, w);
+	if(!(w[$ "ranged"] ?? false)) gather_hit(_user, _name, _dir);  // weeds in the way
+}
+
+/// @description A slam's shockwave (obj_plyr Draw, after the hit): a ring spreading out over the ground and fading.
+function charge_draw_slam(_user){
+	if(!_user.actHit) return;
+	var p = clamp((_user.actStep - _user.act.hit) / max(1, _user.act.frames - _user.act.hit), 0, 1);
+	var w = weapon_def(lpc_catalog().items[_user.look.parts.held.item].name), r = w.reach * 1.3 * (0.3 + 0.7 * p);
+	draw_set_alpha(0.8 * (1 - p));
+	draw_set_colour(make_colour_rgb(240, 220, 170));
+	draw_ellipse(_user.x - r, _user.y - 6 - r * 0.4, _user.x + r, _user.y - 6 + r * 0.4, true);
+	draw_ellipse(_user.x - r + 2, _user.y - 6 - r * 0.4 + 1, _user.x + r - 2, _user.y - 6 + r * 0.4 - 1, true);
 	draw_set_alpha(1);
 }

@@ -44,6 +44,19 @@ function weapon_table(){
 	return t;
 }
 
+/// @description A weapon's kind, for its charged move (charging script): sword, spear, heavy, dagger, ranged, or "" (tools,
+/// staffs - they cast spells instead - and anything else).
+function weapon_class(_name){
+	switch(_name){
+		case "Arming Sword": case "Saber": case "Rapier": case "Scimitar": case "Katana": case "Longsword": case "Longsword alt": case "Glowsword": return "sword";
+		case "Spear": case "Long spear": case "Trident": case "Halberd": case "Dragon spear": return "spear";
+		case "Club": case "Mace": case "Flail": case "Waraxe": case "Cane": return "heavy";
+		case "Dagger": return "dagger";
+		case "Slingshot": case "Crossbow": case "Boomerang": return "ranged";
+	}
+	return "";
+}
+
 /// @description Stats for a held item; tools and other things hit for 1-3.
 function weapon_def(_name){
 	return weapon_table()[$ _name] ?? {dmg: [1, 3], reach: 28, arc: 90, knock: 2, crit: 0.01};
@@ -133,8 +146,8 @@ function monster_spawn(_key, _x, _y, _floor){
 
 /// @description A swing lands (from action_hit): hit every monster in reach and in the swing's arc, or fire a shot.
 /// Returns true if it hit something (or fired).
-function combat_player_hit(_user, _item, _dir){
-	var w = weapon_def(_item);
+function combat_player_hit(_user, _item, _dir, _w = undefined){
+	var w = _w ?? weapon_def(_item);   // a charged move passes its own, stronger stats
 	var ang = [90, 180, 270, 0][_dir];
 	if(w[$ "ranged"] ?? false){
 		if(w.ammo != "" && !inv_is_free()){
@@ -166,7 +179,7 @@ function monster_damage(_inst, _w, _ang){
 	with(_inst){
 		hp -= dmg;
 		flash = 8;
-		hurtT = 10;
+		hurtT = _w[$ "stun"] ?? 10;   // a charged slam stuns longer
 		attacking = false;
 		kx = lengthdir_x(_w[$ "knock"] ?? 3, _ang);
 		ky = lengthdir_y(_w[$ "knock"] ?? 3, _ang);

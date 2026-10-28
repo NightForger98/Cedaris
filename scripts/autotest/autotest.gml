@@ -608,3 +608,58 @@ function autotest_charge(){
 	var c = obj_plyr.charge;
 	return (c == undefined) ? "not charging (last swing level " + string(obj_plyr.actCharge) + ")" : c.item + " level " + string(c.level) + "/" + string(c.max);
 }
+
+/// @description Spawn monsters of a kind round the player: up, left, down and right, _dist pixels away.
+function autotest_monster_ring(_kind, _dist){
+	var d = real(_dist);
+	with(obj_monster) instance_destroy();
+	with(obj_enemy_shot) instance_destroy();
+	monster_spawn(_kind, obj_plyr.x, obj_plyr.y - d, 1);
+	monster_spawn(_kind, obj_plyr.x - d, obj_plyr.y, 1);
+	monster_spawn(_kind, obj_plyr.x, obj_plyr.y + d, 1);
+	monster_spawn(_kind, obj_plyr.x + d, obj_plyr.y, 1);
+	return 4;
+}
+
+/// @description One monster of a kind _dist pixels in front of the player (facing right).
+function autotest_monster_ahead(_kind, _dist){
+	with(obj_monster) instance_destroy();
+	with(obj_enemy_shot) instance_destroy();
+	monster_spawn(_kind, obj_plyr.x + real(_dist), obj_plyr.y, 1);
+	with(obj_plyr){ y_frame = 11; facing = -1; }
+	return obj_plyr.x;
+}
+
+/// @description Every monster's health, and the player's position, for logs.
+function autotest_monster_hps(){
+	var s = "";
+	with(obj_monster) s += kind + " " + string(hp) + "/" + string(hpMax) + (dying ? " (down)" : "") + "  ";
+	return s + " player x " + string(round(obj_plyr.x));
+}
+
+function autotest_fishing_now(){ return instance_exists(obj_fishing) ? "fishing" : "not fishing"; }
+
+/// @description In the mine: stand on a spot with open floor _left px to the left, _right px to the right and _ud px
+/// up and down (no rock), clearing any resources there. Returns the spot or "none".
+function autotest_open_floor(_left, _right, _ud){
+	var l = real(_left), r = real(_right), u = real(_ud);
+	for(var yy = 64 + u; yy < room_height - 64 - u; yy += 16){
+		for(var xx = 64 + l; xx < room_width - 64 - r; xx += 16){
+			var ok = true;
+			for(var px = xx - l; px <= xx + r && ok; px += 8)
+				for(var py = yy - u; py <= yy + u && ok; py += 8)
+					if(tilemap_get_at_pixel(global.mineWalls, px, py) > 0) ok = false;
+			if(!ok) continue;
+			obj_plyr.x = xx; obj_plyr.y = yy;
+			with(obj_resource) if(x > xx - l - 16 && x < xx + r + 16 && y > yy - u - 16 && y < yy + u + 16) instance_destroy();
+			return string(xx) + "," + string(yy);
+		}
+	}
+	return "none";
+}
+
+/// @description The player's shot in flight: its speed and how far it will go.
+function autotest_projectile(){
+	with(obj_projectile) return "speed " + string(point_distance(0, 0, dx, dy)) + "  reach " + string(round(point_distance(0, 0, dx, dy) * life)) + "  damage " + string(weapon.dmg);
+	return "no shot";
+}

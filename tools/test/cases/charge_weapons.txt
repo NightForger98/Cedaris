@@ -1,0 +1,73 @@
+# Charged weapons (docs/CHARGING.md): swords spin, spears lunge, heavy weapons slam, the dagger flurries, slings draw
+start story
+wait 60
+gold 1000
+pos 552 168
+face n
+wait 5
+key e
+wait 80
+call autotest_open_floor 80 380 70
+give c|held|Arming Sword
+give c|held|Spear
+give c|held|Mace
+give c|held|Dagger
+give c|held|Slingshot
+give m|stone 20
+# A sword spins: monsters on every side are hit
+equip c|held|Arming Sword
+call autotest_monster_ring slime 26
+call autotest_vitals
+snap 90 sword_spin
+charge 2
+call autotest_monster_hps
+call autotest_vitals
+# A tap only hits what's in front
+call autotest_monster_ring slime 26
+use 1
+call autotest_monster_hps
+# A spear lunges: it carries you forward and reaches further
+equip c|held|Spear
+call autotest_monster_ahead slime 100
+charge 2
+wait 20
+call autotest_monster_hps
+# A mace slams: everything round is hit and stunned
+equip c|held|Mace
+call autotest_monster_ring slime 30
+snap 85 mace_slam
+charge 2
+call autotest_monster_hps
+# The dagger stabs three times
+equip c|held|Dagger
+call autotest_monster_ahead bat 24
+charge 2
+wait 30
+call autotest_monster_hps
+# A drawn slingshot shoots further
+equip c|held|Slingshot
+call autotest_monster_ahead slime 1500
+charge 2
+call autotest_projectile
+wait 60
+use 1
+call autotest_projectile
+wait 60
+call autotest_monster_ahead slime 150
+charge 2
+wait 60
+call autotest_monster_hps
+inv
+# The fishing rod casts further when charged: too far from the farm pond for a tap, close enough charged
+room rm_1 1600 600
+wait 30
+give c|held|Fishing Rod
+equip c|held|Fishing Rod
+face n
+use 1
+wait 20
+call autotest_fishing_now
+charge 3
+wait 20
+call autotest_fishing_now
+quit

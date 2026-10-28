@@ -17,6 +17,8 @@ if(charge != undefined){
 		// A charged spin or big swing plays out its own way (charge_release_motion)
 		motion = charge_release_motion(charge, actDir);
 		if(motion != undefined && motion.type == "swing") act.fps *= 0.8;
+		// Weapons are free to swing, but a charged move costs 2 energy a level
+		if(actCharge > 0 && !item_is_tool(charge.item) && world_time_ready()) global.vitals.energy = max(0, global.vitals.energy - 2 * actCharge);
 		charge = undefined;
 	}
 }
@@ -26,6 +28,14 @@ if(act != undefined && charge == undefined){
 	var spinning = (motion != undefined && motion.type == "spin");
 	if(spinning){ motion.t++; actStep = (motion.t >= motion.hitAt) ? act.hit : 0; }
 	else actStep += act.fps / game_get_speed(gamespeed_fps);
+	// A spear's lunge carries you forward (not through walls)
+	if(motion != undefined && motion.type == "lunge" && motion.left > 0){
+		var solids = collision_solids(!place_meeting(x, y, obj_npc_parent));
+		repeat(min(6, motion.left)){
+			if(place_meeting(x + motion.dx, y + motion.dy, solids)){ motion.left = 0; break; }
+			x += motion.dx; y += motion.dy; motion.left--;
+		}
+	}
 	if(!actHit && actStep >= act.hit){
 		actHit = true;
 		var itemName = lpc_catalog().items[look.parts.held.item].name;
@@ -35,6 +45,12 @@ if(act != undefined && charge == undefined){
 			if(item_is_tool(itemName) && world_time_ready()) global.vitals.energy = max(0, global.vitals.energy - tool_energy_cost(itemName) * (1 + actCharge));
 			action_hit(id, itemName, actDir, actCharge);
 		}
+	}
+	// A dagger's flurry stabs again
+	if(!spinning && actStep >= act.frames && motion != undefined && motion.type == "flurry" && motion.left > 0){
+		motion.left--;
+		actStep = 0;
+		actHit = false;
 	}
 	if(spinning ? motion.t >= motion.total : actStep >= act.frames){
 		if(spinning) y_frame = 8 + motion.start; // back facing the way you started

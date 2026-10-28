@@ -55,9 +55,10 @@ function fish_roll(){
 }
 
 /// @description The rod's swing lands (from action_hit): if there's water within two cells in front, start fishing.
-function fishing_cast(_user, _dir){
+function fishing_cast(_user, _dir, _level = 0){
 	var dx = [0, -1, 0, 1][_dir], dy = [-1, 0, 1, 0][_dir];
-	for(var reach = 1; reach <= 3; reach++){
+	// Charging the rod throws it further: a cell more each level (charging script)
+	for(var reach = 1; reach <= 3 + _level; reach++){
 		var px = _user.x + dx * reach * 28, py = _user.y - 8 + dy * reach * 28;
 		if(collision_point(px, py, obj_water_zone, false, true) != noone){
 			var fish = fish_roll();

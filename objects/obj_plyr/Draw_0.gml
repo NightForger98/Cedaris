@@ -41,5 +41,6 @@ else if(motion != undefined && motion.type == "spin" && act != undefined) charge
 else if(act != undefined){
 	character_draw(look, 0, 0, xx, yy, 1, {act: act, i: floor(actStep), dir: actDir});
 	if(motion != undefined && motion.type == "swing") charge_draw_swing(id);
+	if(motion != undefined && motion.type == "slam") charge_draw_slam(id);
 }
 else character_draw(look, floor(x_frame), y_frame, xx, yy, 1);

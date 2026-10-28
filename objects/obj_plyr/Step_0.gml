@@ -14,12 +14,18 @@ if(charge != undefined){
 		if(lv > charge.level){ charge.level = lv; charge.flash = 10; }
 	} else {
 		actCharge = charge.level;
+		// A charged spin or big swing plays out its own way (charge_release_motion)
+		motion = charge_release_motion(charge, actDir);
+		if(motion != undefined && motion.type == "swing") act.fps *= 0.8;
 		charge = undefined;
 	}
 }
 // Using the held item: play the action through, firing its effect once on the hit step
 if(act != undefined && charge == undefined){
-	actStep += act.fps / game_get_speed(gamespeed_fps);
+	// A spin holds the swing's hit frame while it turns, landing a third of the way round
+	var spinning = (motion != undefined && motion.type == "spin");
+	if(spinning){ motion.t++; actStep = (motion.t >= motion.hitAt) ? act.hit : 0; }
+	else actStep += act.fps / game_get_speed(gamespeed_fps);
 	if(!actHit && actStep >= act.hit){
 		actHit = true;
 		var itemName = lpc_catalog().items[look.parts.held.item].name;
@@ -30,7 +36,11 @@ if(act != undefined && charge == undefined){
 			action_hit(id, itemName, actDir, actCharge);
 		}
 	}
-	if(actStep >= act.frames) act = undefined;
+	if(spinning ? motion.t >= motion.total : actStep >= act.frames){
+		if(spinning) y_frame = 8 + motion.start; // back facing the way you started
+		act = undefined;
+		motion = undefined;
+	}
 	moveX = 0; moveY = 0;
 	exit;
 }
@@ -42,6 +52,7 @@ if(!busy && input_pressed(ord("F")) && look.parts.held.item != -1){
 	if(variable_struct_exists(cast, "act")){
 		act = cast.act;
 		actCharge = 0;
+		motion = undefined;
 		castSpell = cast.spell;
 		actStep = 0;
 		actHit = false;
@@ -86,6 +97,7 @@ if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(v
 	if(act != undefined){
 		actStep = 0;
 		actHit = false;
+		motion = undefined;
 		actCharge = 0;
 		actDir = clamp(y_frame - 8, 0, 3); // walk rows 8-11 are n, w, s, e
 		// Chargeable: hold on the wind-up until the button's let go

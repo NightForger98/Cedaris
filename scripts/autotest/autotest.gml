@@ -79,6 +79,8 @@ function autotest_step(){
 	// A test press lasts from this Step to the next one, so every object sees it exactly once
 	global.autotestKey = t.press;
 	t.press = -1;
+	// snap N name: a screenshot N frames on, even mid-action (spins, swings)
+	if((t[$ "snapIn"] ?? 0) > 0 && --t.snapIn == 0) screen_save("autotest/" + t.snapName + ".png");
 	if(t.wait > 0){ t.wait--; return; }
 	// Holding the button to charge (the charge command): let go once the level is reached, or if nothing charges
 	if((t[$ "chargeTo"] ?? -1) >= 0){
@@ -195,6 +197,7 @@ function autotest_step(){
 				}
 				autotest_log(s);
 				break;
+			case "snap": t.snapIn = real(a[1]); t.snapName = a[2]; break;
 			case "shot":
 				screen_save("autotest/" + a[1] + ".png");
 				break;

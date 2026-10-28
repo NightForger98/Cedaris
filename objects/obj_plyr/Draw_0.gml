@@ -36,5 +36,10 @@ if(charge != undefined){
 	character_draw(look, 0, 0, xx, yy, 1, a);
 	charge_draw_front(id, xx, yy, actDir);
 }
-else if(act != undefined) character_draw(look, 0, 0, xx, yy, 1, {act: act, i: floor(actStep), dir: actDir});
+// A charged release: the spin with its trail, or the big swing with its arc
+else if(motion != undefined && motion.type == "spin" && act != undefined) charge_draw_spin(id, xx, yy);
+else if(act != undefined){
+	character_draw(look, 0, 0, xx, yy, 1, {act: act, i: floor(actStep), dir: actDir});
+	if(motion != undefined && motion.type == "swing") charge_draw_swing(id);
+}
 else character_draw(look, floor(x_frame), y_frame, xx, yy, 1);

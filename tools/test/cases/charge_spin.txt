@@ -1,0 +1,45 @@
+# Charged releases (docs/CHARGING.md): the scythe and watering can spin with a trail, the axe swings wide
+start story
+wait 60
+time 12
+pos 600 470
+call autotest_ring weeds 2
+call autotest_tool_tier Scythe 2
+hold 7
+face s
+snap 70 spin_a
+snap 76 spin_b
+snap 84 spin_c
+charge 2
+wait 40
+call autotest_resources
+call autotest_charge
+# Facing up it starts from up
+face n
+snap 66 spin_n_a
+snap 74 spin_n_b
+charge 1
+wait 40
+# A Blessed scythe flickers its flames twice first
+call autotest_tool_tier Scythe 7
+face e
+snap 230 blessed_pre
+snap 262 blessed_spin
+charge 6
+wait 60
+# The watering can spins blue
+call autotest_tool_tier Watering_Can 2
+hold 2
+face s
+snap 70 can_spin
+charge 2
+wait 40
+# A charged axe swings wide
+call autotest_tool_tier Axe 5
+hold 5
+face e
+snap 190 axe_swing
+charge 5
+wait 40
+call autotest_charge
+quit

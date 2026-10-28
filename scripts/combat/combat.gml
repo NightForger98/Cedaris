@@ -209,7 +209,7 @@ function player_hurt(_dmg, _fromX, _fromY){
 	with(obj_plyr){
 		iframes = 60;
 		// A hit knocks the wind out of a charge
-		if(charge != undefined){ charge = undefined; act = undefined; }
+		if(charge != undefined){ charge = undefined; act = undefined; motion = undefined; }
 		var a = point_direction(_fromX, _fromY, x, y);
 		var solids = collision_solids(false);
 		repeat(12){

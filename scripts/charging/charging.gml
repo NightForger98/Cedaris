@@ -256,3 +256,88 @@ function charge_draw_flames(_xx, _yy, _back){
 	}
 	gpu_set_blendmode(bm_normal);
 }
+
+// ---------------------------------------------------------------- the release: spins and big swings
+
+#macro CHARGE_SPIN_STEP 4   // frames each facing shows while spinning: about 3 turns in 0.85 s, as in the reference
+#macro CHARGE_SPIN_TURNS 3
+
+/// @description How a charged swing plays out, set when the button's let go (obj_plyr): a spin (scythe, watering can)
+/// or a big swing (axe, pickaxe, hammer, shovel), or undefined for a plain swing. A Blessed tool's flames flicker
+/// twice before a spin starts (pre).
+function charge_release_motion(_c, _dir){
+	var kind = charge_kind(_c.item);
+	if(_c.level <= 0) return undefined;
+	if(kind == "spin" || kind == "water_spin"){
+		var pre = charge_stage(_c).flames ? 4 * 7 : 0, turn = 4 * CHARGE_SPIN_STEP * CHARGE_SPIN_TURNS + CHARGE_SPIN_STEP;
+		return {type: "spin", t: 0, pre: pre, total: pre + turn, hitAt: pre + turn div 3, start: _dir, water: kind == "water_spin", c: _c};
+	}
+	if(kind == "big_swing") return {type: "swing", t: 0, arc: charge_arc(_c.item, _c.level), c: _c};
+	return undefined;
+}
+
+/// @description The facing a spin shows on its frame _t: it starts the way you face and turns clockwise (up, right,
+/// down, left), and ends on the facing it started from.
+function charge_spin_dir(_m){
+	static order = [0, 3, 2, 1];
+	var k = max(0, _m.t - _m.pre) div CHARGE_SPIN_STEP;
+	return order[(array_get_index(order, _m.start) + k) mod 4];
+}
+
+/// @description Draw the player spinning (obj_plyr Draw): the trail's far half, the body, then its near half.
+function charge_draw_spin(_user, _xx, _yy){
+	var m = _user.motion, act = _user.act;
+	if(m.t < m.pre){
+		// The flames flicker twice on the wind-up before the spin
+		charge_draw_flames(_xx, _yy, true);
+		character_draw(_user.look, 0, 0, _xx, _yy, 1, {act: act, i: 0, dir: m.start, fx: charge_fx(m.c, m.start)});
+		charge_draw_flames(_xx, _yy, false);
+		return;
+	}
+	charge_draw_ring(_user, m, true);
+	character_draw(_user.look, 0, 0, _xx, _yy, 1, {act: act, i: min(act.hit, act.frames - 1), dir: charge_spin_dir(m)});
+	charge_draw_ring(_user, m, false);
+}
+
+/// @description A spin's trail: a flat oval swept round the feet behind the blade, fading as it goes - white-green
+/// for the scythe, blue with droplets for the watering can. _back: the far half (behind the body).
+function charge_draw_ring(_user, _m, _back){
+	var p = (_m.t - _m.pre) / (_m.total - _m.pre);
+	var startAng = [90, 180, 270, 0][_m.start];
+	var head = startAng - 360 * CHARGE_SPIN_TURNS * p - 360 * p / (4 * CHARGE_SPIN_TURNS);
+	var cx = _user.x, cy = _user.y - 8, rx = 30, ry = 12;
+	var col = _m.water ? make_colour_rgb(120, 190, 255) : make_colour_rgb(215, 255, 190);
+	var fade = 1 - max(0, p - 0.85) / 0.15;   // the trail fades out as the spin ends
+	for(var s = 0; s < 18; s++){
+		var a1 = head + s * 9, a2 = a1 + 9;
+		var mid = (a1 + a2) / 2;
+		if((dsin(mid) > 0) != _back) continue;   // far side is the top of the oval
+		var alpha = (1 - s / 18) * 0.85 * fade;
+		draw_set_alpha(alpha);
+		draw_line_width_colour(cx + dcos(a1) * rx, cy - dsin(a1) * ry, cx + dcos(a2) * rx, cy - dsin(a2) * ry, 3 - s / 9, col, col);
+	}
+	if(_m.water && !_back){
+		// Droplets flung off the can
+		draw_set_colour(col);
+		for(var d = 0; d < 6; d++){
+			var a = head + d * 25, r = 1 + (d * 7 + _m.t) mod 9;
+			draw_set_alpha(0.8 * fade);
+			draw_rectangle(cx + dcos(a) * (rx + r), cy - dsin(a) * (ry + r * 0.4), cx + dcos(a) * (rx + r) + 1, cy - dsin(a) * (ry + r * 0.4) + 1, false);
+		}
+	}
+	draw_set_alpha(1);
+}
+
+/// @description A big swing's trail (axe, pickaxe): a white arc across the swing's width in front, swept as it plays.
+function charge_draw_swing(_user){
+	var m = _user.motion, act = _user.act;
+	var p = clamp(_user.actStep / act.frames, 0, 1), ang = [90, 180, 270, 0][_user.actDir];
+	var cx = _user.x, cy = _user.y - 20, r = 34;
+	var from = ang + m.arc / 2, sweep = m.arc * p, steps = 16;
+	for(var s = 0; s < steps; s++){
+		var a1 = from - sweep * s / steps, a2 = from - sweep * (s + 1) / steps;
+		draw_set_alpha(0.25 + 0.6 * (s + 1) / steps);
+		draw_line_width_colour(cx + dcos(a1) * r, cy - dsin(a1) * r * 0.8, cx + dcos(a2) * r, cy - dsin(a2) * r * 0.8, 1 + 2 * (s + 1) / steps, c_white, c_white);
+	}
+	draw_set_alpha(1);
+}

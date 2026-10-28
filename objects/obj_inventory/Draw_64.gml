@@ -266,6 +266,7 @@ if(tip != undefined && cursor == undefined){
 		case "scroll":   array_push(lines, "Spell scroll"); break;
 		case "forage":   array_push(lines, "Forage"); break;
 		case "placeable": array_push(lines, "Place it"); break;
+		case "fish":     array_push(lines, "Fish"); break;
 		case "food":     array_push(lines, "Food"); break;
 	}
 	if(tierLine != "") lines[1] = tierLine + " " + string_lower(lines[1]);

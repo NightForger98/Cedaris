@@ -1,0 +1,30 @@
+# Milestone 10.5: cast at the farm pond, wait, land the fish in the green; cook it
+start story
+wait 60
+give c|held|Fishing Rod
+equip c|held|Fishing Rod
+# The little pond west of Brom (its water zone is at 304,192)
+pos 304 290
+face n
+key space
+wait 40
+call autotest_ui
+shot 01_waiting
+call autotest_fish_ready
+wait 2
+shot 02_bite
+key space
+wait 10
+inv
+# Cast at nothing
+pos 600 500
+face s
+key space
+wait 40
+# Cook grilled perch at the hearth
+give x|perch 1
+room rm_12 496 392
+wait 40
+call autotest_station cook f|grilled_perch
+inv
+quit

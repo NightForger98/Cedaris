@@ -8,6 +8,7 @@
 ///   "k|<spell>"                spell scroll (see magic)
 ///   "w|<forage>"               something wild from Whisperwood (see forest)
 ///   "o|<kind>"                 something you place, like a sprinkler (see placeables)
+///   "x|<fish>"                 a fish (see fishing)
 /// A stack is {id, count, pal} - pal is an optional palette name giving clothing its own colour.
 ///
 /// Stats: clothing gets its stats from the materials in its recipe (item_stats), and everything
@@ -136,6 +137,13 @@ function item_def(_id){
 				d = {id: _id, type: "produce", crop: ci, quality: q, max: 99, price: produce_price(ci, q) * 2, tier: q, stats: {},
 				     name: ["", "Silver ", "Gold "][q] + ct.name,
 				     desc: "Ship it, or hold it and use it to eat (+" + string(round(ct.energy * (1 + q * 0.4))) + " energy)."};
+			}
+			break;
+		case "x":
+			var fd = fish_def(p[1]);
+			if(fd != undefined){
+				d = {id: _id, type: "fish", fish: p[1], name: fd.name, max: 99, price: fd.sell * 2, tier: (fd.hard >= 0.5) ? 1 : 0, stats: {},
+				     desc: (fd[$ "junk"] ?? false) ? "Someone lost this a long time ago." : "Sell it, cook it, or hold it and use it to eat it raw (+" + string(fd.energy) + " energy)."};
 			}
 			break;
 		case "o":
@@ -474,6 +482,9 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			break;
 		case "placeable":
 			placeable_draw(d.kind, cx, cy + _size * 0.2, _size / 30);
+			break;
+		case "fish":
+			fish_draw_icon(d.fish, cx, cy, _size * 0.36);
 			break;
 		case "forage":
 			// The plant itself, from the terrain tileset

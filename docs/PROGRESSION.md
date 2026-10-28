@@ -97,6 +97,12 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
   Sprinkler (2 copper, 1 iron: the 4 cells around it), Quality Sprinkler (2 iron, 1 gold: 3x3) and Great Sprinkler
   (2 gold, 1 steel, 1 gem: 5x5). Hold one and use it to place it; it waters every morning; a pickaxe picks it up.
 
+- **Fishing** (`scripts/fishing`): Brom sells the rod. Cast it at water (the farm's ponds, Whisperwood's pond), wait for
+  a bite, then press Space while the marker sweeps through the green zone (narrower for harder fish, wider with
+  Luck). Fish by water, season, time and weather (`fish_table()`): Pond Perch, Mud Carp, Sunfish, Glimmer Trout
+  (rain), Frost Pike (winter), Moonfin (Whisperwood at night) - and the odd Old Boot. Eat them raw or cook
+  Grilled Perch and Moonfin Soup (+5 Luck).
+
 ## Hooks for quests and events
 
 ```gml

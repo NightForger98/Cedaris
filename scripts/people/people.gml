@@ -217,6 +217,6 @@ function dialogue_open(){ return instance_exists(obj_dialogue); }
 /// @description True while any window is up (inventory, dialogue, the notice board, the lift): the player and
 /// monsters hold still, and Esc / I belong to the window.
 function ui_blocking(){
-	return instance_exists(obj_inventory) || dialogue_open() || mine_menu_open()
+	return instance_exists(obj_inventory) || dialogue_open() || mine_menu_open() || instance_exists(obj_fishing)
 	       || (instance_exists(obj_quest_board) && obj_quest_board.open);
 }

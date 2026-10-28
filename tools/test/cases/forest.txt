@@ -39,7 +39,6 @@ pos 970 500
 face e
 key e
 wait 80
-call room_get_name room
 call autotest_forest
 call autotest_resources
 shot 03_forest

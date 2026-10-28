@@ -357,3 +357,9 @@ function autotest_build(_id){
 	for(var i = 0; i < array_length(list); i++) if(list[i].id == _id) return inv_craft(_id, list[i].cost);
 	return "not on the list";
 }
+
+/// @description Fishing for tests: skip the wait, and put the marker in the middle of the green zone.
+function autotest_fish_ready(){
+	with(obj_fishing){ state = "bite"; marker = zoneAt + zone / 2; markerSpeed = 0; return fish; }
+	return "not fishing";
+}

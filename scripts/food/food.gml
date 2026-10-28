@@ -28,6 +28,8 @@ function dish_table(){
 		{key: "stuffed_artichoke", name: "Stuffed Artichoke", ing: [["artichoke", 1], ["tomato", 1]],       energy: 100, buff: {luck: 4},             minutes: 360, colour: make_colour_rgb(120, 160, 80)},
 		{key: "gourd_pie",    name: "Gourd Pie",         ing: [["gourd", 1], ["carrot", 1]],                energy: 120, buff: {charm: 2, luck: 2},   minutes: 360, colour: make_colour_rgb(220, 130, 60)},
 		{key: "forest_stew",  name: "Forest Stew",       ing: [["w|mushroom", 2], ["w|herb", 1], ["potato", 1]], energy: 110, buff: {magic: 3, stamina: 2}, minutes: 360, colour: make_colour_rgb(130, 110, 80)},
+		{key: "grilled_perch", name: "Grilled Perch",     ing: [["x|perch", 1]],                            energy: 70,  buff: {speed: 1, stamina: 2}, minutes: 300, colour: make_colour_rgb(190, 150, 90)},
+		{key: "moonfin_soup",  name: "Moonfin Soup",      ing: [["x|moonfin", 1], ["w|herb", 1]],          energy: 120, buff: {luck: 5, magic: 2},   minutes: 480, colour: make_colour_rgb(170, 160, 230)},
 	];
 	return t;
 }

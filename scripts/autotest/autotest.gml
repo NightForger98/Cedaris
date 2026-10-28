@@ -418,3 +418,13 @@ function autotest_upgrade_rooms(){
 	}
 	return s + "placed " + string(array_length(farm.placed)) + "  sprinklers in bag " + string(inv_count("o|sprinkler"));
 }
+
+/// @description The open shop: its title, how many things it sells, and the first few.
+function autotest_shop_stock(){
+	with(obj_inventory){
+		var s = shopTitle + ": " + string(array_length(shopStock)) + " -";
+		for(var i = 0; i < min(4, array_length(shopStock)); i++) s += " " + item_def(shopStock[i].id).name + " " + string(shopStock[i].price);
+		return s;
+	}
+	return "no shop";
+}

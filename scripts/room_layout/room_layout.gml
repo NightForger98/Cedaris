@@ -8,7 +8,14 @@ function room_layout(){
 		rm_123: {points: {stairs: [96, 180]}, areas: {}},
 		rm_2: {points: {road_west: [64, 576], bridge: [1370, 592], crowd: [560, 400], river: [1456, 0]}, areas: {square: [14, 10, 41, 21]}},
 		rm_beach: {points: {road_east: [1480, 576], pier_end: [160, 576]}, areas: {shore: [14, 1, 28, 38]}},
-		rm_town: {points: {street_south: [1024, 1320]}, areas: {square: [16, 12, 47, 27]}},
+		rm_town: {points: {street_south: [1024, 1320], inn_door: [1056, 340], outfitter_door: [1776, 404], apothecary_door: [272, 852]}, areas: {square: [16, 12, 47, 27]}},
+		rm_town_apothecary: {points: {door: [256, 344]}, areas: {}},
+		rm_town_home_e: {points: {door: [256, 312]}, areas: {}},
+		rm_town_home_nw: {points: {door: [256, 312]}, areas: {}},
+		rm_town_home_se: {points: {door: [256, 312]}, areas: {}},
+		rm_town_home_sw: {points: {door: [256, 312]}, areas: {}},
+		rm_town_inn: {points: {door: [352, 408], bar: [144, 240]}, areas: {}},
+		rm_town_outfitter: {points: {door: [288, 344]}, areas: {}},
 		rm_valley: {points: {path_north: [704, 72]}, areas: {west: [1, 14, 36, 26], east: [42, 4, 58, 36]}},
 	};
 	return t;

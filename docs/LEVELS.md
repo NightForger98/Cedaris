@@ -56,13 +56,14 @@ The farm is the middle of the map; a way out on each side:
   player and solid over its art.
 - **Village** (`rm_2`, 56x36): the hall on a cobbled square (notice board), Elda's and Thorne's houses, the river
   with the bridge to Whisperwood.
-- **Brindlemoor** (`rm_town`, 64x44): the town hall over a big market square, six houses; Lysa the innkeeper and
-  Garrick the watchman.
+- **Brindlemoor** (`rm_town`, 64x44): the town hall over a big market square, six houses; Garrick the watchman.
+  Every door leads inside (`rm_town_*`, built with `tools/rooms/interior.js`): the hall is the Brindle Inn (Lysa sells
+  a daily menu of meals), the sword sign Bryn's Outfitters (clothes and armour that fit you), the potion sign Morga's
+  Apothecary (Heal and Fireball scrolls, staves, forage, tonics); the other four are homes.
 - **Saltmere Coast** (`rm_beach`, 48x40): sea, a beach, a pier to fish from (sea fish); Old Marlo the fisher.
 - **Hollow Vale** (`rm_valley`, 60x44): Wren the shepherd's hut, a river with a bridge, a lake (river fish), wood
   and forage on both banks.
-- Next: interiors for the town's houses (the doors are art only), more people, and shops in the town.
-  `rm_3` is an empty test room nothing leads to.
+- Next: people living in the town's homes. `rm_3` is an empty test room nothing leads to.
 
 ## Generated rooms: the mine (roadmap phase 4)
 

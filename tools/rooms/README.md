@@ -57,7 +57,13 @@ To find a tile's coordinates, look at the sheet in a viewer with a 32px grid; `[
 
 ## Rooms built this way
 
-`rm_1` farm, `rm_2` village, `rm_12`/`rm_123` the farmhouse, `rm_town`, `rm_beach`, `rm_valley` (the world map is in
-`docs/LEVELS.md`). A spec for a room that doesn't exist yet creates it and adds it to `NewHarvest.yyp`. Interiors
+`rm_1` farm, `rm_2` village, `rm_12`/`rm_123` the farmhouse, `rm_town` and its seven interiors (`rm_town_*`),
+`rm_beach`, `rm_valley` (the world map is in `docs/LEVELS.md`). A spec for a room that doesn't exist yet creates it and adds it to `NewHarvest.yyp`. Interiors
 use `base: "none"` and a furnished stamp, with the map only saying where you can walk. `node tools/rooms/paint.js`
 paints rectangles of a character into a spec's map.
+
+Interiors without a captured stamp come from `interior.js`: `interior({w, h, wall, floor, door, exit, furniture})`
+gives a spec with a cream border, a back wall, a floor, a doorway in the bottom edge (and its exit), and furniture
+from its `pieces` table of `TS_interior` tiles (counters, shelves, beds, tables, things for the wall and for
+counter tops). Every piece draws under the player and is solid over its art. `keeper(slot, col, row)` stands a
+shopkeeper behind a counter. A spec's `view: [w, h]` sets the camera's view (interiors use 375 x 210).

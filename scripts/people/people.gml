@@ -63,8 +63,8 @@ function villager_table(){
 		                ["Can I hold your sword? Just for a second?", "I counted all the chickens. There aren't any. We need chickens.", "Bring me a feather! A big one!"],
 		                ["You're the coolest cousin ever.", "When I grow up I'm going to dig to floor thirty. Like you.", "I made you a map of the house. It's mostly the kitchen."]],
 		        rewards: [["m|feather", 5], ["d|cloth|sky", 1], ["m|gem", 1], ["d|cloth|red", 1], ["m|void_pearl", 1]]},
-		// Brindlemoor, the town up the cliff path north of the farm
-		lysa:  {name: "Lysa", title: "the Innkeeper", room: "rm_town", slot: "woman", race: "Human", body: "female", seed: 4101,
+		// Brindlemoor, the town up the cliff path north of the farm, and its shops (rm_town_*)
+		lysa:  {name: "Lysa", title: "the Innkeeper", room: "rm_town_inn", slot: "woman", race: "Human", body: "female", seed: 4101, shop: "inn",
 		        loves: ["f|veg_stew", "f|gourd_pie", "x|salmon"], likes: ["f|", "p|", "x|"], dislikes: ["m|bone", "m|coal"], hates: ["m|troll_hide"],
 		        lines: [["Welcome to Brindlemoor! Mind the cobbles, they bite ankles.", "The inn's always got a pot on. Usually.", "Farmers come up the ladder with the best appetites."],
 		                ["You again! The usual? We don't have a usual. We should.", "Garrick says the road west is all salt and gulls now.", "A traveller paid me in fish once. Best tip I ever had."],
@@ -76,6 +76,18 @@ function villager_table(){
 		                ["You walk like someone who's been down a mine. Respect.", "Saw lights over the sea again. Don't like it.", "Brom makes a fine blade. Tell him I said so. Don't."],
 		                ["If trouble ever follows you up that ladder, I'll be waiting for it.", "You've earned the town's trust. Mine too.", "Take this. A watchman's spare. Keep it sharp."]],
 		        rewards: [["m|iron", 5], ["d|cloth|charcoal", 1], ["m|coal", 10], ["d|cloth|maroon", 1], ["m|steel", 3]]},
+		bryn:  {name: "Bryn", title: "the Outfitter", room: "rm_town_outfitter", slot: "man", race: "Beastkin", body: "male", seed: 4303, shop: "outfitter",
+		        loves: ["m|leather", "m|fur", "m|silk", "m|moonsilk"], likes: ["m|wool", "m|fibre", "m|iron", "f|"], dislikes: ["w|toadstool"], hates: ["m|bone", "m|coal"],
+		        lines: [["Boots, belts, britches. If it's worn, I sell it.", "Stand still, I'm guessing your size. Done.", "Garrick keeps asking for a cape. Watchmen don't need capes."],
+		                ["You wear your clothes like you work in them. Good. That's what they're for.", "Leather from the valley, wool from the vale. Best in the north.", "Brom makes the swords. I make sure you look good holding one."],
+		                ["I'd dress you for free if I could afford it. I can't. Sorry.", "You're the best-turned-out farmer I've ever met.", "I stitched this one with you in mind. Go on."]],
+		        rewards: [["m|leather", 5], ["d|cloth|walnut", 1], ["m|silk", 3], ["d|cloth|navy", 1], ["m|moonsilk", 1]]},
+		morga: {name: "Morga", title: "the Apothecary", room: "rm_town_apothecary", slot: "woman", race: "Orc", body: "female", seed: 4404, shop: "apothecary",
+		        loves: ["w|toadstool", "m|pixie_dust", "m|frost_crystal", "f|forest_stew"], likes: ["w|", "m|gem", "x|", "f|"], dislikes: ["p|corn"], hates: ["f|fiery_chilli", "m|ember_core"],
+		        lines: [["Don't touch the green jar. Or the blue one. Just - don't touch.", "Scrolls, staves, simples. Spells cost mana, my prices cost gold.", "Bring me toadstools. The ugly ones."],
+		                ["You've a feel for magic, farmer. I can smell it on you. Also soil.", "Heal is the first spell anyone should learn. Fireball is the second.", "The forest across the river grows things even I can't name."],
+		                ["You're my favourite customer. You actually read the labels.", "I brewed this for you. Don't ask what's in it.", "Magic is just patience with a staff. You have both."]],
+		        rewards: [["w|herb", 5], ["d|cloth|lavender", 1], ["m|pixie_dust", 2], ["d|cloth|teal", 1], ["k|heal", 1]]},
 		// The Saltmere Coast, west of the farm
 		marlo: {name: "Old Marlo", title: "the Fisher", room: "rm_beach", slot: "man", race: "Human", body: "male", seed: 5101,
 		        loves: ["x|mooneel", "x|seabass", "f|grilled_perch"], likes: ["x|", "f|"], dislikes: ["p|potato"], hates: ["m|ember_core"],
@@ -226,7 +238,7 @@ function people_open(_npc){
 	instance_create_depth(0, 0, -9000, obj_dialogue, {who: key, npc: _npc, text: villager_line(key), note: reward});
 }
 
-/// @description T in Brom's or Mara's dialogue: their shop.
+/// @description T in a shopkeeper's dialogue: their shop.
 function people_trade(_key){
 	var v = villager_def(_key);
 	var inv = instance_create_depth(0, 0, -9000, obj_inventory);
@@ -240,6 +252,62 @@ function people_trade(_key){
 		inv.shopStock = item_seed_stock();
 		inv.shopTitle = "Mara's Seeds - " + season_name(global.clock.season);
 	}
+	if(v.shop == "inn"){
+		inv.shopStock = shop_inn_stock();
+		inv.shopTitle = "The Brindle Inn - today's menu";
+	}
+	if(v.shop == "outfitter"){
+		inv.shopStock = shop_outfitter_stock();
+		inv.shopTitle = "Bryn's Outfitters";
+	}
+	if(v.shop == "apothecary"){
+		inv.shopStock = shop_apothecary_stock();
+		inv.shopTitle = "Morga's Apothecary";
+	}
+}
+
+// ---------------------------------------------------------------- Brindlemoor's shops
+
+/// @description The inn's menu: five of the dishes you can cook, a different five each day, at half again what they're worth.
+/// Buying a meal is the quick way to a food buff before you can grow the ingredients.
+function shop_inn_stock(){
+	var t = dish_table(), out = [], n = array_length(t);
+	for(var i = 0; i < min(5, n); i++){
+		var d = t[(day_index() * 3 + i) mod n];
+		array_push(out, {id: "f|" + d.key, price: round(dish_price(d) * 1.5)});
+	}
+	return out;
+}
+
+/// @description Bryn's clothes and armour: three common or uncommon pieces of each kind that come in your size,
+/// spread through the catalogue (not three of the same hat), at twice what they're worth - making your own at the
+/// crafting table is cheaper.
+function shop_outfitter_stock(){
+	static slots = ["hat", "shirt", "vest", "coat", "cape", "belt", "pants", "shoes", "gloves"];
+	var per = 3, out = [], rs = item_recipes();
+	for(var s = 0; s < array_length(slots); s++){
+		var fit = [];
+		for(var i = 0; i < array_length(rs); i++){
+			var r = rs[i];
+			if(r.slot == slots[s] && item_cost_tier(r.cost) <= 1 && inv_recipe_ok(r, global.look)) array_push(fit, r.id);
+		}
+		var n = array_length(fit);
+		for(var k = 0; k < min(per, n); k++){
+			var pick = fit[(k * n) div per];
+			array_push(out, {id: pick, price: max(40, item_def(pick).price * 2)});
+		}
+	}
+	return out;
+}
+
+/// @description Morga's shelves: the spells you'd otherwise find deep in the mine, staves to cast them, forage, tonics.
+function shop_apothecary_stock(){
+	static ids = [["k|heal", 700], ["k|fireball", 900], ["c|held|Simple staff", 140], ["c|held|Gnarled staff", 220],
+	              ["w|herb", 0], ["w|mushroom", 0], ["w|toadstool", 0], ["m|pixie_dust", 0], ["f|forest_stew", 0], ["f|moonfin_soup", 0]];
+	var out = [];
+	// 0: what it's worth, and a bit more for the trouble of gathering it
+	for(var i = 0; i < array_length(ids); i++) array_push(out, {id: ids[i][0], price: (ids[i][1] > 0) ? ids[i][1] : round(item_def(ids[i][0]).price * 1.5)});
+	return out;
 }
 
 /// @description True while a dialogue box is open (the world holds still).

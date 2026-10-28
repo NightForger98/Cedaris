@@ -1,6 +1,7 @@
 // Brindlemoor (rm_town), the town up the cliff ladder north of the farm. Build with: node tools/rooms/build.js rm_town
-// 64 x 44 cells. The town hall stands over a cobbled square in the middle; six houses around it, each with a lane
-// to the square; the main street runs south to the top of the farm's ladder. Lysa keeps the inn, Garrick the watch.
+// 64 x 44 cells. The town hall stands over a cobbled square in the middle; six houses around it, each with a lane to
+// the square; the main street runs south to the top of the farm's ladder. Garrick keeps the watch. Every door leads
+// inside (rm_town_*): the hall is Lysa's inn, the sword sign the outfitter, the potion sign the apothecary, the rest homes.
 //
 // Map: . grass  : cobbles
 module.exports = {
@@ -88,10 +89,17 @@ module.exports = {
 		// Down the main street to the ladder onto the farm
 		{obj: "obj_transition", x: 1024, y: 1392, sx: 8, sy: 2,
 		 code: "targetRoom = rm_1;\ntargetX = 496;\ntargetY = 152;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
+		// The doors: the hall is the inn, the sword sign the outfitter, the potion sign the apothecary, the rest homes
+		...[["rm_town_inn", 1056, 304, 4, 352, 408], ["rm_town_home_nw", 272, 368, 2, 256, 312],
+		    ["rm_town_outfitter", 1776, 368, 2, 288, 344], ["rm_town_apothecary", 272, 816, 2, 256, 344],
+		    ["rm_town_home_e", 1776, 816, 2, 256, 312], ["rm_town_home_sw", 336, 1264, 2, 256, 312],
+		    ["rm_town_home_se", 1648, 1264, 2, 256, 312]].map(([to, x, y, sx, tx, ty]) => ({obj: "obj_transition", x, y, sx, sy: 1,
+			code: `targetRoom = ${to};\ntargetX = ${tx};\ntargetY = ${ty};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`})),
 	],
 
 	points: {
 		street_south: [1024, 1320],   // coming up the ladder from the farm
+		inn_door: [1056, 340], outfitter_door: [1776, 404], apothecary_door: [272, 852],
 	},
 	areas: {
 		square: [16, 12, 47, 27],

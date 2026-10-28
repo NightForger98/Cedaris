@@ -285,6 +285,8 @@ function build(roomName, opts = {}){
 	}
 	room.roomSettings.Width = W * CELL;
 	room.roomSettings.Height = H * CELL;
+	// view: [w, h] of the camera's view (interiors use the farmhouse's closer 375 x 210, so a small room fills the screen)
+	if(spec.view){ room.views[0].wview = spec.view[0]; room.views[0].hview = spec.view[1]; }
 	const instLayer = Object.assign(layerBase("GMRInstanceLayer", "Instances", 1000), {instances: insts});
 	const colLayer = Object.assign(layerBase("GMRInstanceLayer", "Collisions", 1050, false), {instances: cols});
 	// Within a role, layers made later draw on top (a sign put on a house goes over its wall)

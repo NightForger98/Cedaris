@@ -30,7 +30,7 @@ function fish_def(_key){ return fish_table()[$ _key]; }
 function fishing_place(){
 	if(room == rm_forest) return "forest";
 	if(room == rm_beach) return "sea";
-	if(room == rm_valley) return "river";
+	if(room == rm_valley || room == rm_north) return "river";
 	return "farm";
 }
 

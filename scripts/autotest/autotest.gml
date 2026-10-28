@@ -49,6 +49,11 @@ function input_pressed(_key){
 	return keyboard_check_pressed(_key) || (variable_global_exists("autotestKey") && global.autotestKey == _key);
 }
 
+/// @description A key held down, or held by a test (keydown / keyup), which works even when the window isn't focused.
+function input_held(_key){
+	return keyboard_check(_key) || (variable_global_exists("autotestHeld") && array_get_index(global.autotestHeld, _key) != -1);
+}
+
 function autotest_log(_text){
 	var f = file_text_open_append("autotest/log.txt");
 	file_text_write_string(f, _text);
@@ -150,8 +155,13 @@ function autotest_step(){
 				t.wait = 2;
 				break;
 			// Held keys (walking): keyboard_check sees a simulated press until it's released
-			case "keydown": keyboard_key_press(autotest_key(a[1])); break;
-			case "keyup":   keyboard_key_release(autotest_key(a[1])); break;
+			case "keydown":
+				if(!variable_global_exists("autotestHeld")) global.autotestHeld = [];
+				array_push(global.autotestHeld, autotest_key(a[1]));
+				break;
+			case "keyup":
+				if(variable_global_exists("autotestHeld")){ var hi = array_get_index(global.autotestHeld, autotest_key(a[1])); if(hi != -1) array_delete(global.autotestHeld, hi, 1); }
+				break;
 			// charge N [shot]: hold the button until the held tool reaches level N (a screenshot just before letting go)
 			case "charge":
 				t.chargeTo = real(a[1]);

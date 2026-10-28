@@ -18,7 +18,7 @@ function room_layout(){
 		rm_town_home_sw: {points: {door: [256, 312], hask_bed: [48, 184], hask_home: [240, 248]}, areas: {}},
 		rm_town_inn: {points: {door: [352, 408], lysa_work: [144, 152], ida_work: [240, 152], bar_a: [112, 216], bar_b: [208, 216], door_table: [112, 344], table_a: [400, 216], table_b: [496, 216], table_c: [560, 216], table_d: [656, 216], table_e: [400, 344], table_f: [496, 344], table_g: [560, 344], table_h: [656, 344], lysa_bed: [720, 184], posy_bed: [784, 184], garrick_bed: [848, 184], aldous_bed: [816, 376], bar: [144, 240]}, areas: {}},
 		rm_town_outfitter: {points: {door: [288, 344], bryn_work: [272, 152], bryn_bed: [624, 184], shop_a: [208, 248], shop_b: [368, 280]}, areas: {}},
-		rm_valley: {points: {path_north: [704, 72], pasture: [520, 440], yard: [1060, 470], hunt: [1600, 720], herbs: [420, 760], riverbank: [1180, 760]}, areas: {west: [1, 21, 36, 26], east: [42, 4, 58, 36]}},
+		rm_valley: {points: {path_north: [752, 72], pasture: [1056, 600], yard: [400, 1000], hunt: [900, 1560], herbs: [260, 1140], riverbank: [1120, 1180]}, areas: {west: [26, 20, 42, 36], east: [2, 42, 41, 52]}},
 		rm_valley_carpentry: {points: {door: [288, 344], thorne_work: [144, 152], thorne_bed: [496, 184], rowan_work: [304, 248], shop_a: [208, 248]}, areas: {}},
 		rm_valley_ranch: {points: {door: [288, 344], wren_work: [144, 152], wren_bed: [496, 184], pip_bed: [400, 184], shop_a: [112, 248], ranch_table: [400, 312]}, areas: {}},
 		rm_village_elda: {points: {door: [256, 312], elda_bed: [48, 184], elda_table: [240, 280]}, areas: {}},

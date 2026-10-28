@@ -124,10 +124,10 @@ if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(v
 		exit;
 	}
 }
-var in_left =keyboard_check(vk_left);
-var in_right =keyboard_check(vk_right);
-var in_up=keyboard_check(vk_up);
-var in_down =keyboard_check(vk_down);
+var in_left =input_held(vk_left);
+var in_right =input_held(vk_right);
+var in_up=input_held(vk_up);
+var in_down =input_held(vk_down);
 var in_walk=keyboard_check(vk_control);
 var in_run=keyboard_check(vk_shift);
 	//ALTERSPEED

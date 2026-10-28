@@ -106,7 +106,7 @@ module.exports = {
 		{obj: "obj_transition", x: 8, y: 576, sx: 1, sy: 4,
 		 code: "targetRoom = rm_beach;\ntargetX = 1480;\ntargetY = 576;\nPlayerFacingBefore = dir.left;\nPlayerFacingAfter = dir.left;"},
 		{obj: "obj_transition", x: 736, y: 1272, sx: 4, sy: 1,
-		 code: "targetRoom = rm_valley;\ntargetX = 704;\ntargetY = 72;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
+		 code: "targetRoom = rm_valley;\ntargetX = 752;\ntargetY = 72;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
 	],
 
 	// Named spots for scripts (scripts/room_layout): points in pixels, areas in cells [c1, r1, c2, r2]

@@ -39,8 +39,9 @@ We're not doing that, because:
 The farm is the middle of the map; a way out on each side:
 
 ```
-                     Brindlemoor (rm_town)
-                            | ladder up the cliff
+                     Brindlemoor (rm_town)  ----  North Road (rm_north)
+                            | ladder up the cliff     lane    | road, and the village river
+                            |                                 |
   Saltmere Coast  ----   The Farm (rm_1)   ----  Village (rm_2)  ----  Whisperwood (rm_forest)
    (rm_beach)    road       |  door  \ cave         road            bridge (a village project)
                             |   rm_12 <-> rm_123   rm_mine
@@ -65,9 +66,12 @@ The farm is the middle of the map; a way out on each side:
   Apothecary (Heal and Fireball scrolls, staves, forage, tonics); the other four are homes.
 - **Saltmere Coast** (`rm_beach`, 48x40): sea, a beach, a pier to fish from (sea fish); Old Marlo's hut by the
   road (`rm_beach_hut`).
-- **Hollow Vale** (`rm_valley`, 60x44): Wren's ranch at the top of the path (`rm_valley_ranch`: livestock; Pip
-  works and lives there too), Thorne's carpentry in the woods east of the path (`rm_valley_carpentry`: timber and
-  stone; Rowan works its yard), a river with a bridge, a lake (river fish), wood and forage on both banks.
+- **Hollow Vale** (`rm_valley`, 44x60, turned so its river runs across): the path comes down from the farm past
+  Wren's ranch on the right (`rm_valley_ranch`: livestock; Pip works and lives there too) and Thorne's carpentry on
+  the left (`rm_valley_carpentry`: timber and stone; Rowan works its yard), over the river on a plank bridge to the
+  wildflower meadow; a lake in the north-west (river fish), wood and forage on both banks.
+- **North Road** (`rm_north`, 68x44): empty so far. A road from Brindlemoor's east lane down to the village's north
+  road, and the village river coming up and bending away east (river fish).
 - The world map (M in game) is `spr_world_map` and `scripts/world_map`, made by `node tools/rooms/worldmap.js` from
   the built rooms (run it again after changing an outdoor room): rooms laid out as their exits join, every building
   with a door, and where each indoor room's door is.

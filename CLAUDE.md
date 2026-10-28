@@ -81,6 +81,12 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 - People: `people` (villagers, looks, everyday clothes, friendship, gifts; `obj_dialogue`; shopkeepers' stock:
   `people_trade`). Quests: `quests` (`obj_quest_board` in the village).
 - Heart events: `heart_events` (`heart_event_table`; checked a few times a second, played by `obj_dialogue` in event mode).
+- Charging (`docs/CHARGING.md`): `charging` (hold to charge tools and weapons: `charge_max`, `charge_kind`, the
+  release in `charge_release`, how it looks in `charge_fx` / `charge_draw_*`; `obj_plyr` keeps `charge`, `actCharge`,
+  `motion`). Tiers past Mithril: Cursed (6) and Blessed (7) (`TOOL_CURSED`, `TOOL_BLESSED` in `gathering`).
+- Status effects: `status` (poison in `global.vitals.poison`; the curse in `global.inv.cursed` / `cursePending`; the
+  witch's bolts; Father Aldous lifts curses in `priest_offer`). Autotest: `charge N [shot]` holds the button, `snap N name`
+  screenshots mid-action.
 - Schedules: `schedules` (`villager_routines`: homes, shop hours, days off; `villager_where` works out where someone
   is from the clock, so nothing is saved; walking routes over `room_walk`; `obj_villager` is a villager in your room,
   made by `villagers_update`; a shop trades only while `villager_shop_open`).
@@ -130,6 +136,8 @@ Where things stood at the end of the last session (2026-10-28), and what to know
   each other, rainy days keep most people in, the map shows the real Whisperwood, and the unused `obj_npc_man`,
   `rm_3` and its label objects are gone.
 - Also done: seasonal schedule variants and heart events (`scripts/heart_events`).
+- Also done: milestone 13 - charged tools and weapons, the witch, poison and curses, Father Aldous. Still to come with
+  the world map: his temple, its Friday sermon and hours (see `docs/CHARGING.md`).
 
 **Working with the user**: they want recommendations acted on without asking first ("if you recommend something go
 ahead with it"); they always choose Reload in GameMaker; end each step with a commit and push to `main`.

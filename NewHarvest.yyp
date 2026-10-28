@@ -225,6 +225,7 @@
     {"id":{"name":"festivals","path":"scripts/festivals/festivals.yy",},},
     {"id":{"name":"charging","path":"scripts/charging/charging.yy",},},
     {"id":{"name":"heart_events","path":"scripts/heart_events/heart_events.yy",},},
+    {"id":{"name":"status","path":"scripts/status/status.yy",},},
     {"id":{"name":"obj_enemy_shot","path":"objects/obj_enemy_shot/obj_enemy_shot.yy",},},
     {"id":{"name":"fishing","path":"scripts/fishing/fishing.yy",},},
     {"id":{"name":"food","path":"scripts/food/food.yy",},},

@@ -113,6 +113,13 @@ function monster_table(){
 		troll:      {name: "Troll",      race: "Troll",   body: "muscular", head: "Troll",       skins: ["blue", "lavender", "dark_green"],
 		             wear: [["pants", "Pants", "cloth", "brown"]], weapon: "Club",
 		             from: 15, hp: 90, dmg: [13, 20], def: 4, speed: 0.8, reach: 32, drops: [["m|troll_hide", 1, 1, 0.25], ["m|stone", 3, 6, 1]], gold: [10, 20]},
+		// From floor 25 down (where mithril starts): keeps her distance and throws a green bolt that poisons and a slower
+		// black one that curses your tool (status script). kite: backs away when you close in; tell: flashes before casting
+		witch:      {name: "Witch",      race: "Human",   body: "female",   head: "Human Female Small", skins: ["pale_green", "light", "olive"],
+		             wear: [["hat", "Wizard Hat Base", "cloth", "black"], ["shirt", "Robe", "cloth", "purple"]], weapon: "Gnarled staff",
+		             from: 25, hp: 60, dmg: [8, 12], def: 2, speed: 1.0, reach: 20, kite: true, tell: true,
+		             ranged: {range: 240, shot: "poison", speed: 3.6, pair: "curse"},
+		             drops: [["m|moonsilk", 1, 1, 0.2], ["m|gem", 1, 1, 0.08], ["w|herb", 1, 2, 0.4]], gold: [15, 30]},
 		lizardfolk: {name: "Lizard Warrior", race: "Lizardfolk", body: "male", head: "Lizard male", skins: ["green", "dark_green", "blue"],
 		             wear: [["pants", "Pants", "cloth", "black"]], weapon: "Trident",
 		             from: 20, hp: 70, dmg: [14, 20], def: 3, speed: 1.3, reach: 46, ranged: {range: 190, shot: "spear", speed: 5}, drops: [["m|leather", 1, 2, 0.3], ["m|ember_core", 1, 1, 0.04], ["m|dragon_scale", 1, 1, 0.01]], gold: [12, 24]},
@@ -308,5 +315,11 @@ function monster_shoot(_m, _p){
 		var a = a0 + (i - (n - 1) / 2) * 14;
 		instance_create_depth(_m.x, _m.y - 20 * _m.sc, _m.depth - 1, obj_enemy_shot,
 		                      {dx: lengthdir_x(rg.speed, a), dy: lengthdir_y(rg.speed, a), life: rg.range / rg.speed * 1.3, dmg: dmg, kind: rg.shot});
+	}
+	// A witch throws a second, slower bolt just off the first (pair), so you dodge two
+	if(variable_struct_exists(rg, "pair")){
+		var sp = rg.speed * 0.7, a2 = a0 + choose(-12, 12);
+		instance_create_depth(_m.x, _m.y - 20 * _m.sc, _m.depth - 1, obj_enemy_shot,
+		                      {dx: lengthdir_x(sp, a2), dy: lengthdir_y(sp, a2), life: rg.range / sp * 1.3, dmg: dmg * 0.5, kind: rg.pair});
 	}
 }

@@ -66,7 +66,9 @@ function vitals_exhausted(){ return global.vitals.energy <= 0; }
 /// @description Energy a tool swing costs: 2, minus 2% per point of Stamina (down to half), minus 10% per tool tier.
 function tool_energy_cost(_name = ""){
 	// Each tool upgrade saves another 10%
-	return 2 * (1 - clamp(stat("stamina") * 0.02, 0, 0.5)) * (1 - 0.1 * tool_tier(_name));
+	// A cursed tool drains twice as fast (status script)
+	var cursed = (_name != "" && is_struct(global.inv) && curse_item() == "c|held|" + _name) ? 2 : 1;
+	return 2 * (1 - clamp(stat("stamina") * 0.02, 0, 0.5)) * (1 - 0.1 * tool_tier(_name)) * cursed;
 }
 
 /// @description True for farm tools (they cost energy); weapons are free to swing, as in Stardew.

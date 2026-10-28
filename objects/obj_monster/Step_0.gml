@@ -59,6 +59,7 @@ if(d < aggro){
 	if((d <= def.reach || canShoot) && cooldown <= 0){
 		attacking = true;
 		shooting = canShoot;
+		if(def[$ "tell"] ?? false) flash = 8;   // a witch flashes as she starts to cast, so you can dodge
 		step = 0;
 		hitDone = false;
 		moveX = 0;
@@ -74,6 +75,11 @@ if(d < aggro){
 			actHit = floor(def.frames * 0.6);
 			actFps = 10;
 		}
+	} else if((def[$ "kite"] ?? false) && d < rg.range * 0.45){
+		// Too close for a witch's liking: back away
+		moveX = -lengthdir_x(def.speed, a);
+		moveY = -lengthdir_y(def.speed, a);
+		monster_move(moveX, moveY, solids);
 	} else if(d > ((rg != undefined) ? rg.range * 0.7 : def.reach * 0.6)){
 		moveX = lengthdir_x(def.speed, a);
 		moveY = lengthdir_y(def.speed, a);

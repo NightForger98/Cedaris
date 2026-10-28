@@ -76,6 +76,7 @@ function heart_events_check(){
 
 /// @description The event's last step: friendship for being there, plus the choice's, and the gift. Returns a note.
 function heart_event_finish(_e, _choice){
+	if(variable_struct_exists(_e, "onChoose")) return _e.onChoose(_choice);   // not a heart event: a choice that does something (priest_offer)
 	var pts = 40, note = "";
 	if(_choice >= 0) pts += _e.choice.options[_choice][1];
 	people_add(_e.who, pts);

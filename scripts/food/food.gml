@@ -10,6 +10,8 @@ function stat(_key){
 	if(variable_global_exists("inv") && is_struct(global.inv) && variable_struct_exists(global.inv, "stats")) v += global.inv.stats[$ _key] ?? 0;
 	var b = food_buff();
 	if(b != undefined) v += b.stats[$ _key] ?? 0;
+	// A curse takes 30% off your Defence (status script)
+	if(_key == "defense" && variable_global_exists("inv") && is_struct(global.inv) && curse_active()) v = floor(v * 0.7);
 	return v;
 }
 
@@ -28,6 +30,8 @@ function dish_table(){
 		{key: "stuffed_artichoke", name: "Stuffed Artichoke", ing: [["artichoke", 1], ["tomato", 1]],       energy: 100, buff: {luck: 4},             minutes: 360, colour: make_colour_rgb(120, 160, 80)},
 		{key: "gourd_pie",    name: "Gourd Pie",         ing: [["gourd", 1], ["carrot", 1]],                energy: 120, buff: {charm: 2, luck: 2},   minutes: 360, colour: make_colour_rgb(220, 130, 60)},
 		{key: "forest_stew",  name: "Forest Stew",       ing: [["w|mushroom", 2], ["w|herb", 1], ["potato", 1]], energy: 110, buff: {magic: 3, stamina: 2}, minutes: 360, colour: make_colour_rgb(130, 110, 80)},
+		// Morga's cure for the witch's poison (status script): no buff, it just cures
+		{key: "antidote",     name: "Antidote",          ing: [["w|herb", 2], ["w|mushroom", 1]],          energy: 10,  buff: {},                    minutes: 0, cures: "poison", colour: make_colour_rgb(120, 210, 110)},
 		{key: "grilled_perch", name: "Grilled Perch",     ing: [["x|perch", 1]],                            energy: 70,  buff: {speed: 1, stamina: 2}, minutes: 300, colour: make_colour_rgb(190, 150, 90)},
 		{key: "omelette",      name: "Omelette",          ing: [["a|egg", 2]],                             energy: 90,  buff: {stamina: 3},          minutes: 300, colour: make_colour_rgb(250, 220, 110)},
 		{key: "pancakes",      name: "Pancakes",          ing: [["a|egg", 1], ["a|milk", 1], ["corn", 1]], energy: 130, buff: {speed: 2, charm: 2}, minutes: 360, colour: make_colour_rgb(220, 170, 100)},
@@ -93,7 +97,13 @@ function food_eat(_stack){
 	if(d == undefined) return;
 	global.vitals.energy = min(vitals_max_energy(), global.vitals.energy + d.energy);
 	global.vitals.health = min(vitals_max_health(), global.vitals.health + d.energy * 0.4);
-	global.vitals.buff = {dish: d.key, stats: d.buff, until: min(DAY_END, global.clock.minutes + d.minutes)};
+	if(d.minutes > 0) global.vitals.buff = {dish: d.key, stats: d.buff, until: min(DAY_END, global.clock.minutes + d.minutes)};
+	if((d[$ "cures"] ?? "") == "poison" && status_cure_poison()){
+		_stack.count--;
+		if(_stack.count <= 0) global.inv.slots[global.inv.hotbar] = undefined;
+		farm_message("The poison fades. You feel better");
+		return;
+	}
 	_stack.count--;
 	if(_stack.count <= 0) global.inv.slots[global.inv.hotbar] = undefined;
 	farm_message("Ate " + d.name + "  (+" + string(d.energy) + " energy, " + item_stats_text(d.buff) + ")");

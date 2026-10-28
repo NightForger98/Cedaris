@@ -19,7 +19,8 @@ justOpened = false;
 // Left button: pick up / put down / drag
 if(mouse_check_button_pressed(mb_left) && loc != undefined){
 	if(cursor == undefined){
-		if(inv_get(loc) != undefined){
+		if(curse_locked(inv_get(loc))) showMessage("The curse won't let you move it");   // status script
+		else if(inv_get(loc) != undefined){
 			if(keyboard_check(vk_shift)) quickMove(loc);
 			else {
 				cursor = inv_get(loc);
@@ -30,14 +31,15 @@ if(mouse_check_button_pressed(mb_left) && loc != undefined){
 			}
 		}
 	} else {
-		place(loc);
+		if(curse_locked(inv_get(loc))) showMessage("The curse won't let you move it");
+		else place(loc);
 	}
 }
 // Releasing over a different slot finishes a drag; releasing on the same slot keeps carrying it
 if(mouse_check_button_released(mb_left)){
 	if(dragging && cursor != undefined){
 		if(loc == undefined) snapBack();                                     // dropped on nothing
-		else if(!inv_same_loc(loc, origin) && !place(loc)) snapBack();       // refused
+		else if(!inv_same_loc(loc, origin) && (curse_locked(inv_get(loc)) || !place(loc))) snapBack();       // refused
 	}
 	dragging = false;
 }
@@ -45,7 +47,8 @@ if(mouse_check_button_released(mb_left)){
 // Right button: sell one to the blacksmith, or split one off onto the mouse
 if(mouse_check_button_pressed(mb_right) && loc != undefined && loc.area == "inv"){
 	var st = inv_get(loc);
-	if(st != undefined){
+	if(curse_locked(st)) showMessage("The curse won't let you part with it");
+	else if(st != undefined){
 		if(ship){
 			// Into the shipping bin (paid overnight); tools and clothing can't be shipped
 			var dd = item_def(st.id);

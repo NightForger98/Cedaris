@@ -51,6 +51,26 @@ The original notes:
 - **Ranged monsters**: watchers fire bolts, lizard warriors throw spears (the slime projectile sheet exists).
 - **Below the mine**: an endless "deep" with harder floors, for players who've finished everything.
 
+## Milestone 13: Charged tools, curses and blessings (done)
+
+The full design is in `docs/CHARGING.md`.
+- **Charging:** hold the use button to charge a tool or weapon, a level every 0.6 s, up to one per tool tier (two
+  for weapons, the hammer and shovel; three for the rod). Let go to release:
+  - the hoe tills a patch;
+  - the scythe and watering can spin round you;
+  - the axe and pickaxe swing wide and hard;
+  - swords spin, spears lunge, heavy weapons slam, the dagger flurries, and slings and bows draw;
+  - the rod casts further.
+- **How a charge looks:** the tool winds up and glows, the face reddens, an anger mark appears, then the Cursed
+  tier's yellow outline or the Blessed tier's flames.
+- **The witch:** from floor 25 down, she throws green (poison) and black (curse) bolts.
+  - **Poison:** costs health over time, never below 1. Morga sells antidotes, and you can cook them.
+  - **The curse:** locks the tool or weapon in your hand, doubles its energy cost and takes 30% off your Defence.
+    A cursed Mithril tool becomes the Cursed tier.
+- **Father Aldous:** stands in the town square and lifts curses. A Cursed tool becomes Blessed (5,000 gold);
+  anything else costs 1,000.
+- **Later, with the world map:** the temple, its Friday sermon and opening hours.
+
 ## Art we'll need
 
 | For | What | Where to look (licence-safe) |

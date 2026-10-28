@@ -72,9 +72,12 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 	// Heart events: a scene with a friend, when they're near you at the right place and hour
 	if(world_time_ready() && (current_time div 250) != (current_time - delta_time / 1000) div 250) heart_events_check();
 	
+	// Poison ticks away at your health (status script)
+	if(world_time_ready() && !ui_blocking()) status_step();
 	// Hotbar: 1-9 and 0 pick the held item
 	for(var k = 0; k < INV_HOTBAR; k++){
 		if(!invOpen && keyboard_check_pressed(ord(string((k + 1) mod 10)))){ // not while a window takes the number keys
+			if(!curse_hotbar_ok(k)) continue;   // a cursed tool won't be put down (status script)
 			global.inv.hotbar = k;
 			inv_apply_look(global.look);
 		}

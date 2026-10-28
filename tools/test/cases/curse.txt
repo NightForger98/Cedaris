@@ -1,0 +1,55 @@
+# The witch, poison and the curse, Father Aldous (docs/CHARGING.md, "Status effects and the witch")
+start story
+wait 60
+gold 8000
+# Poison takes health every couple of seconds, never below 1, and an antidote cures it
+call autotest_bolt poison
+wait 300
+call autotest_status
+give f|antidote
+equip f|antidote
+use 1
+call autotest_status
+# A curse with an axe in hand: it's locked there, Defence drops, energy costs double
+hold 5
+call autotest_tool_tier Axe 5
+call autotest_bolt curse
+call autotest_hotbar 1
+call autotest_hotbar 3
+call autotest_status
+call autotest_hotbar 5
+call tool_display_name Axe
+call tool_energy_cost Axe
+inv
+# The cursed Mithril axe charges to 6 with the yellow glow
+call autotest_charge
+charge 6 01_cursed_axe
+# Father Aldous in the town square lifts it - and blesses the axe
+time 11
+room rm_town 1300 600
+wait 40
+call autotest_goto_person aldous
+key e
+wait 5
+shot 02_aldous_offer
+call autotest_dialogue_text
+call autotest_choose 0
+call autotest_status
+call tool_display_name Axe
+key e
+wait 5
+# Blessed now: free to change tools again
+call autotest_hotbar 1
+# A curse with nothing to hold waits for the next tool
+call autotest_hotbar 3
+call autotest_bolt curse
+call autotest_hotbar 7
+call autotest_status
+# Into the mine: witches from floor 25
+mine 26
+call autotest_witch 1
+call autotest_monsters
+call autotest_goto_monster witch
+wait 3
+shot 03_witch
+quit

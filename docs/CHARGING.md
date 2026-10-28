@@ -1,8 +1,9 @@
 # Charged tools and weapons (plan)
 
 Hold the use button to charge a tool or weapon, then let go for a stronger action, like Harvest Moon: Friends of
-Mineral Town (the look) and Stardew Valley (the timing). Status: **planned**. Reference frames are in for right
-(left mirrors it), up and down.
+Mineral Town (the look) and Stardew Valley (the timing). Status: **built** (milestone 13 in `docs/MILESTONES.md`). It was
+built from the reference frames for facing right (left mirrors it), up and down. Code: `scripts/charging` (charging),
+`scripts/status` (poison, the curse, the priest's offer). Tests: `tools/test/cases/charg*.txt` and `curse.txt`.
 
 ## What the player sees
 
@@ -64,7 +65,7 @@ direction goes through the same stages in the same order; only where the tool si
 |---|---|---|
 | Scythe | front sweep (as now) | **Spin**: cuts everything within a radius of `1 + level` cells around you |
 | Watering Can | waters 1 cell (refills at water) | **Spin**: waters every tilled cell within a radius of `level` cells, 1 water each |
-| Axe | one chop | **Large swing**: hits every tree/stump in a wide arc in front; damage grows with level up to the full-charge share in the Cursed and blessed section; screen shake at level 3+ |
+| Axe | one chop | **Large swing**: hits every tree/stump in a wide arc in front; damage grows with level up to the full-charge share in the Cursed and blessed section |
 | Pickaxe | one strike | **Large swing**: the same for rocks and ores (it still can't break rock harder than its tier) |
 | Hoe | tills 1 cell | Stardew area in front: L1 3×1, L2 5×1, L3 3×3, L4 6×3, L5 9×3 |
 | Swords | slash | **Spin slash**: hits all around you, ×1.5 / ×2 damage |
@@ -182,7 +183,7 @@ the normal full-charge pose (red face, anger mark):
 - **A cursed Mithril tool** also becomes the **Cursed tier**: 6 charge levels, the yellow glow, the bigger area.
   The priest turns it **Blessed**.
 - **Anything else** (a weapon, a copper pickaxe) is just cursed. The priest lifts it and it goes back to normal.
-- **Looks:** its icon gets a purple dot and a purple glint in the hand. A Blessed tool's icon dot is gold.
+- **Looks:** its icon gets a purple dot, and the HUD shows the curse. A Blessed tool's icon dot is gold.
 - **Saved:** `global.inv.tools[name] = 6` (Cursed) or `7` (Blessed); a cursed stack carries `cursed: true`. Save
   version goes to 10, and older saves load unchanged.
 

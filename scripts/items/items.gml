@@ -463,6 +463,7 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 				                    cx - ic.crop[2] * sc / 2, cy - ic.crop[3] * sc / 2, sc, ic.act);
 				// Upgraded tools: a dot in the colour of their metal
 				var tt = (d.type == "held") ? tool_tier(d.name) : 0;
+				if(curse_locked(_stack)) tt = TOOL_CURSED;   // a cursed weapon gets the purple dot too
 				if(tt > 0){
 					draw_set_colour(c_black);
 					draw_circle(_x + 9, _y + _size - 9, 6, false);

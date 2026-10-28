@@ -57,6 +57,8 @@ function villager_routines(){
 		hask:   {home: "rm_town_home_sw.hask_bed", rainproof: true, work: {at: "rm_valley.hunt", open: 7, close: 15, off: 3},
 		         after: [[15, "rm_town_inn.table_f"], [21, "home"]],
 		         dayoff: [[10, "rm_town_outfitter.shop_a"], [12, "rm_town_home_sw.hask_home"], [17, "rm_town_inn.table_f"], [21, "home"]]},
+		// Father Aldous: no house or temple yet - the town square by day, a bed at the inn by night
+		aldous: {home: "rm_town_inn.aldous_bed", rainproof: true, routine: [[9, "rm_town.square_c"], [18, "home"]]},
 		garrick:{home: "rm_town_inn.garrick_bed", rainproof: true, work: {at: "rm_town.watch", open: 8, close: 18, off: 6},
 		         after: [[18, "rm_town_inn.table_c"], [22, "home"]],
 		         dayoff: [[9, "rm_beach.camp"], [13, "rm_village_smithy.shop_b"], [16, "rm_town_inn.table_c"], [22, "home"]]},

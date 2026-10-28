@@ -43,6 +43,7 @@ if(act != undefined && charge == undefined){
 		else {
 			// A charged swing costs a tap's energy for every level, plus the tap
 			if(item_is_tool(itemName) && world_time_ready()) global.vitals.energy = max(0, global.vitals.energy - tool_energy_cost(itemName) * (1 + actCharge));
+			else if(world_time_ready() && curse_item() == "c|held|" + itemName) global.vitals.energy = max(0, global.vitals.energy - 1);
 			action_hit(id, itemName, actDir, actCharge);
 		}
 	}

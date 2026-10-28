@@ -141,6 +141,14 @@ function villager_table(){
 		                ["You came all the way down here again? You must like the view.", "The old willows by the bridge are older than the town.", "If you hear singing in the trees, don't follow it."],
 		                ["You're always welcome at my hut, rain or shine.", "I spun this from the softest fleece I had. For you.", "The vale knows you now. It'll look after you."]],
 		        rewards: [["m|wool", 8], ["d|cloth|green", 1], ["w|herb", 5], ["d|cloth|lavender", 1], ["m|unicorn_hair", 1]]},
+		// No house or temple yet (that comes with the world map): he stands in the town square by day and lodges at the
+		// inn. Holding a cursed tool, he offers to lift the curse (priest_offer; status script)
+		aldous: {name: "Father Aldous", title: "the Priest", race: "Human", body: "male", seed: 6101, look: "aldous",
+		        loves: ["f|veg_stew", "w|herb", "m|moonsilk"], likes: ["f|", "p|", "w|"], dislikes: ["m|bone"], hates: ["m|void_pearl", "m|troll_hide"],
+		        lines: [["Peace be with you, child.", "I've no roof over my altar yet. The square will do; the sky is a fine ceiling.", "If the mine ever lays a curse on you, come to me."],
+		                ["You work hard. The valley notices, and so do I.", "There are witches deep in the mine, where the mithril runs. Their bolts carry curses.", "A cursed tool is a burden - but a blessed one is a gift. I can make the one the other."],
+		                ["You've a good heart. I'd stake my collar on it.", "When the temple is built, I'll keep a pew for you at the front.", "Take this, with my blessing. Literally."]],
+		        rewards: [["w|herb", 6], ["d|cloth|white", 1], ["f|antidote", 3], ["d|cloth|gold", 1], ["m|moonsilk", 3]]},
 	};
 	return t;
 }
@@ -175,6 +183,7 @@ function villager_look(_key){
 	var v = villager_def(_key);
 	if(v[$ "look"] == "brom") return villager_look_brom();
 	if(v[$ "look"] == "mara") return villager_look_mara();
+	if(v[$ "look"] == "aldous") return villager_look_aldous();
 	random_set_seed(v.seed);
 	var look = character_random_look(v.race);
 	character_set_body(look, v.body);
@@ -254,6 +263,21 @@ function villager_look_brom(){
 	p.shoes     = {item: character_find_item("shoes", "Basic Boots"),     pal: character_find_palette("cloth", "black")};
 	p.belt      = {item: character_find_item("belt", "Leather Belt"),     pal: -1};
 	p.held      = {item: character_find_item("held", "Hammer"),           pal: -1};
+	return look;
+}
+
+/// @description Father Aldous: a grey-haired priest in a white robe.
+function villager_look_aldous(){
+	var look = character_empty_look("Human", "male");
+	var p = look.parts;
+	p.body.pal  = character_find_palette("body", "light");
+	p.head      = {item: character_find_item("head", "Human Male Plump"), pal: -1};
+	p.hair      = {item: character_find_item("hair", "Balding"),          pal: character_find_palette("hair", "gray")};
+	p.beard     = {item: character_find_item("beard", "Winter Beard"),    pal: character_find_palette("hair", "gray")};
+	p.shirt     = {item: character_find_item("shirt", "Robe"),            pal: character_find_palette("cloth", "white")};
+	p.belt      = {item: character_find_item("belt", "Robe Belt"),       pal: character_find_palette("cloth", "yellow")};
+	p.shoes     = {item: character_find_item("shoes", "Basic Shoes"),     pal: character_find_palette("cloth", "brown")};
+	character_validate(look);
 	return look;
 }
 
@@ -345,6 +369,7 @@ function people_gift(_key, _stack){
 function people_open(_npc){
 	if(instance_exists(obj_dialogue) || instance_exists(obj_inventory) || instance_exists(obj_menu)) return;
 	var key = _npc.who;
+	if(key == "aldous" && curse_active()){ priest_offer(_npc); return; }
 	var reward = people_talk(key);
 	instance_create_depth(0, 0, -9000, obj_dialogue, {who: key, npc: _npc, text: villager_line(key), note: reward});
 }
@@ -426,7 +451,7 @@ function shop_outfitter_stock(){
 /// @description Morga's shelves: the spells you'd otherwise find deep in the mine, staves to cast them, forage, tonics.
 function shop_apothecary_stock(){
 	static ids = [["k|heal", 700], ["k|fireball", 900], ["c|held|Simple staff", 140], ["c|held|Gnarled staff", 220],
-	              ["w|herb", 0], ["w|mushroom", 0], ["w|toadstool", 0], ["m|pixie_dust", 0], ["f|forest_stew", 0], ["f|moonfin_soup", 0]];
+	              ["w|herb", 0], ["w|mushroom", 0], ["w|toadstool", 0], ["m|pixie_dust", 0], ["f|forest_stew", 0], ["f|moonfin_soup", 0], ["f|antidote", 120]];
 	var out = [];
 	// 0: what it's worth, and a bit more for the trouble of gathering it
 	for(var i = 0; i < array_length(ids); i++) array_push(out, {id: ids[i][0], price: (ids[i][1] > 0) ? ids[i][1] : round(item_def(ids[i][0]).price * 1.5)});

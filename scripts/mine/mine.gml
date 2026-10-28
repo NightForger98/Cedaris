@@ -24,11 +24,11 @@ function mine_bands(){
 		 monsters: [["slime", 15], ["bat", 15], ["skeleton", 30], ["wolfkin", 20], ["troll", 10], ["orc", 10]]},
 		{name: "Ember Depths", ground: [19 + 9 * 32, 19 + 11 * 32, 20 + 11 * 32], cold: -2, dark: 0.6,
 		 rocks: [["stone", 25], ["ember_rock", 22], ["gold_vein", 15], ["coal_vein", 10], ["silver_vein", 8], ["mithril_vein", 0], ["gem_node", 6]],
-		 monsters: [["bat", 15], ["skeleton", 15], ["orc", 25], ["troll", 20], ["lizardfolk", 25]]},
+		 monsters: [["bat", 15], ["skeleton", 15], ["orc", 25], ["troll", 20], ["lizardfolk", 25], ["witch", 12]]},
 		// Below floor 30, once the Ember Drake falls: endless, every band's monsters (tougher each floor), void nodes
 		{name: "The Deep", ground: [19 + 9 * 32, 19 + 11 * 32, 20 + 11 * 32], cold: 0, dark: 0.7,
 		 rocks: [["stone", 20], ["gem_node", 10], ["gold_vein", 12], ["mithril_vein", 14], ["void_node", 4], ["ember_rock", 10], ["ice_rock", 10], ["silver_vein", 10], ["coal_vein", 10]],
-		 monsters: [["slime", 8], ["bat", 8], ["ghost", 12], ["eyeball", 14], ["skeleton", 14], ["orc", 14], ["troll", 14], ["lizardfolk", 16], ["wolfkin", 8]]},
+		 monsters: [["slime", 8], ["bat", 8], ["ghost", 12], ["eyeball", 14], ["skeleton", 14], ["orc", 14], ["troll", 14], ["lizardfolk", 16], ["wolfkin", 8], ["witch", 10]]},
 	];
 	return b;
 }

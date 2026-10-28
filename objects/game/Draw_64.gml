@@ -178,6 +178,8 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 		if(f > 0) draw_rectangle(x1, y2 - (y2 - y1) * f, x2, y2, false);
 		ui_text((x1 + x2) / 2, y1 - 18, bars[i][0], 0.6, c_white);
 	}
+	// Poisoned / cursed, left of the bars (status script)
+	status_draw_hud(guiWidth - 86 - (nb - 2) * 38 - 26, guiHeight - 44);
 	if(vitals_exhausted()) ui_text(guiWidth - 64, guiHeight - 270, "Exhausted", 0.5, make_colour_rgb(230, 110, 90), fa_right);
 	// Too cold for what you're wearing: energy drains (warmer clothes or a warming dish fix it)
 	else if(climate_chill() > 0){

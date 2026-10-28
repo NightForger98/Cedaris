@@ -663,3 +663,43 @@ function autotest_projectile(){
 	with(obj_projectile) return "speed " + string(point_distance(0, 0, dx, dy)) + "  reach " + string(round(point_distance(0, 0, dx, dy) * life)) + "  damage " + string(weapon.dmg);
 	return "no shot";
 }
+
+/// @description A witch's bolt hits the player: "poison" or "curse" (as obj_enemy_shot does).
+function autotest_bolt(_kind){
+	obj_plyr.iframes = 0;
+	player_hurt(3, obj_plyr.x, obj_plyr.y - 30);
+	if(_kind == "poison") status_poison(14);
+	if(_kind == "curse") status_curse();
+	return autotest_status();
+}
+
+/// @description Health, poison, the curse and the Defence it costs, for logs.
+function autotest_status(){
+	return "health " + string(global.vitals.health) + "  poison " + string(ceil(global.vitals[$ "poison"] ?? 0)) + "s  cursed '" + curse_item()
+	       + "' pending " + string(global.inv[$ "cursePending"] ?? false) + "  hotbar " + string(global.inv.hotbar + 1) + "  defense " + string(stat("defense"));
+}
+
+/// @description Press a hotbar number key (1-10) the way the game's Step does, curse and all.
+function autotest_hotbar(_n){
+	var k = real(_n) - 1;
+	if(curse_hotbar_ok(k)){ global.inv.hotbar = k; inv_apply_look(global.look); with(obj_plyr) look = global.look; }
+	return autotest_status();
+}
+
+/// @description Choose option _i in the open dialogue's choice (as pressing 1 or 2 does).
+function autotest_choose(_i){
+	with(obj_dialogue){
+		var pick = real(_i);
+		chosen = pick; text = event.choice.options[pick][2]; note = heart_event_finish(event, pick); eventDone = true;
+		return text + " / " + note;
+	}
+	return "no dialogue";
+}
+
+/// @description Witches on a floor, and one spawned beside the player if asked.
+function autotest_witch(_spawn = "0"){
+	if(real(_spawn) > 0) monster_spawn("witch", obj_plyr.x + 160, obj_plyr.y, mine_state().floor);
+	var n = 0;
+	with(obj_monster) if(kind == "witch") n++;
+	return n;
+}

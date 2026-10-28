@@ -37,7 +37,15 @@ ordered so each one builds on the last.
   OpenGameArt is CC-BY-SA - check each sheet) giving eggs, milk and wool. Wool makes the clothing chain
   complete (it's bought today).
 
-## Milestone 12: The deep
+## Milestone 12: The deep (done)
+
+- **Done:** bosses (Frost Wraith on floor 10, Stone Guardian on 20, Ember Drake on 30 - once per game; the ladder
+  down appears where they fall), ranged monsters (slimes spit, watchers fire bolts, lizard warriors throw spears,
+  the wraith and drake fire fans of ice and fire), and the Deep below floor 30 once the drake falls: endless,
+  every band's monsters getting tougher each floor, mithril and void nodes (void pearls).
+
+The original notes:
+
 
 - **Bosses**: a guardian on floors 10 and 20 and a dragon on floor 30 (the Dragon Scale's real source).
 - **Ranged monsters**: watchers fire bolts, lizard warriors throw spears (the slime projectile sheet exists).

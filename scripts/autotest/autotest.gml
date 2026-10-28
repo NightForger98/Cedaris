@@ -485,3 +485,44 @@ function autotest_fps(){
 	for(var i = 0; i < array_length(names); i++) villager_plan(names[i]);
 	return "fps " + string(fps) + " real " + string(round(fps_real)) + "  plans " + string(round((get_timer() - t0) / 1000)) + " ms, routes kept " + string(variable_struct_names_count(global.schedRoutes));
 }
+
+/// @description Beat this room's boss at once, as if the last blow landed.
+function autotest_kill_boss(){
+	var b = mine_boss_here();
+	if(b == noone) return "no boss";
+	var n = b.def.name;
+	monster_kill(b);
+	return n + " beaten";
+}
+
+/// @description Stand _dist px south of the nearest monster of a kind (to be shot at), facing it.
+function autotest_stand_off(_kind, _dist){
+	with(obj_monster) if(kind == _kind && !dying){ obj_plyr.x = x; obj_plyr.y = y + real(_dist); obj_plyr.y_frame = 8; cooldown = 0; return kind + " at " + string(round(x)) + "," + string(round(y)); }
+	return "none";
+}
+
+/// @description Monster shots in flight: how many, and the first one's position, speed and life.
+function autotest_shots(){
+	var s = "shots " + string(instance_number(obj_enemy_shot));
+	with(obj_enemy_shot){ s += " first at " + string(round(x)) + "," + string(round(y)) + " d " + string(dx) + "," + string(dy) + " life " + string(life); break; }
+	return s;
+}
+
+/// @description Like autotest_stand_off, but picks a side (S, N, E, W) where the player stands on open floor with a
+/// clear line of open floor to the monster.
+function autotest_stand_clear(_kind, _dist){
+	var dd = real(_dist);
+	with(obj_monster){
+		if(kind != _kind || dying) continue;
+		static dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+		for(var k = 0; k < 4; k++){
+			var px = x + dirs[k][0] * dd, py = y + dirs[k][1] * dd, clear = true;
+			for(var t = 0; t <= 1 && clear; t += 0.05)
+				if(tilemap_get_at_pixel(global.mineWalls, lerp(x, px, t), lerp(y, py, t)) > 0) clear = false;
+			if(!clear) continue;
+			obj_plyr.x = px; obj_plyr.y = py; cooldown = 0;
+			return kind + " side " + string(k);
+		}
+	}
+	return "no clear side";
+}

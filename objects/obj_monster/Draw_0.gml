@@ -25,16 +25,16 @@ if(lk == "moth"){
 	exit;
 }
 if(look != undefined){
-	var xx = round(x - 32), yy = round(y - 58);
-	if(attacking && act != undefined) character_draw(look, 0, 0, xx, yy, 1, {act: act, i: floor(step), dir: dirIdx});
-	else character_draw(look, (moveX != 0 || moveY != 0) ? 1 + floor(frame) mod 8 : 0, 8 + dirIdx, xx, yy, 1);
+	var xx = round(x - 32 * sc), yy = round(y - 58 * sc);
+	if(attacking && act != undefined) character_draw(look, 0, 0, xx, yy, sc, {act: act, i: floor(step), dir: dirIdx});
+	else character_draw(look, (moveX != 0 || moveY != 0) ? 1 + floor(frame) mod 8 : 0, 8 + dirIdx, xx, yy, sc);
 } else {
 	// [LPC] Monsters sheets: the attack row doubles as the idle loop (its first frames)
 	var f = attacking ? min(floor(step), def.frames - 1) : floor(frame) mod 3;
 	var bob = (def[$ "flies"] ?? false) ? sin(current_time / 150 + x * 0.1) * 3 : 0;
-	draw_sprite_part(def.spr, 0, f * 64, dirIdx * 64, 64, 64, round(x - 32), round(y - 54 + bob));
+	draw_sprite_part_ext(def.spr, 0, f * 64, dirIdx * 64, 64, 64, round(x - 32 * sc), round(y - 54 * sc + bob), sc, sc, def[$ "tint"] ?? c_white, 1);
 }
-if(hp < hpMax && !dying){
+if(hp < hpMax && !dying && !(def[$ "boss"] ?? false)){ // bosses show theirs on the HUD
 	var w = 28, bx = x - w / 2, by = y - 62;
 	draw_set_colour(c_black);
 	draw_rectangle(bx - 1, by - 1, bx + w + 1, by + 3, false);

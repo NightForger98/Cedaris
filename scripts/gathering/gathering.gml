@@ -48,6 +48,8 @@ function resource_table(){
 		               tint: make_colour_rgb(255, 140, 100), drops: [["m|stone", 1, 3, 1], ["m|coal", 1, 2, 0.3], ["m|ember_core", 1, 1, 0.05]]},
 		gem_node:     {name: "Gem Node",     tools: ["Pickaxe"], hp: 5,  hard: 1, art: [578, 392, 56, 53],  anchor: [28, 46],  foot: [1.5, 1.25], scale: 0.75,
 		               ore: make_colour_rgb(90, 220, 230),  drops: [["m|gem", 1, 2, 1]]},
+		void_node:    {name: "Void Node",    tools: ["Pickaxe"], hp: 16, hard: 4, art: [578, 392, 56, 53],  anchor: [28, 46],  foot: [1.5, 1.25], scale: 0.8,
+		               tint: make_colour_rgb(150, 120, 190), ore: make_colour_rgb(95, 40, 145), drops: [["m|void_pearl", 1, 1, 0.08], ["m|gem", 1, 2, 0.6], ["m|stone", 1, 2, 1]]},
 		// Whisperwood: the old trees that make its walls (they can't be cut), and things to forage
 		ancient_oak:  {name: "Ancient Oak",  tools: ["none"], hp: 999, hard: 0, art: [931, 902, 90, 117], anchor: [46, 112], foot: [2, 2], fixed: true, drops: []},
 		ancient_pine: {name: "Ancient Pine", tools: ["none"], hp: 999, hard: 0, art: [961, 5, 63, 147],   anchor: [31, 141], foot: [2, 2], fixed: true, drops: []},

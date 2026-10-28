@@ -25,15 +25,20 @@ function mine_bands(){
 		{name: "Ember Depths", ground: [19 + 9 * 32, 19 + 11 * 32, 20 + 11 * 32], cold: -2, dark: 0.6,
 		 rocks: [["stone", 25], ["ember_rock", 22], ["gold_vein", 15], ["coal_vein", 10], ["silver_vein", 8], ["mithril_vein", 0], ["gem_node", 6]],
 		 monsters: [["bat", 15], ["skeleton", 15], ["orc", 25], ["troll", 20], ["lizardfolk", 25]]},
+		// Below floor 30, once the Ember Drake falls: endless, every band's monsters (tougher each floor), void nodes
+		{name: "The Deep", ground: [19 + 9 * 32, 19 + 11 * 32, 20 + 11 * 32], cold: 0, dark: 0.7,
+		 rocks: [["stone", 20], ["gem_node", 10], ["gold_vein", 12], ["mithril_vein", 14], ["void_node", 4], ["ember_rock", 10], ["ice_rock", 10], ["silver_vein", 10], ["coal_vein", 10]],
+		 monsters: [["slime", 8], ["bat", 8], ["ghost", 12], ["eyeball", 14], ["skeleton", 14], ["orc", 14], ["troll", 14], ["lizardfolk", 16], ["wolfkin", 8]]},
 	];
 	return b;
 }
 
-function mine_band(_floor){ return mine_bands()[(_floor <= 9) ? 0 : ((_floor <= 19) ? 1 : 2)]; }
+function mine_band(_floor){ return mine_bands()[(_floor <= 9) ? 0 : ((_floor <= 19) ? 1 : ((_floor <= MINE_FLOORS) ? 2 : 3))]; }
 
 /// @description The mine's saved state (made on first use).
 function mine_state(){
 	if(!is_struct(global.world[$ "mine"])) global.world.mine = {seed: irandom(999999), deepest: 0, floor: 1};
+	if(!is_array(global.world.mine[$ "bosses"])) global.world.mine.bosses = []; // floors whose boss you've beaten
 	return global.world.mine;
 }
 
@@ -196,7 +201,9 @@ function mine_room_start(){
 	// Ladders
 	var e = m.entrance, l = m.ladder;
 	instance_create_depth(e[0] * 32 + 16, e[1] * 32 + 16, 0, obj_mine_ladder, {down: false});
-	if(fl < MINE_FLOORS) instance_create_depth(l[0] * 32 + 16, l[1] * 32 + 16, 0, obj_mine_ladder, {down: true});
+	// On a boss floor the ladder down only appears when the boss falls (see mine_boss_beaten); below 30 once the drake has
+	var boss = mine_boss(fl);
+	if(boss == "" && (fl < MINE_FLOORS || mine_deep_open())) instance_create_depth(l[0] * 32 + 16, l[1] * 32 + 16, 0, obj_mine_ladder, {down: true});
 
 	// Rocks and ore, fresh each visit (the mine's store is emptied first)
 	var objs = resource_objects("rm_mine");
@@ -213,8 +220,12 @@ function mine_room_start(){
 	// A treasure chest the first time you reach a lift floor
 	mine_place_chest(m, fl);
 
+	// The boss waits where the ladder down will be
+	if(boss != "") monster_spawn(boss, l[0] * 32 + 16, l[1] * 32 + 20, fl);
+
 	// Monsters, away from the entrance
 	var count = min(3 + fl div 3, 12);
+	if(boss != "") count = count div 2;
 	var spots = [];
 	for(var i = 0; i < array_length(m.region); i++){
 		var c = m.region[i];
@@ -236,7 +247,7 @@ function mine_rock_kinds(_floor){
 	var k = mine_band(_floor).rocks;
 	if(_floor < 25) return k;
 	var out = [];
-	for(var i = 0; i < array_length(k); i++) array_push(out, (k[i][0] == "mithril_vein") ? ["mithril_vein", 6 + (_floor - 25) * 2] : k[i]);
+	for(var i = 0; i < array_length(k); i++) array_push(out, (k[i][0] == "mithril_vein") ? ["mithril_vein", min(20, 6 + (_floor - 25) * 2)] : k[i]);
 	return out;
 }
 
@@ -259,7 +270,7 @@ function resource_at_cell(_gx, _gy){
 /// @description Go to a mine floor (fades out, rebuilds the room). From the farm, the lift or a ladder.
 function mine_goto(_floor){
 	var st = mine_state();
-	st.floor = clamp(_floor, 1, MINE_FLOORS);
+	st.floor = clamp(_floor, 1, mine_deep_open() ? 9999 : MINE_FLOORS); // the Deep has no bottom
 	with(game){
 		spawnRoom = rm_mine;
 		spawnX = 0; spawnY = 0;            // mine_room_start puts you at the entrance
@@ -334,7 +345,7 @@ function mine_chest_open(_floor){
 /// entrance, so it's the first thing you find.
 function mine_place_chest(_m, _floor){
 	var st = mine_state();
-	if(_floor mod MINE_LIFT_EVERY != 0 || array_get_index(st[$ "chests"] ?? [], _floor) != -1) return;
+	if(_floor mod MINE_LIFT_EVERY != 0 || array_get_index(st[$ "chests"] ?? [], _floor) != -1 || array_length(mine_chest_loot(_floor)) == 0) return;
 	for(var i = 0; i < array_length(_m.region); i++){
 		var c = _m.region[i];
 		var d = _m.dist[c[0]][c[1]];
@@ -342,4 +353,38 @@ function mine_place_chest(_m, _floor){
 		instance_create_depth(c[0] * 32 + 16, c[1] * 32 + 20, 0, obj_chest, {chestFloor: _floor});
 		return;
 	}
+}
+
+// ---------------------------------------------------------------- bosses and the Deep
+
+/// @description The boss waiting on a floor ("" for none, or once it's beaten): floors 10, 20 and 30.
+function mine_boss(_floor){
+	var b = "";
+	switch(_floor){
+		case 10: b = "wraith"; break;   // the Frozen Halls
+		case 20: b = "guardian"; break; // the Ember Depths
+		case MINE_FLOORS: b = "drake"; break;
+	}
+	return (b != "" && array_get_index(mine_state().bosses, _floor) == -1) ? b : "";
+}
+
+/// @description The floors below 30 open once the Ember Drake is beaten.
+function mine_deep_open(){ return world_time_ready() && array_get_index(mine_state().bosses, MINE_FLOORS) != -1; }
+
+/// @description A boss falls (from monster_kill): remember it, and the ladder down appears where it stood.
+function mine_boss_beaten(_inst){
+	var st = mine_state();
+	if(array_get_index(st.bosses, st.floor) == -1) array_push(st.bosses, st.floor);
+	var gx = _inst.x div 32, gy = _inst.y div 32;
+	// On solid rock (a big boss can end up against a wall) the ladder goes on the floor's planned spot instead
+	if(variable_global_exists("mineWalls") && tilemap_get(global.mineWalls, gx, gy) > 0){ gx = global.mineFloor.ladder[0]; gy = global.mineFloor.ladder[1]; }
+	instance_create_depth(gx * 32 + 16, gy * 32 + 16, 0, obj_mine_ladder, {down: true});
+	popup(_inst.x, _inst.y - 90, (st.floor == MINE_FLOORS) ? "The Deep opens below..." : "The way down is open", make_colour_rgb(255, 220, 120));
+}
+
+/// @description The boss in this room still standing, or noone (for the HUD's health bar).
+function mine_boss_here(){
+	var b = noone;
+	with(obj_monster) if((def[$ "boss"] ?? false) && !dying) b = id;
+	return b;
 }

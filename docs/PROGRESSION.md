@@ -108,6 +108,10 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
   a day without costs 5) and collects what's ready: an egg a day, milk a day, wool every 3 days - well-loved
   animals sometimes give two. Eggs and milk are eaten or cooked (Omelette, Pancakes); wool goes into clothing.
 
+- **Bosses and the Deep**: the Frost Wraith (floor 10), Stone Guardian (20) and Ember Drake (30) guard the way down,
+  once per game, with big drops - the drake is the real source of dragon scales and opens the Deep: endless floors
+  below 30 with every monster and mithril and void nodes (void pearls, otherwise quest rewards).
+
 ## Hooks for quests and events
 
 ```gml

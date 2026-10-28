@@ -138,6 +138,16 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 	weather_icon(guiWidth - 44, by + 52, weather_now());
 	// In the mine: which floor and band, top centre
 	if(room == rm_mine) ui_text(guiWidth / 2, 30, "Mine floor " + string(mine_state().floor) + "  -  " + mine_band(mine_state().floor).name, 0.6, c.accent);
+	// A boss: its name and health across the top
+	var bossHere = (room == rm_mine) ? mine_boss_here() : noone;
+	if(bossHere != noone){
+		var bw = 520, bx1 = guiWidth / 2 - bw / 2, by1 = 56;
+		draw_set_colour(c_black);
+		draw_rectangle(bx1 - 3, by1 - 3, bx1 + bw + 3, by1 + 17, false);
+		draw_set_colour(make_colour_rgb(200, 50, 50));
+		draw_rectangle(bx1, by1, bx1 + bw * max(0, bossHere.hp) / bossHere.hpMax, by1 + 14, false);
+		ui_text(guiWidth / 2, by1 + 30, bossHere.def.name, 0.55, c_white);
+	}
 
 	// Food buff under the clock: what it gives and how long it has left
 	var buff = food_buff();

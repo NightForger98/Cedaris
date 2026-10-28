@@ -22,9 +22,11 @@ if(attacking){
 	step += actFps / game_get_speed(gamespeed_fps);
 	if(!hitDone && step >= actHit){
 		hitDone = true;
-		if(p != noone && point_distance(x, y, p.x, p.y) <= def.reach + 10) player_hurt(irandom_range(def.dmg[0], def.dmg[1]) * toughness, x, y);
+		// A shot at range, or a blow up close
+		if(shooting && p != noone) monster_shoot(id, p);
+		else if(p != noone && point_distance(x, y, p.x, p.y) <= def.reach + 10) player_hurt(irandom_range(def.dmg[0], def.dmg[1]) * toughness, x, y);
 	}
-	if(step >= actFrames){ attacking = false; cooldown = irandom_range(40, 80); }
+	if(step >= actFrames){ attacking = false; cooldown = shooting ? irandom_range(70, 120) : irandom_range(40, 80); }
 	depth_sort();
 	exit;
 }
@@ -51,8 +53,12 @@ if(def[$ "passive"] ?? false){
 if(d < aggro){
 	var a = point_direction(x, y, p.x, p.y);
 	dirIdx = monster_dir(a);
-	if(d <= def.reach && cooldown <= 0){
+	// Shooters (slimes spit, watchers fire bolts, lizards throw spears) attack from range; the rest up close
+	var rg = def[$ "ranged"];
+	var canShoot = rg != undefined && d > def.reach && d <= rg.range;
+	if((d <= def.reach || canShoot) && cooldown <= 0){
 		attacking = true;
+		shooting = canShoot;
 		step = 0;
 		hitDone = false;
 		moveX = 0;
@@ -68,7 +74,7 @@ if(d < aggro){
 			actHit = floor(def.frames * 0.6);
 			actFps = 10;
 		}
-	} else if(d > def.reach * 0.6){
+	} else if(d > ((rg != undefined) ? rg.range * 0.7 : def.reach * 0.6)){
 		moveX = lengthdir_x(def.speed, a);
 		moveY = lengthdir_y(def.speed, a);
 		monster_move(moveX, moveY, solids);

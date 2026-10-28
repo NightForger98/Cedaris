@@ -1,0 +1,13 @@
+start story
+wait 60
+mine 10
+wait 40
+call autotest_stand_clear wraith 180
+wait 70
+call autotest_shots
+wait 5
+call autotest_shots
+wait 20
+call autotest_shots
+call autotest_mine
+quit

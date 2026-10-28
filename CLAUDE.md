@@ -66,6 +66,8 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 - The mine: `mine` (seeded cave floors in `rm_mine`, bands, ladders, lift at `obj_mine_door` on the farm). Combat:
   `combat` (`weapon_table`, `monster_table`, `obj_monster`, knock-outs). Monster art: `spr_mon_*` from [LPC] Monsters,
   imported with `node tools/sprite_import.js <png> <spr_name>` (credited in `LPC_CREDITS.csv`).
+  Bosses (`mine_boss`, `mine_boss_beaten`) and the endless Deep below floor 30; monsters with `ranged` in their
+  table entry shoot `obj_enemy_shot` (`monster_shoot`).
 - Magic: `magic` (spells, mana, scrolls `k|<spell>`).
 - Weather: `weather`. Village projects: `projects` (the board's Projects page). Whisperwood: `forest` (`rm_forest`,
   generated from a fixed seed at Room Start like the mine; `obj_path` is the bridge / the way back, `obj_shrine`).

@@ -56,7 +56,7 @@ function weapon_def(_name){
 /// from: first floor it appears on (it gets a little tougher each floor below that). drops: [id, min, max, chance].
 function monster_table(){
 	static t = {
-		slime:      {name: "Slime",      spr: spr_mon_slime,   frames: 6, from: 1,  hp: 14, dmg: [3, 5],   def: 0, speed: 0.9, reach: 22,
+		slime:      {name: "Slime",      spr: spr_mon_slime,   frames: 6, from: 1,  hp: 14, dmg: [3, 5],   def: 0, speed: 0.9, reach: 22, ranged: {range: 130, shot: "slime", speed: 3},
 		             drops: [["m|copper_ore", 1, 2, 0.3], ["m|gem", 1, 1, 0.02]], gold: [1, 3]},
 		bat:        {name: "Bat",        spr: spr_mon_bat,     frames: 7, from: 2,  hp: 10, dmg: [3, 6],   def: 0, speed: 1.7, reach: 22, flies: true,
 		             drops: [["m|feather", 1, 1, 0.3]], gold: [1, 4]},
@@ -64,8 +64,19 @@ function monster_table(){
 		             drops: [["m|leather", 1, 1, 0.25]], gold: [2, 5]},
 		ghost:      {name: "Ghost",      spr: spr_mon_ghost,   frames: 6, from: 10, hp: 26, dmg: [7, 11],  def: 1, speed: 1.1, reach: 24, flies: true,
 		             drops: [["m|frost_crystal", 1, 1, 0.05], ["m|linen", 1, 2, 0.3], ["k|heal", 1, 1, 0.02]], gold: [4, 9]},
-		eyeball:    {name: "Watcher",    spr: spr_mon_eyeball, frames: 7, from: 20, hp: 32, dmg: [10, 14], def: 2, speed: 1.0, reach: 24, flies: true,
+		eyeball:    {name: "Watcher",    spr: spr_mon_eyeball, frames: 7, from: 20, hp: 32, dmg: [10, 14], def: 2, speed: 1.0, reach: 24, flies: true, ranged: {range: 230, shot: "bolt", speed: 4},
 		             drops: [["m|gem", 1, 1, 0.12]], gold: [8, 15]},
+		// Bosses: the Frost Wraith on floor 10, the Stone Guardian on 20, the Ember Drake on 30 (once per game; see mine_boss). Bigger (scale), tougher, and the
+		// ladder down only appears when they fall. spread: shots fired at once, fanned out.
+		guardian:   {name: "Stone Guardian", boss: true, scale: 1.7, race: "Troll", body: "muscular", head: "Troll", skins: ["lavender"],
+		             wear: [], weapon: "Club", from: 20, hp: 560, dmg: [18, 26], def: 5, speed: 0.9, reach: 50,
+		             drops: [["m|troll_hide", 2, 3, 1], ["m|gem", 2, 4, 1], ["m|iron", 5, 8, 1]], gold: [300, 400]},
+		wraith:     {name: "Frost Wraith", boss: true, scale: 2, spr: spr_mon_ghost, frames: 6, tint: make_colour_rgb(170, 220, 255), flies: true,
+		             from: 10, hp: 360, dmg: [12, 18], def: 3, speed: 1.0, reach: 40, ranged: {range: 280, shot: "ice", speed: 4, spread: 3},
+		             drops: [["m|frost_crystal", 3, 5, 1], ["m|moonsilk", 1, 2, 1], ["m|silver", 4, 6, 1]], gold: [500, 700]},
+		drake:      {name: "Ember Drake", boss: true, scale: 2.2, race: "Lizardfolk", body: "muscular", head: "Lizard male", skins: ["amber"],
+		             wear: [], weapon: "", from: 30, hp: 900, dmg: [24, 32], def: 6, speed: 1.1, reach: 56, ranged: {range: 240, shot: "fire", speed: 4.5, spread: 5},
+		             drops: [["m|dragon_scale", 3, 4, 1], ["m|phoenix_feather", 1, 1, 0.5], ["m|ember_core", 2, 3, 1], ["m|mithril", 2, 3, 1]], gold: [1000, 1500]},
 		// Whisperwood at night: harmless, quick to flee (passive), drawn by obj_monster (look: "pixie" / "moth")
 		pixie:      {name: "Pixie", look: "pixie", passive: true, flies: true, frames: 1, from: 1, hp: 6, dmg: [0, 0], def: 0, speed: 1.9, reach: 0,
 		             drops: [["m|pixie_dust", 1, 1, 0.6]], gold: [0, 0]},
@@ -91,7 +102,7 @@ function monster_table(){
 		             from: 15, hp: 90, dmg: [13, 20], def: 4, speed: 0.8, reach: 32, drops: [["m|troll_hide", 1, 1, 0.25], ["m|stone", 3, 6, 1]], gold: [10, 20]},
 		lizardfolk: {name: "Lizard Warrior", race: "Lizardfolk", body: "male", head: "Lizard male", skins: ["green", "dark_green", "blue"],
 		             wear: [["pants", "Pants", "cloth", "black"]], weapon: "Trident",
-		             from: 20, hp: 70, dmg: [14, 20], def: 3, speed: 1.3, reach: 46, drops: [["m|leather", 1, 2, 0.3], ["m|ember_core", 1, 1, 0.04], ["m|dragon_scale", 1, 1, 0.01]], gold: [12, 24]},
+		             from: 20, hp: 70, dmg: [14, 20], def: 3, speed: 1.3, reach: 46, ranged: {range: 190, shot: "spear", speed: 5}, drops: [["m|leather", 1, 2, 0.3], ["m|ember_core", 1, 1, 0.04], ["m|dragon_scale", 1, 1, 0.01]], gold: [12, 24]},
 	};
 	return t;
 }
@@ -180,6 +191,7 @@ function monster_kill(_inst){
 		got += ((got == "") ? "+" : ",  +") + string(n) + " " + item_def(dr[0]).name;
 	}
 	quests_on_kill(_inst.kind);
+	if(m[$ "boss"] ?? false) mine_boss_beaten(_inst);
 	// Pixies and moths are caught, not defeated
 	if(m[$ "passive"] ?? false) farm_message("Caught a " + string_lower(m.name) + "  " + ((got == "") ? "(it slipped away with nothing)" : got));
 	else farm_message(m.name + " defeated  " + got);
@@ -267,4 +279,19 @@ function monster_dir(_a){
 	if(_a >= 135 && _a < 225) return 1;
 	if(_a >= 225 && _a < 315) return 2;
 	return 3;
+}
+
+// ---------------------------------------------------------------- shots
+
+/// @description A monster's ranged attack lands: one shot (or a fan of them) at the player.
+function monster_shoot(_m, _p){
+	var rg = _m.def.ranged;
+	var n = rg[$ "spread"] ?? 1;
+	var a0 = point_direction(_m.x, _m.y - 20 * _m.sc, _p.x, _p.y - 20);
+	var dmg = irandom_range(_m.def.dmg[0], _m.def.dmg[1]) * _m.toughness * ((n > 1) ? 0.6 : 0.8);
+	for(var i = 0; i < n; i++){
+		var a = a0 + (i - (n - 1) / 2) * 14;
+		instance_create_depth(_m.x, _m.y - 20 * _m.sc, _m.depth - 1, obj_enemy_shot,
+		                      {dx: lengthdir_x(rg.speed, a), dy: lengthdir_y(rg.speed, a), life: rg.range / rg.speed * 1.3, dmg: dmg, kind: rg.shot});
+	}
 }

@@ -1,0 +1,48 @@
+# Milestone 12: bosses on floors 10, 20 and 30 (the ladder down appears when they fall), ranged monsters, the Deep
+start story
+wait 60
+mine 10
+wait 40
+call autotest_mine
+call autotest_monsters
+call autotest_goto_ladder
+call autotest_stand_clear wraith 180
+wait 120
+call autotest_mine
+shot 01_wraith
+call autotest_kill_boss
+wait 5
+call autotest_goto_ladder
+shot 02_way_down
+mine 20
+wait 40
+call autotest_monsters
+call autotest_stand_clear guardian 40
+wait 150
+call autotest_mine
+shot 03_guardian
+# Ranged: a lizard warrior throws spears from a distance
+mine 24
+wait 40
+call autotest_monsters
+call autotest_mine
+call autotest_stand_clear lizardfolk 150
+wait 200
+call autotest_mine
+shot 04_spears
+mine 30
+wait 40
+call autotest_monsters
+call mine_deep_open
+shot 05_drake
+call autotest_kill_boss
+call mine_deep_open
+call autotest_goto_ladder
+key e
+wait 80
+call autotest_mine
+call autotest_monsters
+call autotest_resources
+shot 06_deep
+call mine_lift_floors
+quit

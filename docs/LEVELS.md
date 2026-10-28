@@ -101,6 +101,9 @@ after noon) keep the same day every day. Evenings, many end up at the inn; Lysa,
 
 ## Generated rooms: the mine (roadmap phase 4)
 
+- **Bosses and the Deep** (milestone 12): floors 10, 20 and 30 have a boss (`mine_boss`); the ladder down appears
+  where it falls. Below 30, once the Ember Drake is beaten, the Deep goes on for ever (band 4 in `mine_bands`).
+
 - **One mine room**, rebuilt for each floor while the game runs. The entrance is the cave under the cliff
   on the farm (`rm_1`).
 - **Layout**: a cave carved by cellular automata (random fill, then a few smoothing passes), or stitched

@@ -241,6 +241,7 @@
     {"id":{"name":"depth_sort","path":"scripts/depth_sort/depth_sort.yy",},},
     {"id":{"name":"farming","path":"scripts/farming/farming.yy",},},
     {"id":{"name":"festivals","path":"scripts/festivals/festivals.yy",},},
+    {"id":{"name":"obj_enemy_shot","path":"objects/obj_enemy_shot/obj_enemy_shot.yy",},},
     {"id":{"name":"fishing","path":"scripts/fishing/fishing.yy",},},
     {"id":{"name":"food","path":"scripts/food/food.yy",},},
     {"id":{"name":"forest","path":"scripts/forest/forest.yy",},},

@@ -203,12 +203,15 @@ function mine_room_start(){
 	array_resize(objs, 0);
 	for(var i = 0; i < array_length(m.region); i++){
 		var c = m.region[i];
-		if(m.dist[c[0]][c[1]] < 3 || (c[0] == l[0] && c[1] == l[1]) || random(1) > 0.16) continue;
+		if(m.dist[c[0]][c[1]] < 3 || (c[0] == l[0] && c[1] == l[1]) || random(1) > 0.12) continue;
 		var kind = resource_pick_kind(mine_rock_kinds(fl));
 		var d = resource_make(kind, c[0], c[1], -1);
 		array_push(objs, d);
 		resource_create_instance(d);
 	}
+
+	// A treasure chest the first time you reach a lift floor
+	mine_place_chest(m, fl);
 
 	// Monsters, away from the entrance
 	var count = min(3 + fl div 3, 12);
@@ -284,12 +287,57 @@ function collision_solids(_withNpcs){
 	return s;
 }
 
-/// @description How dark the mine is here (0 = lit): the band's darkness, a little more each floor down.
+/// @description How dark the mine is here (0 = lit): the band's darkness, a little more each floor down; Light helps.
 function mine_darkness(){
 	if(room != rm_mine) return 0;
 	var fl = mine_state().floor;
-	return clamp(mine_band(fl).dark + (fl mod 10) * 0.02, 0, 0.8);
+	var d = clamp(mine_band(fl).dark + (fl mod 10) * 0.02, 0, 0.8);
+	return spell_light_on() ? d * 0.35 : d;   // the Light spell
 }
 
 /// @description True while the lift's floor list is open (the player stands still, Esc closes it).
 function mine_menu_open(){ return instance_exists(obj_mine_door) && obj_mine_door.menuOpen; }
+
+// ---------------------------------------------------------------- treasure
+
+/// @description What the chest on each lift floor holds (opened once per game): [item id, count].
+function mine_chest_loot(_floor){
+	switch(_floor){
+		case 5:  return [["m|copper", 5], ["m|coal", 5], ["m|gem", 1]];
+		case 10: return [["k|fireball", 1], ["m|iron", 3], ["c|held|Simple staff", 1]];
+		case 15: return [["k|heal", 1], ["m|frost_crystal", 2], ["m|silver", 2]];
+		case 20: return [["m|steel", 3], ["m|gem", 3], ["m|pixie_dust", 1]];
+		case 25: return [["m|gold", 3], ["m|ember_core", 1], ["c|held|Diamond staff", 1]];
+		case 30: return [["m|mithril", 2], ["m|dragon_scale", 1], ["m|phoenix_feather", 1]];
+	}
+	return [];
+}
+
+/// @description Open a lift floor's chest: its loot into the bag, and it's marked opened. Returns the message.
+function mine_chest_open(_floor){
+	var st = mine_state();
+	if(!is_array(st[$ "chests"])) st.chests = [];
+	if(array_get_index(st.chests, _floor) != -1) return "Empty";
+	array_push(st.chests, _floor);
+	var loot = mine_chest_loot(_floor), msg = "Treasure!", full = false;
+	for(var i = 0; i < array_length(loot); i++){
+		if(inv_add(item_stack(loot[i][0], loot[i][1])) > 0) full = true;
+		msg += "  +" + string(loot[i][1]) + " " + item_def(loot[i][0]).name;
+	}
+	if(full) msg += "  -  your bag is full, some fell back in the dark";
+	return msg;
+}
+
+/// @description Put the floor's chest out if it's a lift floor whose chest hasn't been opened: a few steps from the
+/// entrance, so it's the first thing you find.
+function mine_place_chest(_m, _floor){
+	var st = mine_state();
+	if(_floor mod MINE_LIFT_EVERY != 0 || array_get_index(st[$ "chests"] ?? [], _floor) != -1) return;
+	for(var i = 0; i < array_length(_m.region); i++){
+		var c = _m.region[i];
+		var d = _m.dist[c[0]][c[1]];
+		if(d < 3 || d > 6 || resource_at_cell(c[0], c[1])) continue;
+		instance_create_depth(c[0] * 32 + 16, c[1] * 32 + 20, 0, obj_chest, {chestFloor: _floor});
+		return;
+	}
+}

@@ -132,5 +132,7 @@ function day_advance(_passedOut){
 	global.vitals.buff = undefined; // food buffs last the day (cleared first: a Stamina buff raises max energy)
 	global.vitals.energy = vitals_max_energy() * (_passedOut ? 0.5 : 1);
 	global.vitals.health = vitals_max_health();
+	global.vitals.mana = mana_max();   // a night's sleep restores your magic
+	global.vitals.light = 0;
 	return {lost: lost, died: died, paid: paid};
 }

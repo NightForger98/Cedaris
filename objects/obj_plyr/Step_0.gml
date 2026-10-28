@@ -10,12 +10,30 @@ if(act != undefined){
 	if(!actHit && actStep >= act.hit){
 		actHit = true;
 		var itemName = lpc_catalog().items[look.parts.held.item].name;
-		if(item_is_tool(itemName) && world_time_ready()) global.vitals.energy = max(0, global.vitals.energy - tool_energy_cost(itemName));
-		action_hit(id, itemName, actDir);
+		if(castSpell != ""){ spell_effect(id, castSpell, actDir, itemName); castSpell = ""; }  // a spell costs mana, not energy
+		else {
+			if(item_is_tool(itemName) && world_time_ready()) global.vitals.energy = max(0, global.vitals.energy - tool_energy_cost(itemName));
+			action_hit(id, itemName, actDir);
+		}
 	}
 	if(actStep >= act.frames) act = undefined;
 	moveX = 0; moveY = 0;
 	exit;
+}
+// Magic: Q picks the next spell you know; F casts it with a staff in hand
+if(input_pressed(ord("Q")) && array_length(spells_known()) > 0){ spell_cycle(); farm_message("Spell: " + spell_def(spell_selected()).name); }
+if(input_pressed(ord("F")) && look.parts.held.item != -1){
+	var cast = spell_begin(look, lpc_catalog().items[look.parts.held.item].name);
+	if(variable_struct_exists(cast, "act")){
+		act = cast.act;
+		castSpell = cast.spell;
+		actStep = 0;
+		actHit = false;
+		actDir = clamp(y_frame - 8, 0, 3);
+		moveX = 0; moveY = 0;
+		exit;
+	}
+	if(cast.why != "") farm_message(cast.why);
 }
 var planting = instance_exists(crops) && crops.planting;
 if(!planting && (mouse_check_button_pressed(mb_left) || input_pressed(vk_space))){
@@ -36,6 +54,7 @@ if(!planting && (mouse_check_button_pressed(mb_left) || input_pressed(vk_space))
 	}
 	if(heldType == "produce"){ farm_eat(held); exit; }
 	if(heldType == "food"){ food_eat(held); exit; }
+	if(heldType == "scroll"){ spell_learn(held); exit; }
 	act = character_action_for(look);
 	// Too tired to swing a tool (weapons still work)
 	if(act != undefined && world_time_ready() && vitals_exhausted() && item_is_tool(lpc_catalog().items[look.parts.held.item].name)){

@@ -2,7 +2,8 @@
 /// Saves are JSON files in the game's save folder (saves/slotN.json); settings live in settings.ini.
 
 #macro SAVE_SLOTS 3
-#macro SAVE_VERSION 4 // 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine)
+#macro SAVE_VERSION 5 // 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine);
+                      // 5: spells (inv.spells) and mana (vitals.mana)
 
 function save_path(_slot){ return "saves/slot" + string(_slot) + ".json"; }
 

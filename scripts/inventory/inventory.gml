@@ -260,7 +260,7 @@ function inv_stack_to_save(_s){ return (_s == undefined) ? undefined : {id: _s.i
 function inv_to_save(){
 	var inv = global.inv;
 	var out = {mode: inv.mode, gold: inv.gold, hotbar: inv.hotbar, slots: [], equip: {}, dyes: {}, trash: inv_stack_to_save(inv.trash),
-	           tools: inv.tools, water: inv.water};
+	           tools: inv.tools, water: inv.water, spells: inv[$ "spells"] ?? [], spell: inv[$ "spell"] ?? ""};
 	for(var i = 0; i < INV_SIZE; i++) array_push(out.slots, inv_stack_to_save(inv.slots[i]));
 	var keys = item_equip_slots();
 	for(var i = 0; i < array_length(keys); i++){
@@ -281,6 +281,9 @@ function inv_from_save(_data){
 	// Tool tiers and the watering can came with save version 3
 	inv.tools = is_struct(_data[$ "tools"]) ? _data.tools : {};
 	inv.water = _data[$ "water"] ?? 40;
+	// Spells came with save version 5
+	inv.spells = is_array(_data[$ "spells"]) ? _data.spells : [];
+	inv.spell = _data[$ "spell"] ?? "";
 	for(var i = 0; i < min(INV_SIZE, array_length(_data.slots)); i++) inv.slots[i] = inv_stack_from_save(_data.slots[i]);
 	var keys = item_equip_slots();
 	for(var i = 0; i < array_length(keys); i++){

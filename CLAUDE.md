@@ -21,8 +21,8 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 
 ## Where things are
 
-- `docs/ROADMAP.md` - the plan (farming, stats, combat, magic, social) with status per step. **Next: step 8,
-  magic (spells with staffs; Light for the mine).**
+- `docs/ROADMAP.md` - the plan (farming, stats, combat, magic, social) with status per step. **Next: step 9,
+  people, quests and Charm (friendship, dialogue, a quest board).**
 - `docs/PROGRESSION.md` - items, materials, recipes, dyes, stats, and the hooks for quests.
 - `docs/LEVELS.md` - **the level creation plan** (agreed): towns and the farm are hand-built rooms; the mine is
   generated at runtime in GML, seeded per floor. Not a WFC/Python pipeline - read why before proposing one.
@@ -37,6 +37,7 @@ A Stardew-like farming game. Project file: `NewHarvest.yyp`. Repo: github.com/Ni
 - The mine: `mine` (seeded cave floors in `rm_mine`, bands, ladders, lift at `obj_mine_door` on the farm). Combat:
   `combat` (`weapon_table`, `monster_table`, `obj_monster`, knock-outs). Monster art: `spr_mon_*` from [LPC] Monsters,
   imported with `node tools/sprite_import.js <png> <spr_name>` (credited in `LPC_CREDITS.csv`).
+- Magic: `magic` (spells, mana, scrolls `k|<spell>`; the player casts with F holding a staff, Q changes spell).
 - Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm, `rm_2` village, `rm_12` house (bed), `rm_3`, `rm_123`, `rm_mine`.
 - Placeholder art drawn from `spr_tile_interior`: crafting table, bed, shipping bin, furnace (to be replaced with real assets).
 

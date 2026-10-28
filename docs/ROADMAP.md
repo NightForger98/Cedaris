@@ -175,6 +175,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
   - Farm spells first: **Grow** (advance one crop a stage), **Rain** (water an area).
   - Then Light (mine darkness), Fireball (projectile) and Heal.
 - Spell table `{name, mana, anim, effect, unlock}`; spells learned from quests or scrolls.
+- Built (step 8): `scripts/magic`. Scrolls are items `k|<spell>`; hold one and use it to learn the spell.
 
 ## Phase 6: People, quests and Charm
 
@@ -196,7 +197,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 | 5 | 2 Gathering + smelting + upgrades | M | **done**: trees/stumps (axe), rocks and ore veins (pickaxe, hardness by tier), weeds and bushes (scythe) spawning in farm areas and regrowing daily; wood, stone, fibre, coal, 5 ores; smelting at Brom's furnace, weaving fibre at the crafting table; Copper to Mithril tool upgrades at Brom's (save v3) |
 | 6 | 3 Stats wiring (Warmth, buffs) | S | **done**: `stat()` with food buffs, cooking at the hearth (8 dishes), winter/night cold vs Warmth, Charm selling bonus |
 | 7 | 4 Combat + mine | XL | **done (core)**: 30-floor mine generated at runtime (earth, ice, lava bands; lift every 5), weapons table, 11 monsters (LPC humanoids + [LPC] Monsters creatures), Defence, Luck crits/drops, heat and cold, knock-outs; still to come: dragon boss, pixies and moths, ranged monsters (save v4) |
-| 8 | 5 Magic | M | reuses the action system and spellcast art |
+| 8 | 5 Magic | M | **done**: mana (30 + 10/Magic), 5 spells from scrolls (Grow, Rain from Mara; Light from Brom; Fireball, Heal from the mine), cast with a staff (F, Q to change), staff power; treasure chests on mine lift floors (save v5) |
 | 9 | 6 Social and quests | L | Charm, rewards; ties progression together |
 
 S = a session, M = 1-2 sessions, L = 2-4 sessions, XL = 4+ sessions.

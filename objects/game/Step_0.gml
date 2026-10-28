@@ -58,6 +58,7 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 		var before = global.clock.minutes;
 		if(clock_tick()) sleep_now(true);
 		food_tick(global.clock.minutes - before); // food buffs wear off; the cold drains energy outdoors
+		mana_tick(global.clock.minutes - before);  // mana trickles back
 	}
 	if(resumeLock > 0) {resumeLock--;}
 	else if(!invOpen && !mine_menu_open() && input_pressed(vk_escape)) {game_pause();}

@@ -225,7 +225,7 @@ function autotest_spawn(_key, _gx, _gy){
 /// @description Energy, warmth and the food buff, for logs.
 function autotest_vitals(){
 	var b = food_buff();
-	return "energy " + string_format(global.vitals.energy, 1, 1) + "/" + string(vitals_max_energy()) + "  cold " + string(climate_cold())
+	return "energy " + string_format(global.vitals.energy, 1, 1) + "/" + string(vitals_max_energy()) + "  mana " + string_format(mana(), 1, 1) + "/" + string(mana_max()) + "  cold " + string(climate_cold())
 	       + "  warmth " + string(stat("warmth")) + "  buff " + ((b == undefined) ? "none" : b.dish + " until " + string(b.until));
 }
 
@@ -262,3 +262,21 @@ function autotest_hurt(_n){ obj_plyr.iframes = 0; player_hurt(real(_n), obj_plyr
 function autotest_mine(){
 	return "floor " + string(mine_state().floor) + " deepest " + string(mine_state().deepest) + "  health " + string(global.vitals.health) + "  cold " + string(climate_cold());
 }
+
+/// @description The crop and soil in front of the player: stage, days, watered.
+function autotest_crop_front(){
+	var c = farm_front_cell(obj_plyr, clamp(obj_plyr.y_frame - 8, 0, 3));
+	var t = farm_tiles()[$ farm_key(c[0], c[1])];
+	var cr = farm_crop_at(c[0], c[1]);
+	return "cell " + string(c[0]) + "," + string(c[1]) + (t == undefined ? " untilled" : (t.watered ? " watered" : " dry"))
+	       + ((cr == noone) ? " no crop" : " crop stage " + string(cr.growthStage) + " days " + string(cr.daysOld));
+}
+
+/// @description Stand by the mine floor's treasure chest.
+function autotest_goto_chest(){
+	with(obj_chest){ obj_plyr.x = x; obj_plyr.y = y + 24; return "chest for floor " + string(chestFloor); }
+	return "none";
+}
+
+/// @description Select a known spell and fill the mana pool, for tests.
+function autotest_spell(_key){ global.inv.spell = _key; global.vitals.mana = mana_max(); return spell_selected(); }

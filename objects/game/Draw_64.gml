@@ -16,7 +16,7 @@ if(dark > 0 && instance_exists(obj_plyr)){
 	var cam = view_camera[0];
 	var lx = (obj_plyr.x - camera_get_view_x(cam)) * guiWidth / camera_get_view_width(cam);
 	var ly = (obj_plyr.y - 24 - camera_get_view_y(cam)) * guiHeight / camera_get_view_height(cam);
-	var r = guiWidth * 0.3;
+	var r = guiWidth * (spell_light_on() ? 0.5 : 0.3);
 	surface_set_target(lightSurf);
 	draw_clear_alpha(c_black, dark);
 	gpu_set_blendmode(bm_subtract);
@@ -88,6 +88,11 @@ if(game_is_playing_room() && variable_global_exists("inv") && is_struct(global.i
 		var hd = item_def(held.id);
 		var label = (hd.type == "held") ? tool_display_name(hd.name) : hd.name;
 		if(held.id == "c|held|Watering Can") label += "  -  water " + string(global.inv[$ "water"] ?? 40) + "/" + string(tool_water_max());
+		// A staff shows the spell it will cast
+		if(hd.type == "held" && staff_power(hd.name) >= 0){
+			var sk = spell_selected();
+			label += (sk == "") ? "  -  no spells yet" : "  -  " + spell_def(sk).name + " (" + string(spell_def(sk).mana) + " mana)   F cast, Q change";
+		}
 		ui_text(hx, hy + hs + 16, label, 0.5, c_white, fa_left);
 	}
 	ui_text(hx + INV_HOTBAR * (hs + hg) + 8, hy + hs / 2, global.inv.mode == "free" ? "I: inventory" : "Gold " + string(global.inv.gold) + "   I: inventory", 0.5, c.accent, fa_left);
@@ -132,8 +137,11 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 	// Energy and health, bottom right (vertical bars like Stardew)
 	var bars = [["E", global.vitals.energy / vitals_max_energy(), make_colour_rgb(110, 200, 90)],
 	            ["H", global.vitals.health / vitals_max_health(), make_colour_rgb(220, 70, 60)]];
-	for(var i = 0; i < 2; i++){
-		var x1 = guiWidth - 86 + i * 38, y1 = guiHeight - 250, x2 = x1 + 28, y2 = guiHeight - 30;
+	// Mana, once you know a spell
+	if(array_length(spells_known()) > 0) array_insert(bars, 0, ["M", mana() / mana_max(), make_colour_rgb(90, 140, 255)]);
+	var nb = array_length(bars);
+	for(var i = 0; i < nb; i++){
+		var x1 = guiWidth - 86 - (nb - 2) * 38 + i * 38, y1 = guiHeight - 250, x2 = x1 + 28, y2 = guiHeight - 30;
 		draw_set_alpha(0.85);
 		draw_set_colour(c.panel);
 		draw_roundrect_ext(x1 - 4, y1 - 4, x2 + 4, y2 + 4, 8, 8, false);
@@ -147,7 +155,7 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 	// Too cold for what you're wearing: energy drains (warmer clothes or a warming dish fix it)
 	else if(climate_chill() > 0){
 		var hot = climate_cold() < 0;
-		ui_text(guiWidth - 100, guiHeight - 262, (hot ? "Hot - Warmth " + string(stat("warmth")) + " is too much" : "Cold " + string(climate_cold()) + "  Warmth " + string(stat("warmth"))),
+		ui_text(guiWidth - 100 - (nb - 2) * 38, guiHeight - 262, (hot ? "Hot - Warmth " + string(stat("warmth")) + " is too much" : "Cold " + string(climate_cold()) + "  Warmth " + string(stat("warmth"))),
 		        0.5, hot ? make_colour_rgb(255, 150, 90) : make_colour_rgb(150, 200, 255), fa_right);
 	}
 

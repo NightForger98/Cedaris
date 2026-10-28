@@ -69,6 +69,13 @@ a dye in the matching dye slot overrides it when the dye suits the piece's mater
   lowest quality is used first), in `dish_table()` (`scripts/food`). Eating one gives energy and a timed buff
   (e.g. Carrot Soup: +4 Warmth for 6 hours); one buff at a time, and it ends when you sleep.
 
+- **Magic**: hold a staff and press F to cast the selected spell (Q changes it). Mana is 30 + 10 per point of Magic,
+  trickles back during the day and fills when you sleep. Spells come from scrolls (`k|<spell>`): Grow and Rain
+  from Mara, Light from Brom, Fireball and Heal from the mine (lift-floor chests, rare drops). Better staffs
+  (Simple, Gnarled, Loop, S, Diamond) add spell power.
+- **The mine's treasure**: a chest on each lift floor (5, 10 ... 30) the first time you get there
+  (`mine_chest_loot()`): bars, gems, staffs, the Fireball and Heal scrolls, and legendary materials at 30.
+
 ## Hooks for quests and events
 
 ```gml

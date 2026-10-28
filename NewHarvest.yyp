@@ -165,6 +165,8 @@
     {"id":{"name":"obj_popup","path":"objects/obj_popup/obj_popup.yy",},},
     {"id":{"name":"obj_mine_ladder","path":"objects/obj_mine_ladder/obj_mine_ladder.yy",},},
     {"id":{"name":"obj_mine_door","path":"objects/obj_mine_door/obj_mine_door.yy",},},
+    {"id":{"name":"obj_chest","path":"objects/obj_chest/obj_chest.yy",},},
+    {"id":{"name":"magic","path":"scripts/magic/magic.yy",},},
     {"id":{"name":"obj_bed","path":"objects/obj_bed/obj_bed.yy",},},
     {"id":{"name":"world_time","path":"scripts/world_time/world_time.yy",},},
     {"id":{"name":"lpc_pal_body_light","path":"sprites/lpc_pal_body_light/lpc_pal_body_light.yy",},},

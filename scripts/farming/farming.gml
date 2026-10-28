@@ -218,11 +218,14 @@ function shipping_payout(){
 	return v;
 }
 
-/// @description The seed seller's stock: seeds of crops in season this season.
+/// @description The seed seller's stock: seeds of crops in season this season, and the farm spell scrolls.
 function item_seed_stock(){
 	var out = [], t = crop_table();
 	for(var i = 0; i < array_length(t); i++){
 		if(crop_in_season(i, global.clock.season)) array_push(out, {id: "s|" + t[i].key, price: t[i].seed});
 	}
+	// And the farm spells, for anyone with a staff
+	array_push(out, {id: "k|grow", price: 300});
+	array_push(out, {id: "k|rain", price: 400});
 	return out;
 }

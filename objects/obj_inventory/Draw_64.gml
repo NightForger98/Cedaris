@@ -257,6 +257,7 @@ if(tip != undefined && cursor == undefined){
 			break;
 		case "material": array_push(lines, "Material"); break;
 		case "dye":      array_push(lines, "Dye"); break;
+		case "scroll":   array_push(lines, "Spell scroll"); break;
 		case "food":     array_push(lines, "Food"); break;
 	}
 	if(tierLine != "") lines[1] = tierLine + " " + string_lower(lines[1]);

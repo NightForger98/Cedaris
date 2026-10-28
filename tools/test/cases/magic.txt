@@ -1,0 +1,67 @@
+# Phase 5: scrolls teach spells; a staff casts them with F (Q changes spell); mana; the mine's chests
+start story
+wait 60
+# Till, plant and leave the soil dry
+pos 700 240
+face s
+hold 1
+use 1
+hold 4
+use 1
+call autotest_crop_front
+# Learn Grow and Rain from scrolls, then cast both with a staff
+give k|grow
+give k|rain
+give c|held|Simple staff
+equip k|grow
+use 1
+equip k|rain
+use 1
+equip c|held|Simple staff
+face s
+call autotest_vitals
+key f
+wait 5
+call autotest_crop_front
+call autotest_spell grow
+key f
+wait 5
+call autotest_crop_front
+call autotest_vitals
+shot 01_cast
+# Light in the mine, and a Fireball
+give k|light
+give k|fireball
+equip k|light
+use 1
+equip k|fireball
+use 1
+equip c|held|Simple staff
+mine 3
+wait 40
+shot 02_dark
+call autotest_spell light
+call spell_selected
+key f
+wait 10
+shot 03_light
+call autotest_spell fireball
+call spell_selected
+call autotest_goto_monster
+key f
+wait 30
+call autotest_monsters
+call autotest_vitals
+shot 04_fireball
+# The chest on floor 5, once
+mine 5
+wait 40
+call autotest_goto_chest
+key e
+wait 5
+inv
+shot 05_chest
+mine 5
+wait 40
+call autotest_goto_chest
+quit

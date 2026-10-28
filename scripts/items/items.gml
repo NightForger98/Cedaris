@@ -5,6 +5,7 @@
 ///   "m|<material>"             crafting material, e.g. "m|linen", "m|dragon_scale"
 ///   "d|<palette material>|<colour>"  dye that recolours equipment, e.g. "d|cloth|red", "d|metal|gold"
 ///   "s|<crop>", "p|<crop>|<quality>"  seeds and produce (see farming); "f|<dish>" cooked food (see food)
+///   "k|<spell>"                spell scroll (see magic)
 /// A stack is {id, count, pal} - pal is an optional palette name giving clothing its own colour.
 ///
 /// Stats: clothing gets its stats from the materials in its recipe (item_stats), and everything
@@ -133,6 +134,13 @@ function item_def(_id){
 				d = {id: _id, type: "produce", crop: ci, quality: q, max: 99, price: produce_price(ci, q) * 2, tier: q, stats: {},
 				     name: ["", "Silver ", "Gold "][q] + ct.name,
 				     desc: "Ship it, or hold it and use it to eat (+" + string(round(ct.energy * (1 + q * 0.4))) + " energy)."};
+			}
+			break;
+		case "k":
+			var sp = spell_def(p[1]);
+			if(sp != undefined){
+				d = {id: _id, type: "scroll", spell: sp.key, name: "Scroll of " + sp.name, max: 9, price: 200, tier: 2, stats: {}, colour: sp.colour,
+				     desc: sp.desc + " Hold it and use it to learn the spell (" + string(sp.mana) + " mana)."};
 			}
 			break;
 		case "f":
@@ -379,6 +387,7 @@ function item_shop_stock(){
 	var bars = ["copper", "iron", "steel", "silver", "gold"];
 	for(var i = 0; i < array_length(bars); i++) array_push(s, {id: "m|" + bars[i], price: item_material(bars[i]).price});
 	array_push(s, {id: "m|coal", price: 8}); // for the furnace, until you find your own
+	array_push(s, {id: "k|light", price: 250}); // for the mine's dark
 	return s;
 }
 
@@ -446,6 +455,18 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			draw_set_colour(make_colour_rgb(120, 90, 55));
 			draw_roundrect_ext(cx - _size * 0.3, cy - _size * 0.36, cx + _size * 0.3, cy + _size * 0.36, 6, 6, true);
 			draw_sprite_stretched(spr_crops_picked, d.crop, cx - _size * 0.24, cy - _size * 0.26, _size * 0.48, _size * 0.48);
+			break;
+		case "scroll":
+			// A rolled parchment tied with a ribbon in the spell's colour
+			var sw = _size * 0.3, sh = _size * 0.38;
+			draw_set_colour(make_colour_rgb(120, 95, 60));
+			draw_roundrect_ext(cx - sw - 2, cy - sh - 2, cx + sw + 2, cy + sh + 2, 6, 6, false);
+			draw_set_colour(make_colour_rgb(235, 220, 180));
+			draw_roundrect_ext(cx - sw, cy - sh, cx + sw, cy + sh, 5, 5, false);
+			draw_set_colour(make_colour_rgb(200, 180, 140));
+			for(var l = -2; l <= 2; l++) draw_line(cx - sw * 0.6, cy + l * sh * 0.3, cx + sw * 0.6, cy + l * sh * 0.3);
+			draw_set_colour(d.colour);
+			draw_rectangle(cx - sw - 2, cy - 3, cx + sw + 2, cy + 3, false);
 			break;
 		case "food":
 			// A bowl of it, steaming

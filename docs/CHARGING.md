@@ -136,7 +136,7 @@ New script **`scripts/charge/charge.gml`**:
 3. Spin animation and trail (scythe, can), then the large swing trail and particles (axe, pickaxe).
 4. Weapons: spin slash, lunge, slam, flurry, draw.
 5. Fishing Rod cast power.
-6. Up/down poses from the reference frames.
+6. Statuses, the witch, cursed and blessed tiers, the priest.
 7. The test case, the full suite, and doc updates (`MILESTONES.md` and the upgrade text at Brom's).
 
 ## Cursed and blessed tools
@@ -169,49 +169,59 @@ the normal full-charge pose (red face, anger mark):
   - Blessed does 100% of that, so one swing. Cursed does 50%, so two swings. Mithril does 35%, so three swings.
   - Lower tiers do at least their tap damage plus their level.
   - It's worked out from the resource table, so a bigger tree or rock added later keeps the same rule.
-- Only a **Mithril** tool (the last tier) can become Cursed. A Cursed tool can only become Blessed. Brom can't
-  upgrade either one.
+- Only a **Mithril** tool (the last tier) can become the Cursed *tier*. A Cursed tool can only become Blessed. Brom
+  can't upgrade either one.
 
-**The curse:**
-- The tool **can't be unequipped**: it stays in your hand and blocks the hotbar keys and scroll, inventory moves,
-  chests, selling and the bin (see open questions).
-- It **drains energy faster**: `tool_energy_cost × 2`, so a charged swing costs `× 2 × (1 + level)`.
-- Its icon gets a purple dot and a purple glint in the hand. A Blessed tool's icon dot is gold.
-- Saved as `global.inv.tools[name] = 6` (Cursed) or `7` (Blessed). Save version goes to 10, and older saves load
-  unchanged.
+**How things get cursed: the witch** (see below). The curse itself can land on **any tool or weapon**:
+- **Locked in hand:** while cursed, the hotbar can't move off it (number keys, scroll, clicking), and it can't be
+  dragged, stored, sold or binned. **Food and potions can still be selected and used**, so a poisoned player isn't
+  stuck; selecting one and then switching back is the only movement allowed.
+- **Drains energy faster:** `tool_energy_cost × 2`, so a charged swing costs `× 2 × (1 + level)`. Cursed weapons cost
+  1 energy a swing.
+- **Lowers Defence by 30%** while you carry it.
+- **A cursed Mithril tool** also becomes the **Cursed tier**: 6 charge levels, the yellow glow, the bigger area.
+  The priest turns it **Blessed**.
+- **Anything else** (a weapon, a copper pickaxe) is just cursed. The priest lifts it and it goes back to normal.
+- **Looks:** its icon gets a purple dot and a purple glint in the hand. A Blessed tool's icon dot is gold.
+- **Saved:** `global.inv.tools[name] = 6` (Cursed) or `7` (Blessed); a cursed stack carries `cursed: true`. Save
+  version goes to 10, and older saves load unchanged.
 
-**The temple and the priest:**
-- **The temple:** a new building. Outside, a room spec in `tools/rooms/specs/` (a plot in `rm_town` or `rm_2`),
-  then `node tools/rooms/worldmap.js`. Inside, `rm_town_temple` with pews, an altar and a door; built with
-  `node tools/rooms/build.js`. The temple is open 8am–6pm, and its doors lock outside those hours through
-  `door_lock_reason`, like the shops.
-- **The priest:** a new villager in `people.gml`, with an LPC look, dialogue, gifts and hearts. Their routine in
-  `villager_routines`:
-  - every day at the temple, working at the altar;
-  - **Friday sermon from 9am to 10am**, with a few villagers' Friday routines sending them to the pews.
-- **Blessing:** talk to the priest **on a Friday after the sermon (10am) and before the temple closes (6pm)**,
-  holding a Cursed tool. A choice offers to bless it for **gold** (amount to be decided). The priest prays with the
-  altar glowing, and the tool becomes Blessed.
-  - At any other time the priest says when to come back: "Come on Friday, after the sermon."
-  - Uses `obj_dialogue`'s existing choice mode, as heart events do.
+**The priest** (for now; the temple, the Friday sermon and opening hours come later with the world map):
+- **Father Aldous**, a new villager in `people.gml`, with an LPC look (robe), dialogue, gifts and hearts.
+- No house: he stands in **the town square from 9am to 6pm** every day, and overnight he stays in a room at the inn.
+- **Lifting a curse:** talk to him while holding a cursed item. A choice offers to lift it:
+  - **5,000 gold** to bless a cursed Mithril tool (it becomes Blessed);
+  - **1,000 gold** for anything else (it goes back to normal).
 
-**Built in** `scripts/gathering/gathering.gml` (tiers, `tool_cursed`, `tool_bless`), the hotbar and inventory code
-(the lock), `scripts/people` and `scripts/schedules` (the priest and the sermon), the room specs, and
-`tools/test/cases/curse.txt`. That test case covers: cursing a Mithril tool, the lock, the double energy, a blessing
-refused on a Thursday or before the sermon, a Friday blessing working and taking the gold, and the 6th level's spin
-radius.
+  Uses `obj_dialogue`'s choice mode, as heart events do.
 
-**Build order:** this goes after step 3 of the steps above, since it needs the spin and level visuals; the temple
-and priest can be built any time.
+## Status effects and the witch
+
+**Statuses** (new `scripts/status/status.gml`, saved in `global.vitals.status`):
+- **Poisoned:** you lose health every few seconds for a while.
+  - Defence lowers both the damage and how long it lasts; Luck gives a chance to shrug off a hit.
+  - It **can't take you below 1 hp**; monsters still can.
+  - **Antidote** at Morga's apothecary cures it.
+- **Cursed:** −30% Defence until the priest lifts it, through sleep and days.
+  - If the black shot hits while you hold nothing or something that isn't a tool or weapon, the curse is
+    **pending**: the HUD says "Cursed: the next tool you pick up..." and it latches onto the next tool or weapon you
+    select.
+- HUD icons next to the health bar: green for poison (with time left), purple for the curse.
+
+**The witch** (`monster_table`, humanoid look: wizard hat, robe):
+- Found from **floor 25 down** (where mithril starts) and in the Deep.
+- She keeps her distance and backs away when you get close.
+- She fires **two straight-line shots, green then black**, after a short wind-up flash so they're fair to dodge:
+  - **Green** (faster) poisons you.
+  - **Black** (slower) curses you.
+- These are new `obj_enemy_shot` kinds, with a trail of small particles.
+- Drops: gold, a chance of moonsilk or a gem.
+
+**Built in** `scripts/gathering/gathering.gml` (the tiers, `tool_cursed`, `tool_bless`), the hotbar and inventory
+code (the lock), `scripts/status`, `scripts/combat` (the witch and her shots), `scripts/people` and
+`scripts/schedules` (the priest). Tested in `tools/test/cases/curse.txt`.
+
+**Hammer and Shovel** charge like weapons: a fixed 2 levels, and a large swing.
 
 ## Still to decide
-- **How a tool becomes cursed.** The plan says only Mithril tools can be, but not how. One option is a cursed altar
-  or chest in the Deep (past the bottom of the mine) that curses the Mithril tool you offer it, in exchange for the
-  6th level.
-- **What "can't be unequipped" means here.** Our held item is whichever hotbar slot is selected.
-  - Stricter: the hotbar can't move off the cursed tool at all, so you can't eat, plant or use another tool until
-    it's blessed.
-  - Looser: the tool can't leave its slot or the bag (no storing, selling, binning), but you can still switch slots.
-- **The blessing's price**, and **where the temple goes** (the town, by the inn, or the village).
-- **Hammer and Shovel:** these aren't upgradable and don't do anything of their own yet. Should they charge like
-  weapons (fixed 2 levels, a large swing), or not charge?
+- The temple, the sermon and where they go, along with the world map edit.

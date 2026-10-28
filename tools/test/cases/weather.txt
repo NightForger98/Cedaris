@@ -1,0 +1,36 @@
+# Milestone 10.1: weather - rain waters the soil, storms and snow, the forecast, cold
+start story
+wait 60
+pos 700 240
+face s
+hold 1
+use 1
+call autotest_crop_front
+call autotest_weather sun rain
+sleep
+wait 60
+room rm_1 700 240
+wait 30
+face s
+call weather_now
+call autotest_crop_front
+call autotest_vitals
+shot 01_rain
+call autotest_weather storm
+wait 30
+shot 02_storm
+season 3
+call autotest_weather snow
+wait 30
+call autotest_vitals
+shot 03_snow
+# Aunt Hesta knows tomorrow's weather
+call autotest_weather sun snow
+room rm_12 400 300
+wait 40
+call autotest_goto_person hesta
+key e
+wait 5
+shot 04_forecast
+key e
+quit

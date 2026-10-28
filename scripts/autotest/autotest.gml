@@ -320,3 +320,10 @@ function autotest_ui(){
 	return "dialogue " + string(instance_exists(obj_dialogue)) + " inventory " + string(instance_exists(obj_inventory))
 	       + " board " + string(instance_exists(obj_quest_board) && obj_quest_board.open);
 }
+
+/// @description Set today's or tomorrow's weather, for tests.
+function autotest_weather(_today, _tomorrow = ""){
+	global.clock.weather = _today;
+	if(_tomorrow != "") global.clock.tomorrow = _tomorrow;
+	return weather_now() + " / " + weather_tomorrow();
+}

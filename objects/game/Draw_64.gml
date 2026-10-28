@@ -9,6 +9,9 @@ if(game_is_playing_room() && world_time_ready() && room_is_outdoors()){
 	}
 }
 
+// Rain, storms and snow over outdoor rooms
+if(game_is_playing_room() && world_time_ready()) weather_draw(guiWidth, guiHeight);
+
 // The mine is dark away from you: a dark layer with a soft circle of light cut out around the player
 var dark = mine_darkness();
 if(dark > 0 && instance_exists(obj_plyr)){
@@ -119,6 +122,7 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 	draw_set_alpha(1);
 	ui_text(bx + 14, by + 20, weekday_name(global.clock.day) + " " + string(global.clock.day) + "  " + season_name(global.clock.season) + "  Y" + string(global.clock.year), 0.55, c.accent, fa_left);
 	ui_text(bx + 14, by + 54, clock_text(), 0.8, c_white, fa_left);
+	weather_icon(guiWidth - 44, by + 52, weather_now());
 	// In the mine: which floor and band, top centre
 	if(room == rm_mine) ui_text(guiWidth / 2, 30, "Mine floor " + string(mine_state().floor) + "  -  " + mine_band(mine_state().floor).name, 0.6, c.accent);
 

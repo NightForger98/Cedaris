@@ -98,6 +98,11 @@ function villager_look(_key){
 	random_set_seed(v.seed);
 	var look = character_random_look(v.race);
 	character_set_body(look, v.body);
+	// Everyday clothes: no masks, armour or things in hand; beards only on men
+	static plain = ["face", "bauldron", "shoulders", "back", "held"];
+	for(var i = 0; i < array_length(plain); i++){ look.parts[$ plain[i]].item = -1; look.parts[$ plain[i]].want = -1; }
+	if(v.body != "male"){ look.parts.beard.item = -1; look.parts.beard.want = -1; }
+	character_validate(look);
 	randomize();
 	return look;
 }
@@ -124,7 +129,9 @@ function villager_line(_key){
 	var h = people_hearts(_key);
 	var tier = (h >= 6) ? 2 : ((h >= 2) ? 1 : 0);
 	var lines = v.lines[tier];
-	return lines[(day_index() + string_length(_key)) mod array_length(lines)];
+	var line = lines[(day_index() + string_length(_key)) mod array_length(lines)];
+	// Aunt Hesta always knows tomorrow's weather
+	return (_key == "hesta") ? weather_forecast_line() + "  " + line : line;
 }
 
 /// @description Talking once a day: +20 friendship. Returns a heart reward message if they have one for you, or "".

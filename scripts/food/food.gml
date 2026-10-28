@@ -112,6 +112,7 @@ function climate_cold(){
 	var s = global.clock.season mod 4;
 	var c = [1, 0, 2, 5][s];
 	if(global.clock.minutes >= 1200 || global.clock.minutes < DAY_START) c += (s == 1) ? 1 : 2;
+	c += weather_cold(); // rain, storms and snow
 	return c;
 }
 

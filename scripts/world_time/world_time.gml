@@ -12,7 +12,8 @@
 #macro BED_ROOM rm_12          // the room with your bed (obj_bed); you wake up next to it
 
 function world_time_new(){
-	global.clock = {minutes: DAY_START, day: 1, season: 0, year: 1};
+	global.clock = {minutes: DAY_START, day: 1, season: 0, year: 1, weather: "sun"}; // a sunny first day
+	global.clock.tomorrow = weather_roll(0);
 	global.vitals = {energy: 270, health: 100, buff: undefined};
 	global.world = {rooms: {}};
 	global.vitals.energy = vitals_max_energy();
@@ -120,6 +121,7 @@ function day_advance(_passedOut){
 
 	// Farm: watered crops grow, out-of-season crops die, soil dries; resources return; then shipping pays out
 	var died = farm_new_day(ck.season);
+	weather_new_day(); // today's weather; rain waters the soil that just dried
 	resources_new_day(); // stumps regrow, rocks and weeds come back
 	var paid = shipping_payout();
 

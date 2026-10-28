@@ -168,6 +168,7 @@
     {"id":{"name":"obj_chest","path":"objects/obj_chest/obj_chest.yy",},},
     {"id":{"name":"people","path":"scripts/people/people.yy",},},
     {"id":{"name":"interact","path":"scripts/interact/interact.yy",},},
+    {"id":{"name":"weather","path":"scripts/weather/weather.yy",},},
     {"id":{"name":"quests","path":"scripts/quests/quests.yy",},},
     {"id":{"name":"obj_dialogue","path":"objects/obj_dialogue/obj_dialogue.yy",},},
     {"id":{"name":"obj_quest_board","path":"objects/obj_quest_board/obj_quest_board.yy",},},

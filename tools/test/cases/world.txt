@@ -3,6 +3,8 @@ start story
 wait 60
 give c|held|Fishing Rod
 call autotest_where
+expect rm_1
+expectnot inside a solid
 # Into the farmhouse, up the stairs, sleep, back down and out
 room rm_1 816 570
 wait 15
@@ -11,6 +13,8 @@ wait 70
 keyup up
 wait 40
 call autotest_where
+expect rm_12
+expectnot inside a solid
 shot 01_downstairs
 pos 160 200
 wait 15
@@ -19,10 +23,14 @@ wait 40
 keyup up
 wait 40
 call autotest_where
+expect rm_123
+expectnot inside a solid
 shot 02_upstairs
 sleep
 wait 60
 call autotest_where
+expect rm_123
+expectnot inside a solid
 pos 96 200
 wait 15
 keydown up
@@ -30,6 +38,8 @@ wait 40
 keyup up
 wait 40
 call autotest_where
+expect rm_12
+expectnot inside a solid
 pos 160 470
 wait 15
 keydown down
@@ -37,6 +47,8 @@ wait 30
 keyup down
 wait 40
 call autotest_where
+expect rm_1
+expectnot inside a solid
 # Up from the farm to Hollow Vale, on up to the Crossroads, up the street into Brindlemoor and back
 room rm_1 1296 110
 wait 15
@@ -45,6 +57,8 @@ wait 70
 keyup up
 wait 40
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 pos 1296 110
 wait 15
 keydown up
@@ -52,6 +66,8 @@ wait 70
 keyup up
 wait 40
 call autotest_where
+expect rm_cross
+expectnot inside a solid
 pos 1040 120
 wait 15
 keydown up
@@ -59,6 +75,8 @@ wait 70
 keyup up
 wait 40
 call autotest_where
+expect rm_town
+expectnot inside a solid
 call autotest_people
 shot 03_town
 pos 1040 1340
@@ -68,6 +86,8 @@ wait 70
 keyup down
 wait 40
 call autotest_where
+expect rm_cross
+expectnot inside a solid
 # West to the coast: the pier, a cast for sea fish, back
 pos 100 576
 wait 15
@@ -76,6 +96,8 @@ wait 70
 keyup left
 wait 40
 call autotest_where
+expect rm_beach
+expectnot inside a solid
 call autotest_resources
 shot 04_coast
 equip c|held|Fishing Rod
@@ -97,6 +119,8 @@ wait 70
 keyup right
 wait 40
 call autotest_where
+expect rm_cross
+expectnot inside a solid
 # East to the village, north to North Road, west into Brindlemoor
 pos 2380 576
 wait 15
@@ -105,6 +129,8 @@ wait 70
 keyup right
 wait 40
 call autotest_where
+expect rm_2
+expectnot inside a solid
 shot 06_village
 pos 1296 110
 wait 15
@@ -113,6 +139,8 @@ wait 70
 keyup up
 wait 40
 call autotest_where
+expect rm_north
+expectnot inside a solid
 pos 100 416
 wait 15
 keydown left
@@ -120,6 +148,8 @@ wait 70
 keyup left
 wait 40
 call autotest_where
+expect rm_town
+expectnot inside a solid
 # The village's south road to South Road, west into the vale
 room rm_2 1040 1540
 wait 15
@@ -128,6 +158,8 @@ wait 70
 keyup down
 wait 40
 call autotest_where
+expect rm_south
+expectnot inside a solid
 pos 100 608
 wait 15
 keydown left
@@ -135,5 +167,7 @@ wait 70
 keyup left
 wait 40
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 shot 07_vale
 quit

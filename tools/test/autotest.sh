@@ -3,7 +3,8 @@
 #
 #   tools/test/autotest.sh tools/test/cases/gathering.txt
 #
-# The script should end with "quit". Results go to build/autotest/ (log.txt and <name>.png).
+# The script should end with "quit". Results go to build/autotest/ (log.txt, result.txt and <name>.png).
+# Exits 0 only if the run reached quit with no failed expect, error or unknown command.
 # Nothing is saved during a test run, so real save slots are safe.
 
 set -u
@@ -23,4 +24,8 @@ echo "---- log"
 cat build/autotest/log.txt 2>/dev/null || echo "(no log: the test didn't start)"
 echo "---- screenshots"
 ls build/autotest/*.png 2>/dev/null
-exit $STATUS
+RESULT=$(cat build/autotest/result.txt 2>/dev/null || echo "FAIL (never reached quit)")
+echo "---- result: $RESULT"
+[ "$STATUS" -ne 0 ] && exit $STATUS
+[ "$RESULT" = "PASS" ] || exit 1
+exit 0

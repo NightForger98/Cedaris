@@ -7,6 +7,8 @@ call autotest_old_save 10 rm_1 1344 200
 call load_game test
 wait 90
 call autotest_where
+expect rm_1
+expectnot inside a solid
 call autotest_farm_state
 shot 01_v10_farm
 # Version 9 (before the farm, the vale and the coast grew), saved on the farm
@@ -14,24 +16,34 @@ call autotest_old_save 9 rm_1 600 500
 call load_game test
 wait 90
 call autotest_where
+expect rm_1
+expectnot inside a solid
 call autotest_farm_state
 # Version 9, saved on the old coast by the pier, and in the old vale
 call autotest_old_save 9 rm_beach 300 576
 call load_game test
 wait 90
 call autotest_where
+expect rm_beach
+expectnot inside a solid
 shot 02_v9_coast
 call autotest_old_save 9 rm_valley 752 600
 call load_game test
 wait 90
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 # Version 10, saved in North Road and in town
 call autotest_old_save 10 rm_north 1000 416
 call load_game test
 wait 90
 call autotest_where
+expect rm_north
+expectnot inside a solid
 call autotest_old_save 10 rm_town 1024 700
 call load_game test
 wait 90
 call autotest_where
+expect rm_town
+expectnot inside a solid
 quit

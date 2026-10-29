@@ -18,11 +18,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_village_elda
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_2
+expectnot inside a solid
 room rm_2 208 984
 face n
 wait 10
@@ -31,11 +35,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_village_smithy
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_2
+expectnot inside a solid
 room rm_2 656 1048
 face n
 wait 10
@@ -44,11 +52,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_village_store
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_2
+expectnot inside a solid
 room rm_2 240 1432
 face n
 wait 10
@@ -57,11 +69,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_village_hesta
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_2
+expectnot inside a solid
 room rm_2 720 1528
 face n
 wait 10
@@ -70,11 +86,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_village_rowan
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_2
+expectnot inside a solid
 room rm_valley 1584 408
 face n
 wait 10
@@ -83,11 +103,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_valley_ranch
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 room rm_valley 880 824
 face n
 wait 10
@@ -96,11 +120,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_valley_carpentry
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 room rm_beach 1232 1944
 face n
 wait 10
@@ -109,11 +137,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_beach_hut
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_beach
+expectnot inside a solid
 room rm_2 800 600
 wait 30
 shot 01_village

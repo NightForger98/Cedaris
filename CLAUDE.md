@@ -94,14 +94,18 @@ Last updated 2026-10-29: the world rebuild, the mine elevator and the art clean-
 - **Build / check**: `./build.sh` (Git Bash) compiles with GameMaker's Igor and prints compiler errors; `./build.sh run`
   launches the game. It needs GameMaker LTS 2026 installed and signed in once (it reads the licence from
   `%APPDATA%/GameMakerStudio2-LTS2026/<user>/licence.plist`). The compiler does not catch calls to unknown
-  functions - check names against the runtime's `GmlSpec.xml` when using new built-ins.
+  functions, so `build.sh` first runs `node tools/check_calls.js`: every call must be a built-in (`GmlSpec.xml`) or a
+  project function, and every `call <fn>` in a test case a project function.
 - **GameMaker open while editing files**: it shows "Project Directory Modified" - choose **Reload**, never Save.
 - **Testing**: `tools/test/autotest.sh tools/test/cases/<case>.txt` builds and runs the game with a test script
   (commands in `scripts/autotest`: start, pos, hold, use, give, time, room, call <function>, shot, `charge N [shot]`
   holds the use button, `snap N name` screenshots mid-action...) and copies its log and screenshots to
-  `build/autotest/` - read the PNGs to check. Full suite:
-  `for c in tools/test/cases/*.txt; do tools/test/autotest.sh $c; done` (don't edit game code while it runs - each
-  case recompiles).
+  `build/autotest/` - read the PNGs to check. A run fails on a failed `expect <text>` / `expectnot <text>` (checked
+  against the last `call` or `inv` result), an ERROR or an unknown command, or if it never reaches `quit`; the script
+  prints `---- result: PASS` or `FAIL n` and exits non-zero on a failure. Give new cases expects, not just logs.
+  Full suite: `tools/test/suite.sh` (or `tools/test/suite.sh mine deep` for some) prints a pass/fail table, with each
+  case's log and screenshots in `build/suite/<case>/`. It takes about an hour; don't edit game code while it runs
+  (each case recompiles), and if you stop it, also kill its `suite.sh` loop, `Igor.exe` and `Runner.exe`.
   - Simulated key presses don't reach `keyboard_check_pressed`, so keys a test needs go through `input_pressed()`;
     held keys (keydown / keyup, walking) go through `input_held()`, so they work even when the window lacks focus.
   - Test runs never write real saves (only a "test" slot). Autosave must never overwrite another game's save slot.

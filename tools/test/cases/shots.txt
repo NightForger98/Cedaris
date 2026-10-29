@@ -10,4 +10,5 @@ call autotest_shots
 wait 20
 call autotest_shots
 call autotest_mine
+expect floor 10
 quit

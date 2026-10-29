@@ -9,6 +9,7 @@ wait 20
 key e
 wait 90
 call autotest_mine
+expect floor 1
 # Reach floor 7, climb out, and the lift opens on 7 and can't go deeper
 mine 7
 wait 40
@@ -20,18 +21,22 @@ wait 10
 key e
 wait 10
 call autotest_lift
+expect pick 7
 key down
 wait 5
 key down
 wait 5
 call autotest_lift
+expect pick 7
 shot 00_story_lift
 key up
 wait 5
 call autotest_lift
+expect pick 2
 key enter
 wait 90
 call autotest_mine
+expect floor 2
 # Free mode: any floor
 start free
 wait 60
@@ -42,6 +47,7 @@ wait 20
 key e
 wait 10
 call autotest_lift
+expect pick 1
 key down
 wait 5
 key down
@@ -49,10 +55,12 @@ wait 5
 key right
 wait 5
 call autotest_lift
+expect pick 12
 shot 01_free_lift
 key enter
 wait 90
 call autotest_mine
+expect floor 12
 # A lift car on floor 15: take it up to floor 3
 mine 15
 wait 40
@@ -62,6 +70,7 @@ shot 02_lift_car
 key e
 wait 10
 call autotest_lift
+expect pick 15
 shot 03_lift_in_mine
 key up
 wait 5
@@ -72,8 +81,11 @@ wait 5
 key left
 wait 5
 call autotest_lift
+expect pick 3
 key enter
 wait 90
 call autotest_mine
+expect floor 3
 call autotest_lift
+expect no lift
 quit

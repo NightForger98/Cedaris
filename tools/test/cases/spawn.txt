@@ -2,22 +2,32 @@
 start story
 wait 60
 call autotest_where
+expect rm_1
+expectnot inside a solid
 shot 01_spawn
 keydown right
 wait 30
 keyup right
 call autotest_where
+expect rm_1
+expectnot inside a solid
 keydown down
 wait 30
 keyup down
 call autotest_where
+expect rm_1
+expectnot inside a solid
 keydown left
 wait 30
 keyup left
 call autotest_where
+expect rm_1
+expectnot inside a solid
 keydown up
 wait 30
 keyup up
 call autotest_where
+expect rm_1
+expectnot inside a solid
 shot 02_walked
 quit

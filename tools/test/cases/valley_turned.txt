@@ -9,6 +9,8 @@ wait 60
 keyup down
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 shot 01_arrive
 pos 1648 420
 face n
@@ -17,6 +19,8 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 room rm_valley 944 870
 wait 20
 keydown up
@@ -24,6 +28,8 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 room rm_valley 1296 1150
 wait 20
 keydown down
@@ -31,6 +37,8 @@ wait 90
 keyup down
 wait 10
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 shot 02_bridge
 pos 1296 120
 keydown up
@@ -38,6 +46,8 @@ wait 60
 keyup up
 wait 30
 call autotest_where
+expect rm_cross
+expectnot inside a solid
 call autotest_villager_at pip
 call autotest_villager_at thorne
 call autotest_villager_at hask

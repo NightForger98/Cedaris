@@ -3,6 +3,8 @@ start free
 wait 60
 time 10
 call autotest_where
+expect rm_1
+expectnot inside a solid
 shot 00_farm_start
 # Up the path to Hollow Vale
 pos 1296 110
@@ -12,6 +14,8 @@ wait 70
 keyup up
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 shot 01_vale
 # On up to the Crossroads
 pos 1296 110
@@ -21,6 +25,8 @@ wait 90
 keyup up
 wait 30
 call autotest_where
+expect rm_cross
+expectnot inside a solid
 # The Crossroads' other exits
 room rm_cross 1040 120
 face n
@@ -29,6 +35,8 @@ wait 70
 keyup up
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 room rm_cross 2380 576
 face e
 keydown right
@@ -36,6 +44,8 @@ wait 70
 keyup right
 wait 30
 call autotest_where
+expect rm_2
+expectnot inside a solid
 room rm_cross 100 576
 face w
 keydown left
@@ -43,6 +53,8 @@ wait 70
 keyup left
 wait 30
 call autotest_where
+expect rm_beach
+expectnot inside a solid
 # Into the farmhouse and back out
 room rm_1 816 600
 face n
@@ -51,4 +63,6 @@ wait 40
 keyup up
 wait 30
 call autotest_where
+expect rm_12
+expectnot inside a solid
 quit

@@ -16,6 +16,8 @@ wait 70
 keyup up
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 shot 01_street
 room rm_town 1008 344
 face n
@@ -25,11 +27,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_town_inn
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 room rm_town 176 376
 face n
 wait 10
@@ -38,11 +44,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_town_home_nw
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 room rm_town 1520 344
 face n
 wait 10
@@ -51,11 +61,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_town_outfitter
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 room rm_town 272 792
 face n
 wait 10
@@ -64,11 +78,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_town_apothecary
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 room rm_town 1776 792
 face n
 wait 10
@@ -77,11 +95,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_town_home_e
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 room rm_town 240 1208
 face n
 wait 10
@@ -90,11 +112,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_town_home_sw
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 room rm_town 1680 1272
 face n
 wait 10
@@ -103,11 +129,15 @@ wait 30
 keyup up
 wait 30
 call autotest_where
+expect rm_town_home_se
+expectnot inside a solid
 keydown down
 wait 50
 keyup down
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 room rm_town 1040 640
 wait 30
 shot 02_square

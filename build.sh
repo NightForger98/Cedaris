@@ -43,6 +43,9 @@ case "${1:-check}" in
   *)     echo "Usage: ./build.sh [check|run|clean]"; exit 2 ;;
 esac
 
+# The compiler lets calls to missing functions through (they fail only when the line runs): catch them first
+node tools/check_calls.js "$(win "$RUNTIME")" || { echo "BUILD FAILED: unknown functions (see above)"; exit 1; }
+
 echo "Runtime: $(basename "$RUNTIME")   Command: Windows $CMD"
 "$IGOR" -j=8 \
   --project="$(win "$PWD/$PROJECT")" \

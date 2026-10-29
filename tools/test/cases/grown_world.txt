@@ -10,6 +10,8 @@ wait 70
 keyup down
 wait 30
 call autotest_where
+expect rm_south
+expectnot inside a solid
 shot 01_south_road
 pos 120 608
 face w
@@ -18,6 +20,8 @@ wait 70
 keyup left
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 shot 02_vale_lane
 pos 1296 120
 keydown up
@@ -25,6 +29,8 @@ wait 70
 keyup up
 wait 30
 call autotest_where
+expect rm_cross
+expectnot inside a solid
 shot 03_farm
 pos 100 576
 keydown left
@@ -32,6 +38,8 @@ wait 70
 keyup left
 wait 30
 call autotest_where
+expect rm_beach
+expectnot inside a solid
 shot 04_coast
 pos 1232 1950
 face n
@@ -40,11 +48,15 @@ wait 70
 keyup up
 wait 30
 call autotest_where
+expect rm_beach_hut
+expectnot inside a solid
 keydown down
 wait 70
 keyup down
 wait 30
 call autotest_where
+expect rm_beach
+expectnot inside a solid
 room rm_valley 120 1664
 wait 20
 keydown left
@@ -52,12 +64,16 @@ wait 70
 keyup left
 wait 30
 call autotest_where
+expect rm_beach
+expectnot inside a solid
 shot 05_far_coast
 keydown right
 wait 70
 keyup right
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 room rm_valley 1648 420
 wait 20
 keydown up
@@ -65,11 +81,15 @@ wait 70
 keyup up
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 keydown down
 wait 70
 keyup down
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 room rm_valley 944 870
 wait 20
 keydown up
@@ -77,11 +97,15 @@ wait 70
 keyup up
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 keydown down
 wait 70
 keyup down
 wait 30
 call autotest_where
+expect rm_valley
+expectnot inside a solid
 room rm_town 1024 1340
 wait 20
 keydown down
@@ -89,6 +113,8 @@ wait 70
 keyup down
 wait 30
 call autotest_where
+expect rm_cross
+expectnot inside a solid
 room rm_12 160 440
 wait 20
 keydown down
@@ -96,6 +122,8 @@ wait 70
 keyup down
 wait 30
 call autotest_where
+expect rm_1
+expectnot inside a solid
 call autotest_villager_at pip
 call autotest_villager_at hask
 call autotest_villager_at marlo

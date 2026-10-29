@@ -5,12 +5,16 @@ time 10
 room rm_town 1960 416
 wait 10
 call autotest_where
+expect rm_town
+expectnot inside a solid
 keydown right
 snap 20 00_walking
 wait 70
 keyup right
 wait 30
 call autotest_where
+expect rm_north
+expectnot inside a solid
 shot 01_from_town
 pos 1696 1300
 wait 5
@@ -19,12 +23,16 @@ wait 70
 keyup down
 wait 30
 call autotest_where
+expect rm_2
+expectnot inside a solid
 shot 02_into_village
 keydown up
 wait 70
 keyup up
 wait 30
 call autotest_where
+expect rm_north
+expectnot inside a solid
 shot 03_back_north
 pos 120 416
 wait 5
@@ -33,6 +41,8 @@ wait 70
 keyup left
 wait 30
 call autotest_where
+expect rm_town
+expectnot inside a solid
 shot 04_back_in_town
 key m
 wait 10

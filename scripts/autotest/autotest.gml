@@ -22,8 +22,13 @@
 ///   call <function> [args]    call a script function, e.g. call smelt m|copper (strings only)
 ///   log <text>                write a line to autotest/log.txt
 ///   inv                       log the inventory
+///   expect <text>             fail unless the last call (or inv) result contains <text>
+///   expectnot <text>          fail if it does
 ///   shot <name>               save a screenshot to autotest/<name>.png
 ///   quit                      close the game
+///
+/// A run fails on a failed expect, an ERROR (a runtime error or a missing function) or an unknown command; quit
+/// writes autotest/result.txt (PASS or FAIL n), which autotest.sh reports. No result file means it never got to quit.
 
 function autotest_start(){
 	global.autotest = undefined;
@@ -39,7 +44,13 @@ function autotest_start(){
 	if(!directory_exists("autotest")) directory_create("autotest");
 	var lf = file_text_open_write("autotest/log.txt");
 	file_text_close(lf);
-	global.autotest = {lines: lines, i: 0, wait: 30, press: -1, uses: 0};
+	global.autotest = {lines: lines, i: 0, wait: 30, press: -1, uses: 0, last: "", fails: 0};
+}
+
+/// @description A failure: logged, counted, and the run's result becomes FAIL.
+function autotest_fail(_text){
+	autotest_log("  FAIL " + _text);
+	global.autotest.fails++;
 }
 
 function autotest_running(){ return variable_global_exists("autotest") && is_struct(global.autotest); }
@@ -194,10 +205,18 @@ function autotest_step(){
 			case "sleep": sleep_now(false); t.wait = 150; break;
 			case "call":
 				var fn = asset_get_index(a[1]);
+				if(fn == -1){ t.last = ""; autotest_fail("no function " + a[1]); break; }
 				var args = [];
 				for(var i = 2; i < array_length(a); i++) array_push(args, a[i]);
 				var r = script_execute_ext(fn, args);
-				autotest_log("  = " + string(r));
+				t.last = string(r);
+				autotest_log("  = " + t.last);
+				break;
+			case "expect":
+			case "expectnot":
+				var want = string_trim(string_delete(line, 1, string_length(a[0])));
+				var has = string_pos(want, t.last) > 0;
+				if(has != (a[0] == "expect")) autotest_fail(a[0] + " \"" + want + "\" in \"" + t.last + "\"");
 				break;
 			case "log":  autotest_log(string_delete(line, 1, 4)); break;
 			case "inv":
@@ -206,17 +225,25 @@ function autotest_step(){
 					var st = global.inv.slots[i];
 					if(st != undefined) s += " " + st.id + "x" + string(st.count);
 				}
+				t.last = s;
 				autotest_log(s);
 				break;
 			case "snap": t.snapIn = real(a[1]); t.snapName = a[2]; break;
 			case "shot":
 				screen_save("autotest/" + a[1] + ".png");
 				break;
-			case "quit": game_end(); break;
-			default: autotest_log("  unknown command");
+			case "quit":
+				var rf = file_text_open_write("autotest/result.txt");
+				file_text_write_string(rf, (t.fails == 0) ? "PASS" : ("FAIL " + string(t.fails)));
+				file_text_close(rf);
+				autotest_log((t.fails == 0) ? "RESULT PASS" : ("RESULT FAIL " + string(t.fails)));
+				game_end();
+				break;
+			default: autotest_fail("unknown command " + a[0]);
 		}
 	} catch(e) {
 		autotest_log("  ERROR " + e.message);
+		t.fails++;
 	}
 }
 

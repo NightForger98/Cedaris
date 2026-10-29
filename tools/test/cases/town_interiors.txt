@@ -13,6 +13,8 @@ wait 20
 keyup up
 wait 40
 call autotest_where
+expect rm_town_inn
+expectnot inside a solid
 call autotest_people
 pos 144 232
 face n
@@ -35,6 +37,8 @@ wait 20
 keyup down
 wait 40
 call autotest_where
+expect rm_town
+expectnot inside a solid
 # The outfitter
 room rm_town 1520 340
 wait 30
@@ -43,6 +47,8 @@ wait 20
 keyup up
 wait 40
 call autotest_where
+expect rm_town_outfitter
+expectnot inside a solid
 pos 272 232
 face n
 key e
@@ -60,6 +66,8 @@ wait 20
 keyup down
 wait 40
 call autotest_where
+expect rm_town
+expectnot inside a solid
 # The apothecary
 room rm_town 272 788
 wait 30
@@ -68,6 +76,8 @@ wait 20
 keyup up
 wait 40
 call autotest_where
+expect rm_town_apothecary
+expectnot inside a solid
 pos 240 232
 face n
 key e
@@ -85,6 +95,8 @@ wait 20
 keyup down
 wait 40
 call autotest_where
+expect rm_town
+expectnot inside a solid
 # The four homes: in and out of each
 room rm_town 176 372
 wait 30
@@ -93,6 +105,8 @@ wait 20
 keyup up
 wait 40
 call autotest_where
+expect rm_town_home_nw
+expectnot inside a solid
 shot 07_home_nw
 pos 256 308
 keydown down
@@ -100,6 +114,8 @@ wait 20
 keyup down
 wait 40
 call autotest_where
+expect rm_town
+expectnot inside a solid
 room rm_town 1776 788
 wait 30
 keydown up
@@ -107,6 +123,8 @@ wait 20
 keyup up
 wait 40
 call autotest_where
+expect rm_town_home_e
+expectnot inside a solid
 shot 08_home_e
 room rm_town 240 1204
 wait 30
@@ -115,6 +133,8 @@ wait 20
 keyup up
 wait 40
 call autotest_where
+expect rm_town_home_sw
+expectnot inside a solid
 shot 09_home_sw
 room rm_town 1680 1268
 wait 30
@@ -123,6 +143,8 @@ wait 20
 keyup up
 wait 40
 call autotest_where
+expect rm_town_home_se
+expectnot inside a solid
 shot 10_home_se
 pos 256 308
 keydown down
@@ -130,4 +152,6 @@ wait 20
 keyup down
 wait 40
 call autotest_where
+expect rm_town
+expectnot inside a solid
 quit

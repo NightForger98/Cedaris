@@ -88,9 +88,9 @@ module.exports = {
 		// East along the lane to North Road (rm_north)
 		{obj: "obj_transition", x: 2040, y: 416, sx: 1, sy: 4,
 		 code: "targetRoom = rm_north;\ntargetX = 64;\ntargetY = 416;\nPlayerFacingBefore = dir.right;\nPlayerFacingAfter = dir.right;"},
-		// Down the main street to the ladder onto the farm
+		// Down the main street to the Crossroads
 		{obj: "obj_transition", x: 1024, y: 1392, sx: 8, sy: 2,
-		 code: "targetRoom = rm_1;\ntargetX = 1040;\ntargetY = 152;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
+		 code: "targetRoom = rm_cross;\ntargetX = 1040;\ntargetY = 72;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
 		// The doors: the hall is the inn, the sword sign the outfitter, the potion sign the apothecary, the rest homes
 		...[["rm_town_inn", 1056, 304, 4, 352, 408], ["rm_town_home_nw", 272, 368, 2, 256, 312],
 		    ["rm_town_outfitter", 1776, 368, 2, 288, 344], ["rm_town_apothecary", 272, 816, 2, 256, 344],

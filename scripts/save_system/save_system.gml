@@ -2,10 +2,11 @@
 /// Saves are JSON files in the game's save folder (saves/slotN.json); settings live in settings.ini.
 
 #macro SAVE_SLOTS 3
-#macro SAVE_VERSION 10// 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine);
+#macro SAVE_VERSION 11// 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine);
                       // 5: spells (inv.spells) and mana (vitals.mana); 6: weather (clock), projects, people, quests (world);
                       // 7: the built farm and village (see save_upgrade_rooms); 8: beaten mine bosses (world.mine.bosses);
-                      // 9: heart events seen (world.events); 10: the farm, the vale and the coast grown (save_upgrade_grown)
+                      // 9: heart events seen (world.events); 10: the farm, the vale and the coast grown (save_upgrade_grown);
+                      // 11: the farm rebuilt below Hollow Vale (save_upgrade_farm_moved)
 
 function save_path(_slot){ return "saves/slot" + string(_slot) + ".json"; }
 
@@ -23,6 +24,7 @@ function save_room_name(_roomName){
 		case "rm_valley": return "Hollow Vale";
 		case "rm_north": return "North Road";
 		case "rm_south": return "South Road";
+		case "rm_cross": return "Crossroads";
 		default:
 			// Houses take their place's name
 			if(string_pos("rm_town_", _roomName) == 1) return "Brindlemoor";
@@ -106,6 +108,8 @@ function load_game(_slot){
 	var grown = save_grown_shift();
 	var oldGrown = !oldRooms && (data[$ "version"] ?? 1) < 10;
 	if(oldGrown) save_upgrade_grown();
+	var oldFarm = !oldRooms && (data[$ "version"] ?? 1) < 11;
+	if(oldFarm) save_upgrade_farm_moved();
 
 	// Sheet row back to a facing direction (rows: 8 up, 9 left, 10 down, 11 right)
 	var facing = dir.down;
@@ -119,6 +123,7 @@ function load_game(_slot){
 	if(oldRooms && rm == rm_2) at = layout_point("rm_2", "road_west");
 	var g = grown[$ data.room];
 	if(oldGrown && g != undefined) at = [at[0] + g[0] * 32, at[1] + g[1] * 32];
+	if(oldFarm && rm == rm_1) at = layout_point("rm_1", "start");
 	with(game){
 		spawnRoom = rm;
 		spawnX = at[0];
@@ -179,6 +184,31 @@ function save_upgrade_grown(){
 		}
 		r.tiles = tiles;
 	}
+}
+
+/// @description Saves before version 11: the farm moved below Hollow Vale and was rebuilt round the same field and
+/// farmhouse. What's on the field stays (crops, tilled soil, sprinklers); other placed things go back in the bag, and
+/// rocks, weeds and trees are rolled again for the new farm.
+function save_upgrade_farm_moved(){
+	var farm = world_room("rm_1"), f = layout_cells("rm_1", "field");
+	var onField = function(_gx, _gy, _f){ return _gx >= _f[0] && _gx <= _f[2] && _gy >= _f[1] && _gy <= _f[3]; };
+	var keep = [], p = farm[$ "placed"];
+	if(is_array(p)) for(var k = 0; k < array_length(p); k++){
+		if(onField(p[k].gx, p[k].gy, f)) array_push(keep, p[k]);
+		else inv_add(item_stack("o|" + p[k].kind, 1));
+	}
+	farm.placed = keep;
+	var tiles = {}, keys = variable_struct_get_names(farm.tiles);
+	for(var k = 0; k < array_length(keys); k++){
+		var xy = string_split(keys[k], "_");
+		if(onField(real(xy[0]), real(xy[1]), f)) tiles[$ keys[k]] = farm.tiles[$ keys[k]];
+	}
+	farm.tiles = tiles;
+	var crops_ = [];
+	for(var k = 0; k < array_length(farm.crops); k++) if(onField(farm.crops[k].gx, farm.crops[k].gy, f)) array_push(crops_, farm.crops[k]);
+	farm.crops = crops_;
+	farm.objects = [];
+	farm.seeded = false;
 }
 
 function save_delete(_slot){

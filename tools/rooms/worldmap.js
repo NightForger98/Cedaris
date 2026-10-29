@@ -17,7 +17,7 @@ const T = require("./tiles.js");
 
 const SCALE = 0.25;        // map pixels per room pixel
 const GAP = 64;            // room pixels between neighbouring rooms
-const OUTDOORS = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north", "rm_south"];
+const OUTDOORS = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north", "rm_south", "rm_cross"];
 const FOREST = {w: 48 * 32, h: 30 * 32};   // FOREST_W x FOREST_H in scripts/forest
 
 const spec = n => require(path.join(__dirname, "specs", n + ".js"));
@@ -104,16 +104,17 @@ function build(){
 			const [dx, dy] = at([ox + x, oy + y]);
 			inside[b] = [dx, dy];
 			if(!thing) continue;
-			const st = JSON.parse(fs.readFileSync(path.join(__dirname, "stamps", thing.stamp + ".json"), "utf8"));
+			const st = thing.stamp ? JSON.parse(fs.readFileSync(path.join(__dirname, "stamps", thing.stamp + ".json"), "utf8"))
+				: {w: thing.src[2], h: thing.src[3]};
 			const [bx, by] = at([ox + thing.at[0] * 32, oy + thing.at[1] * 32]);
 			buildings.push({room: b, rect: [bx, by, Math.round(st.w * 32 * SCALE), Math.round(st.h * 32 * SCALE)]});
 		}
 	}
 	// Rooms reached from inside another (upstairs) map to the same door
 	for(const b of Object.keys(inside)) for(const [, , c] of roomWalk(b, spec(b)).doors) if(!inside[c] && !OUTDOORS.includes(c)) inside[c] = inside[b];
-	// The mine's cave on the farm
-	const cave = spec("rm_1").points.cave;
-	inside.rm_mine = at([pos.rm_1[0] + cave[0], pos.rm_1[1] + cave[1]]);
+	// The mine's cave, under the cliff on North Road
+	const cave = spec("rm_north").points.cave;
+	inside.rm_mine = at([pos.rm_north[0] + cave[0], pos.rm_north[1] + cave[1]]);
 
 	fs.mkdirSync(path.join(root, "build"), {recursive: true});
 	const png = path.join(root, "build", "world_map.png");

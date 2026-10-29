@@ -280,11 +280,11 @@ function mine_goto(_floor){
 	}
 }
 
-/// @description Climb out to the farm, at the cave mouth.
+/// @description Climb out at the cave mouth, under the cliff on North Road.
 function mine_leave(){
 	with(game){
-		spawnRoom = rm_1;
-		var p = layout_point("rm_1", "cave");
+		spawnRoom = rm_north;
+		var p = layout_point("rm_north", "cave");
 		spawnX = p[0]; spawnY = p[1];
 		spawnPlayerFacing = dir.down;
 		restartRoom = false;

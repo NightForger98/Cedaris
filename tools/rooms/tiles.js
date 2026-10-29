@@ -93,4 +93,11 @@ const things = {
 	lilypads2:   {src: [8, 31, 1, 1], role: "decor"},
 };
 
+// The building library (tools/buildings/library.js --tileset): buildings on TS_buildings, by name
+const library = require("./buildings.json");
+for(const [name, def] of Object.entries(library)){
+	if(things[name]) throw new Error("building " + name + " has the name of a thing already");
+	things[name] = def;
+}
+
 module.exports = {terrains, legend, things};

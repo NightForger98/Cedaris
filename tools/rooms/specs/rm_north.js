@@ -7,7 +7,11 @@
 // The village river comes up from the bottom edge (cols 57-59, just right of the village's cols 44-46 once the
 // 400px offset is added) and bends east, leaving by the right edge (rows 27-29) - a quarter circle round (68, 40).
 //
-// Map: . grass  , dirt  ~ water
+// The cliff along the north edge (from the farm, which moved below Hollow Vale): the ladder is only scenery for now,
+// and the cave is the way into the mine (obj_mine_door; you climb back out here). Rocks and ore turn up on the dirt
+// under the cliff (areas cliff_west and cliff_east, see resource_areas in scripts/gathering).
+//
+// Map: . grass  , dirt  ~ water  X cliff (solid)
 const W = 68, H = 44;
 const map = [];
 for(let r = 0; r < H; r++){
@@ -18,7 +22,8 @@ for(let r = 0; r < H; r++){
 		const d = Math.hypot(c - 68, r - 40);
 		const bend = c <= 68 && r <= 41 && d >= 8.0 && d <= 12.2;  // the bend: 4 cells wide (the tiles need water 2+ thick)
 		const up = r > 40 && c >= 57 && c <= 59;                  // straight on down to the village
-		row += (bend || up) ? "~" : (lane || down) ? "," : ".";
+		const cliff = r <= 3, foot = r >= 4 && r <= 6, toCave = (c === 30 || c === 31) && r >= 7 && r <= 11;
+		row += cliff ? "X" : (bend || up) ? "~" : (lane || down || foot || toCave) ? "," : ".";
 	}
 	map.push(row);
 }
@@ -26,7 +31,10 @@ for(let r = 0; r < H; r++){
 module.exports = {
 	seed: 77,
 	map,
-	things: [],
+	things: [
+		{is: "cliff", at: [0, 0]}, {is: "cliff_ladder", at: [12, 0]}, {is: "cliff", at: [18, 0]}, {is: "cliff_cave", at: [30, 0]},
+		{is: "cliff", at: [32, 0]}, {is: "cliff", at: [44, 0]}, {is: "cliff", at: [56, 0]},
+	],
 	scatter: [
 		{on: ".", density: 0.04, seed: 7, pieces: [{is: "leaves", weight: 4}, {is: "leaves2", weight: 4}, {is: "sprout", weight: 2}]},
 		{on: "~", density: 0.06, seed: 8, pieces: [{is: "lilypads"}, {is: "lilypads2"}]},
@@ -34,6 +42,7 @@ module.exports = {
 	instances: [
 		{obj: "obj_plyr", x: 64, y: 416},
 		{obj: "camera", x: 64, y: 416},
+		{obj: "obj_mine_door", x: 992, y: 140},
 		// West to Brindlemoor's east lane
 		{obj: "obj_transition", x: 8, y: 416, sx: 1, sy: 4,
 		 code: "targetRoom = rm_town;\ntargetX = 1984;\ntargetY = 416;\nPlayerFacingBefore = dir.left;\nPlayerFacingAfter = dir.left;"},
@@ -44,6 +53,10 @@ module.exports = {
 	points: {
 		road_west: [64, 416],      // arriving from Brindlemoor
 		road_south: [1696, 1336],  // arriving from the village
+		cave: [992, 168],          // climbing out of the mine
 	},
-	areas: {},
+	areas: {
+		cliff_west: [1, 4, 27, 6],   // rocks and ore under the cliff, either side of the cave
+		cliff_east: [34, 4, 66, 6],
+	},
 };

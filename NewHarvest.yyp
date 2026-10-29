@@ -147,6 +147,9 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"rm_cross","path":"rooms/rm_cross/rm_cross.yy",},},
+    {"id":{"name":"TS_buildings","path":"tilesets/TS_buildings/TS_buildings.yy",},},
+    {"id":{"name":"spr_tile_buildings","path":"sprites/spr_tile_buildings/spr_tile_buildings.yy",},},
     {"id":{"name":"spr_bld_chapel","path":"sprites/spr_bld_chapel/spr_bld_chapel.yy",},},
     {"id":{"name":"spr_bld_stall_wide","path":"sprites/spr_bld_stall_wide/spr_bld_stall_wide.yy",},},
     {"id":{"name":"spr_bld_stall_blue","path":"sprites/spr_bld_stall_blue/spr_bld_stall_blue.yy",},},
@@ -1441,6 +1444,7 @@
     {"roomId":{"name":"rm_beach_hut","path":"rooms/rm_beach_hut/rm_beach_hut.yy",},},
     {"roomId":{"name":"rm_north","path":"rooms/rm_north/rm_north.yy",},},
     {"roomId":{"name":"rm_south","path":"rooms/rm_south/rm_south.yy",},},
+    {"roomId":{"name":"rm_cross","path":"rooms/rm_cross/rm_cross.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[

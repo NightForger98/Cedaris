@@ -68,12 +68,13 @@ function resource_table(){
 /// day, how many on the first visit, and weighted kinds. Each cell is checked against the room's collisions.
 function resource_areas(){
 	static a = [
-		// Farm (areas named in tools/rooms/specs/rm_1.js): the dirt under the cliff, either side of the cave - rocks and ore
-		{room: "rm_1", cells: layout_cells("rm_1", "cliff_west"), max: 6, perDay: 1, start: 4,
+		// North Road (areas named in tools/rooms/specs/rm_north.js): the dirt under the cliff, either side of the mine's
+		// cave - rocks and ore (these were the farm's, before the farm moved; their places in this list are kept)
+		{room: "rm_north", cells: layout_cells("rm_north", "cliff_west"), max: 6, perDay: 1, start: 4,
 		 kinds: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]]},
-		{room: "rm_1", cells: layout_cells("rm_1", "cliff_east"), max: 7, perDay: 2, start: 5,
+		{room: "rm_north", cells: layout_cells("rm_north", "cliff_east"), max: 7, perDay: 2, start: 5,
 		 kinds: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]]},
-		// Farm: the meadow between the house and the smithy - weeds, bushes and stones (no trees: they'd block the yard)
+		// Farm (areas named in tools/rooms/specs/rm_1.js): the meadow by the path - weeds, bushes and stones (no trees)
 		{room: "rm_1", cells: layout_cells("rm_1", "meadow"), max: 12, perDay: 3, start: 9,
 		 kinds: [["weeds", 55], ["bush", 25], ["stone", 20]]},
 		// Farm: the grass west of the field

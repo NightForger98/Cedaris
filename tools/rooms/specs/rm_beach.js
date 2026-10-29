@@ -136,7 +136,7 @@ PlayerFacingAfter = dir.up;`},
 		 code: "targetRoom = rm_valley;\ntargetX = 64;\ntargetY = 1664;\nPlayerFacingBefore = dir.right;\nPlayerFacingAfter = dir.right;"},
 		// The road east to the farm
 		{obj: "obj_transition", x: 1528, y: 2048, sx: 1, sy: 4,
-		 code: "targetRoom = rm_1;\ntargetX = 56;\ntargetY = 576;\nPlayerFacingBefore = dir.right;\nPlayerFacingAfter = dir.right;"},
+		 code: "targetRoom = rm_cross;\ntargetX = 56;\ntargetY = 576;\nPlayerFacingBefore = dir.right;\nPlayerFacingAfter = dir.right;"},
 	],
 
 	points: {

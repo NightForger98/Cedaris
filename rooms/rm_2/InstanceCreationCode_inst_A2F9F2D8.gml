@@ -1,4 +1,4 @@
-targetRoom = rm_1;
+targetRoom = rm_cross;
 targetX = 2400;
 targetY = 576;
 PlayerFacingBefore = dir.left;

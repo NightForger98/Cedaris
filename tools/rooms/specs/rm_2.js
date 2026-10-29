@@ -117,9 +117,9 @@ module.exports = {
 		// The road south (South Road, rm_south)
 		{obj: "obj_transition", x: 1040, y: 1592, sx: 6, sy: 1,
 		 code: "targetRoom = rm_south;\ntargetX = 1040;\ntargetY = 72;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
-		// The road back to the farm
+		// The road west to the Crossroads
 		{obj: "obj_transition", x: 8, y: 576, sx: 1, sy: 4,
-		 code: "targetRoom = rm_1;\ntargetX = 2400;\ntargetY = 576;\nPlayerFacingBefore = dir.left;\nPlayerFacingAfter = dir.left;"},
+		 code: "targetRoom = rm_cross;\ntargetX = 2400;\ntargetY = 576;\nPlayerFacingBefore = dir.left;\nPlayerFacingAfter = dir.left;"},
 	],
 
 	points: {

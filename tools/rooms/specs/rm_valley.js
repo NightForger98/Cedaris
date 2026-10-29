@@ -1,11 +1,12 @@
-// Hollow Vale (rm_valley), through the woods south of the farm. Build with: node tools/rooms/build.js rm_valley
+// Hollow Vale (rm_valley), south of the Crossroads (where the farm used to be); the farm is below it now. Build with: node tools/rooms/build.js rm_valley
 // 77 x 65 cells: as wide as the farm above it (its west edge lines up with the farm's and Brindlemoor's) and as tall
-// as South Road beside it. The path comes down from the farm, past Wren's ranch on the right (rm_valley_ranch, where
+// as South Road beside it. The path comes down from the Crossroads, past Wren's ranch on the right (rm_valley_ranch, where
 // Pip works too) and Thorne's carpentry on the left (rm_valley_carpentry), over the river on a plank bridge to the
 // wildflower meadow in the south; the lake is up in the north-west (river fish, see fishing). The river runs right
 // across: in from South Road (east edge, rows 38-40) and on west through the coast into the sea.
 // Two more roads: a lane east from the path to South Road (rows 28-29, above the river), and from the meadow below
-// the river a road west to the far end of the coast (rows 51-52) - the only way onto that part of the beach.
+// the river a road west to the far end of the coast (rows 51-52) - the only way onto that part of the beach. The path
+// goes on south through the woods to the farm.
 //
 // Map: . grass  , dirt  ~ water  b water under the bridge (walkable)
 // Where you arrive inside a house: its interior spec's door point
@@ -20,7 +21,7 @@ for(let r = 0; r < H; r++){
 	const put = (c1, c2, ch) => { for(let c = c1; c <= c2; c++) row[c] = ch; };
 	for(const [lr, c1, c2] of lake) if(lr === r) put(c1 + O, c2 + O, "~");
 	if(r >= 38 && r <= 40) put(0, W - 1, "~");                    // the river
-	if(r <= 52) put(39, 41, (r >= 38 && r <= 40) ? "b" : ",");    // the path, down from the farm and over the bridge
+	put(39, 41, (r >= 38 && r <= 40) ? "b" : ",");                // the path: down from the Crossroads, over the bridge, to the farm
 	if(r === 12 || r === 13) put(42, 52, ",");                   // the ranch's lane
 	if(r === 26 || r === 27) put(29, 38, ",");                   // the carpentry's lane
 	if(r === 28 || r === 29) put(42, W - 1, ",");                // east to South Road
@@ -31,6 +32,7 @@ for(let r = 0; r < H; r++){
 // The woods along the bottom: two staggered rows of trees right across
 const woods = [];
 for(let c = 0; c < W - 1; c += 3){
+	if(c >= 36 && c <= 42) continue;   // the path to the farm runs through
 	woods.push({is: (c % 2) ? "pine" : "oak", at: [c, 55 + (c % 2)]});
 	woods.push({is: (c % 2) ? "oak" : "pine", at: [c + 1, 59 + ((c + 1) % 2)]});
 }
@@ -88,9 +90,11 @@ module.exports = {
 		 code: `targetRoom = rm_valley_ranch;\ntargetX = ${inside("rm_valley_ranch")[0]};\ntargetY = ${inside("rm_valley_ranch")[1]};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`},
 		{obj: "obj_transition", x: 944, y: 816, sx: 2, sy: 1,
 		 code: `targetRoom = rm_valley_carpentry;\ntargetX = ${inside("rm_valley_carpentry")[0]};\ntargetY = ${inside("rm_valley_carpentry")[1]};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`},
-		// Back up the path to the farm
+		// Up the path to the Crossroads, down it to the farm
+		{obj: "obj_transition", x: 1296, y: 2072, sx: 6, sy: 1,
+		 code: "targetRoom = rm_1;\ntargetX = 1296;\ntargetY = 72;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
 		{obj: "obj_transition", x: 1296, y: 16, sx: 6, sy: 2,
-		 code: "targetRoom = rm_1;\ntargetX = 1280;\ntargetY = 1208;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
+		 code: "targetRoom = rm_cross;\ntargetX = 1296;\ntargetY = 1208;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
 		// East along the lane to South Road, west along the road below the river to the coast
 		{obj: "obj_transition", x: 2456, y: 928, sx: 1, sy: 4,
 		 code: "targetRoom = rm_south;\ntargetX = 64;\ntargetY = 608;\nPlayerFacingBefore = dir.right;\nPlayerFacingAfter = dir.right;"},
@@ -99,7 +103,8 @@ module.exports = {
 	],
 
 	points: {
-		path_north: [1296, 72],  // coming down from the farm
+		path_north: [1296, 72],  // coming down from the Crossroads
+		path_south: [1296, 2008],// up from the farm
 		road_east: [2400, 928],  // in from South Road
 		road_west: [64, 1664],   // in from the coast
 		// Where villagers spend the day (their schedules in scripts/people)

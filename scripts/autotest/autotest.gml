@@ -541,6 +541,25 @@ function autotest_schedule_check(){
 	return ((s == "") ? "all on time" : s) + " | longest walk " + string(round(longest)) + " min (" + longWho + ")";
 }
 
+/// @description The longest walks today (minutes, who, from, to), longest first: _n of them.
+function autotest_long_walks(_n = "10"){
+	global.schedPlans = {};
+	var names = villager_names(), walks = [];
+	for(var i = 0; i < array_length(names); i++){
+		var p = villager_plan(names[i]), from = p.start.room;
+		for(var l = 0; l < array_length(p.legs); l++){
+			var g = p.legs[l];
+			array_push(walks, [round(g.t1 - g.t0), names[i], from, g.to.room]);
+			from = g.to.room;
+		}
+	}
+	array_sort(walks, function(_a, _b){ return _b[0] - _a[0]; });
+	var s = "";
+	for(var i = 0; i < min(real(_n), array_length(walks)); i++) s += string(walks[i][0]) + " " + walks[i][1] + " " + walks[i][2] + ">" + walks[i][3] + "; ";
+	global.schedPlans = {};
+	return s;
+}
+
 function autotest_date(_season, _day){ global.clock.season = real(_season); global.clock.day = real(_day); return (festival_today() == undefined) ? "no festival" : festival_today().name; }
 
 /// @description Take part in today's festival event (lantern or weigh-in), as the board's button would.

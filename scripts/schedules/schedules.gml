@@ -361,8 +361,8 @@ function sched_problem(_msg){
 	if(array_get_index(global.schedProblems, _msg) == -1) array_push(global.schedProblems, _msg);
 }
 
-/// @description The way from one place to another ({room, x, y}), through as few rooms as possible: {segs, len},
-/// one path per room, each ending at the door into the next. Kept once found.
+/// @description The way from one place to another ({room, x, y}), the shortest walk through the rooms' doors:
+/// {segs, len}, one path per room, each ending at the door into the next. Kept once found.
 function route_find(_a, _b){
 	if(!variable_global_exists("schedRoutes")) global.schedRoutes = {};
 	var key = _a.room + ":" + string(_a.x) + "," + string(_a.y) + ">" + _b.room + ":" + string(_b.x) + "," + string(_b.y);
@@ -374,30 +374,41 @@ function route_find(_a, _b){
 	var endNode = _b.room + "#" + string(walk_region(_b.room, _b.x, _b.y));
 	if(startNode == endNode) segs = [path_seg(_a.room, _a.x, _a.y, _b.x, _b.y)];
 	else {
-		// Through the doors, breadth first: prev[node] = {node, room, door} it was reached through
-		var prev = {}, q = [startNode], qi = 0;
+		// Through the doors, shortest first (distances door to door in a straight line - close enough to choose between
+		// ways round, as Brindlemoor to the village by the Crossroads or by North Road): prev[node] = {node, room, door}
+		var prev = {}, dist = {}, at = {}, open = [startNode];
 		prev[$ startNode] = {node: "", room: "", door: -1};
-		while(qi < array_length(q)){
-			var nd = q[qi++];
+		dist[$ startNode] = 0;
+		at[$ startNode] = [_a.x, _a.y];
+		while(array_length(open) > 0){
+			var bi = 0;
+			for(var o = 1; o < array_length(open); o++) if(dist[$ open[o]] < dist[$ open[bi]]) bi = o;
+			var nd = open[bi];
+			array_delete(open, bi, 1);
 			if(nd == endNode) break;
 			var rm = string_copy(nd, 1, string_pos("#", nd) - 1), rg = real(string_delete(nd, 1, string_pos("#", nd)));
-			var doors = walk[$ rm].doors;
+			var doors = walk[$ rm].doors, here = at[$ nd];
 			for(var i = 0; i < array_length(doors); i++){
 				var nr = doors[i][2];
 				if(walk[$ nr] == undefined || walk_region(rm, doors[i][0], doors[i][1]) != rg) continue;
 				var nn = nr + "#" + string(walk_region(nr, doors[i][3], doors[i][4]));
-				if(prev[$ nn] == undefined){ prev[$ nn] = {node: nd, room: rm, door: i}; array_push(q, nn); }
+				var nd2 = dist[$ nd] + point_distance(here[0], here[1], doors[i][0], doors[i][1]);
+				if(dist[$ nn] != undefined && dist[$ nn] <= nd2) continue;
+				if(dist[$ nn] == undefined) array_push(open, nn);
+				dist[$ nn] = nd2;
+				at[$ nn] = [doors[i][3], doors[i][4]];
+				prev[$ nn] = {node: nd, room: rm, door: i};
 			}
 		}
 		if(prev[$ endNode] == undefined){
 			sched_problem("no way from " + _a.room + " to " + _b.room);
 			segs = [{room: _b.room, pts: [_b.x, _b.y], len: 0}];
 		} else {
-			var chain = [], at = endNode;
-			while(at != startNode){
-				var pv = prev[$ at];
+			var chain = [], cur = endNode;
+			while(cur != startNode){
+				var pv = prev[$ cur];
 				array_insert(chain, 0, walk[$ pv.room].doors[pv.door]);
-				at = pv.node;
+				cur = pv.node;
 			}
 			var cr = _a.room, cx = _a.x, cy = _a.y;
 			for(var c = 0; c < array_length(chain); c++){

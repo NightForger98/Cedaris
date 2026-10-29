@@ -39,8 +39,8 @@ Last updated 2026-10-29: the world rebuild, the mine elevator and the art clean-
 1. From the improvement list agreed with the user: quality of life (a real name for the Crossroads, settings such as
    volume and key rebinding, first-day hints, clear messages at locked doors), and normalising line endings (files
    mix LF and CRLF, which breaks exact-match edit scripts - strip `\r` before replacing).
-2. The user hand-plays: charging feel, blessing prices, witch frequency, flame looks, walking times (the longest
-   villager walk is 91 minutes; the world is much bigger now).
+2. The user hand-plays: charging feel, blessing prices, witch frequency, flame looks, walking times (routes now take
+   the shortest way; the longest villager walk is 77 minutes, at villagers' walking pace of 2 px a frame).
 3. Deferred by the user: the temple for Father Aldous (the steepled `church` is in the library; its Friday sermon and
    hours are in `docs/CHARGING.md`), names and contents for North Road, South Road and the Crossroads.
 
@@ -187,7 +187,7 @@ Last updated 2026-10-29: the world rebuild, the mine elevator and the art clean-
 - Heart events: `heart_events` (`heart_event_table`; checked a few times a second, played by `obj_dialogue` in event
   mode).
 - Schedules: `schedules` (`villager_routines`: homes, shop hours, days off, seasonal variants; `villager_where` works
-  out where someone is from the clock, so nothing is saved; walking routes over `room_walk`; `obj_villager` is a
+  out where someone is from the clock, so nothing is saved; walking routes over `room_walk`, the shortest by distance (`route_find`); `autotest_long_walks` lists the longest; `obj_villager` is a
   villager in your room, made by `villagers_update`; a shop trades only while `villager_shop_open`; doors:
   `door_lock_reason`).
 - Wayfinding: `wayfinding` - `signposts_place` (game Room Start) puts an `obj_signpost` by every exit from one

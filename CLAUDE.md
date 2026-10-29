@@ -23,7 +23,7 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 
 ## Handoff
 
-Last updated 2026-10-29, after the world rebuild, with the art clean-up in progress.
+Last updated 2026-10-29: the world rebuild, the mine elevator and the art clean-up are done; all 44 test cases pass.
 
 ### Working with the user
 
@@ -34,40 +34,27 @@ Last updated 2026-10-29, after the world rebuild, with the art clean-up in progr
 - They always choose **Reload** in GameMaker (never Save).
 - End each step with a commit and push to `main`.
 
-### In progress - committed but NOT built or tested
-
-The art clean-up, stopped part way at the user's request:
-- `tools/buildings/library.js`: new local fixes (`clear`, `fill`) and `dropSpecks` (removes detached specks under
-  80px); fills the roof gaps on `brick_arch` (Edwin's hall) and clears scraps on `brick_bay`, `clock_tower`,
-  `brick_gable`, `cottage_L`, `cottage_long`, `cottage_small`, `barn`. **The tileset was not regenerated** in that
-  session. (After the 2026-10-29 pull, the working tree had uncommitted changes to `TS_buildings`, the five outdoor
-  rooms and the `.yyp`, and a new `tilesets/TS_buildings/output_tileset.png` - possibly a regeneration started
-  outside the session; check them before regenerating.)
-- Interiors match their outsides: Brindlemoor's houses have wallpaper (`blue`/`paper`) and parquet/checker floors,
-  the cottages stone walls and wood floors (specs `rm_town_*`, `rm_village_*`, `rm_valley_*`, `rm_beach_hut`).
-  Rebuilt: inn, town homes e/nw/sw, outfitter, Elda's, Hesta's, the store, the ranch, Marlo's hut.
-- Removed: the 17 unused `spr_bld_*` sprites (and their Buildings folder in the .yyp), `tools/buildings/make.js`,
-  the unused stamps `house_cream`, `house_thatch`, `house_cream_thatch`, `village_hall` (tiles.js and
-  `stamps/village_hall.json`); their credit rows were tidied and the in-game credits regenerated. The bed is the LPC
-  castle bed (not a placeholder). The farmhouse stays the cottage-kit stamp (the user's choice).
-
 ### Next steps
 
-1. Finish the clean-up: `node tools/buildings/library.js --tileset`, then rebuild the outdoor rooms
-   (`node tools/rooms/build.js rm_1 rm_2 rm_town rm_valley rm_beach`) and `node tools/rooms/worldmap.js`. Check the
-   cuts in `build/buildings/library.png` - dropping specks can change a building's cut size, which moves its door; if
-   it does, re-run `node tools/rooms/sync_exits.js <room>`. Then run `town_colonial`, `houses_rebuilt`,
-   `town_interiors`, `world` and `built_rooms`, then the full suite (see Testing), commit and push.
-2. From the improvement list agreed with the user: quality of life (a real name for the Crossroads, settings such as
+1. From the improvement list agreed with the user: quality of life (a real name for the Crossroads, settings such as
    volume and key rebinding, first-day hints, clear messages at locked doors), and normalising line endings (files
    mix LF and CRLF, which breaks exact-match edit scripts - strip `\r` before replacing).
-3. The user hand-plays: charging feel, blessing prices, witch frequency, flame looks, walking times (the longest
+2. The user hand-plays: charging feel, blessing prices, witch frequency, flame looks, walking times (the longest
    villager walk is 91 minutes; the world is much bigger now).
-4. Deferred by the user: the temple for Father Aldous (the steepled `church` is in the library; its Friday sermon and
+3. Deferred by the user: the temple for Father Aldous (the steepled `church` is in the library; its Friday sermon and
    hours are in `docs/CHARGING.md`), names and contents for North Road, South Road and the Crossroads.
 
 ### Done so far (history, newest first)
 
+- **2026-10-29 - the art clean-up finished**: `library.js` fixes (`clear`, `fill`, `dropSpecks`: roof gaps on
+  `brick_arch`, scraps cleared on the cottages, colonial houses, barn, the town stalls and the farm shed), tileset
+  regenerated (no building changed size or door), the five outdoor rooms and the world map rebuilt. Interiors match
+  their outsides (Brindlemoor: wallpaper and parquet/checker floors; cottages: stone walls and wood floors). Removed
+  the 17 unused `spr_bld_*` sprites, `tools/buildings/make.js` and the unused stamps (`house_cream`, `house_thatch`,
+  `house_cream_thatch`, `village_hall`), with their credit rows. GameMaker had re-saved the rooms and the `.yyp`
+  (reordering only) - discarded and regenerated. `build/buildings/dec` is not in git: run
+  `tools/buildings/previews.sh` before `library.js`. Unused props with leftover specks: `stall_green`, `stall_blue`,
+  `obelisk` (clean them before placing one). All 44 test cases passed.
 - **2026-10-29 (later)**: the mine's lift became an elevator like Stardew's - a floor picker at the cave, a lift car
   on every 5th floor (with Surface), story mode to floors you've reached, free mode anywhere (`mine_lift`). The user
   reported being stuck on the farm in free mode: `free_rooms` walks from the farmhouse out of every exit and round

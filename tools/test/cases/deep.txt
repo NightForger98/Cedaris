@@ -44,5 +44,5 @@ call autotest_mine
 call autotest_monsters
 call autotest_resources
 shot 06_deep
-call mine_lift_floors
+call mine_lift_top
 quit

@@ -1,81 +1,62 @@
-// Brindlemoor (rm_town), the town up the cliff ladder north of the farm. Build with: node tools/rooms/build.js rm_town
-// 64 x 44 cells. The town hall stands over a cobbled square in the middle; six houses around it, each with a lane to
-// the square; the main street runs south to the top of the farm's ladder. Garrick keeps the watch. Every door leads
-// inside (rm_town_*): the hall is Lysa's inn, the sword sign the outfitter, the potion sign the apothecary, the rest homes
-// (Edwin, Nell, Hask, and Ida with her son Fen). Posy sells flowers in the square; Garrick keeps the watch.
+// Brindlemoor (rm_town), the town north of the Crossroads. Build with: node tools/rooms/build.js rm_town
+// 64 x 44 cells. A colonial town ([LPC] Colonial Buildings, from the building library in tools/buildings) round a big
+// cobbled square: the long brick hall with its clock tower at the head of the square is Lysa's Brindle Inn, the
+// bay-windowed shop Bryn's Outfitters, the small brick house with the potion sign Morga's Apothecary; the homes are
+// Edwin's tall hall with the arched window (he keeps the notices), Nell the weaver's white clapboard house, Hask the
+// hunter's sturdy brick house and Ida and her son Fen's tall gabled one. A clock tower stands in the square; Posy
+// sells flowers from the market stall. The main street runs south to the Crossroads, the lane east to North Road.
 //
 // Map: . grass  : cobbles
+const house = require("../house.js");
+
+const H = {
+	inn: house("brick_hall", [27, 1], "rm_town_inn"),
+	edwin: house("brick_arch", [2, 0], "rm_town_home_nw"),
+	bryn: house("brick_bay", [44, 3], "rm_town_outfitter"),
+	morga: house("brick_small", [7, 18], "rm_town_apothecary"),
+	nell: house("clapboard", [50, 17], "rm_town_home_e"),
+	hask: house("brick_hip", [4, 30], "rm_town_home_sw"),
+	ida: house("brick_gable", [50, 30], "rm_town_home_se"),
+};
+
+const W = 64, Hh = 44;
+const map = [];
+for(let r = 0; r < Hh; r++){
+	const row = Array(W).fill(".");
+	const put = (c1, c2, r1, r2) => { if(r >= r1 && r <= r2) for(let c = c1; c <= c2; c++) row[c] = ":"; };
+	put(16, 47, 12, 27);   // the square
+	put(5, 63, 12, 13);    // the lane across, east to North Road
+	put(30, 32, 10, 11);   // up to the inn
+	put(5, 5, 11, 11);     // Edwin's door
+	put(47, 47, 10, 11);   // Bryn's
+	put(8, 15, 24, 25);    // Morga's
+	put(48, 55, 24, 25);   // Nell's
+	put(30, 33, 28, 43);   // the main street, south to the Crossroads
+	put(7, 29, 37, 38);    // Hask's lane
+	put(34, 52, 39, 40);   // Ida's lane
+	map.push(row.join(""));
+}
+
 module.exports = {
 	seed: 33,
-	map: [
-		"................................................................",
-		"................................................................",
-		"................................................................",
-		"................................................................",
-		"................................................................",
-		"................................................................",
-		"................................................................",
-		"................................................................",
-		"................................................................",
-		"................................................................",
-		"...............................:::..............................",
-		"...............................:::..............................",
-		".......:::::::::::::::::::::::::::::::::::::::::::::::::::::::::",
-		".......:::::::::::::::::::::::::::::::::::::::::::::::::::::::::",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		"................::::::::::::::::::::::::::::::::................",
-		".......::::::::::::::::::::::::::::::::::::::::::::::::::.......",
-		".......::::::::::::::::::::::::::::::::::::::::::::::::::.......",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		"..............................::::..............................",
-		".........::::::::::::::::::::::::::::::::::::::::::::...........",
-		".........::::::::::::::::::::::::::::::::::::::::::::...........",
-		"..............................::::..............................",
-		"..............................::::..............................",
-	],
+	map,
 
 	things: [
-		// The town hall (its roof against the room's top edge), and the houses
-		{is: "village_hall", at: [25, 0]}, {is: "sign_inn", at: [29, 7]},
-		{is: "house_cream", at: [2, 2]}, {is: "house_thatch", at: [49, 2]}, {is: "sign_sword", at: [53, 10]},
-		{is: "house_cream_thatch", at: [2, 16]}, {is: "farmhouse", at: [49, 16]}, {is: "sign_potion", at: [7, 24]},
-		{is: "house_thatch", at: [4, 30]}, {is: "house_cream", at: [45, 30]},
+		...Object.values(H).map(h => h.thing),
+		{is: "sign_inn", at: [33, 8]}, {is: "sign_sword", at: [43, 8]}, {is: "sign_potion", at: [6, 21]},
 
-		// The square: a statue, the notice board, a market of carts, barrels and crates
-		{is: "statue", at: [31, 18]},
-		{is: "board_notes", at: [35, 12]}, {is: "signpost", at: [29, 26]},
-		{is: "hay_cart", at: [19, 14]}, {is: "barrels", at: [23, 14]}, {is: "crate_open", at: [25, 15]}, {is: "chest", at: [26, 15]},
-		{is: "hay_cart", at: [41, 22]}, {is: "barrels", at: [38, 23]}, {is: "barrel", at: [45, 14]}, {is: "barrel", at: [46, 15]},
-		{is: "rope_fence", at: [19, 24]}, {is: "rope_fence", at: [22, 24]},
-		{is: "wheelbarrow", at: [43, 13]}, {is: "bucket", at: [18, 19]},
+		// The square: the clock tower, the statue, the notice board, Posy's flower stall and a market stall
+		{is: "clock_tower", at: [44, 14]}, {is: "statue", at: [31, 18]}, {is: "board_notes", at: [35, 12]},
+		{is: "stall_white", at: [21, 12]}, {is: "stall_stripe", at: [17, 20]}, {is: "fruit_table", at: [38, 24]},
+		{is: "barrels", at: [27, 14]}, {is: "barrel", at: [40, 15]}, {is: "bucket", at: [18, 19]},
 
-		// Gardens and the edges of town
-		{is: "clothesline", at: [9, 15]}, {is: "clothesline", at: [52, 29]},
-		{is: "oak", at: [16, 1]}, {is: "pine", at: [20, 2]}, {is: "oak", at: [41, 1]}, {is: "pine", at: [45, 3]},
-		{is: "bush_big", at: [0, 13]}, {is: "bush_big2", at: [60, 16]}, {is: "oak", at: [61, 27]}, {is: "pine", at: [0, 26]},
-		{is: "oak", at: [18, 34]}, {is: "pine", at: [24, 33]}, {is: "sapling", at: [27, 35]}, {is: "oak", at: [36, 34]},
-		{is: "pine", at: [40, 33]}, {is: "sapling", at: [36, 30]}, {is: "bush_big", at: [19, 29]}, {is: "bush_big2", at: [41, 29]},
-		{is: "pine", at: [0, 40]}, {is: "oak", at: [59, 40]}, {is: "pine", at: [62, 37]},
+		// Trees round the edges of town
+		{is: "oak", at: [13, 1]}, {is: "pine", at: [19, 2]}, {is: "oak", at: [39, 1]}, {is: "pine", at: [55, 1]},
+		{is: "oak", at: [60, 3]}, {is: "bush_big", at: [11, 7]}, {is: "bush_big2", at: [60, 15]}, {is: "pine", at: [0, 15]},
+		{is: "oak", at: [1, 22]}, {is: "oak", at: [61, 26]}, {is: "pine", at: [14, 29]}, {is: "oak", at: [19, 31]},
+		{is: "pine", at: [24, 30]}, {is: "sapling", at: [27, 33]}, {is: "oak", at: [36, 30]}, {is: "pine", at: [41, 31]},
+		{is: "sapling", at: [45, 33]}, {is: "bush_big", at: [16, 40]}, {is: "pine", at: [0, 40]}, {is: "oak", at: [58, 40]},
+		{is: "pine", at: [62, 37]}, {is: "oak", at: [24, 41]}, {is: "pine", at: [38, 41]},
 	],
 
 	scatter: [
@@ -83,32 +64,30 @@ module.exports = {
 	],
 
 	instances: [
-		{obj: "obj_plyr", x: 1024, y: 1320},
-		{obj: "camera", x: 1024, y: 1320},
+		{obj: "obj_plyr", x: 1040, y: 1320},
+		{obj: "camera", x: 1040, y: 1320},
 		// East along the lane to North Road (rm_north)
 		{obj: "obj_transition", x: 2040, y: 416, sx: 1, sy: 4,
 		 code: "targetRoom = rm_north;\ntargetX = 64;\ntargetY = 416;\nPlayerFacingBefore = dir.right;\nPlayerFacingAfter = dir.right;"},
 		// Down the main street to the Crossroads
 		{obj: "obj_transition", x: 1024, y: 1392, sx: 8, sy: 2,
 		 code: "targetRoom = rm_cross;\ntargetX = 1040;\ntargetY = 72;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
-		// The doors: the hall is the inn, the sword sign the outfitter, the potion sign the apothecary, the rest homes
-		...[["rm_town_inn", 1056, 304, 4, 352, 408], ["rm_town_home_nw", 272, 368, 2, 256, 312],
-		    ["rm_town_outfitter", 1776, 368, 2, 288, 344], ["rm_town_apothecary", 272, 816, 2, 256, 344],
-		    ["rm_town_home_e", 1776, 816, 2, 256, 312], ["rm_town_home_sw", 336, 1264, 2, 256, 312],
-		    ["rm_town_home_se", 1648, 1264, 2, 256, 312]].map(([to, x, y, sx, tx, ty]) => ({obj: "obj_transition", x, y, sx, sy: 1,
-			code: `targetRoom = ${to};\ntargetX = ${tx};\ntargetY = ${ty};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`})),
+		// The doors
+		...Object.values(H).map(h => h.transition),
 	],
 
 	points: {
-		street_south: [1024, 1320],   // coming up the ladder from the farm
-		inn_door: [1056, 340], outfitter_door: [1776, 404], apothecary_door: [272, 852],
+		street_south: [1040, 1320],   // coming up the street from the Crossroads
+		inn_door: H.inn.out, outfitter_door: H.bryn.out, apothecary_door: H.morga.out,
 		// Where the townsfolk spend the day (their schedules in scripts/people)
-		watch: [1088, 1250],     // Garrick, at the top of the street down to the farm
-		stall: [736, 600],       // Posy's flowers, by the market carts
+		watch: [1088, 1250],     // Garrick, at the top of the street down to the Crossroads
+		stall: [736, 600],       // Posy's flowers, in front of her stall
 		square_a: [880, 720], square_b: [960, 760], square_c: [1300, 560], square_d: [1180, 820], square_e: [760, 820],
 		square_f: [1120, 480], board: [1150, 430],
 	},
 	areas: {
 		square: [16, 12, 47, 27],
 	},
+	// Where each house's door lets you out (the interiors' exits): node -e 'console.log(require("./tools/rooms/specs/rm_town.js").exits)'
+	exits: Object.fromEntries(Object.entries(H).map(([k, h]) => [k, h.out])),
 };

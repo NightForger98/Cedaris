@@ -1,5 +1,5 @@
-targetRoom = rm_cross;
-targetX = 1040;
-targetY = 72;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+targetRoom = rm_town_outfitter;
+targetX = 288;
+targetY = 344;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

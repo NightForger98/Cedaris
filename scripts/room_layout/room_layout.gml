@@ -12,7 +12,7 @@ function room_layout(){
 		rm_cross: {points: {road_north: [1040, 72], road_west: [56, 576], road_east: [2400, 576], road_south: [1296, 1208]}, areas: {}},
 		rm_north: {points: {road_west: [64, 416], road_south: [1696, 1336], cave: [992, 168]}, areas: {cliff_west: [1, 4, 27, 6], cliff_east: [34, 4, 66, 6]}},
 		rm_south: {points: {road_north: [1040, 72], road_west: [64, 608]}, areas: {}},
-		rm_town: {points: {street_south: [1024, 1320], inn_door: [1056, 340], outfitter_door: [1776, 404], apothecary_door: [272, 852], watch: [1088, 1250], stall: [736, 600], square_a: [880, 720], square_b: [960, 760], square_c: [1300, 560], square_d: [1180, 820], square_e: [760, 820], square_f: [1120, 480], board: [1150, 430]}, areas: {square: [16, 12, 47, 27]}},
+		rm_town: {points: {street_south: [1040, 1320], inn_door: [1008, 340], outfitter_door: [1520, 340], apothecary_door: [272, 788], watch: [1088, 1250], stall: [736, 600], square_a: [880, 720], square_b: [960, 760], square_c: [1300, 560], square_d: [1180, 820], square_e: [760, 820], square_f: [1120, 480], board: [1150, 430]}, areas: {square: [16, 12, 47, 27]}},
 		rm_town_apothecary: {points: {door: [256, 344], morga_work: [240, 152], morga_bed: [560, 184], shop_a: [176, 248], shop_b: [336, 280]}, areas: {}},
 		rm_town_home_e: {points: {door: [256, 312], nell_bed: [432, 184], nell_wheel: [304, 216]}, areas: {}},
 		rm_town_home_nw: {points: {door: [256, 312], edwin_bed: [48, 184], edwin_desk: [208, 280]}, areas: {}},

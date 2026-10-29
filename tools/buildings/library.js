@@ -33,7 +33,7 @@ const B = {
 	// ---- Colonial (Brindlemoor)
 	brick_hip:      {from: "preview-1_5", box: [68, 176, 232, 404], door: [150, 385], foot: 3},
 	brick_gable:    {from: "preview-1_5", box: [262, 2, 422, 276], door: [342, 258], foot: 3, erase: [[350, 255, 400, 300]]},
-	brick_small:    {from: "preview-1_5", box: [452, 80, 615, 276], door: [518, 258], foot: 3},
+	brick_small:    {from: "preview-1_5", box: [452, 80, 615, 276], door: [518, 258], foot: 3, erase: [[440, 170, 488, 218]]},
 	brick_wide:     {from: "preview-1_5", box: [580, 300, 742, 466], door: [662, 450], foot: 3},
 	brick_market:   {from: "preview-1_5", box: [210, 414, 455, 628], door: [357, 610], foot: 3},
 	clapboard:      {from: "preview-3_2", box: [390, 134, 650, 364], door: [520, 355], foot: 3},
@@ -41,7 +41,7 @@ const B = {
 	                 add: [[COL, 0, 704, 32, 64, 176, 232]]},
 	brick_hall:     {from: "preview-4", box: [352, 22, 642, 300], door: [497, 290], foot: 3,
 	                 add: [[COL, 0, 704, 32, 64, 465, 232], [COL, 0, 704, 32, 64, 497, 232]]},
-	clock_tower:    {from: "preview-4", box: [65, 278, 130, 586], door: [97, 565], foot: 2, erase: [[100, 260, 140, 300]]},
+	clock_tower:    {from: "preview-4", box: [65, 278, 130, 586], door: [97, 565], foot: 2, erase: [[90, 250, 140, 300]]},
 	brick_arch:     {from: "preview-4", box: [352, 374, 578, 746], door: [465, 712], foot: 4},
 	church:         {from: "preview-2_3", box: [15, 8, 435, 748], door: [225, 690], foot: 5},
 	// ---- Farm
@@ -57,8 +57,8 @@ const B = {
 	watermill:      {from: "farm-preview", box: [565, 560, 745, 800], foot: 4},
 	outhouse:       {from: "farm-preview", box: [103, 98, 152, 190], foot: 1},
 	// ---- Market and village pieces (preview-market, preview-cottage)
-	stall_stripe:   {from: "preview-market", box: [415, 136, 545, 270], foot: 2},
-	stall_white:    {from: "preview-market", box: [255, 134, 322, 270], foot: 2},
+	stall_stripe:   {from: "preview-market", box: [415, 136, 545, 270], foot: 2, erase: [[380, 100, 416, 290], [416, 250, 430, 290], [470, 60, 560, 136]]},
+	stall_white:    {from: "preview-market", box: [258, 134, 322, 270], foot: 2, erase: [[220, 100, 257, 290], [312, 250, 340, 290]]},
 	stall_green:    {from: "preview-market", box: [543, 232, 642, 364], foot: 2},
 	stall_blue:     {from: "preview-market", box: [125, 232, 225, 376], foot: 2},
 	stall_cart:     {from: "preview-market", box: [135, 104, 250, 212], foot: 2},

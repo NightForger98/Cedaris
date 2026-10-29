@@ -1,0 +1,36 @@
+# A signpost by every way from one outdoor place to another (wayfinding), none indoors
+start story
+wait 60
+time 10
+call autotest_signs
+expect Hollow Vale@n
+pos 1296 140
+face n
+wait 10
+shot 01_farm_path
+room rm_cross 1296 600
+wait 10
+call autotest_signs
+expect Brindlemoor@n
+expect Village@e
+expect Saltmere Coast@w
+expect Hollow Vale@s
+room rm_cross 2340 576
+face e
+wait 10
+shot 02_cross_east
+room rm_cross 120 576
+face w
+wait 10
+shot 03_cross_west
+room rm_valley 1296 1950
+wait 10
+call autotest_signs
+expect The Farm@s
+expect Crossroads@n
+shot 04_vale_south
+room rm_12 160 400
+wait 10
+call autotest_signs
+expect none
+quit

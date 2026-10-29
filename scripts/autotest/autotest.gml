@@ -334,6 +334,13 @@ function autotest_lift(){
 	return s;
 }
 
+/// @description The signposts in this room: where each leads, and which side it stands on.
+function autotest_signs(){
+	var s = "";
+	with(obj_signpost) s += text + "@" + side + " ";
+	return (s == "") ? "none" : s;
+}
+
 /// @description A monster-sized hit on the player, for testing being knocked out.
 function autotest_hurt(_n){ obj_plyr.iframes = 0; player_hurt(real(_n), obj_plyr.x, obj_plyr.y - 30); return global.vitals.health; }
 

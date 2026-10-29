@@ -30,7 +30,7 @@ if(who != "" && !variable_instance_exists(id, "npcName")){
 	draw_set_valign(fa_bottom);
 	draw_text_transformed_colour(x, top, v.name, 0.3, 0.3, 0, c_white, c_white, c_white, c_white, 1);
 	if(near)
-		draw_text_transformed_colour(x, top - 12, "[E] Talk", 0.3, 0.3, 0, c_yellow, c_yellow, c_yellow, c_yellow, 1);
+		draw_text_transformed_colour(x, top - 12, key_label("interact") + " Talk", 0.3, 0.3, 0, c_yellow, c_yellow, c_yellow, c_yellow, 1);
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 }

@@ -141,25 +141,30 @@ case "options":
 	break;
 
 case "controls":
-	ui_text(cx, 110, "Controls", 1.6, c.accent);
-	var rows = [
-		["Arrow keys", "Walk"],
-		["Shift", "Run"],
-		["Ctrl", "Walk slowly"],
-
-		["C", "Free camera, move it with W A S D"],
-		["Insert", "Show collision boxes and grid"],
-		["I", "Inventory and equipment"],
-		["1 - 0", "Pick a hotbar item to hold"],
-		["E", "Trade with the blacksmith / use the crafting table"],
-		["Click / Space", "Use the held tool, plant seeds, eat, harvest a ripe crop"],
-		["Esc", "Pause menu / back"],
-	];
-	for(var i = 0; i < array_length(rows); i++){
-		ui_text(cx - 200, 170 + i * 46, rows[i][0], 0.8, c.accent, fa_right);
-		ui_text(cx - 170, 170 + i * 46, rows[i][1], 0.7, c_white, fa_left);
+	// Click a key to change it, then press the new one (Esc cancels); a key already in use swaps with it
+	draw_set_alpha(0.9);
+	draw_set_colour(c.panel);
+	draw_roundrect_ext(cx - 470, 40, cx + 470, guiH - 20, 18, 18, false);
+	draw_set_alpha(1);
+	ui_text(cx, 90, "Controls", 1.6, c.accent);
+	var acts = keys_actions(), top = 150, rowH = 44;
+	for(var i = 0; i < array_length(acts); i++){
+		var ry = top + i * rowH, act = acts[i][0];
+		ui_text(cx - 40, ry + 18, acts[i][1], 0.65, c_white, fa_right);
+		var lab = (rebinding == act) ? "Press a key..." : key_name(key_of(act));
+		if(ui_button(cx, ry, cx + 240, ry + 36, lab, true, 0.55)) rebinding = (rebinding == act) ? "" : act;
 	}
-	if(ui_button(cx - 120, guiH - 90, cx + 120, guiH - 40, "Back")) openScreen("options");
+	var fy = top + array_length(acts) * rowH + 16;
+	ui_text(cx, fy, "Also: Esc pause / back    1 - 0 hotbar    in a conversation, G gives and T trades or asks the hours", 0.5, c.dim);
+	if(ui_button(cx - 330, guiH - 90, cx - 30, guiH - 40, "Reset to defaults")){
+		var def = keys_default(), nm = variable_struct_get_names(def);
+		for(var i = 0; i < array_length(nm); i++) global.settings.keys[$ nm[i]] = def[$ nm[i]];
+		settings_save();
+		rebinding = "";
+		showMessage("Keys reset");
+	}
+	if(ui_button(cx + 30, guiH - 90, cx + 270, guiH - 40, "Back")){ rebinding = ""; openScreen("options"); }
+	if(message != "" && messageTime > 0) ui_text(cx, guiH - 120, message, 0.6, c.accent);
 	break;
 
 case "credits":

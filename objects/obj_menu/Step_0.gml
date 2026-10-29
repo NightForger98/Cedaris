@@ -2,6 +2,24 @@
 if(justOpened){ justOpened = false; exit; }
 if(messageTime > 0) messageTime--;
 
+// Controls: the next key pressed becomes the action's key (Esc cancels; a key in use swaps with this one)
+if(rebinding != ""){
+	if(keyboard_check_pressed(vk_anykey)){
+		var k = keyboard_lastkey;
+		if(k == vk_escape) rebinding = "";
+		else if(key_reserved(k)) showMessage(key_name(k) + " is kept for the pause menu, the hotbar or debug mode");
+		else {
+			var keys = global.settings.keys, nm = variable_struct_get_names(keys);
+			for(var i = 0; i < array_length(nm); i++) if(keys[$ nm[i]] == k && nm[i] != rebinding) keys[$ nm[i]] = keys[$ rebinding];
+			keys[$ rebinding] = k;
+			settings_save();
+			showMessage(key_name(k) + " set");
+			rebinding = "";
+		}
+	}
+	exit;
+}
+
 // Esc: back out of a sub-screen, or resume from the pause screen
 if(keyboard_check_pressed(vk_escape)){
 	if(screen == "pause"){

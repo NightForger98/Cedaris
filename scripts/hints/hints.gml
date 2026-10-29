@@ -25,13 +25,13 @@ function hints_step(){
 	}
 	if(!instance_exists(obj_plyr) || ui_blocking() || (current_time div 250) == (current_time - delta_time / 1000) div 250) return;
 
-	if(room == rm_1) hint("farm_exit", "Welcome to the farm! The path at the top leads north to Hollow Vale and the rest of the valley. Press M for the map, I for your inventory.");
+	if(room == rm_1) hint("farm_exit", "Welcome to the farm! The path at the top leads north to Hollow Vale and the rest of the valley. Press " + key_name(key_of("map")) + " for the map, " + key_name(key_of("inventory")) + " for your inventory.");
 	var held = inv_held_stack(), id_ = (held == undefined) ? "" : held.id;
-	if(id_ == "c|held|Hoe") hint("hoe", "The hoe: click or press Space facing the field's soil to till it, then plant seeds in it.");
+	if(id_ == "c|held|Hoe") hint("hoe", "The hoe: click or press " + key_name(key_of("use")) + " facing the field's soil to till it, then plant seeds in it.");
 	else if(id_ == "c|held|Watering Can") hint("can", "The watering can: water each crop every day. Use it on a pond or river to refill it.");
 	else if(string_pos("s|", id_) == 1) hint("seeds", "Seeds: plant them in tilled soil and water them every day until they're grown.");
 	with(obj_shipping_bin) if(point_distance(x, y, obj_plyr.x, obj_plyr.y) < 90)
-		hint("bin", "The shipping bin: press E to put in produce and goods to sell. They're paid for overnight.");
+		hint("bin", "The shipping bin: press " + key_name(key_of("interact")) + " to open it, then right-click what you want to sell. It's paid for overnight.");
 	with(obj_mine_door) if(!inMine && point_distance(x, y, obj_plyr.x, obj_plyr.y) < 90 && mine_lift_top() > 1)
 		hint("lift", mine_lift_free() ? "The lift: in free mode it goes to any floor of the mine." : "The lift: it takes you back down to any floor you've already reached.");
 	if(global.clock.minutes >= 22 * 60) hint("late", "It's getting late. At 2 am you'll pass out wherever you are - get to bed before then.");

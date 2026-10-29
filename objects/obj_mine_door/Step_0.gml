@@ -8,7 +8,7 @@ if(menuOpen){
 	if(input_pressed(vk_up)) pick -= MINE_LIFT_EVERY;
 	if(input_pressed(vk_down)) pick += MINE_LIFT_EVERY;
 	pick = clamp(pick, 1, top);
-	if((input_pressed(vk_enter) || input_pressed(ord("E"))) && !(inMine && pick == mine_state().floor)){
+	if((input_pressed(vk_enter) || input_pressed(key_of("interact"))) && !(inMine && pick == mine_state().floor)){
 		menuOpen = false;
 		mine_goto(pick);
 		exit;
@@ -20,7 +20,7 @@ if(menuOpen){
 	}
 	exit;
 }
-if(near && input_pressed(ord("E")) && interact_ready() && !game.doTransition){
+if(near && input_pressed(key_of("interact")) && interact_ready() && !game.doTransition){
 	if(!inMine && mine_lift_top() <= 1) mine_goto(1);
 	else {
 		menuOpen = true;

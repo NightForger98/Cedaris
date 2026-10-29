@@ -13,7 +13,7 @@ if(near){
 	draw_set_font(fnt_eq);
 	draw_set_halign(fa_center);
 	draw_set_valign(fa_bottom);
-	var t = down ? "[E] Climb down" : "[E] Climb out";
+	var t = down ? key_label("interact") + " Climb down" : key_label("interact") + " Climb out";
 	draw_text_transformed_colour(x, y - (down ? 16 : 56), t, 0.3, 0.3, 0, c_yellow, c_yellow, c_yellow, c_yellow, 1);
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);

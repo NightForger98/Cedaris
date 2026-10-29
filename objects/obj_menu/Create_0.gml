@@ -14,6 +14,7 @@ confirm = "";          // e.g. "del2" or "save1" while waiting for a second clic
 message = "";
 messageTime = 0;
 creditsScroll = 0;
+rebinding = "";       // the action waiting for a new key on the Controls screen
 
 refreshSlots = function(){
 	slotData = [];

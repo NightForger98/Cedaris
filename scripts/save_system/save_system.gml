@@ -290,7 +290,11 @@ function settings_load(){
 		fullscreen: ini_read_real("display", "fullscreen", 0),
 		showFps:    ini_read_real("display", "show_fps", 0),
 		volume:     ini_read_real("audio", "master", 80),
+		keys:       {},
 	};
+	// Rebound keys (Options > Controls); anything not in the file keeps its default
+	var def = keys_default(), names = variable_struct_get_names(def);
+	for(var i = 0; i < array_length(names); i++) global.settings.keys[$ names[i]] = ini_read_real("keys", names[i], def[$ names[i]]);
 	ini_close();
 	settings_apply();
 }
@@ -300,7 +304,61 @@ function settings_save(){
 	ini_write_real("display", "fullscreen", global.settings.fullscreen);
 	ini_write_real("display", "show_fps", global.settings.showFps);
 	ini_write_real("audio", "master", global.settings.volume);
+	var names = variable_struct_get_names(global.settings.keys);
+	for(var i = 0; i < array_length(names); i++) ini_write_real("keys", names[i], global.settings.keys[$ names[i]]);
 	ini_close();
+}
+
+// ---------------------------------------------------------------- keys
+
+/// @description The actions you can rebind, in the order the Controls screen lists them, with their default keys.
+function keys_default(){
+	static k = {up: vk_up, down: vk_down, left: vk_left, right: vk_right, run: vk_shift, walk: vk_control,
+	            use: vk_space, interact: ord("E"), inventory: ord("I"), map: ord("M"), cast: ord("F"), spell: ord("Q")};
+	return k;
+}
+
+/// @description What each action does, for the Controls screen (same order as it lists them).
+function keys_actions(){
+	static a = [["up", "Walk up"], ["down", "Walk down"], ["left", "Walk left"], ["right", "Walk right"],
+	            ["run", "Run (hold)"], ["walk", "Walk slowly (hold)"], ["use", "Use the held tool (or click)"],
+	            ["interact", "Talk / use / open"], ["inventory", "Inventory"], ["map", "World map"],
+	            ["cast", "Cast with a staff"], ["spell", "Change spell"]];
+	return a;
+}
+
+/// @description The key an action is bound to. Test runs use the defaults (so your keys can't break them), unless a
+/// test rebinds one itself (autotest_rebind).
+function key_of(_action){
+	var def = keys_default()[$ _action];
+	if((autotest_running() && !(variable_global_exists("keysInTests") && global.keysInTests)) || !variable_global_exists("settings") || !is_struct(global.settings[$ "keys"])) return def;
+	return global.settings.keys[$ _action] ?? def;
+}
+
+/// @description A key's name for the screen: "E", "Space", "Shift"...
+function key_name(_key){
+	switch(_key){
+		case vk_space: return "Space";     case vk_shift: return "Shift";    case vk_control: return "Ctrl";
+		case vk_alt: return "Alt";         case vk_enter: return "Enter";    case vk_tab: return "Tab";
+		case vk_backspace: return "Backspace";
+		case vk_up: return "Up";           case vk_down: return "Down";      case vk_left: return "Left";
+		case vk_right: return "Right";     case vk_home: return "Home";      case vk_end: return "End";
+		case vk_delete: return "Delete";   case vk_insert: return "Insert";
+		case vk_pageup: return "PgUp";     case vk_pagedown: return "PgDn";
+	}
+	if(_key >= vk_numpad0 && _key <= vk_numpad9) return "Num " + string(_key - vk_numpad0);
+	if(_key >= vk_f1 && _key <= vk_f12) return "F" + string(_key - vk_f1 + 1);
+	if((_key >= ord("A") && _key <= ord("Z")) || (_key >= ord("0") && _key <= ord("9"))) return chr(_key);
+	return "Key " + string(_key);
+}
+
+/// @description "[E]" for an action, for the prompts over things you can use.
+function key_label(_action){ return "[" + key_name(key_of(_action)) + "]"; }
+
+/// @description Keys you can't bind an action to: Esc (back / pause), Insert and the page keys (debug), the
+/// hotbar's number keys.
+function key_reserved(_key){
+	return _key == vk_escape || _key == vk_insert || _key == vk_pageup || _key == vk_pagedown || (_key >= ord("0") && _key <= ord("9"));
 }
 
 function settings_apply(){

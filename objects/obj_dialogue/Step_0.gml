@@ -8,7 +8,7 @@ if(event != undefined){
 		if(pick >= 0){ chosen = pick; text = event.choice.options[pick][2]; note = heart_event_finish(event, pick); eventDone = true; }
 		exit;
 	}
-	if(input_pressed(ord("E"))){
+	if(input_pressed(key_of("interact"))){
 		if(eventDone){ global.talkCooldown = current_time + 300; game.resumeLock = 2; instance_destroy(); exit; }
 		line++;
 		if(line < array_length(event.lines)) text = event.lines[line];
@@ -17,7 +17,7 @@ if(event != undefined){
 	exit;
 }
 var v = villager_def(who);
-if(input_pressed(ord("E")) || input_pressed(vk_escape)){
+if(input_pressed(key_of("interact")) || input_pressed(vk_escape)){
 	global.talkCooldown = current_time + 300; // so the same E doesn't start talking again
 	game.resumeLock = 2;
 	instance_destroy();

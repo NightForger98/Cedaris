@@ -63,8 +63,8 @@ if(act != undefined && charge == undefined){
 }
 // Magic: Q picks the next spell you know; F casts it with a staff in hand
 var busy = (charge != undefined);
-if(!busy && input_pressed(ord("Q")) && array_length(spells_known()) > 0){ spell_cycle(); farm_message("Spell: " + spell_def(spell_selected()).name); }
-if(!busy && input_pressed(ord("F")) && look.parts.held.item != -1){
+if(!busy && input_pressed(key_of("spell")) && array_length(spells_known()) > 0){ spell_cycle(); farm_message("Spell: " + spell_def(spell_selected()).name); }
+if(!busy && input_pressed(key_of("cast")) && look.parts.held.item != -1){
 	var cast = spell_begin(look, lpc_catalog().items[look.parts.held.item].name);
 	if(variable_struct_exists(cast, "act")){
 		act = cast.act;
@@ -80,7 +80,7 @@ if(!busy && input_pressed(ord("F")) && look.parts.held.item != -1){
 	if(cast.why != "") farm_message(cast.why);
 }
 var planting = instance_exists(crops) && crops.planting;
-if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(vk_space))){
+if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(key_of("use")))){
 	var faceDir = clamp(y_frame - 8, 0, 3);
 	var cell = instance_exists(crops) ? farm_front_cell(id, faceDir) : [0, 0];
 	var cropHere = instance_exists(crops) ? farm_crop_at(cell[0], cell[1]) : noone;
@@ -124,12 +124,12 @@ if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(v
 		exit;
 	}
 }
-var in_left =input_held(vk_left);
-var in_right =input_held(vk_right);
-var in_up=input_held(vk_up);
-var in_down =input_held(vk_down);
-var in_walk=keyboard_check(vk_control);
-var in_run=keyboard_check(vk_shift);
+var in_left = input_held(key_of("left"));   // keys from Options > Controls
+var in_right = input_held(key_of("right"));
+var in_up = input_held(key_of("up"));
+var in_down = input_held(key_of("down"));
+var in_walk = keyboard_check(key_of("walk"));
+var in_run = keyboard_check(key_of("run"));
 	//ALTERSPEED
 if(in_walk || in_run){
 	spd=abs((in_walk*w_spd)-(in_run*r_spd));

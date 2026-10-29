@@ -2,7 +2,7 @@
 if(ui_blocking() || instance_exists(obj_menu) || game.doTransition) exit;
 if(heartT > 0) heartT--;
 near = interact_near(40);
-if(near && input_pressed(ord("E")) && interact_ready()){
+if(near && input_pressed(key_of("interact")) && interact_ready()){
 	farm_message(animal_tend(data));
 	heartT = 50;
 	moveX = 0;

@@ -8,7 +8,7 @@ var my = device_mouse_y_to_gui(0);
 var loc = slotAt(mx, my);
 
 // Close with I or Esc (game's Step opened us this frame on the same I press, so skip the first frame)
-if(!justOpened && (input_pressed(ord("I")) || input_pressed(vk_escape))){
+if(!justOpened && (input_pressed(key_of("inventory")) || input_pressed(vk_escape))){
 	returnCursor();
 	game.resumeLock = 2;
 	instance_destroy();

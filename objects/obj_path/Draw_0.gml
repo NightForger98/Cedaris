@@ -15,7 +15,7 @@ if(near){
 	draw_set_font(fnt_eq);
 	draw_set_halign(fa_center);
 	draw_set_valign(fa_bottom);
-	var t = (target == "village") ? "[E] Back to the village" : (project_done("bridge") ? "[E] To Whisperwood" : "[E] The bridge is out");
+	var t = (target == "village") ? key_label("interact") + " Back to the village" : (project_done("bridge") ? key_label("interact") + " To Whisperwood" : key_label("interact") + " The bridge is out");
 	draw_text_transformed_colour(x, y - 36, t, 0.3, 0.3, 0, c_yellow, c_yellow, c_yellow, c_yellow, 1);
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);

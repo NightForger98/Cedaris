@@ -11,7 +11,7 @@ if(state == "wait"){
 	ui_text(gw / 2, y1 + h / 2 - 10, "Waiting for a bite...", 0.6, c_white);
 	ui_text(gw / 2, y1 + h / 2 + 20, "Esc to reel in", 0.42, c.dim);
 } else {
-	ui_text(gw / 2, y1 + 22, "A bite!  Space when the marker's in the green", 0.5, c.accent);
+	ui_text(gw / 2, y1 + 22, "A bite!  " + key_name(key_of("use")) + " when the marker's in the green", 0.5, c.accent);
 	var bx = x1 + 24, bw = w - 48, by = y1 + 46;
 	draw_set_colour(merge_colour(c.panel, c_black, 0.5));
 	draw_rectangle(bx, by, bx + bw, by + 28, false);

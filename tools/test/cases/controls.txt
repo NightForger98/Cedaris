@@ -1,0 +1,38 @@
+# Rebinding keys: the Controls screen, and a rebound key works in play (only for this run - settings.ini isn't touched)
+start story
+wait 60
+time 10
+call autotest_controls
+expect 1
+wait 10
+shot 01_controls
+call game_unpause
+wait 10
+# Bind "talk / use" to R: R opens the shipping bin, E no longer does
+call autotest_rebind interact R
+expect interact = R
+pos 1084 560
+face n
+wait 10
+key e
+wait 10
+call autotest_ui
+expectnot inventory 1
+key r
+wait 10
+call autotest_ui
+expect inventory 1
+shot 02_bin_with_r
+key esc
+wait 10
+# Walking is rebindable too: W walks up
+call autotest_rebind up W
+expect up = W
+pos 816 640
+keydown w
+wait 30
+keyup w
+call autotest_where
+expect rm_1
+expectnot 816,640
+quit

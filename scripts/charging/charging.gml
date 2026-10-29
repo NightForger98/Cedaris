@@ -41,7 +41,7 @@ function charge_kind(_name){
 /// @description True while the use button is held (Left click or Space).
 function charge_held(){
 	if(autotest_running() && (global.autotest[$ "chargeTo"] ?? -1) >= 0) return true; // a test holding it (the charge command)
-	return mouse_check_button(mb_left) || keyboard_check(vk_space);
+	return mouse_check_button(mb_left) || keyboard_check(key_of("use"));
 }
 
 /// @description 0 for an ordinary top level, 1 when it's a Cursed tool's, 2 when it's a Blessed tool's.

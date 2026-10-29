@@ -37,7 +37,7 @@ atWork = w.work;
 talkRange = atWork ? 100 : 48;   // across a counter at work
 
 near = interact_near(talkRange);
-if(near && input_pressed(ord("E")) && interact_ready()) people_open(id);
+if(near && input_pressed(key_of("interact")) && interact_ready()) people_open(id);
 
 // Brom at his anvil: a swing every few seconds
 if(hammer){

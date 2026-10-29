@@ -341,6 +341,20 @@ function autotest_hints(){
 	return "seen " + string(global.world[$ "hints"] ?? []) + " showing " + game.hintText + " queued " + string(array_length(game.hintQueue));
 }
 
+/// @description Bind an action to a key for this run only (never saved to settings.ini), e.g. call autotest_rebind interact R.
+function autotest_rebind(_action, _key){
+	global.keysInTests = true;
+	global.settings.keys[$ _action] = autotest_key(_key);
+	return _action + " = " + key_name(key_of(_action));
+}
+
+/// @description Open the pause menu's Controls screen (for a screenshot).
+function autotest_controls(){
+	game_pause();
+	with(obj_menu){ justOpened = false; openScreen("controls"); }
+	return instance_exists(obj_menu);
+}
+
 /// @description The signposts in this room: where each leads, and which side it stands on.
 function autotest_signs(){
 	var s = "";

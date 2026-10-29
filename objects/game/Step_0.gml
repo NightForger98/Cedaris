@@ -65,8 +65,8 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 	}
 	if(resumeLock > 0) {resumeLock--;}
 	else if(!invOpen && input_pressed(vk_escape)) {game_pause();}
-	else if(!invOpen && input_pressed(ord("I")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_inventory);}
-	else if(!invOpen && input_pressed(ord("M")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_world_map);}
+	else if(!invOpen && input_pressed(key_of("inventory")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_inventory);}
+	else if(!invOpen && input_pressed(key_of("map")) && instance_exists(obj_plyr)) {instance_create_depth(0, 0, -9000, obj_world_map);}
 	// Villagers walking into this room on their schedules
 	if(world_time_ready()) villagers_update();
 	// Heart events: a scene with a friend, when they're near you at the right place and hour

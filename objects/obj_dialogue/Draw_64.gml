@@ -35,8 +35,8 @@ if(note != "") ui_text(tx, y2 - 66, note, 0.55, make_colour_rgb(255, 200, 120), 
 
 // Keys (a heart event has its own: next, a choice, or done)
 if(event != undefined){
-	var ek = "[E] Next";
-	if(eventDone) ek = "[E] Done";
+	var ek = key_label("interact") + " Next";
+	if(eventDone) ek = key_label("interact") + " Done";
 	else if(line >= array_length(event.lines) - 1 && variable_struct_exists(event, "choice")){
 		ui_text(tx, y2 - 66, event.choice.ask, 0.5, make_colour_rgb(255, 200, 120), fa_left);
 		ek = "[1] " + event.choice.options[0][0] + "     [2] " + event.choice.options[1][0];
@@ -49,7 +49,7 @@ if(event != undefined){
 }
 // Keys
 var held = inv_held_stack();
-var keys = "[E] Bye";
+var keys = key_label("interact") + " Bye";
 if(held != undefined && people_state(who).gifted != day_index() && item_def(held.id).type != "held" && item_def(held.id).type != "clothing")
 	keys += "     [G] Give " + item_def(held.id).name;
 if((v[$ "shop"] ?? "") != "") keys += villager_shop_open(who) ? "     [T] Trade" : "     [T] Hours";

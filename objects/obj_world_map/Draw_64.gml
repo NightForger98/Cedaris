@@ -65,6 +65,6 @@ for(var b = 0; b < array_length(m.buildings); b++){
 	break;
 }
 
-ui_text(guiW / 2, my + m.h * s + 30, "[M] Close     Point at a building to see whose it is", 0.5, c.dim);
+ui_text(guiW / 2, my + m.h * s + 30, key_label("map") + " Close     Point at a building to see whose it is", 0.5, c.dim);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);

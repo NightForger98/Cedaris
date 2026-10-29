@@ -34,15 +34,52 @@ Last updated 2026-10-29: the world rebuild, the mine elevator, the art clean-up 
 - They always choose **Reload** in GameMaker (never Save).
 - End each step with a commit and push to `main`.
 
-### Next steps
+### Next steps: waiting on the user
 
-The polish list agreed with the user is in `docs/MILESTONES.md` ("Polish before expanding"). What's left is theirs:
-1. The user plays a first week in story mode and the tuning list: charging feel, blessing prices, witch frequency,
-   flame looks, walking times. Their notes become the next polish pass.
-2. Their decisions: names and contents for the Crossroads, North Road and South Road; the temple for Father Aldous
-   (the steepled `church` is in the library; its Friday sermon and hours are in `docs/CHARGING.md`); art direction
-   (the farmhouse stamp, colonial town vs thatched villages); what free mode is for.
-3. The game has no sounds yet (the volume setting is ready for them).
+Everything Claude could do alone from the polish list is done (`docs/MILESTONES.md`, "Polish before expanding").
+What's left needs the user to play or decide. When they come back with notes, turn them into the next polish pass;
+until then, don't start these on Claude's own judgement.
+
+**1. Play a first week in story mode** (new game, story mode; play days 1-7 normally, without debug mode).
+Note every moment of confusion, boredom or being stuck, with the day, the place and what they were trying to do.
+Things worth watching: whether the first-morning hint and the signposts get you off the farm (the farm's only way
+out is the path at the top, north to Hollow Vale - the user was stuck there once); whether the hints come at the
+right moments; how long it takes to reach the village, Brindlemoor and the mine; whether money and energy feel
+right for the first week. *What Claude needs back*: the list of notes, rough is fine.
+
+**2. The tuning list** - things only playing can judge. Where each lives, for when the notes come back:
+- *Charging feel*: how long a level takes (`CHARGE_LEVEL_TIME`, 0.6 s, in `charging`; each tool's levels in
+  `charge_max`), and whether the spin and the wide swings feel good (`CHARGE_SPIN_STEP` / `CHARGE_SPIN_TURNS`).
+- *Blessing prices*: 5,000 gold to bless a cursed Mithril tool, 1,000 to lift any other curse (`curse_lift_price` in
+  function by `priest_offer`; the design is in `docs/CHARGING.md`).
+- *How often the witch appears*: her weight in the mine's band tables (`mine_bands` in `mine`: 12 in the Ember
+  Depths, 10 in the Deep; she starts at floor 25, `monster_table` in `combat`).
+- *The flame and glow looks*: `charge_fx` / `charge_draw_*` in `charging` (screenshots: tests `charge_looks`,
+  `charge_spin`).
+- *Walking times*: villagers walk at `WALK_SPEED` (80 px a game minute, about 2 px a frame - the player walks 2,
+  runs 3); routes take the shortest way; the longest walk is 77 game minutes. If the world feels too big to cross,
+  the options are faster walking for everyone or shortcuts between rooms.
+*What Claude needs back*: for each, "fine" or which way it's off (too slow, too dear, too often...).
+
+**3. Decisions only the user can make** (Claude can build any of them once decided):
+- *Names and contents* for the Crossroads (`rm_cross`, a placeholder name), North Road (`rm_north`) and South
+  Road (`rm_south`): what each place is for (a market, a hamlet, wild land, a quest location...) and what's in it.
+  They're open country now (copses and spawn areas only). Room names live in `save_room_name`; signposts and the
+  map pick them up from there.
+- *Father Aldous's temple*: where it stands and how it looks (the steepled `church` is in the building library);
+  his Friday sermon and hours are planned in `docs/CHARGING.md`. He stands in Brindlemoor's square for now.
+- *Art direction*: keep the farmhouse as the old cottage-kit stamp or rebuild it in the library's style; keep
+  colonial Brindlemoor beside the thatched villages or not; the temple's style.
+- *What free mode is for*: a sandbox for testing and creativity, or a full game with easier rules? It decides
+  prices, energy, knock-out penalties and what the lift allows (now: any floor) in free mode.
+*What Claude needs back*: the choices, in the user's words.
+
+**4. Sounds**: the game has none yet; the volume setting is ready. Adding them needs the user to pick a style
+(and licence-safe packs, credited like the art).
+
+**When the user plays in GameMaker**: choose **Reload**, never Save, when it says the project changed. If it has
+re-saved rooms or the `.yyp` anyway (same content, re-encoded - it happened twice on 2026-10-29), `git status`
+shows them; check with the user, then discard them before committing.
 
 ### Done so far (history, newest first)
 

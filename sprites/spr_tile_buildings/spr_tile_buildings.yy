@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"867db508-7a03-4aa5-9978-a2078f05787c","name":"867db508-7a03-4aa5-9978-a2078f05787c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"50283692-32c7-49cd-a703-17bc5ec18e3a","name":"50283692-32c7-49cd-a703-17bc5ec18e3a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":1664,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"338e35b7-fd29-4faf-8201-b1ba8546cd1e","blendMode":0,"displayName":"default","isLocked":false,"name":"338e35b7-fd29-4faf-8201-b1ba8546cd1e","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"3f0f9846-c563-43f4-94d5-4c465d5045c2","blendMode":0,"displayName":"default","isLocked":false,"name":"3f0f9846-c563-43f4-94d5-4c465d5045c2","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_tile_buildings",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"867db508-7a03-4aa5-9978-a2078f05787c","path":"sprites/spr_tile_buildings/spr_tile_buildings.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"1f2e9a71-3fff-496c-b31e-f8d54cea80ed","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"50283692-32c7-49cd-a703-17bc5ec18e3a","path":"sprites/spr_tile_buildings/spr_tile_buildings.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"104bedbe-387e-404e-b049-98462ba4954c","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

@@ -53,8 +53,8 @@ Last updated 2026-10-29: the world rebuild, the mine elevator and the art clean-
   the 17 unused `spr_bld_*` sprites, `tools/buildings/make.js` and the unused stamps (`house_cream`, `house_thatch`,
   `house_cream_thatch`, `village_hall`), with their credit rows. GameMaker had re-saved the rooms and the `.yyp`
   (reordering only) - discarded and regenerated. `build/buildings/dec` is not in git: run
-  `tools/buildings/previews.sh` before `library.js`. Unused props with leftover specks: `stall_green`, `stall_blue`,
-  `obelisk` (clean them before placing one). All 44 test cases passed.
+  `tools/buildings/previews.sh` before `library.js`. The unused props (`stall_green`, `stall_blue`, `obelisk`)
+  were cleaned too, so every library piece is ready to place. All 44 test cases passed.
 - **2026-10-29 (later)**: the mine's lift became an elevator like Stardew's - a floor picker at the cave, a lift car
   on every 5th floor (with Surface), story mode to floors you've reached, free mode anywhere (`mine_lift`). The user
   reported being stuck on the farm in free mode: `free_rooms` walks from the farmhouse out of every exit and round

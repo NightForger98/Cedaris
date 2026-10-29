@@ -221,6 +221,8 @@ function mine_room_start(){
 	if(boss == "" && (fl < MINE_FLOORS || mine_deep_open())) instance_create_depth(l[0] * 32 + 16, l[1] * 32 + 16, 0, obj_mine_ladder, {down: true});
 	// The lift car, before the rocks so none lands on it
 	if(fl mod MINE_LIFT_EVERY == 0) mine_place_lift(m);
+	// A treasure chest the first time you reach a lift floor (before the rocks, which keep clear of it)
+	mine_place_chest(m, fl);
 
 	// Rocks and ore, fresh each visit (the mine's store is emptied first)
 	var objs = resource_objects("rm_mine");
@@ -228,14 +230,16 @@ function mine_room_start(){
 	for(var i = 0; i < array_length(m.region); i++){
 		var c = m.region[i];
 		if(m.dist[c[0]][c[1]] < 3 || (c[0] == l[0] && c[1] == l[1]) || random(1) > 0.12) continue;
+		var cx = c[0] * 32 + 16, cy = c[1] * 32 + 20, near = false;   // not on the chest or the lift car
+		with(obj_chest) if(point_distance(x, y, cx, cy) < 72) near = true;
+		with(obj_mine_door) if(point_distance(x, y, cx, cy) < 72) near = true;
+		if(near) continue;
 		var kind = resource_pick_kind(mine_rock_kinds(fl));
 		var d = resource_make(kind, c[0], c[1], -1);
 		array_push(objs, d);
 		resource_create_instance(d);
 	}
 
-	// A treasure chest the first time you reach a lift floor
-	mine_place_chest(m, fl);
 
 	// The boss waits where the ladder down will be
 	if(boss != "") monster_spawn(boss, l[0] * 32 + 16, l[1] * 32 + 20, fl);

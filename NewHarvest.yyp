@@ -146,6 +146,7 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"spr_mine_lift","path":"sprites/spr_mine_lift/spr_mine_lift.yy",},},
     {"id":{"name":"rm_cross","path":"rooms/rm_cross/rm_cross.yy",},},
     {"id":{"name":"TS_buildings","path":"tilesets/TS_buildings/TS_buildings.yy",},},
     {"id":{"name":"spr_tile_buildings","path":"sprites/spr_tile_buildings/spr_tile_buildings.yy",},},

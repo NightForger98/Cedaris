@@ -1,0 +1,7 @@
+"LPC: Interior Castle Tiles" by Lanea Zimmerman (Sharm)
+https://opengameart.org/content/lpc-interior-castle-tiles
+License: CC-BY 4.0 / CC-BY 3.0 / CC-BY-SA 4.0 / CC-BY-SA 3.0 / GPL 3.0 / OGA-BY 3.0
+Attribution instructions (from the page): "Please credit Lanea Zimmerman"
+
+In this game (tileset TS_interior): the blue wallpaper with cream trim, parquet and grey stone floors, red carpets,
+pillars, the red bed, gold sofa and chairs, curtains, the clock, paintings, potted plants and vases.

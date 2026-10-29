@@ -18,6 +18,7 @@ function lpc_credits(){
 			"Bluecarrot16",
 			"Bonsaiheldin",
 			"Buch",
+			"caeles",
 			"Carlo Enrico Victoria (Nemisys)",
 			"Casper Nilsson",
 			"Charles Sanchez (CharlesGabriel)",

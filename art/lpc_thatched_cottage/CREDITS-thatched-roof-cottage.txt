@@ -1,0 +1,17 @@
+"LPC Thatched-roof Cottage" by bluecarrot16
+License: CC-BY-SA 3.0 / GPL 3.0+
+https://opengameart.org/content/lpc-thatched-roof-cottage
+
+Based on:
+"LPC Base Assets"
+Lanea Zimmerman (Sharm) and Daniel Armstrong (HughSpectrum).
+CC-BY-SA 3.0 / GPL 3.0+.
+http://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles
+
+"LPC art entry"
+Casper Nilsson.
+CC-BY-SA 3.0 / GPL 3.0+.
+http://opengameart.org/content/lpc-cnilsson
+
+(Copied from the pack's OpenGameArt page. In this game: the house kit tileset TS_cottage - its timber-frame walls
+and thatch roofs; the windows and doors on the same sheet are "LPC Windows & Doors", see art/lpc_windows_doors.)

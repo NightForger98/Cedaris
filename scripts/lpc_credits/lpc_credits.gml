@@ -15,6 +15,7 @@ function lpc_credits(){
 			"Blarumyrran",
 			"bluecarrot16",
 			"Bluecarrot16",
+			"bluecarrot16 (believed",
 			"Bonsaiheldin",
 			"Buch",
 			"Carlo Enrico Victoria (Nemisys)",
@@ -82,6 +83,7 @@ function lpc_credits(){
 			"Thane Brimhall (pennomi)",
 			"thecilekli",
 			"TheraHedwig",
+			"to confirm)",
 			"Tracy",
 			"tskaufma",
 			"Tuomo Untinen (reemax)",
@@ -90,6 +92,7 @@ function lpc_credits(){
 			"William Thompson",
 			"William.Thompsonj",
 			"William.Thomsponj",
+			"Wolthera",
 			"Wolthera van Hövell tot Westerflier (TheraHedwig)",
 			"Yamilian",
 			"Zi Ye"

@@ -1,0 +1,15 @@
+# One line ending everywhere: LF in the repo and in the working copy. The room builder and the other tools write LF,
+# GameMaker reads it, and mixed endings break exact-match edits. (Overrides a system-wide core.autocrlf.)
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.gif binary
+*.wav binary
+*.ogg binary
+*.mp3 binary
+*.ttf binary
+*.otf binary
+*.zip binary
+*.exe binary
+*.dll binary

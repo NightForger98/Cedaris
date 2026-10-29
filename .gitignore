@@ -5,3 +5,6 @@
 *.yydebug
 *.win
 *.zip
+
+# GameMaker writes this when it saves a tileset; the builder makes the real one
+tilesets/*/output_tileset.png

@@ -110,10 +110,8 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
   `TS_buildings` and `tools/rooms/buildings.json`; a spec places one with `tools/rooms/house.js`, and
   `node tools/rooms/sync_exits.js <room>` points the interiors' exits at their doorsteps. Look at them all in
   `build/buildings/library.png`. The farmhouse is still the cottage-kit stamp.
-- Older building sprites not in the game: `spr_bld_*` in the Sprites/Buildings folder (made by
-  `node tools/buildings/make.js --import`; preview `build/buildings/all.png`).
-- Placeholder art drawn from `spr_tile_interior`: the bed (the crafting table, shipping bin and furnace now use LPC art; replace with real
-  assets).
+- The bed (obj_bed) draws the red bed from `spr_tile_interior` (LPC Interior Castle Tiles); the crafting table, shipping
+  bin and furnace use LPC art too.
 
 ## Conventions
 
@@ -153,3 +151,62 @@ Where things stood at the end of the last session (2026-10-28), and what to know
 
 **Working with the user**: they want recommendations acted on without asking first ("if you recommend something go
 ahead with it"); they always choose Reload in GameMaker; end each step with a commit and push to `main`.
+
+## Handoff (2026-10-29): the world rebuild and the clean-up in progress
+
+**Done and pushed this session** (`main`, up to "Open country in the Crossroads, North Road and South Road"):
+- Doors: outdoor rooms never lock (`door_lock_reason`); only houses and shops keep hours.
+- The world grew and moved: the coast runs the whole west side (48x153, tree line, the vale's river crossing it into
+  the sea, the far south reached only from the vale's road below the river); Hollow Vale is 77x65; South Road
+  (`rm_south`) is new; the farm moved below Hollow Vale and was rebuilt with the farm pack (same farmhouse and
+  field); the Crossroads (`rm_cross`, a placeholder name) sits in the farm's old place; the old farm cliff, ladder
+  (scenery) and the mine's cave are on North Road's north edge.
+- Buildings: the building library (`tools/buildings`: `previews.sh` -> `decompose.js` -> `library.js --tileset`
+  -> `TS_buildings` + `tools/rooms/buildings.json`; placed with `tools/rooms/house.js`; interiors' exits with
+  `tools/rooms/sync_exits.js <room>`). Brindlemoor is colonial; the village, vale and coast are thatched cottages
+  with the medieval decorations; see docs/LEVELS.md for who lives where.
+- Saves: versions 10 (rooms grew) and 11 (farm moved) upgrade old saves; loading onto a now-blocked spot steps out to
+  the nearest free one (game Room Start).
+- Schedules: routes go through a room's walkable parts (`walk_region`), villagers set off to be at work 10 minutes
+  early, `sched_problem` records unwalkable routes for the tests.
+- Tests: all 41 cases passed before the clean-up below. New checks: `schedule_check`, `old_saves`, `perf`,
+  `open_country`, `farm_moved`, `town_colonial`, `houses_rebuilt`, `tools/test/check_areas.js` (spawn areas
+  vs roads). Resource areas: new ones always go at the END of `resource_areas` (saves count regrowth by position).
+- Open country: copses (`tools/rooms/woods.js`) and spawn areas in the Crossroads, North Road and South Road.
+- Credits: the house kit (Thatched-roof Cottage, Windows & Doors), the interior tileset (Base Assets, Interior Castle
+  Tiles, House interior and decorations), Base Assets, Farm, Medieval Village Decorations, Colonial Buildings - each
+  pack with its credits file (and images where used) in `art/`.
+
+**In progress - committed but NOT built or tested** (the art clean-up, stopped part way at the user's request):
+- `tools/buildings/library.js`: new local fixes (`clear`, `fill`) and `dropSpecks` (removes detached specks
+  under 80px); fills the roof gaps on `brick_arch` (Edwin's hall) and clears scraps on `brick_bay`, `clock_tower`,
+  `brick_gable`, `cottage_L`, `cottage_long`, `cottage_small`, `barn`. **The tileset was not regenerated**: run
+  `node tools/buildings/library.js --tileset`, then rebuild the outdoor rooms
+  (`node tools/rooms/build.js rm_1 rm_2 rm_town rm_valley rm_beach`) and `node tools/rooms/worldmap.js`.
+  Check the cuts in `build/buildings/library.png` - the library's cut sizes can change when specks are dropped, which
+  would move doors; if a building's size changes, re-run `sync_exits.js` for its room.
+- Interiors match their outsides: Brindlemoor's houses have wallpaper (`blue`/`paper`) and parquet/checker floors,
+  the cottages stone walls and wood floors (specs `rm_town_*`, `rm_village_*`, `rm_valley_*`, `rm_beach_hut`).
+  Rebuilt: inn, town homes e/nw/sw, outfitter, Elda's, Hesta's, the store, the ranch, Marlo's hut.
+- Removed: the 17 unused `spr_bld_*` sprites (and their Buildings folder in the .yyp), `tools/buildings/make.js`,
+  the unused stamps `house_cream`, `house_thatch`, `house_cream_thatch`, `village_hall` (tiles.js and
+  `stamps/village_hall.json`); their credit rows were tidied and the in-game credits regenerated. The bed is not a
+  placeholder (it's the LPC castle bed); its note was updated. The farmhouse stays the cottage-kit stamp (the user's
+  choice).
+
+**Next steps**:
+1. Finish the clean-up: regenerate the tileset and rooms as above, look at the cuts, then run
+   `town_colonial`, `houses_rebuilt`, `town_interiors`, `world` and `built_rooms`, then the full suite
+   (`for c in tools/test/cases/*.txt; do tools/test/autotest.sh $c; done`; don't edit game code while it runs -
+   each case recompiles), commit and push.
+2. Then, from the improvement list agreed with the user: quality of life (a real name for the Crossroads, settings
+   such as volume and key rebinding, first-day hints, clear messages at locked doors), and normalising line endings
+   (files mix LF and CRLF, which breaks exact-match edit scripts - strip `` before replacing).
+3. The user hand-plays: charging feel, blessing prices, witch frequency, flame looks, walking times (the longest
+   villager walk is 91 minutes; the world is much bigger now).
+4. Deferred by the user: the temple for Father Aldous (the steepled `church` is in the library), names and contents
+   for North Road, South Road and the Crossroads.
+
+**Working with the user** (this session): on question turns answer only, no plans or recommendations until asked;
+when they say "stop", stop at once. When asked to plan they want questions first, then implementation. They always
+choose Reload in GameMaker.

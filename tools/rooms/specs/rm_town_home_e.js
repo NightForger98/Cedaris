@@ -1,7 +1,7 @@
 // Nell the weaver's home (rm_town_home_e, the stone house in the east). node tools/rooms/build.js rm_town_home_e
 const {interior} = require("../interior.js");
 module.exports = interior({
-	w: 16, h: 11, door: 7, wall: "panel", floor: "parquet",
+	w: 16, h: 11, door: 7, wall: "paper", floor: "parquet",
 	exit: {room: "rm_town", x: 1776, y: 788},
 	furniture: [
 		{is: "kitchen_sink", at: [1, 2]}, {is: "stove", at: [2, 2]}, {is: "shelf_dishes", at: [3, 2]},

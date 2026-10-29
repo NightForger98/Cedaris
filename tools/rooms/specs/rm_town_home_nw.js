@@ -1,7 +1,7 @@
 // Edwin the scribe's home (rm_town_home_nw, the cream house in the north-west). node tools/rooms/build.js rm_town_home_nw
 const {interior} = require("../interior.js");
 module.exports = interior({
-	w: 16, h: 11, door: 7, wall: "blue", floor: "wood",
+	w: 16, h: 11, door: 7, wall: "blue", floor: "parquet",
 	exit: {room: "rm_town", x: 176, y: 372},
 	furniture: [
 		{is: "bed", at: [1, 2]}, {is: "cupboard", at: [3, 2]}, {is: "shelf_low", at: [4, 2]}, {is: "window", at: [6, 1]}, {is: "clock", at: [9, 1]},

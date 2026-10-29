@@ -2,7 +2,7 @@
 // node tools/rooms/build.js rm_beach_hut. A fisher's one-room hut: nets, a cask, a stove.
 const {interior} = require("../interior.js");
 module.exports = interior({
-	w: 14, h: 10, door: 6, wall: "blue", floor: "wood",
+	w: 14, h: 10, door: 6, wall: "stone", floor: "wood",
 	exit: {room: "rm_beach", x: 1232, y: 1940},
 	furniture: [
 		{is: "bed_small", at: [1, 2]}, {is: "window", at: [4, 1]}, {is: "stove", at: [7, 2]}, {is: "pots", at: [8, 3]},

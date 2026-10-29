@@ -3,7 +3,7 @@
 // windows in the middle; the lodging in the east, where Lysa, Posy, Garrick and Father Aldous sleep. The bar's east end is open.
 const {interior} = require("../interior.js");
 module.exports = interior({
-	w: 29, h: 14, door: 10, wall: "panel", floor: "wood",
+	w: 29, h: 14, door: 10, wall: "paper", floor: "parquet",
 	exit: {room: "rm_town", x: 1008, y: 340},
 	furniture: [
 		// Behind the bar: shelves on the wall

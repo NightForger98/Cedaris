@@ -3,7 +3,7 @@
 // end); sacks, barrels and shelves of goods; she lives in the corner past the shop floor.
 const {interior} = require("../interior.js");
 module.exports = interior({
-	w: 20, h: 12, door: 8, wall: "panel", floor: "parquet",
+	w: 20, h: 12, door: 8, wall: "stone", floor: "wood",
 	exit: {room: "rm_2", x: 656, y: 1044},
 	furniture: [
 		{is: "shelf_dishes", at: [1, 2]}, {is: "shelf_low", at: [2, 2]}, {is: "shelf_open", at: [3, 2]}, {is: "window", at: [5, 1]},

@@ -2,7 +2,7 @@
 // node tools/rooms/build.js rm_village_hesta. A warm family kitchen; two beds.
 const {interior} = require("../interior.js");
 module.exports = interior({
-	w: 16, h: 11, door: 7, wall: "blue", floor: "wood",
+	w: 16, h: 11, door: 7, wall: "stone", floor: "wood",
 	exit: {room: "rm_2", x: 240, y: 1428},
 	furniture: [
 		{is: "kitchen_sink", at: [1, 2]}, {is: "stove", at: [2, 2]}, {is: "oven", at: [3, 3]}, {is: "shelf_dishes", at: [4, 2]},

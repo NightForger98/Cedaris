@@ -1,4 +1,4 @@
-// Helpers for composing building sprites from the tile sheets and the downloaded LPC art (see make.js).
+// Helpers for drawing and cutting building art from the tile sheets and the LPC packs (see library.js, decompose.js).
 const fs = require("fs");
 const path = require("path");
 const {readPng, writePng, newImage} = require("../rooms/png.js");

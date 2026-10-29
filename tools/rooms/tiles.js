@@ -34,16 +34,9 @@ const legend = {
 // Things. src: [col, row, w, h] in the tileset (default TS_terrain), or stamp: a captured multi-layer piece in
 // tools/rooms/stamps. above: how many top rows draw over the player. solid: [dx, dy, w, h] blocks, inside the thing.
 const things = {
-	// Buildings (cottage kit, captured from the first test rooms). door: the cell in front of the door, inside the thing.
+	// The farmhouse (cottage kit, captured from the first test rooms; the other buildings are the building library at
+	// the end of this file). door: the cell in front of the door, inside the thing.
 	farmhouse:   {stamp: "farmhouse", above: 4, solid: [[0, 3, 13, 6], [0, 9, 6, 1], [7, 9, 6, 1]], door: [6, 9]},
-	village_hall:{stamp: "village_hall", above: 4, solid: [[1, 3, 14, 6], [1, 9, 6, 1], [9, 9, 6, 1]], door: [7, 9]},
-	// The farmhouse in other colours: the kit has cream walls 4 rows above the stone ones, yellow thatch 7 rows above brown
-	house_cream:  {stamp: "farmhouse", above: 4, solid: [[0, 3, 13, 6], [0, 9, 6, 1], [7, 9, 6, 1]], door: [6, 9],
-	               swap: [{cols: [0, 15], rows: [8, 11], dRow: -4}]},
-	house_thatch: {stamp: "farmhouse", above: 4, solid: [[0, 3, 13, 6], [0, 9, 6, 1], [7, 9, 6, 1]], door: [6, 9],
-	               swap: [{cols: [16, 31], rows: [7, 13], dRow: -7}]},
-	house_cream_thatch: {stamp: "farmhouse", above: 4, solid: [[0, 3, 13, 6], [0, 9, 6, 1], [7, 9, 6, 1]], door: [6, 9],
-	               swap: [{cols: [0, 15], rows: [8, 11], dRow: -4}, {cols: [16, 31], rows: [7, 13], dRow: -7}]},
 	// The cliff under the farm's north edge (12 wide, repeats) and the mine's cave mouth (2 wide), from the first farm
 	cliff:       {stamp: "cliff_strip", crop: [18, 0, 12, 5]},
 	cliff_cave:  {stamp: "cliff_strip", crop: [16, 0, 2, 5]},

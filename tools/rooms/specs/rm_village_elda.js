@@ -2,7 +2,7 @@
 // node tools/rooms/build.js rm_village_elda. An herbalist's home: drying herbs, books, plants everywhere.
 const {interior} = require("../interior.js");
 module.exports = interior({
-	w: 16, h: 11, door: 7, wall: "paper", floor: "wood",
+	w: 16, h: 11, door: 7, wall: "stone", floor: "wood",
 	exit: {room: "rm_2", x: 144, y: 340},
 	furniture: [
 		{is: "bed_small", at: [1, 2]}, {is: "bookshelf", at: [3, 2]}, {is: "shelf_books", at: [4, 2]}, {is: "window", at: [6, 1]},

@@ -104,7 +104,6 @@ function lpc_credits(){
 			"William Thompson",
 			"William.Thompsonj",
 			"William.Thomsponj",
-			"Wolthera",
 			"Wolthera van Hövell tot Westerflier (TheraHedwig)",
 			"Xenodora",
 			"Yamilian",

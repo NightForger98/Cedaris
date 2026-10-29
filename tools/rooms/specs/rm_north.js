@@ -28,12 +28,18 @@ for(let r = 0; r < H; r++){
 	map.push(row);
 }
 
+const woods = require("../woods.js"), taken = new Set();
+
 module.exports = {
 	seed: 77,
 	map,
 	things: [
 		{is: "cliff", at: [0, 0]}, {is: "cliff_ladder", at: [12, 0]}, {is: "cliff", at: [18, 0]}, {is: "cliff_cave", at: [30, 0]},
 		{is: "cliff", at: [32, 0]}, {is: "cliff", at: [44, 0]}, {is: "cliff", at: [56, 0]},
+		// Trees between the cliff and the lane, and a wide meadow of copses south of it
+		...woods(map, [0, 7, 28, 11], 4, 31, undefined, taken), ...woods(map, [34, 7, 67, 11], 5, 32, undefined, taken),
+		...woods(map, [0, 15, 50, 43], 30, 33, undefined, taken), ...woods(map, [56, 15, 67, 43], 6, 34, undefined, taken),
+		{is: "stump", at: [20, 20]}, {is: "signpost", at: [55, 14]},
 	],
 	scatter: [
 		{on: ".", density: 0.04, seed: 7, pieces: [{is: "leaves", weight: 4}, {is: "leaves2", weight: 4}, {is: "sprout", weight: 2}]},
@@ -58,5 +64,7 @@ module.exports = {
 	areas: {
 		cliff_west: [1, 4, 27, 6],   // rocks and ore under the cliff, either side of the cave
 		cliff_east: [34, 4, 66, 6],
+		meadow_w: [2, 15, 50, 42],   // wood, stones and forage south of the lane
+		meadow_e: [56, 15, 66, 26],  // east of the road, above the river
 	},
 };

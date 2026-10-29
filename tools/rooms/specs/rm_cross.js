@@ -1,8 +1,9 @@
 // The Crossroads (rm_cross), where the farm used to be, before it moved below Hollow Vale. Build with:
 // node tools/rooms/build.js rm_cross
-// 77 x 40 cells, the farm's old size and place on the map. Empty for now: only the roads, which keep the farm's old
+// 77 x 40 cells, the farm's old size and place on the map. Open country for now: the roads keep the farm's old
 // lines - west to Saltmere Coast and east to the village (rows 17-18), north up Brindlemoor's main street (cols
-// 32-33), and south down to Hollow Vale (cols 39-41).
+// 32-33), and south down to Hollow Vale (cols 39-41) - with a signpost where they meet, and copses in the four
+// corners between them, where wood, stones, weeds and forage turn up (areas nw, ne, sw, se; see resource_areas).
 //
 // Map: . grass  , dirt
 const W = 77, H = 40;
@@ -18,10 +19,18 @@ for(let r = 0; r < H; r++){
 	map.push(row);
 }
 
+const woods = require("../woods.js"), taken = new Set();
+
 module.exports = {
 	seed: 99,
 	map,
-	things: [],
+	things: [
+		{is: "signpost", at: [34, 15]}, {is: "stump", at: [30, 20]}, {is: "stump", at: [45, 14]},
+		...woods(map, [0, 0, 30, 15], 14, 21, undefined, taken),
+		...woods(map, [35, 0, 76, 15], 18, 22, undefined, taken),
+		...woods(map, [0, 20, 37, 39], 16, 23, undefined, taken),
+		...woods(map, [43, 20, 76, 39], 16, 24, undefined, taken),
+	],
 	scatter: [
 		{on: ".", density: 0.05, seed: 3, pieces: [{is: "leaves", weight: 4}, {is: "leaves2", weight: 4}, {is: "mushrooms"}, {is: "sprout", weight: 2}]},
 	],
@@ -43,5 +52,7 @@ module.exports = {
 		road_east: [2400, 576],    // in from the village
 		road_south: [1296, 1208],  // up from Hollow Vale
 	},
-	areas: {},
+	areas: {
+		nw: [2, 2, 30, 15], ne: [35, 2, 74, 15], sw: [2, 20, 37, 37], se: [43, 20, 74, 37],
+	},
 };

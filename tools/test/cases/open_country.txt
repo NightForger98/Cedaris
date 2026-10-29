@@ -1,0 +1,17 @@
+# The open country between places: wood, stones and forage turn up in the Crossroads, North Road and South Road
+start story
+wait 60
+time 10
+room rm_cross 1040 576
+wait 30
+call autotest_resources
+shot 01_cross
+room rm_north 800 700
+wait 30
+call autotest_resources
+shot 02_north
+room rm_south 600 1300
+wait 30
+call autotest_resources
+shot 03_south
+quit

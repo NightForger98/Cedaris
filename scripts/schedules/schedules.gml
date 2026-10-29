@@ -426,9 +426,9 @@ function building_name(_keys, _noun){
 
 /// @description Can you go into this room now? "" if so, else what the locked door tells you. A home is locked while
 /// its people sleep (9pm - 8am); a shop outside its hours and on its day off. Friends (2 hearts with anyone who lives
-/// or works there) are welcome any time. Rooms nobody lives or works in (your house, the mine) are never locked.
+/// or works there) are welcome any time. Outdoors, and rooms nobody lives or works in (your house, the mine), are never locked.
 function door_lock_reason(_rm){
-	if(!world_time_ready()) return "";
+	if(!world_time_ready() || room_is_outdoors(asset_get_index(_rm))) return "";
 	var names = villager_names(), keeper = "", people = [];
 	for(var i = 0; i < array_length(names); i++){
 		var k = names[i], w = villager_routine(k)[$ "work"];

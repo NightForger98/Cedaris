@@ -1,0 +1,23 @@
+# Before 8am: every road is open, only people's houses are locked
+start story
+wait 60
+call autotest_date 0 2
+time 6.5
+call door_lock_reason rm_2
+call door_lock_reason rm_town
+call door_lock_reason rm_beach
+call door_lock_reason rm_valley
+call door_lock_reason rm_village_elda
+call door_lock_reason rm_village_smithy
+call door_lock_reason rm_town_home_e
+call door_lock_reason rm_north
+call door_lock_reason rm_1
+# Walk off the farm east to the village
+room rm_1 1856 576
+face right
+keydown right
+wait 60
+keyup right
+call door_lock_reason rm_12
+shot 01_village_early
+quit

@@ -90,8 +90,8 @@ evening swims, Elda mushrooming in the vale in fall, Posy's winter flower stall 
 winter, Aunt Hesta's spring seed shopping - and in winter nobody lingers outdoors after 5pm.
 Heart events (`scripts/heart_events`): ten short scenes with a friend, met in the right place and hours with enough
 hearts; some end with a choice that matters to them, some with a gift.
-Doors lock: homes while their people sleep (9pm - 8am), shops outside hours and on their day off - unless you have
-2 hearts with someone who lives or works there (`door_lock_reason`). Villagers step around you and each other.
+Doors lock: homes while their people sleep (9pm - 8am), shops outside hours and on their day off (roads and outdoor
+places never lock) - unless you have 2 hearts with someone who lives or works there (`door_lock_reason`). Villagers step around you and each other.
 
 | Shop | Keeper (lives) | Hours | Closed | Day off |
 | --- | --- | --- | --- | --- |

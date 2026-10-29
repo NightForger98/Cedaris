@@ -44,8 +44,8 @@ function clock_tick(){
 	return global.clock.minutes >= DAY_END;
 }
 
-/// @description Rooms that get the day/night tint.
-function room_is_outdoors(){ return room == rm_1 || room == rm_2 || room == rm_forest || room == rm_town || room == rm_beach || room == rm_valley || room == rm_north; }
+/// @description Rooms that get the day/night tint (this room, or another one).
+function room_is_outdoors(_rm = room){ return _rm == rm_1 || _rm == rm_2 || _rm == rm_forest || _rm == rm_town || _rm == rm_beach || _rm == rm_valley || _rm == rm_north; }
 
 /// @description Darkness 0-1: evening from 6 pm, full night by 10 pm, light again by 7 am.
 function night_amount(){

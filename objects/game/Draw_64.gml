@@ -188,6 +188,7 @@ if(game_is_playing_room() && world_time_ready() && !instance_exists(obj_menu) &&
 		        0.5, hot ? make_colour_rgb(255, 150, 90) : make_colour_rgb(150, 200, 255), fa_right);
 	}
 
+	hints_draw(guiWidth, guiHeight); // a first-time hint
 	// Message line (day start, saves, warnings)
 	if(hudTime > 0) ui_text(guiWidth / 2, 110, hudMessage, 0.7, c_white);
 	draw_set_halign(fa_left);

@@ -334,6 +334,13 @@ function autotest_lift(){
 	return s;
 }
 
+/// @description Turn first-time hints on for this run (off by default so screenshots stay clean), and say which
+/// have been shown and what is showing.
+function autotest_hints(){
+	global.hintsInTests = true;
+	return "seen " + string(global.world[$ "hints"] ?? []) + " showing " + game.hintText + " queued " + string(array_length(game.hintQueue));
+}
+
 /// @description The signposts in this room: where each leads, and which side it stands on.
 function autotest_signs(){
 	var s = "";

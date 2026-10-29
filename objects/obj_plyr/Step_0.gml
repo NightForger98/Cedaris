@@ -198,7 +198,10 @@ var inst = instance_place(x,y,obj_transition);
 // Skip transitions that were never given a target room
 // Homes and shops lock at night and out of hours (door_lock_reason)
 var locked = (inst != noone && inst.targetRoom != -1) ? door_lock_reason(room_get_name(inst.targetRoom)) : "";
-if(locked != "" && facing == inst.PlayerFacingBefore && game.hudTime <= 0) farm_message(locked);
+if(locked != "" && facing == inst.PlayerFacingBefore && game.hudTime <= 0){
+	farm_message(locked);
+	hint("locked", "Homes and shops keep hours. Talk to a shopkeeper and press T to hear theirs.");
+}
 if (inst != noone and inst.targetRoom != -1 and facing == inst.PlayerFacingBefore and locked == "" and !busy){
 	
 	with(game){

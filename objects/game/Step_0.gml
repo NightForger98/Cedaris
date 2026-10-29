@@ -72,6 +72,9 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 	// Heart events: a scene with a friend, when they're near you at the right place and hour
 	if(world_time_ready() && (current_time div 250) != (current_time - delta_time / 1000) div 250) heart_events_check();
 	
+	// First-time hints (hints script)
+	if(world_time_ready()) hints_step();
+
 	// Poison ticks away at your health (status script)
 	if(world_time_ready() && !ui_blocking()) status_step();
 	// Hotbar: 1-9 and 0 pick the held item

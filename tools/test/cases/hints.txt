@@ -1,0 +1,31 @@
+# First-time hints: the farm's way out on the first morning, the hoe, the late night; each only once
+start story
+call autotest_hints
+wait 40
+call autotest_hints
+expect farm_exit
+expect showing Welcome to the farm
+shot 01_welcome
+hold 1
+wait 20
+call autotest_hints
+expect hoe
+expect queued 1
+wait 480
+call autotest_hints
+expect showing The hoe
+shot 02_hoe
+time 22
+wait 500
+call autotest_hints
+expect late
+expect showing It's getting late
+shot 03_late
+# Shown once: back on the farm, nothing new is queued
+room rm_cross 1296 600
+wait 30
+room rm_1 816 600
+wait 30
+call autotest_hints
+expect queued 0
+quit

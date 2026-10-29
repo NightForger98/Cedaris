@@ -245,6 +245,7 @@
     {"id":{"name":"gathering","path":"scripts/gathering/gathering.yy",},},
     {"id":{"name":"instance_create_crop","path":"scripts/instance_create_crop/instance_create_crop.yy",},},
     {"id":{"name":"interact","path":"scripts/interact/interact.yy",},},
+    {"id":{"name":"hints","path":"scripts/hints/hints.yy",},},
     {"id":{"name":"wayfinding","path":"scripts/wayfinding/wayfinding.yy",},},
     {"id":{"name":"inventory","path":"scripts/inventory/inventory.yy",},},
     {"id":{"name":"items","path":"scripts/items/items.yy",},},

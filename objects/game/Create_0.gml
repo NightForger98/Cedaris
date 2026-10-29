@@ -19,6 +19,9 @@ wakeAtBed = false;
 autosavePending = false;
 dayReport = {lost: 0, died: 0, paid: 0, blessed: 0}; // what the last new day did, for the morning message
 hudMessage = "";
+hintQueue = [];  // first-time hints waiting to show (hints script)
+hintText = "";
+hintTime = 0;
 hudTime = 0;
 autotest_start(); // automated test run, if autotest.txt is in the save folder
 room_goto_next(); // the main menu

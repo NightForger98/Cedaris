@@ -51,7 +51,7 @@ right for the first week. *What Claude needs back*: the list of notes, rough is 
 - *Charging feel*: how long a level takes (`CHARGE_LEVEL_TIME`, 0.6 s, in `charging`; each tool's levels in
   `charge_max`), and whether the spin and the wide swings feel good (`CHARGE_SPIN_STEP` / `CHARGE_SPIN_TURNS`).
 - *Blessing prices*: 5,000 gold to bless a cursed Mithril tool, 1,000 to lift any other curse (`curse_lift_price` in
-  function by `priest_offer`; the design is in `docs/CHARGING.md`).
+  `status`, used by `priest_offer`; the design is in `docs/CHARGING.md`).
 - *How often the witch appears*: her weight in the mine's band tables (`mine_bands` in `mine`: 12 in the Ember
   Depths, 10 in the Deep; she starts at floor 25, `monster_table` in `combat`).
 - *The flame and glow looks*: `charge_fx` / `charge_draw_*` in `charging` (screenshots: tests `charge_looks`,

@@ -6,7 +6,7 @@ gold 5000
 call autotest_date 0 2
 time 11
 # The inn: in through the hall's door, Lysa's menu, back out
-room rm_town 1056 340
+room rm_town 1008 340
 wait 30
 keydown up
 wait 20
@@ -36,7 +36,7 @@ keyup down
 wait 40
 call autotest_where
 # The outfitter
-room rm_town 1776 404
+room rm_town 1520 340
 wait 30
 keydown up
 wait 20
@@ -61,7 +61,7 @@ keyup down
 wait 40
 call autotest_where
 # The apothecary
-room rm_town 272 852
+room rm_town 272 788
 wait 30
 keydown up
 wait 20
@@ -86,7 +86,7 @@ keyup down
 wait 40
 call autotest_where
 # The four homes: in and out of each
-room rm_town 272 404
+room rm_town 176 372
 wait 30
 keydown up
 wait 20
@@ -100,7 +100,7 @@ wait 20
 keyup down
 wait 40
 call autotest_where
-room rm_town 1776 852
+room rm_town 1776 788
 wait 30
 keydown up
 wait 20
@@ -108,7 +108,7 @@ keyup up
 wait 40
 call autotest_where
 shot 08_home_e
-room rm_town 336 1300
+room rm_town 240 1204
 wait 30
 keydown up
 wait 20
@@ -116,7 +116,7 @@ keyup up
 wait 40
 call autotest_where
 shot 09_home_sw
-room rm_town 1648 1300
+room rm_town 1680 1268
 wait 30
 keydown up
 wait 20

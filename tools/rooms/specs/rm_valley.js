@@ -122,7 +122,8 @@ module.exports = {
 	exits: {ranch: HOUSE.ranch.out, carpentry: HOUSE.carpentry.out},
 	areas: {
 		west: [43, 18, 59, 26],     // the meadow east of the path, north of the lane (clear of the ranch and its pen)
-		east: [2, 42, 75, 49],      // the wildflower meadow beyond the bridge
+		east: [2, 42, 38, 49],      // the wildflower meadow beyond the bridge, west of the path
+		east_far: [42, 42, 75, 49], // and east of it
 		east_low: [43, 31, 75, 36], // between the lane and the river
 		woods_w: [1, 2, 15, 36],    // the west woods
 	},

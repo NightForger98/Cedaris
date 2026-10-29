@@ -107,6 +107,11 @@ function resource_areas(){
 		 kinds: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]]},
 		{room: "rm_beach", cells: layout_cells("rm_beach", "shore_far"), max: 6, perDay: 1, start: 5,
 		 kinds: [["stone", 35], ["boulder", 20], ["weeds", 20], ["bush", 15], ["copper_vein", 10]]},
+		// The halves of areas split to keep them off the roads
+		{room: "rm_beach", cells: layout_cells("rm_beach", "shore_mid"), max: 6, perDay: 1, start: 4,
+		 kinds: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]]},
+		{room: "rm_valley", cells: layout_cells("rm_valley", "east_far"), max: 8, perDay: 2, start: 6,
+		 kinds: [["oak", 20], ["pine", 20], ["bush", 10], ["forage_herb", 20], ["forage_mushroom", 15], ["forage_toadstool", 10], ["stone", 5]]},
 	];
 	return a;
 }

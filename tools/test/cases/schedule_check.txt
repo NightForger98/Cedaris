@@ -1,0 +1,118 @@
+# Every villager's day, every weekday of every season, sun and rain: on time for work, home by midnight, every route walkable
+start story
+wait 60
+call autotest_weather sun
+call autotest_date 0 1
+call autotest_schedule_check
+call autotest_date 0 2
+call autotest_schedule_check
+call autotest_date 0 3
+call autotest_schedule_check
+call autotest_date 0 4
+call autotest_schedule_check
+call autotest_date 0 5
+call autotest_schedule_check
+call autotest_date 0 6
+call autotest_schedule_check
+call autotest_date 0 7
+call autotest_schedule_check
+call autotest_date 1 1
+call autotest_schedule_check
+call autotest_date 1 2
+call autotest_schedule_check
+call autotest_date 1 3
+call autotest_schedule_check
+call autotest_date 1 4
+call autotest_schedule_check
+call autotest_date 1 5
+call autotest_schedule_check
+call autotest_date 1 6
+call autotest_schedule_check
+call autotest_date 1 7
+call autotest_schedule_check
+call autotest_date 2 1
+call autotest_schedule_check
+call autotest_date 2 2
+call autotest_schedule_check
+call autotest_date 2 3
+call autotest_schedule_check
+call autotest_date 2 4
+call autotest_schedule_check
+call autotest_date 2 5
+call autotest_schedule_check
+call autotest_date 2 6
+call autotest_schedule_check
+call autotest_date 2 7
+call autotest_schedule_check
+call autotest_date 3 1
+call autotest_schedule_check
+call autotest_date 3 2
+call autotest_schedule_check
+call autotest_date 3 3
+call autotest_schedule_check
+call autotest_date 3 4
+call autotest_schedule_check
+call autotest_date 3 5
+call autotest_schedule_check
+call autotest_date 3 6
+call autotest_schedule_check
+call autotest_date 3 7
+call autotest_schedule_check
+call autotest_weather rain
+call autotest_date 0 1
+call autotest_schedule_check
+call autotest_date 0 2
+call autotest_schedule_check
+call autotest_date 0 3
+call autotest_schedule_check
+call autotest_date 0 4
+call autotest_schedule_check
+call autotest_date 0 5
+call autotest_schedule_check
+call autotest_date 0 6
+call autotest_schedule_check
+call autotest_date 0 7
+call autotest_schedule_check
+call autotest_date 1 1
+call autotest_schedule_check
+call autotest_date 1 2
+call autotest_schedule_check
+call autotest_date 1 3
+call autotest_schedule_check
+call autotest_date 1 4
+call autotest_schedule_check
+call autotest_date 1 5
+call autotest_schedule_check
+call autotest_date 1 6
+call autotest_schedule_check
+call autotest_date 1 7
+call autotest_schedule_check
+call autotest_date 2 1
+call autotest_schedule_check
+call autotest_date 2 2
+call autotest_schedule_check
+call autotest_date 2 3
+call autotest_schedule_check
+call autotest_date 2 4
+call autotest_schedule_check
+call autotest_date 2 5
+call autotest_schedule_check
+call autotest_date 2 6
+call autotest_schedule_check
+call autotest_date 2 7
+call autotest_schedule_check
+call autotest_date 3 1
+call autotest_schedule_check
+call autotest_date 3 2
+call autotest_schedule_check
+call autotest_date 3 3
+call autotest_schedule_check
+call autotest_date 3 4
+call autotest_schedule_check
+call autotest_date 3 5
+call autotest_schedule_check
+call autotest_date 3 6
+call autotest_schedule_check
+call autotest_date 3 7
+call autotest_schedule_check
+quit

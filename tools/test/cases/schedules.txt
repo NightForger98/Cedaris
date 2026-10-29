@@ -20,9 +20,9 @@ call autotest_dialogue_text
 shot 01_smithy_closed
 key esc
 wait 10
-# 8:30: on the way to work across the farm (Edwin to the village, Rowan to the vale)
+# 8:30: on the way to work across the Crossroads (Edwin to the village, Rowan to the vale)
 time 8.5
-room rm_1 2264 520
+room rm_cross 1296 576
 wait 30
 log --- Monday 8:30
 call autotest_schedules

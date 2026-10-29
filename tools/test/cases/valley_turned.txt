@@ -1,8 +1,8 @@
-# Hollow Vale turned (river across): down from the farm, into the ranch and the carpentry, over the bridge, back up
+# Hollow Vale turned (river across): down from the Crossroads, into the ranch and the carpentry, over the bridge, back up
 start story
 wait 60
 time 10
-room rm_1 1280 1150
+room rm_cross 1296 1150
 wait 20
 keydown down
 wait 60

@@ -181,10 +181,12 @@ function villager_plan(_key){
 	var legs = [], free = 0;
 	for(var i = 1; i < array_length(stops); i++){
 		var to = sched_place(_key, stops[i][1]);
+		var route = route_find(at, to), walkTime = route.len / WALK_SPEED;
 		var t0 = max(stops[i][0] * 60, free);
-		var route = route_find(at, to);
-		var t1 = t0 + route.len / WALK_SPEED;
-		array_push(legs, {t0: t0, t1: t1, route: route, to: to, work: array_length(stops[i]) > 2});
+		// Work (the stop an hour before opening): set off in time to be there 10 minutes early, however far it is
+		if(array_length(stops[i]) > 2) t0 = max(free, min(t0, (stops[i][0] + 1) * 60 - walkTime - 10));
+		var t1 = t0 + walkTime;
+		array_push(legs, {t0: t0, t1: t1, route: route, to: to, work: array_length(stops[i]) > 2, open: (stops[i][0] + 1) * 60});
 		at = to;
 		free = t1;
 	}
@@ -258,6 +260,33 @@ function walk_grid(_room){
 	return g;
 }
 
+/// @description Which walkable part of a room a point is in: rooms can be cut in two (the coast by the vale's river),
+/// so a door is only a way out from the part it's in. Parts are numbered once per room (a flood over the walk grid).
+function walk_region(_room, _x, _y){
+	if(!variable_global_exists("walkRegions")) global.walkRegions = {};
+	var g = walk_grid(_room), lab = global.walkRegions[$ _room];
+	if(lab == undefined){
+		var n = g.w * g.h, next = 0;
+		lab = array_create(n, -1);
+		for(var i = 0; i < n; i++){
+			if(g.cost[i] == 0 || lab[i] != -1) continue;
+			var st = [i];
+			lab[i] = next;
+			while(array_length(st) > 0){
+				var c = array_pop(st), cx = c mod g.w, cy = c div g.w;
+				if(cx > 0 && g.cost[c - 1] > 0 && lab[c - 1] == -1){ lab[c - 1] = next; array_push(st, c - 1); }
+				if(cx < g.w - 1 && g.cost[c + 1] > 0 && lab[c + 1] == -1){ lab[c + 1] = next; array_push(st, c + 1); }
+				if(cy > 0 && g.cost[c - g.w] > 0 && lab[c - g.w] == -1){ lab[c - g.w] = next; array_push(st, c - g.w); }
+				if(cy < g.h - 1 && g.cost[c + g.w] > 0 && lab[c + g.w] == -1){ lab[c + g.w] = next; array_push(st, c + g.w); }
+			}
+			next++;
+		}
+		global.walkRegions[$ _room] = lab;
+	}
+	var cell = walk_cell_near(g, _x, _y);
+	return (cell == -1) ? -1 : lab[cell];
+}
+
 /// @description The walkable cell nearest a point (doors and spots can sit on a wall's edge), as cell index.
 function walk_cell_near(_g, _x, _y){
 	var cx = floor(_x / 32), cy = floor(_y / 32);
@@ -278,7 +307,7 @@ function path_seg(_room, _x1, _y1, _x2, _y2){
 	var g = walk_grid(_room), W = g.w;
 	var s = walk_cell_near(g, _x1, _y1), e = walk_cell_near(g, _x2, _y2);
 	if(s == -1 || e == -1){
-		show_debug_message("schedules: no path in " + _room + " from " + string(_x1) + "," + string(_y1) + " to " + string(_x2) + "," + string(_y2));
+		sched_problem("no path in " + _room + " from " + string(_x1) + "," + string(_y1) + " to " + string(_x2) + "," + string(_y2));
 		return {room: _room, pts: [_x1, _y1, _x2, _y2], len: point_distance(_x1, _y1, _x2, _y2)};
 	}
 	var n = W * g.h, best = array_create(n, infinity), from = array_create(n, -1);
@@ -308,7 +337,7 @@ function path_seg(_room, _x1, _y1, _x2, _y2){
 	// Back from the end: cell centres where the way turns
 	var cells = [];
 	for(var c2 = e; c2 != -1; c2 = from[c2]){ array_insert(cells, 0, c2); if(c2 == s) break; }
-	if(cells[0] != s) show_debug_message("schedules: " + _room + " is cut in two between " + string(_x1) + "," + string(_y1) + " and " + string(_x2) + "," + string(_y2));
+	if(cells[0] != s) sched_problem("" + _room + " is cut in two between " + string(_x1) + "," + string(_y1) + " and " + string(_x2) + "," + string(_y2));
 	var pts = [_x1, _y1];
 	for(var i = 0; i < array_length(cells); i++){
 		var keep = (i == 0 || i == array_length(cells) - 1);
@@ -324,6 +353,14 @@ function path_seg(_room, _x1, _y1, _x2, _y2){
 	return {room: _room, pts: pts, len: len};
 }
 
+/// @description A route that can't be walked (someone would cut across or jump): logged, and kept for the tests
+/// (autotest_schedule_check).
+function sched_problem(_msg){
+	show_debug_message("schedules: " + _msg);
+	if(!variable_global_exists("schedProblems")) global.schedProblems = [];
+	if(array_get_index(global.schedProblems, _msg) == -1) array_push(global.schedProblems, _msg);
+}
+
 /// @description The way from one place to another ({room, x, y}), through as few rooms as possible: {segs, len},
 /// one path per room, each ending at the door into the next. Kept once found.
 function route_find(_a, _b){
@@ -332,29 +369,35 @@ function route_find(_a, _b){
 	var r = global.schedRoutes[$ key];
 	if(r != undefined) return r;
 	var walk = room_walk(), segs = [];
-	if(_a.room == _b.room) segs = [path_seg(_a.room, _a.x, _a.y, _b.x, _b.y)];
+	// Places are (room, the walkable part of it) - a door only leads on from the part it's in
+	var startNode = _a.room + "#" + string(walk_region(_a.room, _a.x, _a.y));
+	var endNode = _b.room + "#" + string(walk_region(_b.room, _b.x, _b.y));
+	if(startNode == endNode) segs = [path_seg(_a.room, _a.x, _a.y, _b.x, _b.y)];
 	else {
-		// Rooms joined by doors, breadth first: prev[room] = {room, door} it was reached through
-		var prev = {}, q = [_a.room], qi = 0;
-		prev[$ _a.room] = {room: "", door: -1};
+		// Through the doors, breadth first: prev[node] = {node, room, door} it was reached through
+		var prev = {}, q = [startNode], qi = 0;
+		prev[$ startNode] = {node: "", room: "", door: -1};
 		while(qi < array_length(q)){
-			var rm = q[qi++];
-			if(rm == _b.room) break;
+			var nd = q[qi++];
+			if(nd == endNode) break;
+			var rm = string_copy(nd, 1, string_pos("#", nd) - 1), rg = real(string_delete(nd, 1, string_pos("#", nd)));
 			var doors = walk[$ rm].doors;
 			for(var i = 0; i < array_length(doors); i++){
 				var nr = doors[i][2];
-				if(prev[$ nr] == undefined && walk[$ nr] != undefined){ prev[$ nr] = {room: rm, door: i}; array_push(q, nr); }
+				if(walk[$ nr] == undefined || walk_region(rm, doors[i][0], doors[i][1]) != rg) continue;
+				var nn = nr + "#" + string(walk_region(nr, doors[i][3], doors[i][4]));
+				if(prev[$ nn] == undefined){ prev[$ nn] = {node: nd, room: rm, door: i}; array_push(q, nn); }
 			}
 		}
-		if(prev[$ _b.room] == undefined){
-			show_debug_message("schedules: no way from " + _a.room + " to " + _b.room);
+		if(prev[$ endNode] == undefined){
+			sched_problem("no way from " + _a.room + " to " + _b.room);
 			segs = [{room: _b.room, pts: [_b.x, _b.y], len: 0}];
 		} else {
-			var chain = [], at = _b.room;
-			while(at != _a.room){
+			var chain = [], at = endNode;
+			while(at != startNode){
 				var pv = prev[$ at];
 				array_insert(chain, 0, walk[$ pv.room].doors[pv.door]);
-				at = pv.room;
+				at = pv.node;
 			}
 			var cr = _a.room, cx = _a.x, cy = _a.y;
 			for(var c = 0; c < array_length(chain); c++){

@@ -147,9 +147,10 @@ PlayerFacingAfter = dir.up;`},
 		road_vale: [1480, 4480], // in from Hollow Vale
 	},
 	areas: {
-		shore: [14, 47, 28, 84],   // stones and scrub on the sand and behind it
+		shore: [14, 47, 28, 62],   // stones and scrub on the sand and behind it (north of the road to the Crossroads)
+		shore_mid: [14, 65, 28, 84], // south of that road
 		shore_north: [14, 1, 28, 44],
 		shore_south: [14, 88, 28, 124],
-		shore_far: [14, 130, 28, 150], // below the river, reached from the vale
+		shore_far: [14, 130, 23, 150], // below the river, reached from the vale (the sand, clear of its road)
 	},
 };

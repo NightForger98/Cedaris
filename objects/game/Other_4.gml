@@ -45,7 +45,19 @@ if(wakeAtBed){
 if(spawnRoom == -1 || room != spawnRoom || !instance_exists(obj_plyr)) exit;
 obj_plyr.x=spawnX;
 obj_plyr.y=spawnY;
-obj_plyr.facing = spawnPlayerFacing; 
+obj_plyr.facing = spawnPlayerFacing;
+// A save from before a room was rebuilt can put you inside what stands there now: step out to the nearest free spot
+with(obj_plyr){
+	var solids = collision_solids(false);
+	if(place_meeting(x, y, solids)){
+		var x0 = x, y0 = y, found = false;
+		for(var d = 1; d <= 30 && !found; d++) for(var k = 0; k < 8 * d && !found; k++){
+			var a = k / (8 * d) * 2 * pi, tx = x0 + round(cos(a) * d * 16), ty = y0 + round(sin(a) * d * 16);
+			if(tx < 16 || ty < 16 || tx > room_width - 16 || ty > room_height - 16) continue;
+			if(!place_meeting(tx, ty, solids)){ x = tx; y = ty; found = true; }
+		}
+	}
+}
 
 with(obj_plyr){
 

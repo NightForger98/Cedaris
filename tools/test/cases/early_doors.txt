@@ -12,8 +12,8 @@ call door_lock_reason rm_village_smithy
 call door_lock_reason rm_town_home_e
 call door_lock_reason rm_north
 call door_lock_reason rm_1
-# Walk off the farm east to the village
-room rm_1 2400 576
+# Walk from the Crossroads east to the village
+room rm_cross 2400 576
 face right
 keydown right
 wait 60

@@ -1,4 +1,4 @@
-# The built farm and village (tools/rooms): start, walk, exits, the farmhouse door, resources
+# The built farm and village (tools/rooms): start, walk, exits, the farmhouse door, resources (the farm below Hollow Vale)
 start story
 wait 60
 call autotest_where
@@ -11,35 +11,35 @@ keydown right
 wait 40
 keyup right
 call autotest_where
-pos 800 190
+pos 1900 300
 wait 15
-shot 02_cave_smithy
-pos 960 560
+shot 02_barn
+pos 1296 600
 wait 15
-shot 03_field_road
-pos 1560 400
+shot 03_lane
+pos 272 760
 wait 15
 shot 04_pond
-pos 1600 840
+pos 2144 950
 wait 15
 shot 05_pasture
 pos 700 1060
 wait 15
 shot 06_woods
 debug on
-pos 272 600
+pos 816 600
 wait 10
 shot 07_door_debug
 debug off
 # The farmhouse door: walk up into it
-pos 272 560
+pos 816 570
 keydown up
 wait 40
 keyup up
 wait 40
 call autotest_where
-# Back on the farm: the road east to the village
-room rm_1 2384 576
+# The Crossroads: the road east to the village
+room rm_cross 2384 576
 wait 30
 keydown right
 wait 40
@@ -50,17 +50,17 @@ shot 08_village_arrive
 pos 1144 500
 wait 15
 shot 09_square
-pos 1844 590
+pos 1370 590
 wait 15
 shot 10_bridge
 pos 944 1080
 wait 15
 shot 11_lane
-pos 1744 1000
+pos 1200 1000
 wait 15
 shot 12_southeast
-# Back west to the farm
-pos 604 576
+# Back west to the Crossroads
+pos 60 576
 keydown left
 wait 40
 keyup left

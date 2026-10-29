@@ -417,6 +417,61 @@ function autotest_goto_animal(_kind){
 }
 
 /// @description Set the calendar (season, day), for tests.
+/// @description Write an old save (version _v) to the test slot, saved in _room at (_x, _y) as that version had it:
+/// a watered crop and a sprinkler on the field, a second sprinkler off it (in the old yard). Before version 10 the farm
+/// was 17 columns narrower, so the farm's things are 17 cells further west. Load it with: call load_game test
+function autotest_old_save(_v, _room, _x, _y){
+	var v = real(_v), dx = (v < 10) ? -17 : 0;
+	var farm = world_room("rm_1");
+	farm.crops = [{gx: 40 + dx, gy: 25, type: 0, days: 3}];
+	farm.tiles = {};
+	farm.tiles[$ farm_key(40 + dx, 25)] = {watered: true};
+	farm.placed = [{kind: "sprinkler", gx: 41 + dx, gy: 25}, {kind: "sprinkler", gx: 45 + dx, gy: 5}];
+	var data = {version: v, savedAt: date_current_datetime(), playtime: 0, room: _room, x: real(_x), y: real(_y), row: 10,
+		look: character_look_to_save(obj_plyr.look), inv: inv_to_save(), clock: global.clock, vitals: global.vitals, world: global.world};
+	if(!directory_exists("saves")) directory_create("saves");
+	var f = file_text_open_write(save_path("test"));
+	file_text_write_string(f, json_stringify(data));
+	file_text_close(f);
+	return "wrote a version " + string(v) + " save in " + _room;
+}
+
+/// @description The farm's stored crops, soil and placed things, and sprinklers in the bag (after loading a save)
+function autotest_farm_state(){
+	var farm = world_room("rm_1"), s = "crops";
+	for(var i = 0; i < array_length(farm.crops); i++){ var c = farm.crops[i]; s += " " + string(c.gx) + "," + string(c.gy) + (farm_is_soil(c.gx, c.gy) ? "" : " NOT ON THE FIELD"); }
+	s += " | soil " + string_join_ext(",", variable_struct_get_names(farm.tiles)) + " | placed";
+	var p = farm[$ "placed"] ?? [];
+	for(var i = 0; i < array_length(p); i++) s += " " + p[i].kind + " " + string(p[i].gx) + "," + string(p[i].gy);
+	return s + " | sprinklers in bag " + string(inv_count("o|sprinkler"));
+}
+
+/// @description The frame rate now: fps (capped at the game speed) and fps_real (how fast it could go), and how many
+/// instances the room holds.
+function autotest_fps_now(){ return "fps " + string(fps) + "  real " + string(round(fps_real)) + "  instances " + string(instance_count); }
+
+/// @description Plan everyone's day afresh and report what's wrong with it: late for work (arriving after opening),
+/// home after midnight, or a route that can't be walked. "all on time" if nothing; the longest walk either way.
+function autotest_schedule_check(){
+	global.schedPlans = {};
+	global.schedRoutes = {};
+	global.schedProblems = [];
+	var names = villager_names(), s = "", longest = 0, longWho = "";
+	for(var i = 0; i < array_length(names); i++){
+		var k = names[i], p = villager_plan(k);
+		for(var l = 0; l < array_length(p.legs); l++){
+			var g = p.legs[l], mins = g.t1 - g.t0;
+			if(mins > longest){ longest = mins; longWho = k; }
+			if(g.work && g.t1 > g.open + 5) s += k + " late for work (" + string(floor(g.t1 / 60)) + ":" + ((floor(g.t1) mod 60 < 10) ? "0" : "") + string(floor(g.t1) mod 60) + ", opens " + string(g.open / 60) + "); ";
+		}
+		var n = array_length(p.legs);
+		if(n > 0 && p.legs[n - 1].t1 > 24 * 60) s += k + " home after midnight; ";
+	}
+	for(var i = 0; i < array_length(global.schedProblems); i++) s += global.schedProblems[i] + "; ";
+	global.schedPlans = {};
+	return ((s == "") ? "all on time" : s) + " | longest walk " + string(round(longest)) + " min (" + longWho + ")";
+}
+
 function autotest_date(_season, _day){ global.clock.season = real(_season); global.clock.day = real(_day); return (festival_today() == undefined) ? "no festival" : festival_today().name; }
 
 /// @description Take part in today's festival event (lantern or weigh-in), as the board's button would.

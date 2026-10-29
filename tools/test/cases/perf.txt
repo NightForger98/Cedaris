@@ -1,0 +1,77 @@
+# Frame rate in the big outdoor rooms at midday, with the villagers about
+start story
+wait 60
+time 12
+room rm_beach 1300 2048
+wait 120
+call autotest_fps_now
+keydown right
+wait 60
+call autotest_fps_now
+keyup right
+wait 60
+call autotest_fps_now
+room rm_valley 1296 900
+wait 120
+call autotest_fps_now
+keydown right
+wait 60
+call autotest_fps_now
+keyup right
+wait 60
+call autotest_fps_now
+room rm_town 1040 640
+wait 120
+call autotest_fps_now
+keydown right
+wait 60
+call autotest_fps_now
+keyup right
+wait 60
+call autotest_fps_now
+room rm_2 800 600
+wait 120
+call autotest_fps_now
+keydown right
+wait 60
+call autotest_fps_now
+keyup right
+wait 60
+call autotest_fps_now
+room rm_1 1296 600
+wait 120
+call autotest_fps_now
+keydown right
+wait 60
+call autotest_fps_now
+keyup right
+wait 60
+call autotest_fps_now
+room rm_cross 1040 576
+wait 120
+call autotest_fps_now
+keydown right
+wait 60
+call autotest_fps_now
+keyup right
+wait 60
+call autotest_fps_now
+room rm_north 1000 416
+wait 120
+call autotest_fps_now
+keydown right
+wait 60
+call autotest_fps_now
+keyup right
+wait 60
+call autotest_fps_now
+room rm_south 1040 600
+wait 120
+call autotest_fps_now
+keydown right
+wait 60
+call autotest_fps_now
+keyup right
+wait 60
+call autotest_fps_now
+quit

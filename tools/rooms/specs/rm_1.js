@@ -90,6 +90,6 @@ module.exports = {
 		woods: [18, 32, 33, 33],     // a young wood at the woods' edge, west of the field
 		pasture: [60, 28, 75, 31],   // where animals roam
 		field: [35, 21, 58, 31],
-		far_west: [1, 15, 15, 21],   // the meadow between the windmill and the pond
+		far_west: [1, 15, 14, 21],   // the meadow between the windmill and the pond
 	},
 };

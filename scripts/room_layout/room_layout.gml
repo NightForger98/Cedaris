@@ -3,11 +3,11 @@
 
 function room_layout(){
 	static t = {
-		rm_1: {points: {start: [816, 592], door: [816, 564], path_north: [1296, 72]}, areas: {meadow: [42, 8, 49, 15], west: [18, 21, 33, 31], woods: [18, 32, 33, 33], pasture: [60, 28, 75, 31], field: [35, 21, 58, 31], far_west: [1, 15, 15, 21]}},
+		rm_1: {points: {start: [816, 592], door: [816, 564], path_north: [1296, 72]}, areas: {meadow: [42, 8, 49, 15], west: [18, 21, 33, 31], woods: [18, 32, 33, 33], pasture: [60, 28, 75, 31], field: [35, 21, 58, 31], far_west: [1, 15, 14, 21]}},
 		rm_12: {points: {door: [160, 472], stairs: [160, 180]}, areas: {}},
 		rm_123: {points: {stairs: [96, 180]}, areas: {}},
 		rm_2: {points: {road_west: [64, 576], road_north: [1296, 72], road_south: [1040, 1536], bridge: [1370, 592], crowd: [560, 400], river: [1456, 0], board: [1010, 410], riverbank: [1370, 280], riverbank_b: [1370, 860], square_a: [700, 560], square_b: [800, 620], square_c: [1100, 520], square_d: [600, 650], square_e: [1180, 640], square_f: [900, 450], lane: [600, 1100]}, areas: {square: [14, 10, 41, 21]}},
-		rm_beach: {points: {road_east: [1480, 2048], pier_end: [160, 2048], pier_b: [256, 2032], camp: [560, 1992], road_vale: [1480, 4480]}, areas: {shore: [14, 47, 28, 84], shore_north: [14, 1, 28, 44], shore_south: [14, 88, 28, 124], shore_far: [14, 130, 28, 150]}},
+		rm_beach: {points: {road_east: [1480, 2048], pier_end: [160, 2048], pier_b: [256, 2032], camp: [560, 1992], road_vale: [1480, 4480]}, areas: {shore: [14, 47, 28, 62], shore_mid: [14, 65, 28, 84], shore_north: [14, 1, 28, 44], shore_south: [14, 88, 28, 124], shore_far: [14, 130, 23, 150]}},
 		rm_beach_hut: {points: {door: [224, 280], marlo_bed: [48, 184], marlo_home: [144, 248]}, areas: {}},
 		rm_cross: {points: {road_north: [1040, 72], road_west: [56, 576], road_east: [2400, 576], road_south: [1296, 1208]}, areas: {}},
 		rm_north: {points: {road_west: [64, 416], road_south: [1696, 1336], cave: [992, 168]}, areas: {cliff_west: [1, 4, 27, 6], cliff_east: [34, 4, 66, 6]}},
@@ -20,7 +20,7 @@ function room_layout(){
 		rm_town_home_sw: {points: {door: [256, 312], hask_bed: [48, 184], hask_home: [240, 248]}, areas: {}},
 		rm_town_inn: {points: {door: [352, 408], lysa_work: [144, 152], ida_work: [240, 152], bar_a: [112, 216], bar_b: [208, 216], door_table: [112, 344], table_a: [400, 216], table_b: [496, 216], table_c: [560, 216], table_d: [656, 216], table_e: [400, 344], table_f: [496, 344], table_g: [560, 344], table_h: [656, 344], lysa_bed: [720, 184], posy_bed: [784, 184], garrick_bed: [848, 184], aldous_bed: [816, 376], bar: [144, 240]}, areas: {}},
 		rm_town_outfitter: {points: {door: [288, 344], bryn_work: [272, 152], bryn_bed: [624, 184], shop_a: [208, 248], shop_b: [368, 280]}, areas: {}},
-		rm_valley: {points: {path_north: [1296, 72], path_south: [1296, 2008], road_east: [2400, 928], road_west: [64, 1664], pasture: [1600, 600], yard: [944, 1000], hunt: [1444, 1560], herbs: [804, 1140], riverbank: [1664, 1180]}, areas: {west: [43, 18, 59, 26], east: [2, 42, 75, 49], east_low: [43, 31, 75, 36], woods_w: [1, 2, 15, 36]}},
+		rm_valley: {points: {path_north: [1296, 72], path_south: [1296, 2008], road_east: [2400, 928], road_west: [64, 1664], pasture: [1600, 600], yard: [944, 1000], hunt: [1444, 1560], herbs: [804, 1140], riverbank: [1664, 1180]}, areas: {west: [43, 18, 59, 26], east: [2, 42, 38, 49], east_far: [42, 42, 75, 49], east_low: [43, 31, 75, 36], woods_w: [1, 2, 15, 36]}},
 		rm_valley_carpentry: {points: {door: [288, 344], thorne_work: [144, 152], thorne_bed: [496, 184], rowan_work: [304, 248], shop_a: [208, 248]}, areas: {}},
 		rm_valley_ranch: {points: {door: [288, 344], wren_work: [144, 152], wren_bed: [496, 184], pip_bed: [400, 184], shop_a: [112, 248], ranch_table: [400, 312]}, areas: {}},
 		rm_village_elda: {points: {door: [256, 312], elda_bed: [48, 184], elda_table: [240, 280]}, areas: {}},

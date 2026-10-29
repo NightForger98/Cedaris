@@ -2,7 +2,7 @@
 start story
 wait 60
 gold 1000
-pos 552 168
+room rm_north 992 176
 face n
 wait 5
 shot 00_cave

@@ -1,0 +1,79 @@
+# The mine's lift: story mode goes only to floors you've reached, free mode anywhere; a lift car on every 5th floor
+start story
+wait 60
+time 10
+room rm_north 992 176
+face n
+wait 20
+# Nothing reached yet: E goes straight down to floor 1
+key e
+wait 90
+call autotest_mine
+# Reach floor 7, climb out, and the lift opens on 7 and can't go deeper
+mine 7
+wait 40
+call mine_leave
+wait 90
+pos 992 176
+face n
+wait 10
+key e
+wait 10
+call autotest_lift
+key down
+wait 5
+key down
+wait 5
+call autotest_lift
+shot 00_story_lift
+key up
+wait 5
+call autotest_lift
+key enter
+wait 90
+call autotest_mine
+# Free mode: any floor
+start free
+wait 60
+time 10
+room rm_north 992 176
+face n
+wait 20
+key e
+wait 10
+call autotest_lift
+key down
+wait 5
+key down
+wait 5
+key right
+wait 5
+call autotest_lift
+shot 01_free_lift
+key enter
+wait 90
+call autotest_mine
+# A lift car on floor 15: take it up to floor 3
+mine 15
+wait 40
+call autotest_goto_lift
+wait 10
+shot 02_lift_car
+key e
+wait 10
+call autotest_lift
+shot 03_lift_in_mine
+key up
+wait 5
+key up
+wait 5
+key left
+wait 5
+key left
+wait 5
+call autotest_lift
+key enter
+wait 90
+call autotest_mine
+call autotest_lift
+quit

@@ -73,6 +73,7 @@ function autotest_key(_name){
 		case "right":  return vk_right;
 		case "up":     return vk_up;
 		case "down":   return vk_down;
+		case "enter":  return vk_enter;
 	}
 	return ord(string_upper(_name));
 }
@@ -291,6 +292,19 @@ function autotest_monsters(){
 function autotest_goto_ladder(){
 	with(obj_mine_ladder) if(down){ obj_plyr.x = x; obj_plyr.y = y + 10; return "ladder at " + string(x) + "," + string(y); }
 	return "none";
+}
+
+/// @description Stand the player beside the mine's lift car, and log its floor choice.
+function autotest_goto_lift(){
+	with(obj_mine_door) if(inMine){ obj_plyr.x = x; obj_plyr.y = y + 14; return "lift at " + string(x) + "," + string(y); }
+	return "none";
+}
+
+/// @description The lift's state: open, the floor picked, and the deepest it goes to.
+function autotest_lift(){
+	var s = "no lift";
+	with(obj_mine_door) s = "lift open " + string(menuOpen) + " pick " + string(pick) + " top " + string(mine_lift_top()) + " inMine " + string(inMine);
+	return s;
 }
 
 /// @description A monster-sized hit on the player, for testing being knocked out.

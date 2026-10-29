@@ -2,7 +2,8 @@
 ///
 /// Layout: cellular-automata cave from a seed (the save's mine seed + the floor), so a floor's shape is the same
 /// every visit. Contents (rocks, ore, monsters) are rolled fresh each visit, like Stardew, so nothing per floor
-/// is saved. global.world.mine = {seed, deepest, floor}. Every 5th floor you reach unlocks the lift at the entrance.
+/// is saved. global.world.mine = {seed, deepest, floor}. The lift (obj_mine_door: the cave mouth, and a lift car on
+/// every 5th floor) goes to any floor you've reached in story mode, and to any floor at all in free mode.
 /// Tiles are drawn with tilemap_set on layers made at Room Start; an invisible tilemap of walls (and lava) is what
 /// the player and monsters collide with (global.mineWalls, see collision_solids).
 
@@ -42,11 +43,25 @@ function mine_state(){
 	return global.world.mine;
 }
 
-/// @description Floors the lift can take you to: 1, then every 5th floor you've reached.
-function mine_lift_floors(){
-	var out = [1], d = mine_state().deepest;
-	for(var f = MINE_LIFT_EVERY; f <= d; f += MINE_LIFT_EVERY) array_push(out, f);
-	return out;
+/// @description True in free mode, where the lift goes anywhere; story mode only goes back to floors you've reached.
+function mine_lift_free(){ return variable_global_exists("gameMode") && global.gameMode == "free"; }
+
+/// @description The deepest floor the lift goes to (it goes to every floor from 1 down to here): the deepest you've
+/// reached in story mode; in free mode the bottom, floor 30, or far into the Deep once the drake is beaten.
+function mine_lift_top(){
+	var d = max(1, mine_state().deepest);
+	if(!mine_lift_free()) return d;
+	return max(d, mine_deep_open() ? 999 : MINE_FLOORS);
+}
+
+/// @description Put a lift car a couple of steps from the ladder up (every 5th floor, like Stardew's elevator).
+function mine_place_lift(_m){
+	for(var i = 0; i < array_length(_m.region); i++){
+		var c = _m.region[i];
+		if(_m.dist[c[0]][c[1]] != 2) continue;
+		instance_create_depth(c[0] * 32 + 16, c[1] * 32 + 20, 0, obj_mine_door, {inMine: true});
+		return;
+	}
 }
 
 // ---------------------------------------------------------------- generation
@@ -204,6 +219,8 @@ function mine_room_start(){
 	// On a boss floor the ladder down only appears when the boss falls (see mine_boss_beaten); below 30 once the drake has
 	var boss = mine_boss(fl);
 	if(boss == "" && (fl < MINE_FLOORS || mine_deep_open())) instance_create_depth(l[0] * 32 + 16, l[1] * 32 + 16, 0, obj_mine_ladder, {down: true});
+	// The lift car, before the rocks so none lands on it
+	if(fl mod MINE_LIFT_EVERY == 0) mine_place_lift(m);
 
 	// Rocks and ore, fresh each visit (the mine's store is emptied first)
 	var objs = resource_objects("rm_mine");
@@ -309,7 +326,11 @@ function mine_darkness(){
 }
 
 /// @description True while the lift's floor list is open (the player stands still, Esc closes it).
-function mine_menu_open(){ return instance_exists(obj_mine_door) && obj_mine_door.menuOpen; }
+function mine_menu_open(){
+	var open = false;
+	with(obj_mine_door) if(menuOpen) open = true;
+	return open;
+}
 
 // ---------------------------------------------------------------- treasure
 
@@ -350,6 +371,8 @@ function mine_place_chest(_m, _floor){
 		var c = _m.region[i];
 		var d = _m.dist[c[0]][c[1]];
 		if(d < 3 || d > 6 || resource_at_cell(c[0], c[1])) continue;
+		var lift = instance_nearest(c[0] * 32 + 16, c[1] * 32 + 20, obj_mine_door);
+		if(lift != noone && point_distance(lift.x, lift.y, c[0] * 32 + 16, c[1] * 32 + 20) < 72) continue; // clear of the lift car
 		instance_create_depth(c[0] * 32 + 16, c[1] * 32 + 20, 0, obj_chest, {chestFloor: _floor});
 		return;
 	}

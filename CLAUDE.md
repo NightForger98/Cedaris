@@ -68,6 +68,12 @@ The art clean-up, stopped part way at the user's request:
 
 ### Done so far (history, newest first)
 
+- **2026-10-29 (later)**: the mine's lift became an elevator like Stardew's - a floor picker at the cave, a lift car
+  on every 5th floor (with Surface), story mode to floors you've reached, free mode anywhere (`mine_lift`). The user
+  reported being stuck on the farm in free mode: `free_rooms` walks from the farmhouse out of every exit and round
+  the Crossroads in free mode, and it all works - the farm's only way out is the path at the top (north to Hollow
+  Vale), since the farm moved. The `mine` test now starts at the North Road cave.
+
 - **2026-10-29 - the world rebuild** (pushed, up to "Open country in the Crossroads, North Road and South Road"):
   - Doors: outdoor rooms never lock (`door_lock_reason`); only houses and shops keep hours.
   - The world grew and moved: the coast runs the whole west side (48x153, a tree line, the vale's river crossing it
@@ -165,8 +171,9 @@ The art clean-up, stopped part way at the user's request:
 - Gathering, smelting, tool tiers and upgrades: `gathering` (resources are `obj_resource`, spawned per room area;
   the furnace is `obj_furnace`, in Brom's smithy). Art for trees, rocks and weeds is cut from `spr_tile_terrain`.
 - Stats, cooking, food buffs and the cold: `food` (`stat(key)` is how to read any stat; the hearth is `obj_kitchen`).
-- The mine: `mine` (seeded cave floors in `rm_mine`, bands, ladders, the lift at `obj_mine_door` in the cave on North
-  Road). Bosses (`mine_boss`, `mine_boss_beaten`) and the endless Deep below floor 30; monsters with `ranged` in
+- The mine: `mine` (seeded cave floors in `rm_mine`, bands, ladders). The lift is `obj_mine_door`: at the cave on
+  North Road, and a lift car (`inMine`) by the ladder up on every 5th floor; story mode goes to any floor you've
+  reached, free mode to any floor (`mine_lift_top`, `mine_lift_free`). Tests: `mine`, `mine_lift`. Bosses (`mine_boss`, `mine_boss_beaten`) and the endless Deep below floor 30; monsters with `ranged` in
   their table entry shoot `obj_enemy_shot` (`monster_shoot`).
 - Combat: `combat` (`weapon_table`, `monster_table`, `obj_monster`, knock-outs). Monster art: `spr_mon_*` from [LPC]
   Monsters, imported with `node tools/sprite_import.js <png> <spr_name>` (credited in `LPC_CREDITS.csv`).

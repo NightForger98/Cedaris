@@ -154,7 +154,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
   - Humanoids reuse LPC looks: goblins, orcs, skeletons, zombies, trolls, wolfkin. They're random looks from the race table.
   - Creatures (slimes, bats, pixies, dragons) need other art. LPC-compatible monster sets exist on
     OpenGameArt; check each licence and add it to `LPC_CREDITS.csv`.
-- **The mine:** generated while the game runs, one seeded layout per floor (see `docs/LEVELS.md`): floors with rocks (ore), monsters and a ladder down, a lift every 5 floors, deeper floors
+- **The mine:** generated while the game runs, one seeded layout per floor (see `docs/LEVELS.md`): floors with rocks (ore), monsters and a ladder down, a lift every 5 floors (now an elevator: any floor you've reached, or any in free mode), deeper floors
   with tougher monsters. This is the main source of the **rare and legendary materials**:
 
 | Material | Source |
@@ -198,7 +198,7 @@ This makes every tool and weapon swing one renderer feature plus a pipeline step
 | 4 | 1 Farming loop | L | **done**: till, seeds (Mara), plant, water (pond refill), watered-only growth, seasons, harvest with Luck quality, regrowing crops, eating, shipping bin |
 | 5 | 2 Gathering + smelting + upgrades | M | **done**: trees/stumps (axe), rocks and ore veins (pickaxe, hardness by tier), weeds and bushes (scythe) spawning in farm areas and regrowing daily; wood, stone, fibre, coal, 5 ores; smelting at Brom's furnace, weaving fibre at the crafting table; Copper to Mithril tool upgrades at Brom's (save v3) |
 | 6 | 3 Stats wiring (Warmth, buffs) | S | **done**: `stat()` with food buffs, cooking at the hearth (8 dishes), winter/night cold vs Warmth, Charm selling bonus |
-| 7 | 4 Combat + mine | XL | **done (core)**: 30-floor mine generated at runtime (earth, ice, lava bands; lift every 5), weapons table, 11 monsters (LPC humanoids + [LPC] Monsters creatures), Defence, Luck crits/drops, heat and cold, knock-outs; still to come: dragon boss, pixies and moths, ranged monsters (save v4) |
+| 7 | 4 Combat + mine | XL | **done (core)**: 30-floor mine generated at runtime (earth, ice, lava bands; lift every 5, an elevator since), weapons table, 11 monsters (LPC humanoids + [LPC] Monsters creatures), Defence, Luck crits/drops, heat and cold, knock-outs; still to come: dragon boss, pixies and moths, ranged monsters (save v4) |
 | 8 | 5 Magic | M | **done**: mana (30 + 10/Magic), 5 spells from scrolls (Grow, Rain from Mara; Light from Brom; Fireball, Heal from the mine), cast with a staff (F, Q to change), staff power; treasure chests on mine lift floors (save v5) |
 | 9 | 6 Social and quests | L | **done**: 8 named villagers with fixed looks and homes, dialogue with portraits and hearts, daily talk and gifts (loves/likes/dislikes/hates), Charm boosts friendship, heart rewards every 2 hearts, a village notice board with daily delivery and hunting requests (gold, friendship, dyes) |
 

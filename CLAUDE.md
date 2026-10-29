@@ -23,7 +23,7 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 
 ## Handoff
 
-Last updated 2026-10-29: the world rebuild, the mine elevator and the art clean-up are done; all 44 test cases pass.
+Last updated 2026-10-29: the world rebuild, the mine elevator, the art clean-up and a round of polish are done.
 
 ### Working with the user
 
@@ -36,16 +36,21 @@ Last updated 2026-10-29: the world rebuild, the mine elevator and the art clean-
 
 ### Next steps
 
-1. From the improvement list agreed with the user: quality of life (a real name for the Crossroads, settings such as
-   volume and key rebinding, first-day hints, clear messages at locked doors), and normalising line endings (files
-   mix LF and CRLF, which breaks exact-match edit scripts - strip `\r` before replacing).
-2. The user hand-plays: charging feel, blessing prices, witch frequency, flame looks, walking times (routes now take
-   the shortest way; the longest villager walk is 77 minutes, at villagers' walking pace of 2 px a frame).
-3. Deferred by the user: the temple for Father Aldous (the steepled `church` is in the library; its Friday sermon and
-   hours are in `docs/CHARGING.md`), names and contents for North Road, South Road and the Crossroads.
+The polish list agreed with the user is in `docs/MILESTONES.md` ("Polish before expanding"). What's left is theirs:
+1. The user plays a first week in story mode and the tuning list: charging feel, blessing prices, witch frequency,
+   flame looks, walking times. Their notes become the next polish pass.
+2. Their decisions: names and contents for the Crossroads, North Road and South Road; the temple for Father Aldous
+   (the steepled `church` is in the library; its Friday sermon and hours are in `docs/CHARGING.md`); art direction
+   (the farmhouse stamp, colonial town vs thatched villages); what free mode is for.
+3. The game has no sounds yet (the volume setting is ready for them).
 
 ### Done so far (history, newest first)
 
+- **2026-10-29 - polish before expanding**: tests that fail (`expect`, `tools/test/suite.sh`, 257 expects added),
+  `tools/check_calls.js` in `build.sh`, LF line endings (`.gitattributes`), signposts by every road (`wayfinding`),
+  first-time hints (`hints`), key rebinding (Options > Controls, `key_of`), routes by distance (longest walk 77 min),
+  a real lift cage, rocks kept off the mine's chests, the last library props cleaned. GameMaker keeps re-saving the
+  rooms and `.yyp` when it's open (same content, re-encoded): check `git status` and discard those before committing.
 - **2026-10-29 - the art clean-up finished**: `library.js` fixes (`clear`, `fill`, `dropSpecks`: roof gaps on
   `brick_arch`, scraps cleared on the cottages, colonial houses, barn, the town stalls and the farm shed), tileset
   regenerated (no building changed size or door), the five outdoor rooms and the world map rebuilt. Interiors match

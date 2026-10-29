@@ -22,7 +22,7 @@ We're not doing that, because:
 
 - Designed, not generated: each room is a spec in `tools/rooms/specs/` (a text map of the ground, plus the
   buildings, trees, props and instances placed on it) that `node tools/rooms/build.js <room>` turns into the room
-  file. See "Room builder" in `CLAUDE.md`. The farm (`rm_1`) and the village (`rm_2`) are built this way.
+  file. See "Room builder" in `CLAUDE.md`. Every room but the mine and Whisperwood is built this way.
   - **Why a spec rather than the room editor**: a layout is reviewable text, the builder does the fiddly parts
     (autotiled edges, collision boxes that match the art, water zones, roofs and tree tops over the player), and
     Claude can design and change rooms without the editor. The ground is still placed by hand, cell by cell:
@@ -51,6 +51,9 @@ The Crossroads sits in the middle of the map, where the farm used to be; the far
                       |
                The Farm (rm_1)   door: rm_12 <-> rm_123
 ```
+
+Every road from one outdoor place to another has a signpost naming where it leads (`wayfinding`; placed at
+Room Start from the rooms' exits, so a new road gets one by itself).
 
 Buildings come from the building library (`tools/buildings`, tileset `TS_buildings`): the packs' preview pictures
 rebuilt from the packs' own tiles, placed in a spec with `tools/rooms/house.js` (the thing, its door and the
@@ -146,12 +149,13 @@ after noon) keep the same day every day. Evenings, many end up at the inn; Lysa,
   another kind of spawn area, with harder veins deeper down, which ties into the pickaxe tiers; mithril
   near the bottom), and monsters from the LPC look system (goblins, skeletons, trolls...).
 - **Bands of floors** change the look and the finds: earth, ice (frost crystals), lava (ember cores), with
-  a lift every 5 floors.
+  a lift car every 5 floors. The lift (at the cave, and in those cars) is an elevator like Stardew's: in story
+  mode it goes to any floor you've reached, in free mode to any floor.
 - **Seeded per floor**: the layout comes from the save's seed plus the floor number, so a floor looks the
   same when you come back. Its contents (rocks, ore, monsters) are rolled fresh on every visit, like Stardew,
   so nothing per floor is saved: only the seed, the deepest floor reached and the floor you're on.
 - **Built** (step 7): `scripts/mine` (generation, bands, the lift), `scripts/combat` (weapons, monsters,
-  knock-outs), `rm_mine`; entered from the cave on the farm (`obj_mine_door`).
+  knock-outs), `rm_mine`; entered from the cave on North Road (`obj_mine_door`, which is also the lift).
 
 ## If WFC is wanted later
 

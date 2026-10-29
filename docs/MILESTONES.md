@@ -12,7 +12,7 @@ ordered so each one builds on the last.
 | No long-term goal | The loops work, but nothing asks you to combine them (crops + ore + monster drops). |
 | No weather | Every day is the same; the watering can is a chore with no break. Phase 0.3 already planned a weather icon. |
 | Pixie dust and moonsilk have no source | The roadmap pinned them on pixies and moths in a night forest, which doesn't exist. |
-| Nowhere new to go | (Was: three outdoor places. Now the farm is a hub with Brindlemoor, the coast, the vale and the village around it - see `docs/LEVELS.md`.) |
+| Nowhere new to go | (Was: three outdoor places. Now the Crossroads is the hub, with Brindlemoor, the coast, Hollow Vale (and the farm below it), the village, North Road and South Road around it - see `docs/LEVELS.md`.) |
 | Watering never gets easier | Stardew's sprinklers are the big mid-game upgrade; ours would come from smelted bars. |
 | The Fishing Rod does nothing | It's in Brom's shop and the catalog, but there's no fishing. |
 
@@ -70,6 +70,25 @@ The full design is in `docs/CHARGING.md`.
 - **Father Aldous:** stands in the town square and lifts curses. A Cursed tool becomes Blessed (5,000 gold);
   anything else costs 1,000.
 - **Later, with the world map:** the temple, its Friday sermon and opening hours.
+
+## Polish before expanding (2026-10-29)
+
+Making what's there solid and easy to pick up before adding more.
+
+| Step | Status |
+|---|---|
+| Tests that fail: `expect` checks, a pass/fail result per run, `tools/test/suite.sh` | **Done** |
+| `tools/check_calls.js` in `build.sh`: no calls to functions that don't exist | **Done** |
+| LF line endings everywhere (`.gitattributes`) | **Done** |
+| Finding your way: signposts by every road, a first-morning hint about the farm's way out | **Done** |
+| First-time hints: tools, seeds, the shipping bin, the lift, locked doors, late nights, low energy | **Done** |
+| Key rebinding (Options > Controls) | **Done** (volume was already there; the game has no sounds yet) |
+| Shorter villager walks: routes by distance (longest 77 min, was 91) | **Done** |
+| The building library's last scraps; a real lift cage; rocks kept off the mine's chests | **Done** |
+| The user plays a first week and the tuning list (charging, blessing prices, the witch, flames, walks) | To do (the user) |
+| Names and contents for the Crossroads, North Road and South Road; the temple for Father Aldous | To do (the user decides) |
+| Art direction: the farmhouse stamp, colonial town vs thatched villages, the temple's style | To do (the user decides) |
+| What free mode is for (sandbox or an easier game) | To do (the user decides) |
 
 ## Art we'll need
 

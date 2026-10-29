@@ -25,7 +25,7 @@ wait 10
 equip f|carrot_soup
 use 1
 call autotest_vitals
-room rm_1 700 470
+room rm_1 1244 470
 wait 30
 call autotest_vitals
 wait 600

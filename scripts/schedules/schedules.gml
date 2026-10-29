@@ -149,7 +149,7 @@ function villager_stops(_key){
 		stops = array_concat(stops, (after != undefined) ? after : [[work.close, "home"]]);
 	}
 	// Winter evenings: nobody lingers outdoors after 5pm (it's dark and freezing)
-	static outside = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north"];
+	static outside = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north", "rm_south"];
 	if(global.clock.season mod 4 == 3){
 		for(var i = 1; i < array_length(stops); i++){
 			var pl = stops[i][1];
@@ -159,7 +159,7 @@ function villager_stops(_key){
 	}
 	// Rain: anything outdoors becomes staying in (home), unless they're the kind to go out in it anyway
 	if(weather_is_wet() && !(r[$ "rainproof"] ?? false)){
-		static outdoors = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north"];
+		static outdoors = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north", "rm_south"];
 		for(var i = 1; i < array_length(stops); i++){
 			var pl = stops[i][1];
 			if(is_struct(pl) || pl == "home") continue;

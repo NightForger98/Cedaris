@@ -59,7 +59,7 @@ wait 60
 call autotest_monster_hps
 inv
 # The fishing rod casts further when charged: too far from the farm pond for a tap, close enough charged
-room rm_1 1600 600
+room rm_1 2144 600
 wait 30
 give c|held|Fishing Rod
 equip c|held|Fishing Rod

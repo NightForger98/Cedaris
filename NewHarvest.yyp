@@ -146,6 +146,7 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"rm_south","path":"rooms/rm_south/rm_south.yy",},},
     {"id":{"name":"rm_north","path":"rooms/rm_north/rm_north.yy",},},
     {"id":{"name":"spr_ore_icons","path":"sprites/spr_ore_icons/spr_ore_icons.yy",},},
     {"id":{"name":"spr_shipping_chest","path":"sprites/spr_shipping_chest/spr_shipping_chest.yy",},},
@@ -1421,6 +1422,7 @@
     {"roomId":{"name":"rm_valley_carpentry","path":"rooms/rm_valley_carpentry/rm_valley_carpentry.yy",},},
     {"roomId":{"name":"rm_beach_hut","path":"rooms/rm_beach_hut/rm_beach_hut.yy",},},
     {"roomId":{"name":"rm_north","path":"rooms/rm_north/rm_north.yy",},},
+    {"roomId":{"name":"rm_south","path":"rooms/rm_south/rm_south.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[

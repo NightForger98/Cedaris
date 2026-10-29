@@ -61,7 +61,7 @@ To find a tile's coordinates, look at the sheet in a viewer with a 32px grid; `[
 ## Rooms built this way
 
 `rm_1` farm, `rm_2` village and its houses (`rm_village_*`), `rm_12`/`rm_123` the farmhouse, `rm_town` and its seven
-interiors (`rm_town_*`), `rm_beach` and Marlo's hut, `rm_valley` with the ranch and the carpentry, `rm_north` (the world map is in `docs/LEVELS.md`). A spec for a room that doesn't exist yet creates it and adds it to `NewHarvest.yyp`. Interiors
+interiors (`rm_town_*`), `rm_beach` and Marlo's hut, `rm_valley` with the ranch and the carpentry, `rm_north`, `rm_south` (the world map is in `docs/LEVELS.md`). A spec for a room that doesn't exist yet creates it and adds it to `NewHarvest.yyp`. Interiors
 use `base: "none"` and a furnished stamp, with the map only saying where you can walk. `node tools/rooms/paint.js`
 paints rectangles of a character into a spec's map.
 

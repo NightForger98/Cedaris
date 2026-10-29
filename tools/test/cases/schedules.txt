@@ -22,7 +22,7 @@ key esc
 wait 10
 # 8:30: on the way to work across the farm (Edwin to the village, Rowan to the vale)
 time 8.5
-room rm_1 1720 520
+room rm_1 2264 520
 wait 30
 log --- Monday 8:30
 call autotest_schedules
@@ -50,7 +50,7 @@ room rm_town 1024 700
 wait 30
 call autotest_people
 shot 05_town_10am
-room rm_valley 700 400
+room rm_valley 1244 400
 wait 30
 call autotest_people
 shot 06_valley_10am

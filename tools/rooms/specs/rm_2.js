@@ -61,7 +61,7 @@ module.exports = {
 		"..........,,,..........,,,.....,,,..........~~~.........",
 		"........,,,,,,,,,,,,,,,,,,,,,,,,,,..........~~~.........",
 		"........,,,,,,,,,,,,,,,,,,,,,,,,,,..........~~~.........",
-		"............................................~~~.........",
+		"...............................,,,..........~~~.........",
 	],
 
 	things: [
@@ -114,14 +114,18 @@ module.exports = {
 		// The road north (North Road, rm_north)
 		{obj: "obj_transition", x: 1296, y: 8, sx: 6, sy: 1,
 		 code: "targetRoom = rm_north;\ntargetX = 1696;\ntargetY = 1336;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
+		// The road south (South Road, rm_south)
+		{obj: "obj_transition", x: 1040, y: 1592, sx: 6, sy: 1,
+		 code: "targetRoom = rm_south;\ntargetX = 1040;\ntargetY = 72;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
 		// The road back to the farm
 		{obj: "obj_transition", x: 8, y: 576, sx: 1, sy: 4,
-		 code: "targetRoom = rm_1;\ntargetX = 1856;\ntargetY = 576;\nPlayerFacingBefore = dir.left;\nPlayerFacingAfter = dir.left;"},
+		 code: "targetRoom = rm_1;\ntargetX = 2400;\ntargetY = 576;\nPlayerFacingBefore = dir.left;\nPlayerFacingAfter = dir.left;"},
 	],
 
 	points: {
 		road_west: [64, 576],    // arriving from the farm
 		road_north: [1296, 72],  // arriving from North Road
+		road_south: [1040, 1536], // arriving from South Road
 		bridge: [1370, 592],     // back from Whisperwood
 		crowd: [560, 400],       // where visitors stand on a festival day (a 4-wide grid from here)
 		river: [1456, 0],        // lanterns float down from here on Lantern Night

@@ -1,5 +1,5 @@
 targetRoom = rm_beach;
 targetX = 1232;
-targetY = 468;
+targetY = 1940;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

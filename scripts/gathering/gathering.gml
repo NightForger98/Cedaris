@@ -93,6 +93,19 @@ function resource_areas(){
 		// Whisperwood: its clearings (walls and water are skipped) - wood, forage and a few stones
 		{room: "rm_forest", cells: [2, 2, 45, 27], max: 34, perDay: 8, start: 28,
 		 kinds: [["oak", 16], ["pine", 16], ["bush", 14], ["weeds", 10], ["stone", 6], ["forage_mushroom", 16], ["forage_herb", 12], ["forage_toadstool", 5]]},
+		// The grown rooms' new land (kept at the end: saves count each area's regrowth by its place in this list)
+		{room: "rm_1", cells: layout_cells("rm_1", "far_west"), max: 8, perDay: 2, start: 6,
+		 kinds: [["weeds", 40], ["bush", 15], ["stone", 25], ["oak", 10], ["pine", 10]]},
+		{room: "rm_valley", cells: layout_cells("rm_valley", "east_low"), max: 10, perDay: 2, start: 7,
+		 kinds: [["oak", 20], ["pine", 15], ["bush", 15], ["weeds", 15], ["stone", 10], ["forage_herb", 15], ["forage_mushroom", 10]]},
+		{room: "rm_valley", cells: layout_cells("rm_valley", "woods_w"), max: 12, perDay: 3, start: 9,
+		 kinds: [["oak", 25], ["pine", 25], ["bush", 10], ["weeds", 10], ["forage_mushroom", 20], ["forage_toadstool", 10]]},
+		{room: "rm_beach", cells: layout_cells("rm_beach", "shore_north"), max: 8, perDay: 2, start: 6,
+		 kinds: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]]},
+		{room: "rm_beach", cells: layout_cells("rm_beach", "shore_south"), max: 8, perDay: 2, start: 6,
+		 kinds: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]]},
+		{room: "rm_beach", cells: layout_cells("rm_beach", "shore_far"), max: 6, perDay: 1, start: 5,
+		 kinds: [["stone", 35], ["boulder", 20], ["weeds", 20], ["bush", 15], ["copper_vein", 10]]},
 	];
 	return a;
 }

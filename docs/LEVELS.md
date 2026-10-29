@@ -39,17 +39,18 @@ We're not doing that, because:
 The farm is the middle of the map; a way out on each side:
 
 ```
-                     Brindlemoor (rm_town)  ----  North Road (rm_north)
-                            | ladder up the cliff     lane    | road, and the village river
-                            |                                 |
-  Saltmere Coast  ----   The Farm (rm_1)   ----  Village (rm_2)  ----  Whisperwood (rm_forest)
-   (rm_beach)    road       |  door  \ cave         road            bridge (a village project)
-                            |   rm_12 <-> rm_123   rm_mine
-                     Hollow Vale (rm_valley)
-                         path through the woods
+ Saltmere       Brindlemoor (rm_town)  ----  North Road (rm_north)
+  Coast               | ladder up the cliff     lane    | road, and the village river
+ (rm_beach,           |                                 |
+  all the   ----   The Farm (rm_1)   ----  Village (rm_2)  ----  Whisperwood (rm_forest)
+  west     road       |  door  \ cave         road       | road and river   bridge (a village project)
+  side)               |   rm_12 <-> rm_123   rm_mine     |
+    |          Hollow Vale (rm_valley)  ----------  South Road (rm_south)
+    |                 |                lane above the river; the rivers join
+    +---------- road below the river (the only way to the far south of the coast)
 ```
 
-- **Farm** (`rm_1`, 60x40): the cliff along the north with the ladder up to town and the mine's cave, a yard with
+- **Farm** (`rm_1`, 77x40; widened west so its west edge lines up with Brindlemoor's and the vale's): the cliff along the north with the ladder up to town and the mine's cave, a yard with
   your workbench by it; farmhouse in the west; the field in the middle; pond in the north-east; fenced pasture in
   the south-east; woods along the south with a path through them. Roads east (village) and west (coast). Only you
   live here; villagers cross it on their way between places.
@@ -64,14 +65,19 @@ The farm is the middle of the map; a way out on each side:
   Every door leads inside (`rm_town_*`, built with `tools/rooms/interior.js`): the hall is the Brindle Inn (Lysa sells
   a daily menu of meals), the sword sign Bryn's Outfitters (clothes and armour that fit you), the potion sign Morga's
   Apothecary (Heal and Fireball scrolls, staves, forage, tonics); the other four are homes.
-- **Saltmere Coast** (`rm_beach`, 48x40): sea, a beach, a pier to fish from (sea fish); Old Marlo's hut by the
-  road (`rm_beach_hut`).
-- **Hollow Vale** (`rm_valley`, 44x60, turned so its river runs across): the path comes down from the farm past
+- **Saltmere Coast** (`rm_beach`, 48x153, the whole west side of the map): sea, a beach, a pier to fish from (sea
+  fish); Old Marlo's hut by the farm road (`rm_beach_hut`). Woods line its east edge, open only for the farm road, the
+  vale's river (which crosses the coast into the sea and cuts it in two) and the road from the vale's meadow below the
+  river - the only way onto the far south of the coast.
+- **Hollow Vale** (`rm_valley`, 77x65, its river running across): the path comes down from the farm past
   Wren's ranch on the right (`rm_valley_ranch`: livestock; Pip works and lives there too) and Thorne's carpentry on
   the left (`rm_valley_carpentry`: timber and stone; Rowan works its yard), over the river on a plank bridge to the
-  wildflower meadow; a lake in the north-west (river fish), wood and forage on both banks.
+  wildflower meadow; a lake in the north-west (river fish), wood and forage on both banks. A lane east above the
+  river to South Road; from the meadow below it, a road west to the far south of the coast.
 - **North Road** (`rm_north`, 68x44): empty so far. A road from Brindlemoor's east lane down to the village's north
   road, and the village river coming up and bending away east (river fish).
+- **South Road** (`rm_south`, 56x55): empty so far. The village's south road comes down and turns west into the vale's
+  lane; the village river comes down the east side and turns west under it into the vale's river (river fish).
 - The world map (M in game) is `spr_world_map` and `scripts/world_map`, made by `node tools/rooms/worldmap.js` from
   the built rooms (run it again after changing an outdoor room): rooms laid out as their exits join, every building
   with a door, and where each indoor room's door is.

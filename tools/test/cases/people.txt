@@ -3,7 +3,7 @@ start story
 wait 60
 # Pip minds Wren's sheep in Hollow Vale from 7
 time 10
-room rm_valley 560 480
+room rm_valley 1104 480
 wait 30
 call autotest_people
 # Talk to Pip, then give him a gold carrot (he loves carrots)
@@ -35,7 +35,7 @@ call autotest_ui
 key esc
 wait 10
 # A heart reward: at 2 hearts Pip has something for you
-room rm_valley 560 480
+room rm_valley 1104 480
 wait 30
 call autotest_set_friend pip 520
 call autotest_goto_person pip

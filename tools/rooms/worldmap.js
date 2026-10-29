@@ -17,7 +17,7 @@ const T = require("./tiles.js");
 
 const SCALE = 0.25;        // map pixels per room pixel
 const GAP = 64;            // room pixels between neighbouring rooms
-const OUTDOORS = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north"];
+const OUTDOORS = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north", "rm_south"];
 const FOREST = {w: 48 * 32, h: 30 * 32};   // FOREST_W x FOREST_H in scripts/forest
 
 const spec = n => require(path.join(__dirname, "specs", n + ".js"));

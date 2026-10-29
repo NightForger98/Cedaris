@@ -96,7 +96,7 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 - Anything usable with E calls `interact_near(range)` and `interact_ready()` (`interact`): only the closest thing
   answers. `ui_blocking()` is true while any window is open (the clock stops).
 - Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm (the hub), `rm_2` village (east), `rm_town` (north, up the
-  ladder), `rm_beach` (west), `rm_valley` (south), `rm_north` (North Road: east of the town, north of the village), `rm_12` farmhouse downstairs, `rm_123` upstairs (`BED_ROOM`),
+  ladder), `rm_beach` (west), `rm_valley` (south), `rm_north` (North Road: east of the town, north of the village), `rm_south` (South Road: south of the village, east of the vale), `rm_12` farmhouse downstairs, `rm_123` upstairs (`BED_ROOM`),
   `rm_town_*` (the town's inn, outfitter, apothecary and four homes), `rm_village_*` (smithy, general store, three
   homes), `rm_valley_ranch`, `rm_valley_carpentry`, `rm_beach_hut`, `rm_mine`, `rm_forest`. A new outdoor room also
   needs `room_is_outdoors`, `save_room_name` and the debug room list. Tilesets: `TS_terrain`, `TS_cottage` (house

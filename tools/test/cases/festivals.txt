@@ -38,7 +38,7 @@ shot 04_frost
 key esc
 wait 30
 # Pip isn't home on a festival day
-room rm_1 700 400
+room rm_1 1244 400
 wait 40
 call autotest_people
 quit

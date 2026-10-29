@@ -2,7 +2,7 @@
 start story
 wait 60
 time 10
-room rm_1 736 1150
+room rm_1 1280 1150
 wait 20
 keydown down
 wait 60
@@ -10,21 +10,21 @@ keyup down
 wait 30
 call autotest_where
 shot 01_arrive
-pos 1104 420
+pos 1648 420
 face n
 keydown up
 wait 30
 keyup up
 wait 30
 call autotest_where
-room rm_valley 400 870
+room rm_valley 944 870
 wait 20
 keydown up
 wait 30
 keyup up
 wait 30
 call autotest_where
-room rm_valley 752 1150
+room rm_valley 1296 1150
 wait 20
 keydown down
 wait 90
@@ -32,7 +32,7 @@ keyup down
 wait 10
 call autotest_where
 shot 02_bridge
-pos 752 120
+pos 1296 120
 keydown up
 wait 60
 keyup up

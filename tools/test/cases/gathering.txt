@@ -71,7 +71,7 @@ call tool_upgrade Hoe
 key esc
 wait 10
 inv
-room rm_1 700 300
+room rm_1 1244 300
 wait 30
 hold 6
 call autotest_goto iron_vein
@@ -79,7 +79,7 @@ use 3
 inv
 # Copper hoe tills two cells
 hold 1
-pos 700 240
+pos 1244 240
 face e
 use 1
 wait 10
@@ -96,7 +96,7 @@ wait 10
 # Next day: stumps age, more resources come back
 sleep
 wait 60
-room rm_1 700 300
+room rm_1 1244 300
 wait 30
 call autotest_resources
 shot 11_next_day

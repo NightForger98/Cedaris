@@ -1,5 +1,5 @@
 targetRoom = rm_valley;
-targetX = 1008;
-targetY = 404;
+targetX = 944;
+targetY = 852;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

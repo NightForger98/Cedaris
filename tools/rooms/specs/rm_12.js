@@ -38,7 +38,7 @@ module.exports = {
 		{obj: "obj_kitchen", x: 304, y: 268},
 		// The front door, and the stairs up
 		{obj: "obj_transition", x: 160, y: 496, sx: 4, sy: 2,
-		 code: "targetRoom = rm_1;\ntargetX = 272;\ntargetY = 564;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
+		 code: "targetRoom = rm_1;\ntargetX = 816;\ntargetY = 564;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
 		{obj: "obj_transition", x: 160, y: 112, sx: 4, sy: 2,
 		 code: "targetRoom = rm_123;\ntargetX = 96;\ntargetY = 180;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.down;"},
 	],

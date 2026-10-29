@@ -9,7 +9,7 @@ call autotest_crop_front
 call autotest_weather sun rain
 sleep
 wait 60
-room rm_1 700 240
+room rm_1 1244 240
 wait 30
 face s
 call weather_now

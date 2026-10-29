@@ -32,16 +32,16 @@ wait 5
 shot 01_placed
 sleep
 wait 60
-room rm_1 640 720
+room rm_1 1184 720
 wait 40
 face s
 call autotest_crop_front
-pos 704 720
+pos 1248 720
 call autotest_crop_front
 shot 02_morning
 # The pickaxe picks it back up
 hold 6
-pos 672 784
+pos 1216 784
 face n
 use 1
 inv

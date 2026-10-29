@@ -22,7 +22,7 @@ We're not doing that, because:
 
 - Designed, not generated: each room is a spec in `tools/rooms/specs/` (a text map of the ground, plus the
   buildings, trees, props and instances placed on it) that `node tools/rooms/build.js <room>` turns into the room
-  file. See `tools/rooms/README.md`. The farm (`rm_1`) and the village (`rm_2`) are built this way.
+  file. See "Room builder" in `CLAUDE.md`. The farm (`rm_1`) and the village (`rm_2`) are built this way.
   - **Why a spec rather than the room editor**: a layout is reviewable text, the builder does the fiddly parts
     (autotiled edges, collision boxes that match the art, water zones, roofs and tree tops over the player), and
     Claude can design and change rooms without the editor. The ground is still placed by hand, cell by cell:

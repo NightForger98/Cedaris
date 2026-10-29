@@ -5,7 +5,7 @@
 //
 //   node tools/rooms/build.js rm_1 [rm_2 ...]      (or "all")
 //
-// See tools/rooms/README.md for the spec format.
+// See "Room builder" in CLAUDE.md for the spec format.
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");

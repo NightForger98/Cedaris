@@ -10,7 +10,13 @@
 //
 // Map: . grass  , dirt  ~ water  b water under the bridge (walkable)
 // Where you arrive inside a house: its interior spec's door point
-const inside = r => require("./" + r + ".js").points.door;
+const house = require("../house.js");
+// Wren's ranch (a long thatched cottage, hay and a wagon by it) and Thorne's carpentry (the L-shaped cottage, its open
+// lean-to his lumber shed), from the building library (tools/buildings)
+const HOUSE = {
+	ranch: house("plain_long", [46, 5], "rm_valley_ranch"),
+	carpentry: house("plain_L", [24, 19], "rm_valley_carpentry"),
+};
 
 const W = 77, H = 65, O = 17;   // O: how far the first vale (44 wide) moved right when the vale grew west
 // The lake: [row, first col, last col]
@@ -23,7 +29,8 @@ for(let r = 0; r < H; r++){
 	if(r >= 38 && r <= 40) put(0, W - 1, "~");                    // the river
 	put(39, 41, (r >= 38 && r <= 40) ? "b" : ",");                // the path: down from the Crossroads, over the bridge, to the farm
 	if(r === 12 || r === 13) put(42, 52, ",");                   // the ranch's lane
-	if(r === 26 || r === 27) put(29, 38, ",");                   // the carpentry's lane
+	if(r === 26 || r === 27) put(26, 38, ",");                   // the carpentry's lane
+	if(r === 25) put(26, 28, ",");                               // its door
 	if(r === 28 || r === 29) put(42, W - 1, ",");                // east to South Road
 	if(r === 51 || r === 52) put(0, 38, ",");                    // west to the far end of the coast
 	map.push(row.join(""));
@@ -43,12 +50,12 @@ module.exports = {
 
 	things: [
 		// Wren's ranch, with her garden and sheep pen below
-		{is: "house_thatch", at: [45, 2]},
+		HOUSE.ranch.thing, {is: "wagon", at: [57, 8]}, {is: "hay_roll", at: [44, 14]},
 		{is: "picket", at: [46, 16]}, {is: "picket", at: [50, 16]}, {is: "hay_bale", at: [54, 15]},
 		{is: "clothesline", at: [57, 12]}, {is: "barrel", at: [43, 9]}, {is: "bucket", at: [49, 18]},
 
 		// Thorne's carpentry, with its lumber yard below
-		{is: "house_thatch", at: [23, 16]}, {is: "sign_sword", at: [27, 24]},
+		HOUSE.carpentry.thing, {is: "sign_sword", at: [23, 22]},
 		{is: "barrels", at: [31, 29]}, {is: "stump", at: [34, 30]}, {is: "crate_open", at: [25, 29]}, {is: "wheelbarrow", at: [26, 30]},
 
 		// The bridge: planks over the river, three wide
@@ -86,10 +93,7 @@ module.exports = {
 		{obj: "obj_plyr", x: 1296, y: 72},
 		{obj: "camera", x: 1296, y: 72},
 		// The ranch's and the carpentry's doors
-		{obj: "obj_transition", x: 1648, y: 368, sx: 2, sy: 1,
-		 code: `targetRoom = rm_valley_ranch;\ntargetX = ${inside("rm_valley_ranch")[0]};\ntargetY = ${inside("rm_valley_ranch")[1]};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`},
-		{obj: "obj_transition", x: 944, y: 816, sx: 2, sy: 1,
-		 code: `targetRoom = rm_valley_carpentry;\ntargetX = ${inside("rm_valley_carpentry")[0]};\ntargetY = ${inside("rm_valley_carpentry")[1]};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`},
+		HOUSE.ranch.transition, HOUSE.carpentry.transition,
 		// Up the path to the Crossroads, down it to the farm
 		{obj: "obj_transition", x: 1296, y: 2072, sx: 6, sy: 1,
 		 code: "targetRoom = rm_1;\ntargetX = 1296;\ntargetY = 72;\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;"},
@@ -114,6 +118,8 @@ module.exports = {
 		herbs: [804, 1140],      // the meadow by the river, west
 		riverbank: [1664, 1180],
 	},
+	// Where each house's door lets you out (the interiors' exits; tools/rooms/sync_exits.js)
+	exits: {ranch: HOUSE.ranch.out, carpentry: HOUSE.carpentry.out},
 	areas: {
 		west: [43, 18, 59, 26],     // the meadow east of the path, north of the lane (clear of the ranch and its pen)
 		east: [2, 42, 75, 49],      // the wildflower meadow beyond the bridge

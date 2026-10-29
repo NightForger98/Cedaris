@@ -1,5 +1,5 @@
-targetRoom = rm_south;
-targetX = 1040;
-targetY = 72;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+targetRoom = rm_village_smithy;
+targetX = 288;
+targetY = 344;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

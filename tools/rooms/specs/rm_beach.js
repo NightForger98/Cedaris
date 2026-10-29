@@ -103,7 +103,7 @@ module.exports = {
 		{is: "stump", at: [22, 55]}, {is: "stump", at: [17, 76]}, {is: "signpost2", at: [25, 62]},
 
 		// Marlo's hut
-		{is: "house_thatch", at: [32, 50]}, {is: "barrel", at: [31, 59]}, {is: "rope_fence", at: [41, 60]},
+		{is: "plain_small", at: [36, 54]}, {is: "barrel", at: [34, 59]}, {is: "rope_fence", at: [41, 60]},
 
 		// Behind the beach: trees and bushes
 		{is: "pine", at: [29, 48]}, {is: "bush_big2", at: [30, 69]}, {is: "oak", at: [36, 70]},

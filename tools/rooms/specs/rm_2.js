@@ -1,76 +1,54 @@
 // The village (rm_2). Build with: node tools/rooms/build.js rm_2
-// 56 x 50 cells of 32px. The hall stands on the north side of a cobbled square (the notice board is by its door);
-// Elda's house is in the north-west, Brom's smithy (the sword sign) and Mara's general store along a lane in the
-// south, and below them a second lane with Aunt Hesta and Tobin's house and Rowan's. Every door leads inside
-// (rm_village_*). The road west goes back to the farm; the river runs down the east side, with the bridge to
-// Whisperwood (obj_path draws it).
+// 56 x 50 cells of 32px. Thatched cottages ([LPC] Thatched-roof Cottage, dressed with the medieval village
+// decorations; the building library in tools/buildings). The hall - twin cottages joined by a gateway - stands on the
+// north side of a cobbled square (the notice board is by it); Elda's little cottage is in the north-west, Brom's smithy
+// (the long cottage with double doors, torches and a banner) and Mara's general store (the tall one with market
+// awnings) along a lane in the south, and below them a second lane with Aunt Hesta and Tobin's L-shaped cottage and
+// Rowan's. Every door but the hall's leads inside (rm_village_*). The road west goes to the Crossroads; the river runs
+// down the east side, with the bridge to Whisperwood (obj_path draws it).
 //
 // Map: . grass  , dirt  : cobbles  ~ water. See tools/rooms/tiles.js for the rest.
 // Where you arrive inside a house: its interior spec's door point
-const inside = r => require("./" + r + ".js").points.door;
+const house = require("../house.js");
+
+const H = {
+	hall: house("cottage_twin", [15, 1]),
+	elda: house("cottage_small", [2, 4], "rm_village_elda"),
+	smithy: house("cottage_long", [3, 22], "rm_village_smithy"),
+	store: house("cottage_shop", [17, 23], "rm_village_store"),
+	hesta: house("cottage_L", [4, 37], "rm_village_hesta"),
+	rowan: house("plain_tall", [19, 38], "rm_village_rowan"),
+};
+
+const W = 56, HH = 50;
+const map = [];
+for(let r = 0; r < HH; r++){
+	const row = Array(W).fill(".");
+	const put = (c1, c2, r1, r2, ch) => { if(r >= r1 && r <= r2) for(let c = c1; c <= c2; c++) row[c] = ch; };
+	put(39, 41, 0, 9, ",");      // the road north
+	put(14, 41, 10, 21, ":");    // the square
+	put(0, 13, 17, 18, ",");     // the road west
+	put(42, 43, 17, 18, ",");    // to the bridge
+	put(18, 20, 9, 9, ":");      // the hall's door
+	put(4, 6, 10, 16, ",");      // Elda's
+	put(31, 33, 22, 49, ",");    // the road south
+	put(2, 33, 33, 34, ",");     // the first lane: the smithy and the store
+	put(5, 7, 31, 32, ",");      // the smithy's door
+	put(19, 21, 32, 32, ",");    // the store's
+	put(8, 33, 47, 48, ",");     // the second lane: Hesta's and Rowan's
+	put(6, 8, 44, 46, ",");      // Hesta's door
+	put(44, 46, 0, 49, "~");     // the river
+	map.push(row.join(""));
+}
 
 module.exports = {
 	seed: 22,
-	map: [
-		".......................................,,,..~~~.........",
-		".......................................,,,..~~~.........",
-		".......................................,,,..~~~.........",
-		".......................................,,,..~~~.........",
-		".......................................,,,..~~~.........",
-		".......................................,,,..~~~.........",
-		".......................................,,,..~~~.........",
-		".......................................,,,..~~~.........",
-		".......................................,,,..~~~.........",
-		".......................................,,,..~~~.........",
-		"..............::::::::::::::::::::::::::::..~~~.........",
-		"..............::::::::::::::::::::::::::::..~~~.........",
-		"..............::::::::::::::::::::::::::::..~~~.........",
-		".......,,,....::::::::::::::::::::::::::::..~~~.........",
-		".......,,,....::::::::::::::::::::::::::::..~~~.........",
-		".......,,,....::::::::::::::::::::::::::::..~~~.........",
-		".......,,,....::::::::::::::::::::::::::::..~~~.........",
-		",,,,,,,,,,,,,,::::::::::::::::::::::::::::,,~~~.........",
-		",,,,,,,,,,,,,,::::::::::::::::::::::::::::,,~~~.........",
-		"..............::::::::::::::::::::::::::::..~~~.........",
-		"..............::::::::::::::::::::::::::::..~~~.........",
-		"..............::::::::::::::::::::::::::::..~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"........,,,....................,,,..........~~~.........",
-		"........,,,....................,,,..........~~~.........",
-		"..,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,..........~~~.........",
-		"..,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-		"..........,,,..........,,,.....,,,..........~~~.........",
-		"........,,,,,,,,,,,,,,,,,,,,,,,,,,..........~~~.........",
-		"........,,,,,,,,,,,,,,,,,,,,,,,,,,..........~~~.........",
-		"...............................,,,..........~~~.........",
-	],
+	map,
 
 	things: [
-		// The hall, its top against the room's edge (the captured art has no roof peak), and the houses
-		{is: "village_hall", at: [20, 0]}, {is: "sign_inn", at: [25, 7]},
-		{is: "house_cream", at: [2, 3]}, {is: "sign_potion", at: [7, 11]},
-		{is: "house_thatch", at: [3, 21]},
-		{is: "house_cream_thatch", at: [18, 23]}, {is: "sign_sword", at: [7, 29]},
-		{is: "house_cream", at: [5, 36]}, {is: "house_thatch", at: [18, 36]},
+		// The hall and the houses, with Elda's potion sign and the smithy's sword sign
+		...Object.values(H).map(h => h.thing),
+		{is: "sign_potion", at: [1, 7]}, {is: "sign_sword", at: [2, 27]},
 
 		// The square: a statue in the middle, the notice board by the hall door, barrels and a cart
 		{is: "statue", at: [27, 15]},
@@ -81,7 +59,7 @@ module.exports = {
 
 		// Gardens and yards
 		{is: "clothesline", at: [10, 32]}, {is: "barrel", at: [16, 29]}, {is: "wheelbarrow", at: [0, 29]},
-		{is: "bush_big", at: [33, 2]}, {is: "bush_big2", at: [36, 3]}, {is: "oak", at: [16, 2]},
+		{is: "bush_big", at: [33, 2]}, {is: "bush_big2", at: [36, 3]}, {is: "well", at: [34, 13]},
 		{is: "sapling", at: [40, 24]}, {is: "oak", at: [36, 26]}, {is: "pine", at: [40, 29]},
 		{is: "cattails", at: [43, 4]}, {is: "cattails", at: [43, 27]}, {is: "cattails", at: [47, 12]},
 
@@ -94,7 +72,7 @@ module.exports = {
 
 		// The south lane
 		{is: "pine", at: [0, 38]}, {is: "oak", at: [1, 44]}, {is: "pine", at: [36, 37]}, {is: "oak", at: [39, 41]},
-		{is: "sapling", at: [36, 45]}, {is: "bush_big2", at: [40, 47]}, {is: "barrel", at: [17, 44]}, {is: "bucket", at: [4, 45]},
+		{is: "sapling", at: [36, 45]}, {is: "bush_big2", at: [40, 47]}, {is: "barrel", at: [17, 44]}, {is: "hay_roll", at: [27, 44]},
 	],
 
 	scatter: [
@@ -108,9 +86,7 @@ module.exports = {
 		{obj: "obj_quest_board", x: 976, y: 362},
 		{obj: "obj_path", x: 1416, y: 592},
 		// The houses' doors (rm_village_*)
-		...[["rm_village_elda", 272, 400], ["rm_village_smithy", 304, 976], ["rm_village_store", 784, 1040],
-		    ["rm_village_hesta", 368, 1456], ["rm_village_rowan", 784, 1456]].map(([to, x, y]) => ({obj: "obj_transition", x, y, sx: 2, sy: 1,
-			code: `targetRoom = ${to};\ntargetX = ${inside(to)[0]};\ntargetY = ${inside(to)[1]};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`})),
+		...Object.values(H).filter(h => h.transition).map(h => h.transition),
 		// The road north (North Road, rm_north)
 		{obj: "obj_transition", x: 1296, y: 8, sx: 6, sy: 1,
 		 code: "targetRoom = rm_north;\ntargetX = 1696;\ntargetY = 1336;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
@@ -123,7 +99,7 @@ module.exports = {
 	],
 
 	points: {
-		road_west: [64, 576],    // arriving from the farm
+		road_west: [64, 576],    // arriving from the Crossroads
 		road_north: [1296, 72],  // arriving from North Road
 		road_south: [1040, 1536], // arriving from South Road
 		bridge: [1370, 592],     // back from Whisperwood
@@ -137,4 +113,6 @@ module.exports = {
 	areas: {
 		square: [14, 10, 41, 21],  // the cobbled square: bunting on festival days
 	},
+	// Where each house's door lets you out (the interiors' exits; tools/rooms/sync_exits.js)
+	exits: Object.fromEntries(Object.entries(H).map(([k, h]) => [k, h.out])),
 };

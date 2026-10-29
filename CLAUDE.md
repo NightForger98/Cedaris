@@ -95,16 +95,23 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
   `building_label` names each building in the tooltip.
 - Anything usable with E calls `interact_near(range)` and `interact_ready()` (`interact`): only the closest thing
   answers. `ui_blocking()` is true while any window is open (the clock stops).
-- Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_1` farm (the hub), `rm_2` village (east), `rm_town` (north, up the
-  ladder), `rm_beach` (west), `rm_valley` (south), `rm_north` (North Road: east of the town, north of the village), `rm_south` (South Road: south of the village, east of the vale), `rm_12` farmhouse downstairs, `rm_123` upstairs (`BED_ROOM`),
-  `rm_town_*` (the town's inn, outfitter, apothecary and four homes), `rm_village_*` (smithy, general store, three
-  homes), `rm_valley_ranch`, `rm_valley_carpentry`, `rm_beach_hut`, `rm_mine`, `rm_forest`. A new outdoor room also
-  needs `room_is_outdoors`, `save_room_name` and the debug room list. Tilesets: `TS_terrain`, `TS_cottage` (house
-  kit), `TS_town`, `TS_interior`.
-- Building exteriors not yet in the game: sprites `spr_bld_*` in the Sprites/Buildings folder (houses, terrace, smithy,
-  carpentry, general store, bakery, market stalls, chapel), made by `node tools/buildings/make.js --import` from the
-  tilesets and the LPC packs in `build/assets_dl`; preview sheet `build/buildings/all.png`. Their bottom edge is
-  ground level; the door is in the middle of the bottom row.
+- Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_cross` the Crossroads (the hub, where the farm was), `rm_2`
+  village (east), `rm_town` Brindlemoor (north), `rm_beach` (west), `rm_valley` Hollow Vale (south), `rm_1` the farm
+  (below the vale), `rm_north` (North Road: east of the town, north of the village; the cliff and the mine's cave),
+  `rm_south` (South Road: south of the village, east of the vale), `rm_12` farmhouse downstairs, `rm_123` upstairs
+  (`BED_ROOM`), `rm_town_*` (the town's inn, outfitter, apothecary and four homes), `rm_village_*` (smithy, general
+  store, three homes), `rm_valley_ranch`, `rm_valley_carpentry`, `rm_beach_hut`, `rm_mine`, `rm_forest`. A new
+  outdoor room also needs `room_is_outdoors`, `save_room_name`, the schedules' outdoor lists, the debug room list
+  and `OUTDOORS` in tools/rooms/worldmap.js. Tilesets: `TS_terrain`, `TS_cottage` (house kit), `TS_town`,
+  `TS_interior`, `TS_buildings` (the building library).
+- Buildings in the outdoor rooms come from the building library: `tools/buildings/previews.sh` rebuilds the packs'
+  preview pictures from their own tiles without the ground (`decompose.js`), `node tools/buildings/library.js
+  --tileset` cuts the buildings (`B` in library.js: box, door, foot, fixes) into `spr_tile_buildings` /
+  `TS_buildings` and `tools/rooms/buildings.json`; a spec places one with `tools/rooms/house.js`, and
+  `node tools/rooms/sync_exits.js <room>` points the interiors' exits at their doorsteps. Look at them all in
+  `build/buildings/library.png`. The farmhouse is still the cottage-kit stamp.
+- Older building sprites not in the game: `spr_bld_*` in the Sprites/Buildings folder (made by
+  `node tools/buildings/make.js --import`; preview `build/buildings/all.png`).
 - Placeholder art drawn from `spr_tile_interior`: the bed (the crafting table, shipping bin and furnace now use LPC art; replace with real
   assets).
 

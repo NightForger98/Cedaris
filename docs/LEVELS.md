@@ -36,46 +36,59 @@ We're not doing that, because:
 
 ### The world so far
 
-The farm is the middle of the map; a way out on each side:
+The Crossroads sits in the middle of the map, where the farm used to be; the farm is at the foot of Hollow Vale:
 
 ```
- Saltmere       Brindlemoor (rm_town)  ----  North Road (rm_north)
-  Coast               | ladder up the cliff     lane    | road, and the village river
- (rm_beach,           |                                 |
-  all the   ----   The Farm (rm_1)   ----  Village (rm_2)  ----  Whisperwood (rm_forest)
-  west     road       |  door  \ cave         road       | road and river   bridge (a village project)
-  side)               |   rm_12 <-> rm_123   rm_mine     |
-    |          Hollow Vale (rm_valley)  ----------  South Road (rm_south)
-    |                 |                lane above the river; the rivers join
+ Saltmere       Brindlemoor (rm_town)  ----  North Road (rm_north): the cliff, the mine's cave (rm_mine)
+  Coast               | main street      lane    | road, and the village river
+ (rm_beach,           |                          |
+  all the   ----  Crossroads (rm_cross) ----  Village (rm_2)  ----  Whisperwood (rm_forest)
+  west     road       |                road      | road and river   bridge (a village project)
+  side)               |                          |
+    |          Hollow Vale (rm_valley)  -------  South Road (rm_south)
+    |                 | path            lane above the river; the rivers join
     +---------- road below the river (the only way to the far south of the coast)
+                      |
+               The Farm (rm_1)   door: rm_12 <-> rm_123
 ```
 
-- **Farm** (`rm_1`, 77x40; widened west so its west edge lines up with Brindlemoor's and the vale's): the cliff along the north with the ladder up to town and the mine's cave, a yard with
-  your workbench by it; farmhouse in the west; the field in the middle; pond in the north-east; fenced pasture in
-  the south-east; woods along the south with a path through them. Roads east (village) and west (coast). Only you
-  live here; villagers cross it on their way between places.
+Buildings come from the building library (`tools/buildings`, tileset `TS_buildings`): the packs' preview pictures
+rebuilt from the packs' own tiles, placed in a spec with `tools/rooms/house.js` (the thing, its door and the
+interior's exit; `tools/rooms/sync_exits.js` points the interiors at their doorsteps).
+
+- **Farm** (`rm_1`, 77x40), at the foot of the vale; a path comes down to the lane across it. The farmhouse in the
+  west and the field in the middle (where they always were), the barn and silo in the north-east with the coop and
+  granary round the pasture, the windmill and a beehive shed in the north-west, the pond in the west meadow, woods
+  along the south. Farm pack buildings ([LPC] Farm). Only you live here.
 - **Farmhouse** (`rm_12` downstairs: kitchen, dining room, the hearth; `rm_123` upstairs: your bedroom -
   `BED_ROOM`, you wake up there). Furnished stamps from the first versions; all furniture is under the player and
   solid over its art.
-- **Village** (`rm_2`, 56x50): the hall on a cobbled square (notice board), the river with the bridge to
-  Whisperwood. Houses (`rm_village_*`): Elda's (north-west, potion sign), Brom's smithy (sword sign; the furnace is
-  inside) and Mara's general store on the lane south of the square, and on a second lane below, Aunt Hesta and
-  Tobin's house and Rowan's.
-- **Brindlemoor** (`rm_town`, 64x44): the town hall over a big market square, six houses; Garrick the watchman.
-  Every door leads inside (`rm_town_*`, built with `tools/rooms/interior.js`): the hall is the Brindle Inn (Lysa sells
-  a daily menu of meals), the sword sign Bryn's Outfitters (clothes and armour that fit you), the potion sign Morga's
-  Apothecary (Heal and Fireball scrolls, staves, forage, tonics); the other four are homes.
+- **Crossroads** (`rm_cross`, 77x40): empty so far; the roads between the coast, the village, Brindlemoor and the
+  vale. Villagers cross it on their way between places.
+- **Village** (`rm_2`, 56x50): thatched cottages dressed with the medieval village decorations. The hall (twin
+  cottages joined by a gateway) on a cobbled square (notice board, well), the river with the bridge to Whisperwood.
+  Houses (`rm_village_*`): Elda's little cottage (north-west, potion sign), Brom's smithy (the long cottage with
+  double doors, torches and a banner; the furnace is inside) and Mara's general store (market awnings) on the lane
+  south of the square, and on a second lane below, Aunt Hesta and Tobin's L-shaped cottage and Rowan's.
+- **Brindlemoor** (`rm_town`, 64x44): a colonial town ([LPC] Colonial Buildings) round a big cobbled square with a
+  clock tower; Garrick the watchman. Every door leads inside (`rm_town_*`, built with `tools/rooms/interior.js`):
+  the long brick hall with the clock tower is the Brindle Inn (Lysa sells a daily menu of meals), the bay-windowed
+  shop Bryn's Outfitters (clothes and armour that fit you), the small brick house with the potion sign Morga's
+  Apothecary (Heal and Fireball scrolls, staves, forage, tonics); the homes are Edwin's arched hall, Nell's
+  clapboard house, Hask's brick house and Ida and Fen's gabled one. Posy's flower stall is in the square.
 - **Saltmere Coast** (`rm_beach`, 48x153, the whole west side of the map): sea, a beach, a pier to fish from (sea
-  fish); Old Marlo's hut by the farm road (`rm_beach_hut`). Woods line its east edge, open only for the farm road, the
-  vale's river (which crosses the coast into the sea and cuts it in two) and the road from the vale's meadow below the
-  river - the only way onto the far south of the coast.
-- **Hollow Vale** (`rm_valley`, 77x65, its river running across): the path comes down from the farm past
-  Wren's ranch on the right (`rm_valley_ranch`: livestock; Pip works and lives there too) and Thorne's carpentry on
-  the left (`rm_valley_carpentry`: timber and stone; Rowan works its yard), over the river on a plank bridge to the
-  wildflower meadow; a lake in the north-west (river fish), wood and forage on both banks. A lane east above the
-  river to South Road; from the meadow below it, a road west to the far south of the coast.
-- **North Road** (`rm_north`, 68x44): empty so far. A road from Brindlemoor's east lane down to the village's north
-  road, and the village river coming up and bending away east (river fish).
+  fish); Old Marlo's cottage by the road to the Crossroads (`rm_beach_hut`). Woods line its east edge, open only for
+  that road, the vale's river (which crosses the coast into the sea and cuts it in two) and the road from the vale's
+  meadow below the river - the only way onto the far south of the coast.
+- **Hollow Vale** (`rm_valley`, 77x65, its river running across): the path comes down from the Crossroads past
+  Wren's ranch on the right (`rm_valley_ranch`, a long cottage with a wagon: livestock; Pip works and lives there
+  too) and Thorne's carpentry on the left (`rm_valley_carpentry`, the L-shaped cottage: timber and stone; Rowan works
+  its yard), over the river on a plank bridge to the wildflower meadow and on through the woods to the farm; a lake in
+  the north-west (river fish), wood and forage on both banks. A lane east above the river to South Road; from the
+  meadow below it, a road west to the far south of the coast.
+- **North Road** (`rm_north`, 68x44): the cliff along its north edge (the ladder is scenery) with the cave into the
+  mine, rocks and ore under it; a road from Brindlemoor's east lane down to the village's north road, and the village
+  river coming up and bending away east (river fish).
 - **South Road** (`rm_south`, 56x55): empty so far. The village's south road comes down and turns west into the vale's
   lane; the village river comes down the east side and turns west under it into the vale's river (river fish).
 - The world map (M in game) is `spr_world_map` and `scripts/world_map`, made by `node tools/rooms/worldmap.js` from

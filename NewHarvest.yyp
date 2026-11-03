@@ -10,6 +10,7 @@
   },
   "defaultScriptType":1,
   "Folders":[
+    {"$GMFolder":"","%Name":"Houses","folderPath":"folders/Sprites/Houses.yy","name":"Houses","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Items","folderPath":"folders/Sprites/Items.yy","name":"Items","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Furniture","folderPath":"folders/Sprites/Furniture.yy","name":"Furniture","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Effects","folderPath":"folders/Sprites/Effects.yy","name":"Effects","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -146,6 +147,12 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"spr_house_barn","path":"sprites/spr_house_barn/spr_house_barn.yy",},},
+    {"id":{"name":"spr_house_cottage","path":"sprites/spr_house_cottage/spr_house_cottage.yy",},},
+    {"id":{"name":"spr_house_lodge","path":"sprites/spr_house_lodge/spr_house_lodge.yy",},},
+    {"id":{"name":"spr_house_townhouse","path":"sprites/spr_house_townhouse/spr_house_townhouse.yy",},},
+    {"id":{"name":"spr_house_smithy","path":"sprites/spr_house_smithy/spr_house_smithy.yy",},},
+    {"id":{"name":"spr_house_farmhouse","path":"sprites/spr_house_farmhouse/spr_house_farmhouse.yy",},},
     {"id":{"name":"spr_mine_lift","path":"sprites/spr_mine_lift/spr_mine_lift.yy",},},
     {"id":{"name":"rm_cross","path":"rooms/rm_cross/rm_cross.yy",},},
     {"id":{"name":"TS_buildings","path":"tilesets/TS_buildings/TS_buildings.yy",},},

@@ -3,13 +3,13 @@
 //   node tools/buildings/ai_house.js <name> [...]   art/ai_houses/originals/<name>.png -> art/ai_houses/<name>.png
 //
 // PixelLab draws objects bigger than 200x200 on one flat colour instead of transparency, already at the game's pixel
-// scale (one art pixel per pixel). The background is cleared by a flood from the edges over pixels of (almost) that
+// scale (one art pixel per pixel). The background is cleared by a flood from the edges over pixels near that
 // colour - the buildings' 1px dark outline stops it - and the result is trimmed, so the building's base is the
 // bottom edge.
 const path = require("path");
 const {readPng, writePng, newImage} = require("../rooms/png.js");
 const DIR = path.join(__dirname, "../../art/ai_houses");
-const TOL = 12;
+const TOL = 40;
 
 function clearBackground(im){
 	const W = im.w, H = im.h, px = im.px, seen = new Uint8Array(W * H), st = [];

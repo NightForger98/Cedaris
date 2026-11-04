@@ -1,0 +1,7 @@
+"Animated Coins" by Clint Bellanger (Liberated Pixel Cup entry, 2012)
+https://opengameart.org/content/animated-coins-0  (sources: https://opengameart.org/content/animated-coins)
+License: CC-BY 3.0 / CC-BY-SA 3.0 / GPL 3.0 / GPL 2.0
+Attribution instructions (from the page): "Clint Bellanger for Liberated Pixel Art"
+
+coin_gold.png, coin_silver.png, coin_copper.png: 8 frames of 32x32 each (bobbing, spinning, a shine across);
+the coin's floor-centre is at (16, 28).

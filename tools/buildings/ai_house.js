@@ -5,7 +5,7 @@
 // PixelLab draws objects bigger than 200x200 on one flat colour instead of transparency, already at the game's pixel
 // scale (one art pixel per pixel). The background is cleared by a flood from the edges over pixels near that
 // colour - the buildings' 1px dark outline stops it - and the result is trimmed, so the building's base is the
-// bottom edge.
+// bottom edge. FIX (below) clears what a few drew that a building can't have (smoke, ground).
 const path = require("path");
 const {readPng, writePng, newImage} = require("../rooms/png.js");
 const DIR = path.join(__dirname, "../../art/ai_houses");
@@ -42,10 +42,52 @@ function trim(im){
 	return o;
 }
 
+// Things PixelLab drew that a building can't have, in rows of the trimmed picture: smoke above the chimney (cutTop
+// rows), the ground it stood on (cutBottom rows), grass tufts left at its foot (green pixels in the last grassRows).
+const FIX = {
+	brewery: {cutTop: 27},
+	lighthouse: {cutBottom: 13, grassRows: 8},
+};
+
+function clearRows(im, y0, y1){
+	for(let y = Math.max(0, y0); y < Math.min(im.h, y1); y++) for(let x = 0; x < im.w; x++) im.px[(y * im.w + x) * 4 + 3] = 0;
+}
+
+// Clear pieces smaller than min pixels that aren't joined to anything (8-way): what's left of a cut-away tuft.
+function dropSpecks(im, min){
+	const W = im.w, H = im.h, seen = new Uint8Array(W * H);
+	for(let s0 = 0; s0 < W * H; s0++){
+		if(seen[s0] || im.px[s0 * 4 + 3] < 128) continue;
+		const part = [], q = [s0];
+		seen[s0] = 1;
+		while(q.length){
+			const i = q.pop(); part.push(i);
+			const x = i % W, y = (i - x) / W;
+			for(let dy = -1; dy <= 1; dy++) for(let dx = -1; dx <= 1; dx++){
+				const xx = x + dx, yy = y + dy, j = yy * W + xx;
+				if(xx >= 0 && yy >= 0 && xx < W && yy < H && !seen[j] && im.px[j * 4 + 3] >= 128){ seen[j] = 1; q.push(j); }
+			}
+		}
+		if(part.length < min) for(const i of part) im.px[i * 4 + 3] = 0;
+	}
+}
+
 for(const name of process.argv.slice(2)){
 	const im = readPng(path.join(DIR, "originals", name + ".png"));
 	clearBackground(im);
-	const o = trim(im);
+	let o = trim(im);
+	const fix = FIX[name];
+	if(fix){
+		clearRows(o, 0, fix.cutTop || 0);
+		clearRows(o, o.h - (fix.cutBottom || 0), o.h);
+		const bottom = o.h - (fix.cutBottom || 0);
+		for(let y = bottom - (fix.grassRows || 0); y < bottom; y++) for(let x = 0; x < o.w; x++){
+			const i = (y * o.w + x) * 4, r = o.px[i], g = o.px[i + 1], b = o.px[i + 2];
+			if(g > r + 4 && g >= b) o.px[i + 3] = 0;	// greens, dark outline greens too
+		}
+		dropSpecks(o, 60);
+		o = trim(o);
+	}
 	writePng(path.join(DIR, name + ".png"), o);
 	console.log(name + ": " + o.w + "x" + o.h);
 }

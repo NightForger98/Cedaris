@@ -39,8 +39,35 @@ alchemist (320x384 canvas, 260x320): "pixel art alchemist shop and library with 
 two-storey cream half-timbered house ... on the left and a tall round brick tower on the right topped by a dark slate
 dome ... Arched windows, one with books behind it. One centred arched wooden door with a stone step ... One hanging
 sign with a green potion flask, a small green and white awning over a potion shelf."
-mill (384x320 canvas, 308x231): "pixel art watermill and warehouse ... A long wide two-storey building, much wider
+mill (384x320 canvas, 295x184): the second try. "pixel art watermill ... A long wide two-storey building, much wider
 than tall, its roof ridge running left to right ... golden thatched roof ... Grey stone base, red brick and cream
-half-timbered walls ... a stone chimney. A big wooden water wheel against the left wall. A loft door upstairs with a
-wooden hoist beam. One centred wooden double door at the bottom middle, a few crates and sacks beside it." (also
-"No water"). The wheel came out standing in a stone basin, and there is no hoist.
+half-timbered walls ... a stone chimney. A big wooden water wheel fixed to the left side wall of the building, its
+bottom dipping into a narrow strip of blue water (a mill race) along the bottom edge under the wheel only. On the
+upper floor, an open loft door with a small wooden hoist beam and a hanging sack. One centred wooden double door at
+the bottom middle, a few crates and sacks beside it." The hoist didn't come. originals/mill_first_try.png is the
+first (the wheel in a stone basin).
+
+Second batch, from the developer's concept sheets (content only), chosen for the villagers. The words that keep a
+building front-on: "wider than tall, its roof ridge running left to right ... no side walls visible".
+ranch_barn (352x320, 286x311): ranch barn and stable - red-brown planks, white trim, hay loft door, X-braced double door,
+  a hay bale and a trough.
+carpentry (352x320, 312x167): second try - "One single connected long wide building ... under one continuous golden
+  thatched roof ... Left half: cream half-timbered walls ... one wooden door. Right half: the same roof continues
+  over an open workshop bay with stacked lumber planks, logs and a sawhorse. A small hanging sign showing only a
+  picture of a saw, no letters." (the first try was two buildings with letters on the sign)
+bakery (352x320, 244x238): red clay tile roof, cream plaster and beams, a round brick oven chimney, bread under a red
+  and white awning, a bread sign.
+church (352x384, 210x324): grey stone chapel, a square bell tower in the middle with a bronze bell and a slate spire,
+  pointed arched windows, a rose window, an arched double door with steps.
+weaver (352x320, 318x240): thatched, half-timbered, flower boxes, bolts of red, blue and green cloth, yarn, a spool
+  sign.
+small_house (256x224, 168x173): one-storey thatched cottage, two shuttered windows with flower boxes.
+family_house (288x288, 196x233): two storeys, brick below and half-timbered above, slate roof, four windows, a porch,
+  a bench.
+brewery (352x320, 283x167): stone below, slate roof, kiln chimney, barrels by an arched double door. Its smoke is
+  cut off by ai_house.js (FIX).
+silo (256x352, 210x261): round stone silo with a slate cone and a small plank grain shed.
+lighthouse (256x384, 168x322): second try - "stand directly on the bottom edge of the canvas, on no platform, no
+  grass, no dirt, no rocks ... the bottom edge of the building is a straight horizontal line"; the thin grass strip
+  it still had is cut off by ai_house.js (FIX). The first try stood on an angled slab of ground.
+No fisherman's hut: three tries (the last with the wording above) all came out at an angle.

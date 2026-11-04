@@ -70,4 +70,18 @@ silo (256x352, 210x261): round stone silo with a slate cone and a small plank gr
 lighthouse (256x384, 168x322): second try - "stand directly on the bottom edge of the canvas, on no platform, no
   grass, no dirt, no rocks ... the bottom edge of the building is a straight horizontal line"; the thin grass strip
   it still had is cut off by ai_house.js (FIX). The first try stood on an angled slab of ground.
-No fisherman's hut: three tries (the last with the wording above) all came out at an angle.
+Three plain tries at a fisherman's hut all came out at an angle; see fisherman_hut below for the one that worked.
+
+fisherman_hut (168x163), Marlo's - made a different way, since plain prompts always drew huts at an angle:
+1. originals/fisherman_hut_base.png: small_house on a 192x192 grey canvas, its golden thatch recoloured to weathered
+   grey-brown (by script, no generation).
+2. PixelLab create_map_object in style-matching mode (background_image = the base, a custom mask =
+   originals/fisherman_hut_mask.png, white over the walls only), 1 generation: "weathered fisherman's hut front wall:
+   flat front elevation, the front wall parallel to the screen, no side wall visible, no perspective, no isometric.
+   Weathered grey-brown wooden plank walls with dark beams on a low grey stone base, a small shuttered window on each
+   side, one plain wooden door in the middle. A fishing net hung on the front wall, a coil of rope, a wooden crate of
+   fish and two oars leaning by the door, a small lantern by the door. Crisp pixels, 1px dark outline, soft muted
+   palette, LPC style". It returned only the new wall strip (originals/fisherman_hut_walls.png, rows 125-166).
+3. originals/fisherman_hut.png: stitched by hand on magenta - the recoloured roof, the new walls, and the base's stone
+   footing moved up 10 rows (the old door's bottom in it replaced by stone from beside it). ai_house.js clears the
+   magenta (FIX). No net or lantern came out; the fish in the crate read as white blobs.

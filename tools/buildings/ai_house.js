@@ -43,10 +43,12 @@ function trim(im){
 }
 
 // Things PixelLab drew that a building can't have, in rows of the trimmed picture: smoke above the chimney (cutTop
-// rows), the ground it stood on (cutBottom rows), grass tufts left at its foot (green pixels in the last grassRows).
+// rows), the ground it stood on (cutBottom rows), grass tufts left at its foot (green pixels in the last grassRows),
+// stray pixels of the key colour a hand-stitched original was put together on (key).
 const FIX = {
 	brewery: {cutTop: 27},
 	lighthouse: {cutBottom: 13, grassRows: 8},
+	fisherman_hut: {key: [255, 0, 255]},	// stitched by hand on magenta, see the README
 };
 
 function clearRows(im, y0, y1){
@@ -80,6 +82,8 @@ for(const name of process.argv.slice(2)){
 	if(fix){
 		clearRows(o, 0, fix.cutTop || 0);
 		clearRows(o, o.h - (fix.cutBottom || 0), o.h);
+		if(fix.key) for(let i = 0; i < o.w * o.h; i++)
+			if(Math.abs(o.px[i * 4] - fix.key[0]) + Math.abs(o.px[i * 4 + 1] - fix.key[1]) + Math.abs(o.px[i * 4 + 2] - fix.key[2]) < 60) o.px[i * 4 + 3] = 0;
 		const bottom = o.h - (fix.cutBottom || 0);
 		for(let y = bottom - (fix.grassRows || 0); y < bottom; y++) for(let x = 0; x < o.w; x++){
 			const i = (y * o.w + x) * 4, r = o.px[i], g = o.px[i + 1], b = o.px[i + 2];

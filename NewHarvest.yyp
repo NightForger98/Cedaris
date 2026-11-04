@@ -154,6 +154,7 @@
     {"id":{"name":"spr_house_carpentry","path":"sprites/spr_house_carpentry/spr_house_carpentry.yy",},},
     {"id":{"name":"spr_house_church","path":"sprites/spr_house_church/spr_house_church.yy",},},
     {"id":{"name":"spr_house_family_house","path":"sprites/spr_house_family_house/spr_house_family_house.yy",},},
+    {"id":{"name":"spr_house_fisherman_hut","path":"sprites/spr_house_fisherman_hut/spr_house_fisherman_hut.yy",},},
     {"id":{"name":"spr_house_lighthouse","path":"sprites/spr_house_lighthouse/spr_house_lighthouse.yy",},},
     {"id":{"name":"spr_house_market","path":"sprites/spr_house_market/spr_house_market.yy",},},
     {"id":{"name":"spr_house_market_small","path":"sprites/spr_house_market_small/spr_house_market_small.yy",},},

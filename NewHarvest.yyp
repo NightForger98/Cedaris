@@ -148,6 +148,7 @@
   "name":"NewHarvest",
   "resources":[
     {"id":{"name":"spr_house_tavern","path":"sprites/spr_house_tavern/spr_house_tavern.yy",},},
+    {"id":{"name":"spr_house_tavern_inn","path":"sprites/spr_house_tavern_inn/spr_house_tavern_inn.yy",},},
     {"id":{"name":"spr_house_windmill","path":"sprites/spr_house_windmill/spr_house_windmill.yy",},},
     {"id":{"name":"spr_house_barn","path":"sprites/spr_house_barn/spr_house_barn.yy",},},
     {"id":{"name":"spr_house_cottage","path":"sprites/spr_house_cottage/spr_house_cottage.yy",},},

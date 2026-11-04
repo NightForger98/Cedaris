@@ -20,12 +20,14 @@ reorganised. What's known about each source, so the credits go in with it (then 
 The adobe set's attribution instructions: link the page, "attribute Sharm as graphic artist, and me as contributor"
 (its `credit.txt` is in `Tilesets/`).
 
-## Still missing - need a link
+## Resolved since
 
-- `Tilesets/Outside_A1`-`A5`, `Outside_B`, `Inside_A2`, `Inside_A4`, `Inside_B`, `Inside_C` - LPC art repacked in
-  RPG Maker's tileset layout (who did the repack, and from which packs?). Some pieces (crates, flowers, white-brick and
-  wooden fronts) are Guido Bos's entry, now credited in `art/lpc_guido_bos`; most are the LPC Base Assets.
-- `Characters/!$clock.png`, `Characters/!$door.png`, `Characters/!fire.png`, `Characters/$princess.png` (the princess looks like the
-  girl in Guido Bos's interior entry - `art/lpc_guido_bos/inside-contest.png` - but that entry has no sprite sheet of her)
-- `System/Window.png`, `System/Window1.png` (an RPG Maker window skin - if it's RPG Maker's own, it can't be used
-  outside RPG Maker)
+- `Tilesets/Outside_A1`-`A5`, `Outside_B`, `Inside_A2`, `Inside_A4`, `Inside_B`, `Inside_C`, `Characters/!$clock.png`,
+  `!$door.png`, `!fire.png`, `$princess.png`, `System/Window.png`, `Window1.png`: byte for byte the files of Sharm's
+  [LPC: Modified base tiles](https://opengameart.org/content/lpc-modified-base-tiles) (Lanea Zimmerman, William
+  Thompson; CC-BY / CC-BY-SA / GPL / OGA-BY), now in `art/lpc_modified_base_tiles` and credited.
+
+## Still missing
+
+- The "free huge 32x32px tileset, 20000 tiles" from Reddit (r/gamedev, post koz8ik): Reddit can't be read from here -
+  its name or download link is needed to check the licence.

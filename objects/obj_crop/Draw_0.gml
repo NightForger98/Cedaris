@@ -6,11 +6,19 @@ cropType * frameHeight,
 frameWidth, frameHeight,
 xx,yy
 );
-//Draw the sparkle
+// The twinkle over a ripe crop: a little four-pointed star that grows and fades (5 steps)
 if(sparkle >= 0){
-	draw_sprite(spr_sparkle, sparkle,x +2, y -10); 	
+	var r = [1, 2, 3, 2, 1][floor(sparkle)], sx = x + 8, sy = y - 34;
+	draw_set_alpha(1 - floor(sparkle) * 0.12);
+	draw_set_colour(c_white);
+	draw_line(sx - r - 1, sy, sx + r + 1, sy);
+	draw_line(sx, sy - r - 1, sx, sy + r + 1);
+	draw_set_colour(make_colour_rgb(255, 240, 150));
+	draw_point(sx, sy);
+	draw_set_alpha(1);
+	draw_set_colour(c_white);
 	sparkle += .1;
-if(sparkle >= sprite_get_number(spr_sparkle)){
+if(sparkle >= 5){
 	sparkle = -1;
 	alarm[1] = random_range(4,5)*room_speed;
 }

@@ -515,6 +515,15 @@ function autotest_farm_state(){
 	return s + " | sprinklers in bag " + string(inv_count("o|sprinkler"));
 }
 
+/// @description A ripe crop of _type at (_x, _y) on the farm's field, twinkling (for a screenshot of the look)
+function autotest_ripe_crop(_x, _y, _type){
+	instance_create_crop(real(_x), real(_y), real(_type));
+	var c = instance_nearest(real(_x), real(_y), obj_crop);
+	if(c == noone) return "no crop";
+	with(c){ growthStage = maxGrowthStage; fullyGrown = true; sparkle = 2; }
+	return "ripe crop " + string(c.cropType);
+}
+
 /// @description The frame rate now: fps (capped at the game speed) and fps_real (how fast it could go), and how many
 /// instances the room holds.
 function autotest_fps_now(){ return "fps " + string(fps) + "  real " + string(round(fps_real)) + "  instances " + string(instance_count); }

@@ -1,0 +1,4 @@
+"Cookiez monsters (re entry)" by Ben Potter (Liberated Pixel Cup entry, 2012)
+https://opengameart.org/content/cookiez-monsters-re-entry
+License: CC-BY-SA 3.0 / GPL 3.0 (the Liberated Pixel Cup terms)
+Sprite sheets: bee, clam (attack), ghost, snake, a turtle (tt), a gnu wizard (attack); gifs/ the animations.

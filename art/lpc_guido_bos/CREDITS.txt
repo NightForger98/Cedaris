@@ -1,0 +1,6 @@
+"Flowers, buildings and boxes; Interior wooden tiles; some old castle stuff" by Guido Bos (Liberated Pixel Cup entry, 2012)
+https://opengameart.org/content/flowers-buildings-and-boxes-interior-wooden-tiles-some-old-castle-stuff
+(combined entry, also https://opengameart.org/content/interior-wooden-tiles and https://opengameart.org/content/3rd-entry-some-old-castle-stuff)
+License: CC-BY-SA 3.0 / GPL 3.0 (the Liberated Pixel Cup terms)
+contest-art.png: crates, wood and white-brick building fronts, about 13 flowers, a bush, a rock, street paving;
+castle-contest.png: old castle walls, stairs and pieces; inside-contest.png: wooden interior walls and floor.

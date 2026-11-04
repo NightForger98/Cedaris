@@ -1,0 +1,4 @@
+"Items set" by Artur Reterski (Liberated Pixel Cup entry, 2012)
+https://opengameart.org/content/items-set
+License: CC-BY-SA 3.0 / GPL 3.0 (the Liberated Pixel Cup terms)
+items.png: 30 equipment icons, 32x32 (helmets, gloves, potions, rings, swords, axes, spears, staves, shields), by type and quality (basic, good, premium).

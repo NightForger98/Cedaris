@@ -70,6 +70,8 @@ const FIX = {
 	home_hayward: {},	// a speckled background: only the loose specks (dropped below) need clearing
 	home_ward: {tol: 90}, cafe_terrace: {tol: 90},	// speckled backgrounds
 	prop_sea_arch: {holes: true},	// the sky seen through the arch
+	windmill: {cutBottom: 24, grassRows: 34},	// a patch of grass and a path round its foot
+	oakhart_farmhouse: {},	// a faint signature in a corner (dropped as specks)
 	home_larkspun: {cutBottom: 25}, rangers_cabin: {cutBottom: 26}, home_frere: {grassRows: 6},	// a path drawn down from the door
 };
 

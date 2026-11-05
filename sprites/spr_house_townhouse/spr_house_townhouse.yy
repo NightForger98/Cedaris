@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_house_townhouse",
   "bboxMode":0,
-  "bbox_bottom":282,
+  "bbox_bottom":245,
   "bbox_left":0,
-  "bbox_right":242,
+  "bbox_right":169,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"656fcb92-2b3b-478f-b0e1-9d44124d37d2","name":"656fcb92-2b3b-478f-b0e1-9d44124d37d2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b5b02763-5213-4c8b-84eb-24bf5e273b44","name":"b5b02763-5213-4c8b-84eb-24bf5e273b44","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":283,
+  "height":246,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"060c0280-e5cf-4799-b4ce-c79aee9eb6ff","blendMode":0,"displayName":"default","isLocked":false,"name":"060c0280-e5cf-4799-b4ce-c79aee9eb6ff","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"ac3744b3-01c6-444a-8e1e-3a7aab5d49b8","blendMode":0,"displayName":"default","isLocked":false,"name":"ac3744b3-01c6-444a-8e1e-3a7aab5d49b8","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_townhouse",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"656fcb92-2b3b-478f-b0e1-9d44124d37d2","path":"sprites/spr_house_townhouse/spr_house_townhouse.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"8545454a-79ee-466e-b49e-d0a9f533e4a1","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"b5b02763-5213-4c8b-84eb-24bf5e273b44","path":"sprites/spr_house_townhouse/spr_house_townhouse.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"e2f2a4d7-6658-4196-8871-83fbe10bdc08","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":243,
+  "width":170,
 }

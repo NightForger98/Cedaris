@@ -2,7 +2,7 @@
 const {interior} = require("../interior.js");
 module.exports = interior({
 	w: 16, h: 11, door: 7, wall: "paper", floor: "checker",
-	exit: {room: "rm_beaconhill", x: 496, y: 308},
+	exit: {room: "rm_beaconhill", x: 432, y: 308},
 	furniture: [
 		{is: "cupboard", at: [1, 2]}, {is: "shelf_low", at: [2, 2]}, {is: "drawers", at: [3, 2]}, {is: "window", at: [5, 1]}, {is: "portrait", at: [8, 1]},
 		{is: "bed_small", at: [10, 2]}, {is: "bed", at: [13, 2]},

@@ -14,12 +14,13 @@ const {readPng} = require("./png.js");
 const root = path.join(__dirname, "..", "..");
 
 const DOORS = {
-	alchemist: 42, bakery: 50, barn: 98, blacksmith: 97, brewery: 146, carpentry: 71, church: 106, cottage: 117,
-	family_house: 97, farmhouse: 140, fisherman_hut: 48, lighthouse: 97, lodge: 103, market: 160, market_small: 97,
-	mill: 182, ranch_barn: 142, silo: 60, small_house: 84, smithy: 112, tavern: 115, tavern_inn: 92, townhouse: 122,
-	town_hall: 165, weaver: 161, windmill: 99,
+	alchemist: 42, bakery: 50, barn: 98, blacksmith: 97, brewery: 146, carpentry: 71, church: 106, cottage: 48,
+	family_house: 97, farmhouse: 140, fisherman_hut: 48, lighthouse: 97, lodge: 201, market: 160, market_small: 97,
+	mill: 182, ranch_barn: 142, silo: 60, small_house: 84, smithy: 112, tavern: 115, tavern_inn: 92, townhouse: 84,
+	town_hall: 165, weaver: 161, windmill: 83,
 	witch_tower: 75, guild_hall: 150, tool_shop: 50, hospital: 130, library: 150,
 	olive_press: 117, tinker_workshop: 82, boatyard: 112, glassworks: 132, stables: 137,
+	oakhart_farmhouse: 132,
 	home_saba: 95, home_brassbolt: 120, home_saltwhistle: 111, home_fairglass: 107, home_hayward: 104,
 	home_larkspun: 121, home_silverbough: 114, home_frere: 143, home_quill: 81, home_ward: 63, home_tawil: 98, home_kassar: 91, home_night: 131, farmhouse_1: 78, farmhouse_2: 78, farmhouse_3: 96, farmhouse_4: 62,
 };

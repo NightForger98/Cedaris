@@ -1,5 +1,5 @@
-targetRoom = rm_manara;
-targetX = 464;
-targetY = 1464;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+targetRoom = rm_verdun;
+targetX = 976;
+targetY = 72;
+PlayerFacingBefore = dir.down;
+PlayerFacingAfter = dir.down;

@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_house_lodge",
   "bboxMode":0,
-  "bbox_bottom":216,
+  "bbox_bottom":164,
   "bbox_left":0,
-  "bbox_right":290,
+  "bbox_right":236,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"edbcbf78-1ca0-4266-97cd-60df3b8667ad","name":"edbcbf78-1ca0-4266-97cd-60df3b8667ad","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"97f58f54-34a9-4e79-88dc-10507b336495","name":"97f58f54-34a9-4e79-88dc-10507b336495","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":217,
+  "height":165,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"fa0828f3-4dbd-45ba-a606-fe5eea39d6e2","blendMode":0,"displayName":"default","isLocked":false,"name":"fa0828f3-4dbd-45ba-a606-fe5eea39d6e2","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"39560bf1-cd16-48e9-8d45-beb110c28a41","blendMode":0,"displayName":"default","isLocked":false,"name":"39560bf1-cd16-48e9-8d45-beb110c28a41","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_lodge",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"edbcbf78-1ca0-4266-97cd-60df3b8667ad","path":"sprites/spr_house_lodge/spr_house_lodge.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"a55492b8-55aa-47f2-b4f5-b470ad472948","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"97f58f54-34a9-4e79-88dc-10507b336495","path":"sprites/spr_house_lodge/spr_house_lodge.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"39a5f74d-699d-4fcd-88bc-1241a69d0e58","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":291,
+  "width":237,
 }

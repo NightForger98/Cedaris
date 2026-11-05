@@ -176,3 +176,13 @@ grey background", so its pale rock doesn't melt into the background).
   prop_miners_camp, prop_botanical, prop_overlook, prop_turtle_nests
 Cleaning options added to tools/buildings/ai_house.js for these: tol (a speckled background), holes (background seen
 through an arch), cutBottom for a path drawn down from the door.
+
+Fourth batch, 2026-11-05: PixelLab remakes of the Meshy buildings still in the world (their finer detail and darker
+palette didn't sit with the rest), same settings, the prompts' usual ending plus "nothing around the building, plain
+flat grey background", a PixelLab building of the same kind as color_image, 3 tries each:
+- lodge (the hotel, Well's Head; color tavern_inn), townhouse (the Goldcrests, Red Street; family_house), cottage (the
+  Ironveins, Beacon Hill: a dwarf miners' stone cottage; blacksmith), windmill (Victory Hill; mill - retried without
+  color_image, "fills the whole canvas, no ground, no base", its grass patch cleaned off), oakhart_farmhouse (Rowan's
+  family of builders, Victory Hill; carpentry - a faint signature in a corner dropped as specks)
+- the tavern now uses tavern_inn and the smithy blacksmith (PixelLab ones made earlier for them and never placed)
+The Meshy sprites spr_house_barn, spr_house_farmhouse, spr_house_smithy and spr_house_tavern are no longer placed.

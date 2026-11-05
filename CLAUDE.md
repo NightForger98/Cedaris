@@ -120,6 +120,13 @@ and retries are in `art/ai_houses/README.txt`. Words that keep a building front-
 wider than tall, its roof ridge running left to right"; "farmhouse" brings fences and ground, "cottage" doesn't;
 "nothing around the building, plain flat grey background" for clean edges.
 
+**Art direction (the user, 2026-11-05)**: all the map's art is to be PixelLab, in the style of these buildings; only
+what comes from the LPC character generator stays (characters, clothes, equipment, held tools and their icons). No
+Meshy building is placed any more (the last five were remade, the tavern and smithy use `tavern_inn` / `blacksmith`).
+Monsters, farm animals and anything LPC with seasonal versions (trees, bushes, terrain) stay LPC for now. Still to
+remake, in this order: inventory icons drawn with shapes and seed packets, crops, gatherable trees and rocks with
+stages, then the terrain (the user will design the map with PixelLab first), interiors with the indoor-room remake.
+
 **Not done yet**: farm buildings at Garth's; the
 horse, the minecart, the sewers and the cave passage, teleporting; a different routine on shop days off per season
 (most have one day-off routine all year); explosives for Fen; real stock for the bakery, flowers and furniture;

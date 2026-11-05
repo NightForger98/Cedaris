@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_house_windmill",
   "bboxMode":0,
-  "bbox_bottom":279,
+  "bbox_bottom":231,
   "bbox_left":0,
-  "bbox_right":194,
+  "bbox_right":162,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"d1b935c8-96ff-429d-9316-1072553a801d","name":"d1b935c8-96ff-429d-9316-1072553a801d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"839cd2cd-dc6c-456f-ac0f-3bd0aef78cfb","name":"839cd2cd-dc6c-456f-ac0f-3bd0aef78cfb","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":280,
+  "height":232,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"9529e00e-238c-4b5c-a53d-3028d6af848f","blendMode":0,"displayName":"default","isLocked":false,"name":"9529e00e-238c-4b5c-a53d-3028d6af848f","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"cec70d30-1ad7-4937-85e3-58d4bfe75916","blendMode":0,"displayName":"default","isLocked":false,"name":"cec70d30-1ad7-4937-85e3-58d4bfe75916","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_windmill",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"d1b935c8-96ff-429d-9316-1072553a801d","path":"sprites/spr_house_windmill/spr_house_windmill.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"bcdca05f-5525-49c0-bd85-c097c113b711","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"839cd2cd-dc6c-456f-ac0f-3bd0aef78cfb","path":"sprites/spr_house_windmill/spr_house_windmill.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"d33129b4-b0a5-4823-bcb4-d13c139d8008","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":195,
+  "width":163,
 }

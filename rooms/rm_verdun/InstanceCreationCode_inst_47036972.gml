@@ -1,5 +1,5 @@
 targetRoom = rm_redstreet;
-targetX = 528;
-targetY = 760;
+targetX = 464;
+targetY = 728;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

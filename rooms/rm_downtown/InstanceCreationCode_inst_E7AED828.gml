@@ -1,5 +1,5 @@
-targetRoom = rm_bank;
-targetX = 256;
-targetY = 312;
+targetRoom = rm_starsand;
+targetX = 592;
+targetY = 1432;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

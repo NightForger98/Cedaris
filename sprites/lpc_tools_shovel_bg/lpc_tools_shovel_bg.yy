@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_tools_shovel_bg",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"c06053a3-9912-4849-9add-b92b68a05ebd","blendMode":0,"displayName":"default","isLocked":false,"name":"c06053a3-9912-4849-9add-b92b68a05ebd","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

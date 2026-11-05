@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_nose_button_adult",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"775f958f-0051-4dea-9f6c-40327db207fb","blendMode":0,"displayName":"default","isLocked":false,"name":"775f958f-0051-4dea-9f6c-40327db207fb","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

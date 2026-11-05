@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_feet_sandals_male",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"7def197c-e1fa-48fc-8375-0c1d28763ca8","blendMode":0,"displayName":"default","isLocked":false,"name":"7def197c-e1fa-48fc-8375-0c1d28763ca8","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

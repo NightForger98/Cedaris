@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_heads_human_male_gaunt_g2",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"ad1d6510-ea0c-41dd-8953-4ca909ebe836","blendMode":0,"displayName":"default","isLocked":false,"name":"ad1d6510-ea0c-41dd-8953-4ca909ebe836","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

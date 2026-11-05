@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_backpack_jetpack_male_steel_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"dbd68671-3c87-4b0c-9532-aad44db26f18","blendMode":0,"displayName":"default","isLocked":false,"name":"dbd68671-3c87-4b0c-9532-aad44db26f18","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

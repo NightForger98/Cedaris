@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hat_headband_thick_adult",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"fac8b6f9-4330-4375-bf95-107e0c51d1ac","blendMode":0,"displayName":"default","isLocked":false,"name":"fac8b6f9-4330-4375-bf95-107e0c51d1ac","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

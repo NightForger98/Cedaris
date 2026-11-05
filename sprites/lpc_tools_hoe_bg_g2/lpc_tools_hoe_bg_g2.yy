@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_tools_hoe_bg_g2",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"bb0f4aa3-c413-45ca-a979-f8fdf160fd35","blendMode":0,"displayName":"default","isLocked":false,"name":"bb0f4aa3-c413-45ca-a979-f8fdf160fd35","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

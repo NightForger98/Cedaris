@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hair_extensions_ponytails_topknot_long_adult_fg",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"14fd47c6-7156-4e30-95b6-227d68d90ca6","blendMode":0,"displayName":"default","isLocked":false,"name":"14fd47c6-7156-4e30-95b6-227d68d90ca6","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_backpack_jetpack_female_steel_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"20c74b65-6641-4d66-abd2-a4699afd0eb1","blendMode":0,"displayName":"default","isLocked":false,"name":"20c74b65-6641-4d66-abd2-a4699afd0eb1","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

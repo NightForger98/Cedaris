@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_neck_gem_round_female_yellow_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"4c51de7d-f2cd-403b-b573-f222fa646763","blendMode":0,"displayName":"default","isLocked":false,"name":"4c51de7d-f2cd-403b-b573-f222fa646763","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

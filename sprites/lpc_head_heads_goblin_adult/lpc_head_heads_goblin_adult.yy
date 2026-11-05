@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_heads_goblin_adult",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"ef7497be-9689-4d86-90d5-ced69669cac6","blendMode":0,"displayName":"default","isLocked":false,"name":"ef7497be-9689-4d86-90d5-ced69669cac6","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

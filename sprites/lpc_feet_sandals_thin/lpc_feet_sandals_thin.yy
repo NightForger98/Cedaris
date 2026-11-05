@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_feet_sandals_thin",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"de8147b5-4656-42bd-9667-76b71056e694","blendMode":0,"displayName":"default","isLocked":false,"name":"de8147b5-4656-42bd-9667-76b71056e694","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

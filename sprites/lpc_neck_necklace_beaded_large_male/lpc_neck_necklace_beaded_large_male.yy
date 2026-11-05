@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_neck_necklace_beaded_large_male",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"c40bdb2e-044c-41a7-a2c7-3fca220b2766","blendMode":0,"displayName":"default","isLocked":false,"name":"c40bdb2e-044c-41a7-a2c7-3fca220b2766","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

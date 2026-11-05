@@ -13,9 +13,9 @@ using System.Runtime.InteropServices;
 public static class LpcConv {
     // Universal sheet rows (64px each) for each animation
     static readonly Dictionary<string, int> Row = new Dictionary<string, int> {
-        {"spellcast", 0}, {"thrust", 4}, {"walk", 8}, {"slash", 12}, {"shoot", 16}, {"hurt", 20}, {"watering", 21}
+        {"spellcast", 0}, {"thrust", 4}, {"walk", 8}, {"slash", 12}, {"shoot", 16}, {"hurt", 20}, {"watering", 21}, {"run", 25}
     };
-    const int Rows = 25;
+    const int Rows = 29;
 
     static int[] Read(string path, out int w, out int h) {
         using (var bmp = new Bitmap(path)) {

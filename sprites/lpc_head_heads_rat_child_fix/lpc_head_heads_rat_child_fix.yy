@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_heads_rat_child_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"88b0e6ec-094f-43e9-b177-c6534a532306","blendMode":0,"displayName":"default","isLocked":false,"name":"88b0e6ec-094f-43e9-b177-c6534a532306","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

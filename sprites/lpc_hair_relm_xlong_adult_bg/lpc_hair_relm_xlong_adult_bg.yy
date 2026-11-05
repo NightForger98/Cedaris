@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hair_relm_xlong_adult_bg",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"3bba463e-e3fc-4c83-8915-c5faf47756f2","blendMode":0,"displayName":"default","isLocked":false,"name":"3bba463e-e3fc-4c83-8915-c5faf47756f2","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

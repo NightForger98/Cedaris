@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_beards_beard_5oclock_shadow",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"4d4cec88-7653-4b3f-893b-8d52bbb2e976","blendMode":0,"displayName":"default","isLocked":false,"name":"4d4cec88-7653-4b3f-893b-8d52bbb2e976","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

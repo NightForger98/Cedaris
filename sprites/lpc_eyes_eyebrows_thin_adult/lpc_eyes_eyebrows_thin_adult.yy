@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_eyes_eyebrows_thin_adult",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"c48820ef-212d-4c50-9a2a-b0030b774d34","blendMode":0,"displayName":"default","isLocked":false,"name":"c48820ef-212d-4c50-9a2a-b0030b774d34","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

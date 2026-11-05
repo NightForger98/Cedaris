@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hair_sara_adult_fg",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"f167cd10-03f0-4355-a2f4-f82b259829ae","blendMode":0,"displayName":"default","isLocked":false,"name":"f167cd10-03f0-4355-a2f4-f82b259829ae","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

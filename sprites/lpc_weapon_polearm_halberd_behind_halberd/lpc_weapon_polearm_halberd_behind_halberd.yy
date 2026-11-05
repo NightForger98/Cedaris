@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_weapon_polearm_halberd_behind_halberd",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"daa5a8f1-5163-402d-83ed-59c5353c9407","blendMode":0,"displayName":"default","isLocked":false,"name":"daa5a8f1-5163-402d-83ed-59c5353c9407","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

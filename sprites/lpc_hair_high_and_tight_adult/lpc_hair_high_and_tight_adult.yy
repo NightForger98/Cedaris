@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hair_high_and_tight_adult",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"4f561e40-0a3a-4041-86c2-332f553ae61d","blendMode":0,"displayName":"default","isLocked":false,"name":"4f561e40-0a3a-4041-86c2-332f553ae61d","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

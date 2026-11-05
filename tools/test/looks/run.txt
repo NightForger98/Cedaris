@@ -1,0 +1,38 @@
+# Not in the suite (it only takes pictures): sprinting with the LPC run cycle in each direction, and with a bow
+# (no run art: it keeps its walk_128 carrying pose). bash tools/test/autotest.sh tools/test/looks/run.txt
+start story
+wait 60
+time 12
+pos 600 470
+keydown shift
+keydown right
+wait 9
+shot run_e1
+wait 4
+shot run_e2
+keyup right
+keydown down
+wait 9
+shot run_s
+keyup down
+keydown left
+wait 9
+shot run_w
+keyup left
+keydown up
+wait 9
+shot run_n
+keyup up
+keyup shift
+give c|held|Bow
+equip c|held|Bow
+pos 600 470
+keydown shift
+keydown right
+wait 9
+shot run_bow
+keyup right
+keyup shift
+wait 10
+shot stand_bow
+quit

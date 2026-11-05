@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_neck_gem_marquise_female_yellow_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"4ee9b057-c5e9-4347-8e14-4df6903b96fe","blendMode":0,"displayName":"default","isLocked":false,"name":"4ee9b057-c5e9-4347-8e14-4df6903b96fe","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

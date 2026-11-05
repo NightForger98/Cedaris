@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hat_magic_large_adult_brown_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"37369dce-a4ab-44f3-8cf6-9b2b0f7bb035","blendMode":0,"displayName":"default","isLocked":false,"name":"37369dce-a4ab-44f3-8cf6-9b2b0f7bb035","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

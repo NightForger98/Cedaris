@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_heads_minotaur_female",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"a05e62d4-4a7c-407e-807c-3cb4185c0e41","blendMode":0,"displayName":"default","isLocked":false,"name":"a05e62d4-4a7c-407e-807c-3cb4185c0e41","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

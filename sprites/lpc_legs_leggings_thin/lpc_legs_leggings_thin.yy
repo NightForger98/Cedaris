@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_legs_leggings_thin",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"2ff61e00-0974-4dbf-a3a6-7f16fff3e297","blendMode":0,"displayName":"default","isLocked":false,"name":"2ff61e00-0974-4dbf-a3a6-7f16fff3e297","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

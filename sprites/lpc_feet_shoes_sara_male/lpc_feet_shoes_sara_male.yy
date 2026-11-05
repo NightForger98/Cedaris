@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_feet_shoes_sara_male",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"54331ce5-ef2c-482b-9738-253e7a576ddb","blendMode":0,"displayName":"default","isLocked":false,"name":"54331ce5-ef2c-482b-9738-253e7a576ddb","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

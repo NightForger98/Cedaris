@@ -295,7 +295,7 @@ gml = '''/// Generated from the Universal LPC Spritesheet Character Generator by
 /// Each layer has a draw depth z (higher draws on top) and, per body type, a list of
 /// sprites with how each is coloured:
 ///   k = -1 selectable palette, -2 skin palette, -3 eye palette, -4 fixed colours, or a fixed palette sprite.
-/// Sheets use the universal LPC layout (64x64 frames, walk cycle in rows 8-11, watering in rows 21-24).
+/// Sheets use the universal LPC layout (64x64 frames, walk cycle in rows 8-11, watering in rows 21-24, run in rows 25-28).
 /// anims: the LPC animations the item supports. actions: layers for LPC custom (oversized) animations,
 /// in sheets of 4 rows (n, w, s, e) of cat.anims[name].fs-sized frames; while one plays, the body replays
 /// frames seq[direction][i] of its cat.anims[name].base animation.

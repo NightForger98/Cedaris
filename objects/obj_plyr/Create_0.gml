@@ -4,6 +4,7 @@ w_spd= 1.5;
 n_spd= 3;
 r_spd= 4.5;   // walk / normal / run: px a frame (the new world is bigger; roads add ROAD_BOOST)
 spd = n_spd;
+sprinting = false;   // the run key held (Step): moving shows the LPC run cycle
 x_frame =0;
 y_frame =0;
 moveX=0;

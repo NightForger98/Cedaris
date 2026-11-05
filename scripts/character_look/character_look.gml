@@ -414,6 +414,15 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 		var pal = (part.pal == -1) ? it.defPal : part.pal;
 		var layers = it.layers;
 		var lsx = sx, lsy = sy, lsw = 64, ldx = _x, ldy = _y;
+		// Running (rows 25-28): an item with no run art (skirts, dresses, capes, necklaces, held tools) shows its walk
+		// frame for the same step instead (run frame i is walk frame i + 1, rows 8-11)
+		var fr = _frame, rw = _row;
+		if(act == undefined && _row >= 25 && _row <= 28 && array_get_index(it.anims, "run") == -1){
+			// (a held tool would float beside the running arms: it's put away, unless it's carried on the back - the bows)
+			if(slots[s].key == "held" && !variable_struct_exists(it.actions, "walk_128")) continue;
+			fr = 1 + (_frame mod 8); rw = _row - 17;
+			lsx = fr * 64; lsy = rw * 64;
+		}
 		// During a custom action the held item swaps to its oversized sheet, centred on the 64px body
 		if(act != undefined && act.custom && slots[s].key == "held" && variable_struct_exists(it.actions, act.name)){
 			layers = it.actions[$ act.name];
@@ -425,12 +434,12 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 		}
 		// Walking (or standing) with a held item carried by an oversized walk (the bows, the long spears, the katana):
 		// its walk_128 sheet, frame for frame with the body's walk (rows 8-11: n, w, s, e)
-		else if(act == undefined && slots[s].key == "held" && _row >= 8 && _row < 12 && variable_struct_exists(it.actions, "walk_128")){
+		else if(act == undefined && slots[s].key == "held" && rw >= 8 && rw < 12 && variable_struct_exists(it.actions, "walk_128")){
 			var wfs = cat.anims[$ "walk_128"].fs;
 			layers = it.actions[$ "walk_128"];
 			lsw = wfs;
-			lsx = _frame * wfs;
-			lsy = (_row - 8) * wfs;
+			lsx = fr * wfs;
+			lsy = (rw - 8) * wfs;
 			ldx = _x - (wfs - 64) / 2 * _scale;
 			ldy = _y - (wfs - 64) / 2 * _scale;
 		}

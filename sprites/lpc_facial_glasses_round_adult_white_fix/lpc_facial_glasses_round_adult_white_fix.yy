@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_facial_glasses_round_adult_white_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"e91f8a1d-9a6b-4767-9793-fc667c98726c","blendMode":0,"displayName":"default","isLocked":false,"name":"e91f8a1d-9a6b-4767-9793-fc667c98726c","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

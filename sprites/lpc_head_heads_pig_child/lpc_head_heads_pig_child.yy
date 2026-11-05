@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_heads_pig_child",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"93b5ddb7-cbdb-442d-8415-d193b19ef7d7","blendMode":0,"displayName":"default","isLocked":false,"name":"93b5ddb7-cbdb-442d-8415-d193b19ef7d7","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

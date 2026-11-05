@@ -128,8 +128,9 @@ var in_left = input_held(key_of("left"));   // keys from Options > Controls
 var in_right = input_held(key_of("right"));
 var in_up = input_held(key_of("up"));
 var in_down = input_held(key_of("down"));
-var in_walk = keyboard_check(key_of("walk"));
-var in_run = keyboard_check(key_of("run"));
+var in_walk = input_held(key_of("walk"));
+var in_run = input_held(key_of("run"));
+sprinting = in_run;   // drawn with the run cycle while moving (Draw)
 	//ALTERSPEED
 if(in_walk || in_run){
 	spd=abs((in_walk*w_spd)-(in_run*r_spd));

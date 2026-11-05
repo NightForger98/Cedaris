@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_ears_big_child",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"3ff97f45-7df4-4f38-a297-b6c1fc5d2b55","blendMode":0,"displayName":"default","isLocked":false,"name":"3ff97f45-7df4-4f38-a297-b6c1fc5d2b55","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_arms_hands_gloves_male",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"c6bad91c-7011-4a32-8c35-cbeb34639944","blendMode":0,"displayName":"default","isLocked":false,"name":"c6bad91c-7011-4a32-8c35-cbeb34639944","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_torso_aprons_suspenders_male_white_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"425d394b-3fb7-4e7d-84d5-bbf14d04849c","blendMode":0,"displayName":"default","isLocked":false,"name":"425d394b-3fb7-4e7d-84d5-bbf14d04849c","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

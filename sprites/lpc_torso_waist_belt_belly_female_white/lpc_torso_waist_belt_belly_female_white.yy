@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_torso_waist_belt_belly_female_white",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"d216e3cd-5367-468b-8902-d9893ac69260","blendMode":0,"displayName":"default","isLocked":false,"name":"d216e3cd-5367-468b-8902-d9893ac69260","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

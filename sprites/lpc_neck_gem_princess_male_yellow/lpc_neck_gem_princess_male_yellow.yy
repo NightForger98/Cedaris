@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_neck_gem_princess_male_yellow",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"f2c77ec7-25c9-4fea-92ab-030122171955","blendMode":0,"displayName":"default","isLocked":false,"name":"f2c77ec7-25c9-4fea-92ab-030122171955","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

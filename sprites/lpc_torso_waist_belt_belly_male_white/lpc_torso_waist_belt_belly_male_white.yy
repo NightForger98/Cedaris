@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_torso_waist_belt_belly_male_white",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"f5cde8d4-72c5-4f23-a8f5-f5d50581dcd4","blendMode":0,"displayName":"default","isLocked":false,"name":"f5cde8d4-72c5-4f23-a8f5-f5d50581dcd4","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

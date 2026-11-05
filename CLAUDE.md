@@ -490,6 +490,12 @@ frames, frame for frame with the body's walk), which `character_draw` swaps in f
 walking or standing (the long spears, katana, scimitar and longsword alt too). `plan.py` names them Bow / Recurve Bow /
 Great Bow (`RENAME`) and gives each one natural wood finish in fixed colours (`BOW_WOOD`); arrows (`m|arrow`) are
 their ammo, Hask sells both.
+Run (2026-11-06): sheets have 29 rows now - the LPC run cycle (8 frames) in rows 25-28 (n, w, s, e), for sprinting
+(obj_plyr `sprinting`: the run key held while moving). An item with no run art shows its walk frame for the same step
+(run frame i = walk frame i + 1); a held tool without run art is put away while sprinting, a bow keeps its walk_128
+carrying pose; the child body has no run art, so a child keeps walking. The other newer LPC animations (idle, jump, sit,
+emote, climb, combat stance, the one-handed swings) aren't converted yet; add them the same way (a row in `convert.ps1`,
+the name in `plan.py`'s `ANIMS`).
 
 LPC art is CC-BY-SA 3.0, GPL 3.0 and/or OGA-BY 3.0, depending on the piece; `LPC_CREDITS.csv` lists the authors and
 licences for every piece used, and the game's credits must include them.

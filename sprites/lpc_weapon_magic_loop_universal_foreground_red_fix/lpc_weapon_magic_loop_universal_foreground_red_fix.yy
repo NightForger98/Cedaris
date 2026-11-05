@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_weapon_magic_loop_universal_foreground_red_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"dfbfa7ac-58da-4796-8453-a999cecf70e8","blendMode":0,"displayName":"default","isLocked":false,"name":"dfbfa7ac-58da-4796-8453-a999cecf70e8","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

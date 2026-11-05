@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_backpack_squarepack_male_white_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"3c1ff8c8-8fd1-42b3-b14a-9932ed94abab","blendMode":0,"displayName":"default","isLocked":false,"name":"3c1ff8c8-8fd1-42b3-b14a-9932ed94abab","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

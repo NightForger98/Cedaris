@@ -43,4 +43,7 @@ else if(act != undefined){
 	if(motion != undefined && motion.type == "swing") charge_draw_swing(id);
 	if(motion != undefined && motion.type == "slam") charge_draw_slam(id);
 }
+// Sprinting (the run key, moving): the LPC run cycle, rows 25-28 (8 frames, n w s e), stepped by the walk counter;
+// a child has no run art, so keeps the walk
+else if(sprinting && facing != -1 && look.body != "child") character_draw(look, (max(1, floor(x_frame)) - 1) mod 8, y_frame + 17, xx, yy, 1);
 else character_draw(look, floor(x_frame), y_frame, xx, yy, 1);

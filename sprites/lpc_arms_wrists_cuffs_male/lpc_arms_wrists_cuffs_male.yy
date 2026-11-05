@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_arms_wrists_cuffs_male",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"c176575a-1535-430e-8a59-6f862e049fa8","blendMode":0,"displayName":"default","isLocked":false,"name":"c176575a-1535-430e-8a59-6f862e049fa8","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

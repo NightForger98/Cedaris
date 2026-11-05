@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hat_pirate_bicorne_athwart_basic_adult_white",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"6b6d94d7-2c68-4e02-94e9-2c3e611d3c6f","blendMode":0,"displayName":"default","isLocked":false,"name":"6b6d94d7-2c68-4e02-94e9-2c3e611d3c6f","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

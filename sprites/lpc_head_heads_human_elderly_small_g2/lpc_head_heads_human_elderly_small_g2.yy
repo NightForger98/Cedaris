@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_heads_human_elderly_small_g2",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"c81558d3-bf37-44e1-8da6-66da5758d3af","blendMode":0,"displayName":"default","isLocked":false,"name":"c81558d3-bf37-44e1-8da6-66da5758d3af","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

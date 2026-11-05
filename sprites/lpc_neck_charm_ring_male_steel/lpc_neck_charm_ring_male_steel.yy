@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_neck_charm_ring_male_steel",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"b0a8dea6-5d91-4ef1-99db-302d8d22d928","blendMode":0,"displayName":"default","isLocked":false,"name":"b0a8dea6-5d91-4ef1-99db-302d8d22d928","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

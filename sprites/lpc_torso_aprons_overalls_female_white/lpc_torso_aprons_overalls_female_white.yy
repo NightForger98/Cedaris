@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_torso_aprons_overalls_female_white",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"7e21623a-c51e-40be-aae7-a81603b9375a","blendMode":0,"displayName":"default","isLocked":false,"name":"7e21623a-c51e-40be-aae7-a81603b9375a","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

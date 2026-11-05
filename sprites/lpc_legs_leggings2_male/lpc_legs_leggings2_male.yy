@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_legs_leggings2_male",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"b7ee28e2-f45f-497c-ac9e-4b11b3b55c45","blendMode":0,"displayName":"default","isLocked":false,"name":"b7ee28e2-f45f-497c-ac9e-4b11b3b55c45","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

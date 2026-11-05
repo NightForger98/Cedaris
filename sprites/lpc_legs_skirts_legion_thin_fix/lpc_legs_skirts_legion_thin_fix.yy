@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_legs_skirts_legion_thin_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"043102b9-6cc3-4ec9-a33b-0f3d479c09ac","blendMode":0,"displayName":"default","isLocked":false,"name":"043102b9-6cc3-4ec9-a33b-0f3d479c09ac","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

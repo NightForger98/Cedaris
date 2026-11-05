@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_neck_charm_ring_female_steel_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"f6cdb32a-fb15-4eb6-9bd6-7b187aa72b01","blendMode":0,"displayName":"default","isLocked":false,"name":"f6cdb32a-fb15-4eb6-9bd6-7b187aa72b01","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

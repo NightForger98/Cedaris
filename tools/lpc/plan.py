@@ -9,8 +9,8 @@ repo, tree_file, out = sys.argv[1:4]
 tree = set(l.strip() for l in open(tree_file, encoding='utf-8'))
 
 BODIES = ['male', 'female', 'muscular', 'teen', 'pregnant', 'child']
-# Universal sheet rows, plus watering for the farm tools
-ANIMS = ['spellcast', 'thrust', 'walk', 'slash', 'shoot', 'hurt', 'watering']
+# Universal sheet rows, plus watering for the farm tools and run (rows 25-28, for sprinting)
+ANIMS = ['spellcast', 'thrust', 'walk', 'slash', 'shoot', 'hurt', 'watering', 'run']
 
 SLOT = {
     'body': 'body', 'head': 'head', 'ears': 'ears', 'nose': 'nose', 'eyes': 'eyes', 'eyebrows': 'eyebrows',

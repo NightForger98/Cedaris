@@ -984,6 +984,7 @@
     {"id":{"name":"lpc_torso_bandage_male_white","path":"sprites/lpc_torso_bandage_male_white/lpc_torso_bandage_male_white.yy",},},
     {"id":{"name":"lpc_torso_bandage_male_white_fix","path":"sprites/lpc_torso_bandage_male_white_fix/lpc_torso_bandage_male_white_fix.yy",},},
     {"id":{"name":"lpc_torso_chainmail_female","path":"sprites/lpc_torso_chainmail_female/lpc_torso_chainmail_female.yy",},},
+    {"id":{"name":"lpc_torso_chainmail_female_fix","path":"sprites/lpc_torso_chainmail_female_fix/lpc_torso_chainmail_female_fix.yy",},},
     {"id":{"name":"lpc_torso_chainmail_male","path":"sprites/lpc_torso_chainmail_male/lpc_torso_chainmail_male.yy",},},
     {"id":{"name":"lpc_torso_chainmail_male_fix","path":"sprites/lpc_torso_chainmail_male_fix/lpc_torso_chainmail_male_fix.yy",},},
     {"id":{"name":"lpc_torso_clothes_blouse_female_white","path":"sprites/lpc_torso_clothes_blouse_female_white/lpc_torso_clothes_blouse_female_white.yy",},},

@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_ears_zabos_adult_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"183e78d6-d1aa-4b2e-a133-c88b192a1ccf","blendMode":0,"displayName":"default","isLocked":false,"name":"183e78d6-d1aa-4b2e-a133-c88b192a1ccf","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

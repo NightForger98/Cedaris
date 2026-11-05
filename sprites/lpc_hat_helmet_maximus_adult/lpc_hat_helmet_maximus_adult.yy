@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hat_helmet_maximus_adult",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"fc3c7db9-7e73-4fbc-b3c2-af2b736f8ab9","blendMode":0,"displayName":"default","isLocked":false,"name":"fc3c7db9-7e73-4fbc-b3c2-af2b736f8ab9","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

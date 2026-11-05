@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_heads_troll_child_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"5510620a-38e9-4a6d-88e9-7949c6298635","blendMode":0,"displayName":"default","isLocked":false,"name":"5510620a-38e9-4a6d-88e9-7949c6298635","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

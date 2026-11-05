@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_beards_beard_winter_male",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"52bd7f2c-af64-447d-aede-12106dd9d25d","blendMode":0,"displayName":"default","isLocked":false,"name":"52bd7f2c-af64-447d-aede-12106dd9d25d","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

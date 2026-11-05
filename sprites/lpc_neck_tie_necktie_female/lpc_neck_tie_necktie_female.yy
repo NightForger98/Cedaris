@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_neck_tie_necktie_female",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"296db550-aa05-4afc-aaca-9e50e8ed463c","blendMode":0,"displayName":"default","isLocked":false,"name":"296db550-aa05-4afc-aaca-9e50e8ed463c","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

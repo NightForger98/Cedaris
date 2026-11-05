@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_facial_earrings_princess_male_yellow",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"53cb5989-0a0e-4dea-8de0-c4c637940f57","blendMode":0,"displayName":"default","isLocked":false,"name":"53cb5989-0a0e-4dea-8de0-c4c637940f57","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

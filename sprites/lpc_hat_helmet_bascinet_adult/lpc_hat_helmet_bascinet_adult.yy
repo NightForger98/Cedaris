@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hat_helmet_bascinet_adult",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"9f7c3a16-8ec6-4a47-a01c-9614f49d156d","blendMode":0,"displayName":"default","isLocked":false,"name":"9f7c3a16-8ec6-4a47-a01c-9614f49d156d","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

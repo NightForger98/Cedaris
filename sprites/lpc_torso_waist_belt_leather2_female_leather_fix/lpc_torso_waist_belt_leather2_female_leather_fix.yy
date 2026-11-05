@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_torso_waist_belt_leather2_female_leather_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"c95c5a89-8f20-464a-b089-51f73ffc349d","blendMode":0,"displayName":"default","isLocked":false,"name":"c95c5a89-8f20-464a-b089-51f73ffc349d","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

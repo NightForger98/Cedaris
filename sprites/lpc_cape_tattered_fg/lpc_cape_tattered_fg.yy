@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_cape_tattered_fg",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"29046fbd-8751-422a-a1c3-6ad9f704ad0d","blendMode":0,"displayName":"default","isLocked":false,"name":"29046fbd-8751-422a-a1c3-6ad9f704ad0d","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

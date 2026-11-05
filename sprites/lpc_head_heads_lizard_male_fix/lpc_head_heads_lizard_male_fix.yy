@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_head_heads_lizard_male_fix",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"b2f27cb2-c8fd-4387-aca5-6931a6de3f77","blendMode":0,"displayName":"default","isLocked":false,"name":"b2f27cb2-c8fd-4387-aca5-6931a6de3f77","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

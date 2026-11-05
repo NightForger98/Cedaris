@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hair_idol_adult",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"2a22b961-22e7-4b47-a9fe-b8bc93a1d82c","blendMode":0,"displayName":"default","isLocked":false,"name":"2a22b961-22e7-4b47-a9fe-b8bc93a1d82c","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

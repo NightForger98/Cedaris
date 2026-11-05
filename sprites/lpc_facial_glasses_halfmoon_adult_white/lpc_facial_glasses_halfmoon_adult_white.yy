@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_facial_glasses_halfmoon_adult_white",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"62a60d7e-ce8b-41f3-b581-1e8f4d8f7d99","blendMode":0,"displayName":"default","isLocked":false,"name":"62a60d7e-ce8b-41f3-b581-1e8f4d8f7d99","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

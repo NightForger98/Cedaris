@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_torso_clothes_vest_open_male_white",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"99f8dbf0-121a-45dc-a8e4-ace6b14ed49d","blendMode":0,"displayName":"default","isLocked":false,"name":"99f8dbf0-121a-45dc-a8e4-ace6b14ed49d","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

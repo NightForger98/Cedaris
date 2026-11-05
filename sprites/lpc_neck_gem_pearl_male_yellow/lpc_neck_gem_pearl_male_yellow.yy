@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_neck_gem_pearl_male_yellow",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"e678d369-8371-4315-a542-8accb79ea426","blendMode":0,"displayName":"default","isLocked":false,"name":"e678d369-8371-4315-a542-8accb79ea426","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

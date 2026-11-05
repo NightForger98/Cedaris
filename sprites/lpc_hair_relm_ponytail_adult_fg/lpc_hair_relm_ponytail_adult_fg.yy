@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hair_relm_ponytail_adult_fg",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"cb1985c7-6e59-4aef-96fb-e1190a398678","blendMode":0,"displayName":"default","isLocked":false,"name":"cb1985c7-6e59-4aef-96fb-e1190a398678","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

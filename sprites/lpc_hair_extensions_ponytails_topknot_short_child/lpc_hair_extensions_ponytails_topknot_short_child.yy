@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"lpc_hair_extensions_ponytails_topknot_short_child",
   "bboxMode":0,
-  "bbox_bottom":1599,
+  "bbox_bottom":1855,
   "bbox_left":0,
   "bbox_right":831,
   "bbox_top":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":1600,
+  "height":1856,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"28dc3322-72f9-4a46-907f-e1f1bebd8ccc","blendMode":0,"displayName":"default","isLocked":false,"name":"28dc3322-72f9-4a46-907f-e1f1bebd8ccc","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

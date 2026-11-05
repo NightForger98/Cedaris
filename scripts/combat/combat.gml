@@ -168,7 +168,7 @@ function combat_player_hit(_user, _item, _dir, _w = undefined){
 		}
 		instance_create_depth(_user.x + lengthdir_x(16, ang), _user.y - 20 + lengthdir_y(16, ang), _user.depth - 1, obj_projectile,
 		                      {dx: lengthdir_x(w.speed, ang), dy: lengthdir_y(w.speed, ang), life: w.range / w.speed, weapon: w, ang: ang,
-		                       owner: _user, back: false, hits: []});
+		                       owner: _user, back: false, hits: [], pierce: w[$ "pierce"] ?? 0});
 		return true;
 	}
 	if(!instance_exists(obj_monster)) return false;
@@ -178,7 +178,7 @@ function combat_player_hit(_user, _item, _dir, _w = undefined){
 		var d = point_distance(cx, cy, x, y - 14);
 		if(d > w.reach + 12) continue;
 		if(d > 16 && abs(angle_difference(ang, point_direction(cx, cy, x, y - 14))) > w.arc / 2) continue;
-		monster_damage(id, w, ang);
+		monster_damage(id, w, point_direction(cx, cy, x, y - 14));   // knocked away from you
 		hit = true;
 	}
 	return hit;

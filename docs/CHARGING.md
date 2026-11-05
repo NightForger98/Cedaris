@@ -22,7 +22,9 @@ built from the reference frames for facing right (left mirrors it), up and down.
 **Max levels:**
 - Upgradable tools: one level per tier (Basic 0, Copper 1 ... Mithril 5, Cursed/Blessed 6; see below). A Basic tool
   can't charge.
-- Weapons: a fixed 2 levels, since weapons can't be upgraded.
+- Weapons: a fixed 3 levels, since weapons can't be upgraded: the glow, the red face, the anger mark. Each is a
+  stronger release, and the top one knocks monsters hard and shakes the screen (2026-11-05, the user: "levels for the
+  attack like the daggers"). A hit while charging still knocks the charge out, so the top level is a risk next to monsters.
 
 **Energy:** a charged tool costs `tool_energy_cost × (1 + level)`. A charged weapon release costs 2 energy per level
 (a tap is still free).
@@ -47,7 +49,7 @@ direction goes through the same stages in the same order; only where the tool si
 
 - A tool stops at its own maximum. A Copper tool only reaches wind-up 2, only Cursed tools get the outline, and only
   Blessed tools get the flames.
-- **Weapons** (2 levels) use the wind-up, then red face at level 1 and the anger mark at level 2.
+- **Weapons** (3 levels) use the wind-up and glow at level 1, the red face at level 2 and the anger mark at level 3.
 - **Flames:**
   - One flame frame is drawn by hand (small tongues around the body outline).
   - The second is the same with the tongues shifted slightly, since the down reference only shows one frame.
@@ -68,11 +70,11 @@ direction goes through the same stages in the same order; only where the tool si
 | Axe | one chop | **Large swing**: hits every tree/stump in a wide arc in front; damage grows with level up to the full-charge share in the Cursed and blessed section |
 | Pickaxe | one strike | **Large swing**: the same for rocks and ores (it still can't break rock harder than its tier) |
 | Hoe | tills 1 cell | Stardew area in front: L1 3×1, L2 5×1, L3 3×3, L4 6×3, L5 9×3 |
-| Swords | slash | **Spin slash**: hits all around you, ×1.5 / ×2 damage |
-| Spears, Halberd | thrust | **Lunge**: dash up to 2 cells forward (stops at walls), reach ×1.5, ×1.5 / ×2 damage |
-| Club, Mace, Flail, Waraxe | swing | **Ground slam**: hits all around you, double knockback, monsters stunned for 1 s |
-| Dagger | stab | **Flurry**: 3 quick stabs (2 at level 1) |
-| Slingshot, Crossbow, Boomerang | shot | **Draw**: shot speed, range and damage ×(1 + 0.35 × level) |
+| Swords | slash | L1 **wide slash** (180°, not behind you, ×1.25); L2 **spin** (360°, ×1.5); L3 **two spins** (×2, knockback) |
+| Spears, Halberd | thrust | **Lunge** 1 / 2 / 3 cells forward (stops at walls), reach ×1.3 / ×1.6 / ×2, ×1.25 / ×1.5 / ×2 damage, L3 knockback |
+| Club, Mace, Flail, Waraxe | swing | L1 **wide swing** (150° in front, ×1.3 knockback); L2 **ground slam** all round (reach ×1.4, ×2 knockback, stun); L3 **big slam** (reach ×2, ×3 knockback, longer stun) |
+| Dagger | stab | **Flurry**: 2 / 3 / 4 quick stabs; the last of a level-3 flurry knocks back |
+| Slingshot, Bows, Crossbow, Boomerang | shot | **Draw**: speed, range and damage ×1.35 / ×1.7 / ×2; the shot pierces 1 monster at L2 and all at L3 (the boomerang hits everything it passes anyway); L3 knockback |
 | Staffs | spell (F) | no charge |
 
 - **Tap changes:** today a tap of the hoe, watering can or scythe already reaches further with each tier
@@ -222,7 +224,7 @@ the normal full-charge pose (red face, anger mark):
 code (the lock), `scripts/status`, `scripts/combat` (the witch and her shots), `scripts/people` and
 `scripts/schedules` (the priest). Tested in `tools/test/cases/curse.txt`.
 
-**Hammer and Shovel** charge like weapons: a fixed 2 levels, and a large swing.
+**Hammer and Shovel**: a fixed 2 levels, and a large swing.
 
 ## Still to decide
 - The temple, the sermon and where they go, along with the world map edit.

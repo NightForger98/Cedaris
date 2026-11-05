@@ -4,4 +4,5 @@
 if(!variable_instance_exists(id, "owner")) owner = noone;
 if(!variable_instance_exists(id, "back")) back = false;
 if(!variable_instance_exists(id, "hits")) hits = [];
+if(!variable_instance_exists(id, "pierce")) pierce = 0;   // monsters a shot flies on through
 spin = 0;

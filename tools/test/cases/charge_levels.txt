@@ -1,0 +1,91 @@
+# Weapon charges have three levels (the glow, the red face, the anger mark), each stronger (docs/CHARGING.md): a sword
+# slashes wide at 1 (not behind you), spins at 2 and 3; a mace swings wide at 1, slams all round at 2 and 3; the top
+# level knocks monsters far back; a bow's arrow pierces one monster at 2.
+start story
+wait 60
+gold 1000
+pos 552 168
+face n
+wait 5
+key e
+wait 80
+call autotest_open_floor 120 380 90
+give c|held|Arming Sword
+give c|held|Mace
+give c|held|Bow
+give m|arrow 20
+equip c|held|Arming Sword
+call autotest_monster_ring slime 26
+equip c|held|Arming Sword
+face e
+call autotest_monster_ring slime 26
+call autotest_toughen
+charge 1
+wait 40
+call autotest_monster_hits
+expect hit 3 of 4
+log Arming Sword level 1
+equip c|held|Arming Sword
+face e
+call autotest_monster_ring slime 26
+call autotest_toughen
+charge 2
+wait 40
+call autotest_monster_hits
+expect hit 4 of 4
+log Arming Sword level 2
+equip c|held|Arming Sword
+face e
+call autotest_monster_ring slime 26
+call autotest_toughen
+charge 3
+wait 40
+call autotest_monster_hits
+expect hit 4 of 4
+call autotest_knocked_over 40
+expect yes
+log Arming Sword level 3
+equip c|held|Mace
+face e
+call autotest_monster_ring slime 26
+call autotest_toughen
+charge 1
+wait 40
+call autotest_monster_hits
+expect hit 1 of 4
+log Mace level 1
+equip c|held|Mace
+face e
+call autotest_monster_ring slime 26
+call autotest_toughen
+charge 2
+wait 40
+call autotest_monster_hits
+expect hit 4 of 4
+log Mace level 2
+equip c|held|Mace
+face e
+call autotest_monster_ring slime 26
+call autotest_toughen
+charge 3
+wait 40
+call autotest_monster_hits
+expect hit 4 of 4
+call autotest_knocked_over 110
+expect yes
+log Mace level 3
+equip c|held|Bow
+face e
+call autotest_monster_line slime 120 170
+charge 1
+wait 70
+call autotest_monster_hits
+expect hit 1 of 2
+log Bow level 1
+call autotest_monster_line slime 120 170
+charge 2
+wait 70
+call autotest_monster_hits
+expect hit 2 of 2
+log Bow level 2
+quit

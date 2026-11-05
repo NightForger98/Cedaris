@@ -30,8 +30,11 @@ if(boomer){
 	exit;
 }
 if(--life <= 0 || wall){ instance_destroy(); exit; }
-var m = instance_nearest(x, gy, obj_monster);
-if(m != noone && !m.dying && point_distance(x, gy, m.x, m.y - 4) < 16){
-	monster_damage(m, weapon, ang);
-	instance_destroy();
+// A charged shot (pierce) flies on through that many monsters, hitting each once
+with(obj_monster){
+	if(dying || array_get_index(other.hits, id) != -1 || point_distance(x, y - 4, other.x, gy) >= 16) continue;
+	monster_damage(id, other.weapon, other.ang);
+	array_push(other.hits, id);
+	if(other.pierce <= 0){ with(other) instance_destroy(); exit; }
+	other.pierce -= 1;
 }

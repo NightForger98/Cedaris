@@ -13,6 +13,12 @@ x += (in_right - in_left) * 6;
 x = clamp(x, following.x-h_border,following.x+h_border);
 y = clamp(y, following.y-v_border,following.y+ v_border);
 }
+// A top-level charged hit shakes the screen for a few frames (global.camShake, charging script)
+if(variable_global_exists("camShake") && global.camShake > 0){
+	global.camShake--;
+	x += irandom_range(-3, 3);
+	y += irandom_range(-2, 2);
+}
 
 
 

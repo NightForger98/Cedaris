@@ -103,7 +103,7 @@ function autotest_step(){
 	if((t[$ "chargeTo"] ?? -1) >= 0){
 		var c = instance_exists(obj_plyr) ? obj_plyr.charge : undefined;
 		t.chargeWait = (t[$ "chargeWait"] ?? 0) + 1;
-		if(c == undefined ? t.chargeWait > 6 : (c.level >= min(t.chargeTo, c.max) && (t[$ "chargeShot"] ?? "") == "")){
+		if(c == undefined ? t.chargeWait > 30 : (c.level >= min(t.chargeTo, c.max) && (t[$ "chargeShot"] ?? "") == "")){
 			t.chargeTo = -1;
 			t.wait = 2;
 		}
@@ -940,4 +940,50 @@ function autotest_shots_where(){
 	var s = "player " + string(round(obj_plyr.x)) + "," + string(round(obj_plyr.y)) + ":";
 	with(obj_projectile) s += " shot " + string(round(x)) + "," + string(round(y)) + (back ? " back" : " out") + " depth " + string(depth) + " vis " + string(visible);
 	return s;
+}
+
+/// @description Test: how many monsters have been hit (health below full) and the furthest any was knocked from where
+/// it was put, e.g. "hit 3 of 4, knocked 52".
+function autotest_monster_hits(){
+	var n = 0, hitN = 0, far = 0;
+	with(obj_monster){
+		n++;
+		if(hp < hpMax || dying) hitN++;
+		far = max(far, point_distance(x, y, xstart, ystart));
+	}
+	return "hit " + string(hitN) + " of " + string(n) + ", knocked " + string(round(far));
+}
+
+/// @description Test: two monsters of a kind in a line in front of the player (facing right), _d1 and _d2 px away, and
+/// tough enough to survive a shot (so a shot that pierces is seen to hit both).
+function autotest_monster_line(_kind, _d1, _d2){
+	with(obj_monster) instance_destroy();
+	with(obj_enemy_shot) instance_destroy();
+	var a = monster_spawn(_kind, obj_plyr.x + real(_d1), obj_plyr.y, 1), b = monster_spawn(_kind, obj_plyr.x + real(_d2), obj_plyr.y, 1);
+	a.hp = 999; a.hpMax = 999; b.hp = 999; b.hpMax = 999;
+	with(obj_monster){ xstart = x; ystart = y; }
+	with(obj_plyr){ y_frame = 11; facing = -1; }
+	return 2;
+}
+
+/// @description Test: make every monster tough (999 health), and the player untouchable for 10 s, so hits and knockback
+/// can be measured.
+function autotest_toughen(){
+	with(obj_monster){ hp = 999; hpMax = 999; xstart = x; ystart = y; }
+	with(obj_plyr) iframes = 600;   // monsters next to you would hit you and knock a long charge out of your hands
+	return instance_number(obj_monster);
+}
+
+/// @description Test: the player's charge, action and motion right now.
+function autotest_player_action(){
+	with(obj_plyr) return "charge " + (charge == undefined ? "none" : string(charge.level) + "/" + string(charge.max))
+		+ " act " + (act == undefined ? "none" : act.name) + " actCharge " + string(actCharge)
+		+ " motion " + (motion == undefined ? "none" : motion.type) + " energy " + string(global.vitals.energy);
+	return "no player";
+}
+
+/// @description Test: "yes" if some monster was knocked more than _px from where it was put (autotest_toughen).
+function autotest_knocked_over(_px){
+	with(obj_monster) if(point_distance(x, y, xstart, ystart) > real(_px)) return "yes";
+	return "no";
 }

@@ -1,3 +1,1 @@
-label = "Shrine";
-boxW = 96;
-boxH = 96;
+sprite_index = spr_prop_roadside_shrine;

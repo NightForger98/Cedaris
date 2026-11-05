@@ -1,1 +1,1 @@
-sprite_index = spr_house_church;
+sprite_index = spr_house_home_ward;

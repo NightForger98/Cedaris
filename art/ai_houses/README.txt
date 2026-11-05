@@ -155,3 +155,24 @@ stables (304x271): "pixel art horse stable barn ... A long low wide barn ... bro
   It came out gable-front, with "HARSE" on the sign and a grey drop shadow on the right. originals/stables_with_text.png
   is as made; in originals/stables.png the letters are painted over with the sign's brown, a small horseshoe is
   drawn by hand in their place, and the shadow is cleared. No saddle; one stall rail with the horse, one hay bale.
+
+Third batch, 2026-11-05, made through the PixelLab API (POST /v2/map-objects) on the developer's Tier 1 plan, from the
+prompts in design/PixelLab_Asset_Brief.docx (tools/docs/pixellab_brief.js), each with "A long low wide building, much
+wider than tall, its roof ridge running left to right." added before "Straight-on front view", the brief's style
+reference as color_image (a forced palette), canvases rounded to multiples of 4 (the API needs it), 3 tries each and the
+best kept. Settings as above.
+Retried with other wording (no color_image, "cottage" not "farmhouse", "nothing around the building, plain flat grey
+background, no signs") where the first tries came out at an angle or on a patch of ground: home_hayward, home_frere,
+home_night, rangers_cabin, prop_beach_umbrella (the bench palette had taken its stripes), prop_sea_arch ("plain flat dark
+grey background", so its pale rock doesn't melt into the background).
+- homes: home_saba, home_brassbolt, home_saltwhistle, home_fairglass, home_hayward (the five families), home_larkspun,
+  home_silverbough, home_frere, home_quill, home_ward, home_tawil, home_kassar, home_night (families that shared a house)
+- farmhouse_1-4: the player's farmhouse for each upgrade (house_level 0-3). farmhouse_1 from the brief's prompt; 2-4
+  with farmhouse_1 / farmhouse_2 as color_image (an init_image kept the old house unchanged at any strength)
+- landmarks (spr_prop_<name>): museum, monastery, old_hangar, beach_bar, lifeguard_hut, rangers_cabin, fish_market,
+  ferry_dock, cafe_terrace, roadside_shrine, merchant_cart, cliff_lookout
+- props: prop_olive_tree, prop_grapevine, prop_gravestones, prop_shipwreck, prop_sea_arch, prop_tide_pools,
+  prop_herb_bed, prop_swing, prop_flower_bed, prop_beach_umbrella, and for the last placeholders prop_keeper_garden,
+  prop_miners_camp, prop_botanical, prop_overlook, prop_turtle_nests
+Cleaning options added to tools/buildings/ai_house.js for these: tol (a speckled background), holes (background seen
+through an arch), cutBottom for a path drawn down from the door.

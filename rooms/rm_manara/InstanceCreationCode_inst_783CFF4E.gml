@@ -1,5 +1,5 @@
-targetRoom = rm_redstreet;
-targetX = 528;
-targetY = 72;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+targetRoom = rm_wellshead;
+targetX = 1920;
+targetY = 816;
+PlayerFacingBefore = dir.left;
+PlayerFacingAfter = dir.left;

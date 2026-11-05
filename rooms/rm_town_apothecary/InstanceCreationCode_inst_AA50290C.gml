@@ -1,5 +1,5 @@
 targetRoom = rm_resolve;
-targetX = 592;
+targetX = 656;
 targetY = 404;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

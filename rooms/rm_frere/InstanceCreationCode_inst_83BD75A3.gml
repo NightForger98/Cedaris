@@ -1,3 +1,1 @@
-label = "Hayward home";
-boxW = 224;
-boxH = 192;
+sprite_index = spr_prop_monastery;

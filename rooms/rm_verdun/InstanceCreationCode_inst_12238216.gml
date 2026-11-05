@@ -1,3 +1,1 @@
-label = "Flower beds";
-boxW = 160;
-boxH = 64;
+sprite_index = spr_prop_flower_bed;

@@ -1,3 +1,1 @@
-label = "Saba home";
-boxW = 224;
-boxH = 192;
+sprite_index = spr_house_home_saba;

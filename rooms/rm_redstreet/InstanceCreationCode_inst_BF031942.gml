@@ -1,3 +1,1 @@
-label = "Cafe terrace";
-boxW = 192;
-boxH = 96;
+sprite_index = spr_prop_cafe_terrace;

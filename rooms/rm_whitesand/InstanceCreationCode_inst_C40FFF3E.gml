@@ -1,5 +1,5 @@
-targetRoom = rm_pigeonrocks;
-targetX = 944;
-targetY = 856;
+targetRoom = rm_beach_hut;
+targetX = 224;
+targetY = 280;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

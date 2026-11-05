@@ -1,5 +1,5 @@
-targetRoom = rm_starsand;
-targetX = 1120;
-targetY = 816;
-PlayerFacingBefore = dir.left;
-PlayerFacingAfter = dir.left;
+targetRoom = rm_plummet;
+targetX = 64;
+targetY = 336;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

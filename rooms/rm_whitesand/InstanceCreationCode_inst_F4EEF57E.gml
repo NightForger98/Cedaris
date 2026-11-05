@@ -1,3 +1,1 @@
-label = "Lifeguard hut";
-boxW = 64;
-boxH = 96;
+sprite_index = spr_prop_beach_bar;

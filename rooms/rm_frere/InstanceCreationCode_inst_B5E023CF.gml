@@ -1,5 +1,5 @@
-targetRoom = rm_home_hayward;
-targetX = 224;
-targetY = 280;
+targetRoom = rm_resolve;
+targetX = 528;
+targetY = 728;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

@@ -1,3 +1,1 @@
-label = "Ferry to the island";
-boxW = 160;
-boxH = 96;
+sprite_index = spr_prop_ferry_dock;

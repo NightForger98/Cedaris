@@ -1,3 +1,1 @@
-label = "Fish market";
-boxW = 192;
-boxH = 96;
+sprite_index = spr_prop_fish_market;

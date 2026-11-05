@@ -20,11 +20,15 @@ const DOORS = {
 	town_hall: 165, weaver: 161, windmill: 99,
 	witch_tower: 75, guild_hall: 150, tool_shop: 50, hospital: 130, library: 150,
 	olive_press: 117, tinker_workshop: 82, boatyard: 112, glassworks: 132, stables: 137,
+	home_saba: 95, home_brassbolt: 120, home_saltwhistle: 111, home_fairglass: 107, home_hayward: 104,
+	home_larkspun: 121, home_silverbough: 114, home_frere: 143, home_quill: 81, home_ward: 63, home_tawil: 98, home_kassar: 91, home_night: 131, farmhouse_1: 78, farmhouse_2: 78, farmhouse_3: 96, farmhouse_4: 62,
 };
 
 // Props drawn as one sprite (spr_prop_<name>, PixelLab): "prop_<name>", centred in a box of whole tiles, standing on
 // its bottom edge; solid: how many of its bottom rows block you (0: you can walk over it).
-const PROPS = {bench: 1, lamp: 1, fountain: 2, planter: 1, campfire: 1};
+const PROPS = {bench: 1, lamp: 1, fountain: 2, planter: 1, campfire: 1,
+	museum: 2, monastery: 2, old_hangar: 2, beach_bar: 1, lifeguard_hut: 1, rangers_cabin: 2, fish_market: 1, ferry_dock: 2, cafe_terrace: 1, roadside_shrine: 1, merchant_cart: 1, cliff_lookout: 2, olive_tree: 1, grapevine: 1, gravestones: 1, shipwreck: 1, sea_arch: 2, tide_pools: 0, herb_bed: 1, swing: 1, flower_bed: 1, beach_umbrella: 0,
+	keeper_garden: 1, miners_camp: 1, botanical: 2, overlook: 1, turtle_nests: 0};
 
 function spriteSize(name){
 	const dir = path.join(root, "sprites", name);

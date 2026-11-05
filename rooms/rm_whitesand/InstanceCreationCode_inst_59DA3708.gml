@@ -1,5 +1,5 @@
-targetRoom = rm_winghill;
-targetX = 64;
-targetY = 368;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+targetRoom = rm_pigeonrocks;
+targetX = 976;
+targetY = 888;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

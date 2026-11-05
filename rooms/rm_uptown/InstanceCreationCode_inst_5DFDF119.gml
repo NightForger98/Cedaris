@@ -1,3 +1,1 @@
-label = "Museum";
-boxW = 256;
-boxH = 160;
+sprite_index = spr_prop_museum;

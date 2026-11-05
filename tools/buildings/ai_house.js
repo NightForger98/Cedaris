@@ -11,10 +11,28 @@ const {readPng, writePng, newImage} = require("../rooms/png.js");
 const DIR = path.join(__dirname, "../../art/ai_houses");
 const TOL = 40;
 
-function clearBackground(im){
+// tol: how near the background colour a pixel must be to clear (higher for a speckled background); holes: also
+// clear background-coloured pixels the flood can't reach (seen through an arch)
+function clearBackground(im, tol = TOL, holes = false){
 	const W = im.w, H = im.h, px = im.px, seen = new Uint8Array(W * H), st = [];
 	const bg = [px[0], px[1], px[2]];
-	const near = i => px[i * 4 + 3] < 128 || Math.abs(px[i * 4] - bg[0]) + Math.abs(px[i * 4 + 1] - bg[1]) + Math.abs(px[i * 4 + 2] - bg[2]) < TOL;
+	const near = i => px[i * 4 + 3] < 128 || Math.abs(px[i * 4] - bg[0]) + Math.abs(px[i * 4 + 1] - bg[1]) + Math.abs(px[i * 4 + 2] - bg[2]) < tol;
+	// a hole: a patch of background colour over 400 pixels (smaller patches are the art's own highlights)
+	if(holes){
+		const done = new Uint8Array(W * H);
+		for(let s = 0; s < W * H; s++){
+			if(done[s] || !near(s)) continue;
+			const part = [], q = [s];
+			done[s] = 1;
+			while(q.length){
+				const i = q.pop(), x = i % W;
+				part.push(i);
+				for(const j of [x > 0 ? i - 1 : -1, x < W - 1 ? i + 1 : -1, i - W, i + W])
+					if(j >= 0 && j < W * H && !done[j] && near(j)){ done[j] = 1; q.push(j); }
+			}
+			if(part.length > 400) for(const i of part) px[i * 4 + 3] = 0;
+		}
+	}
 	for(let x = 0; x < W; x++) for(const y of [0, H - 1]) st.push(y * W + x);
 	for(let y = 0; y < H; y++) for(const x of [0, W - 1]) st.push(y * W + x);
 	while(st.length){
@@ -49,6 +67,10 @@ const FIX = {
 	brewery: {cutTop: 27},
 	lighthouse: {cutBottom: 13, grassRows: 8},
 	fisherman_hut: {key: [255, 0, 255]},	// stitched by hand on magenta, see the README
+	home_hayward: {},	// a speckled background: only the loose specks (dropped below) need clearing
+	home_ward: {tol: 90}, cafe_terrace: {tol: 90},	// speckled backgrounds
+	prop_sea_arch: {holes: true},	// the sky seen through the arch
+	home_larkspun: {cutBottom: 25}, rangers_cabin: {cutBottom: 26}, home_frere: {grassRows: 6},	// a path drawn down from the door
 };
 
 function clearRows(im, y0, y1){
@@ -76,7 +98,7 @@ function dropSpecks(im, min){
 
 for(const name of process.argv.slice(2)){
 	const im = readPng(path.join(DIR, "originals", name + ".png"));
-	clearBackground(im);
+	clearBackground(im, (FIX[name] || {}).tol, (FIX[name] || {}).holes);
 	let o = trim(im);
 	const fix = FIX[name];
 	if(fix){

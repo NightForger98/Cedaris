@@ -1,0 +1,56 @@
+# The farmhouse grows with its upgrades (house_level 0-3): each stage is drawn (spr_house_farmhouse_1-4), its door
+# stays the way in, and you can't walk through its walls.
+start story
+wait 60
+time 12
+call autotest_house 0
+room rm_1 816 640
+wait 40
+call autotest_buildings
+expect farmhouse_1
+shot farm_house_0
+# Walk west along its front wall, one row up: blocked by the wall
+pos 760 560
+wait 5
+keydown up
+wait 40
+keyup up
+call autotest_where
+expectnot inside a solid
+# Up into the door
+pos 816 600
+wait 5
+keydown up
+wait 60
+keyup up
+wait 60
+call autotest_room_name
+expect rm_12
+# Each upgrade: the bigger house, the door in the same place
+call autotest_house 1
+room rm_1 816 640
+wait 40
+call autotest_buildings
+expect farmhouse_2
+shot farm_house_1
+call autotest_house 2
+room rm_1 816 640
+wait 40
+call autotest_buildings
+expect farmhouse_3
+shot farm_house_2
+call autotest_house 3
+room rm_1 816 640
+wait 40
+call autotest_buildings
+expect farmhouse_4
+shot farm_house_3
+pos 816 600
+wait 5
+keydown up
+wait 60
+keyup up
+wait 60
+call autotest_room_name
+expect rm_12
+quit

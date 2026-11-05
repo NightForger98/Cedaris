@@ -1,3 +1,1 @@
-label = "Beach bar";
-boxW = 160;
-boxH = 96;
+sprite_index = spr_house_fisherman_hut;

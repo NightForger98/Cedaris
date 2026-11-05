@@ -1,3 +1,1 @@
-label = "Shipwreck";
-boxW = 224;
-boxH = 128;
+sprite_index = spr_prop_shipwreck;

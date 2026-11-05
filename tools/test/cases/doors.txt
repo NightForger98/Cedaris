@@ -1,6 +1,6 @@
 # Doors and the sprite buildings: a door takes you through when you walk into it from any side - straight or
 # diagonally - but not back out the moment you arrive. The houses are sprites (obj_building, tools/rooms/sprite_buildings.js)
-# with their way in at the door; landmarks without art yet are labelled placeholders (obj_placeholder).
+# with their way in at the door; landmarks are props (spr_prop_*, PixelLab art).
 start story
 wait 60
 call autotest_date 0 2
@@ -49,7 +49,7 @@ wait 40
 call autotest_buildings
 expect house_hospital
 expect house_library
-expect [Museum]
+expect prop_museum
 shot 03_uptown
 room rm_plummet
 wait 40

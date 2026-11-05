@@ -1,3 +1,1 @@
-label = "Herb garden";
-boxW = 192;
-boxH = 128;
+sprite_index = spr_prop_herb_bed;

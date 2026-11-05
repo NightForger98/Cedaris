@@ -63,7 +63,7 @@ room rm_frere
 wait 40
 call autotest_buildings
 expect house_stables
-expect [Hayward home]
+expect house_home_hayward
 shot 03_frere
 room rm_southbeach
 wait 40

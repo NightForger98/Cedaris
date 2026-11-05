@@ -35,8 +35,8 @@ module.exports = {
 
 	things: [
 		// Home
-		{is: "farmhouse", at: [19, 7]},
-		{is: "barrels", at: [32, 13]}, {is: "barrel", at: [18, 14]}, {is: "wheelbarrow", at: [32, 9]},
+		// (the farmhouse is an obj_building, in instances: it grows with its upgrades)
+		{is: "barrels", at: [33, 14]}, {is: "barrel", at: [20, 15]}, {is: "wheelbarrow", at: [33, 10]},
 		{is: "hay_bale", at: [17, 19]}, {is: "clothesline", at: [20, 20]},
 
 		// The field: a scarecrow, and the cart at its corner
@@ -77,6 +77,11 @@ module.exports = {
 		{obj: "camera", x: 816, y: 592},
 		{obj: "obj_crafting_table", x: 1150, y: 360},
 		{obj: "obj_shipping_bin", x: 1084, y: 520},
+		// The farmhouse (PixelLab, art/ai_houses/farmhouse_1-4): the stage for its upgrades (house_level 0-3), its door
+		// always over x 816 (the door below) and its foot on y 544. Its collision is made to fit the stage: the bottom
+		// two rows of cells under it, but the door's.
+		{obj: "obj_building", x: 0, y: 544,
+		 code: "var _l = clamp(house_level(), 0, 3);\nsprite_index = [spr_house_farmhouse_1, spr_house_farmhouse_2, spr_house_farmhouse_3, spr_house_farmhouse_4][_l];\nx = 816 - [78, 78, 96, 62][_l];\nvar _c1 = floor(x / 32), _c2 = floor((x + sprite_get_width(sprite_index) - 8) / 32);\nfor(var _c = _c1; _c <= _c2; _c++) if(_c != 25){ var _b = instance_create_depth(_c * 32 + 16, 512, 0, obj_col_box); _b.image_xscale = 2; _b.image_yscale = 4; _b.visible = false; }"},
 		// The farmhouse door
 		{obj: "obj_transition", x: 816, y: 528, sx: 2, sy: 1,
 		 code: "targetRoom = rm_12;\ntargetX = 160;\ntargetY = 472;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},

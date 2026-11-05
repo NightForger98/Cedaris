@@ -1,5 +1,5 @@
-targetRoom = rm_verdun;
-targetX = 64;
-targetY = 400;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+targetRoom = rm_home_gullwater;
+targetX = 224;
+targetY = 280;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

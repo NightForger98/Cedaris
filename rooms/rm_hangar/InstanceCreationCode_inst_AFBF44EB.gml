@@ -1,5 +1,5 @@
-targetRoom = rm_plummet;
-targetX = 64;
-targetY = 336;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+targetRoom = rm_gracetower;
+targetX = 560;
+targetY = 72;
+PlayerFacingBefore = dir.down;
+PlayerFacingAfter = dir.down;

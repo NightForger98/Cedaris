@@ -106,15 +106,26 @@ overnight while they slept, as a prototype:
 
 **Marriage** is in (`scripts/marriage`): courting events at 2/4/6/8 hearts are placeholders built from each
 candidate's own lines - real scenes still to write. House plans from Rowan's are built overnight (upgrade level in
-`global.world.house`), but the farmhouse doesn't change look yet.
+`global.world.house`), and the farmhouse grows with them: `rm_1`'s farmhouse is an `obj_building` whose creation code
+picks `spr_house_farmhouse_1`-`4` by `house_level()`, shifts it so its door stays over x 816, and makes its own
+collision (two rows of `obj_col_box` under it, not the door's). The room is re-entered after the overnight build, so
+the new stage shows next morning.
 
-**Not done yet**: the farmhouse actually growing with each upgrade, and farm buildings at Garth's; the
+**PixelLab art (2026-11-05)**: the developer's Tier 1 plan (2,000 generations a month, resets on the 5th; the API key
+is the user's - never commit or repeat it). Made through the API (`POST /v2/map-objects`, then poll
+`GET /v2/map-objects/{id}`; canvases must be multiples of 4; about 1 generation each): every family has its own home
+now (`spr_house_home_*`), the farmhouse has its 4 stages, and every landmark placeholder has art (`spr_prop_<name>`,
+registered in `PROPS` in `sprite_buildings.js` with its solid rows) - no `ph:` is left in `world.js`. Prompts, picks
+and retries are in `art/ai_houses/README.txt`. Words that keep a building front-on: "A long low wide building, much
+wider than tall, its roof ridge running left to right"; "farmhouse" brings fences and ground, "cottage" doesn't;
+"nothing around the building, plain flat grey background" for clean edges.
+
+**Not done yet**: farm buildings at Garth's; the
 horse, the minecart, the sewers and the cave passage, teleporting; a different routine on shop days off per season
 (most have one day-off routine all year); explosives for Fen; real stock for the bakery, flowers and furniture;
 roads and lanes look the same
-(both brown - a cobble tile for roads would make the boost visible); the placeholder landmarks need art and
-something to do there; the farm (`rm_1`, its own spec) still has its stamp farmhouse, not the Meshy one; interiors
-weren't changed to match the new outsides.
+(both brown - a cobble tile for roads would make the boost visible); the landmarks have art but nothing to do there
+yet; interiors weren't changed to match the new outsides.
 
 ### Working with the user
 

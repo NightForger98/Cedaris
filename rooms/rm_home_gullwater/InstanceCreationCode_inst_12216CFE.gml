@@ -1,5 +1,5 @@
 targetRoom = rm_pigeonrocks;
-targetX = 752;
-targetY = 500;
+targetX = 784;
+targetY = 564;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

@@ -19,21 +19,22 @@ const GRID = [
 
 // kind: "town" (few trees), "rural", "wild" (woods) - how thick the trees are
 const ROOMS = {
-	rm_wellshead: {name: "Well's Head", w: 52, h: 40, sea: "tl", kind: "rural", links: {r: "lane", b: "lane"}, landmarks: [{ruin: "house", q: "se"}],
+	rm_wellshead: {name: "Well's Head", corniche: true, w: 52, h: 40, sea: "tl", kind: "rural", links: {r: "lane", b: "lane"}, landmarks: [{ruin: "house", q: "se"}],
 		buildings: [{key: "hotel", is: "house_lodge", room: "rm_hotel"},
 			{key: "glassworks", is: "house_glassworks", room: "rm_glassworks"}, {key: "fairglass", ph: "Fairglass home", w: 7, h: 6, room: "rm_home_fairglass"}],
 		decor: [{is: "well"}, {is: "fruit_table"}]},
-	rm_manara: {name: "Manara's Light", w: 44, h: 36, sea: "t", kind: "rural", links: {l: "lane", r: "lane", b: "road"}, landmarks: [{ph: "Lookout point", w: 4, h: 3, q: "se"}, {ph: "Keeper's garden", w: 5, h: 3, q: "sw"}],
+	rm_manara: {name: "Manara's Light", corniche: true, w: 44, h: 36, sea: "t", kind: "rural", links: {l: "lane", r: "lane", b: "road"}, landmarks: [{ph: "Lookout point", w: 4, h: 3, q: "se"}, {ph: "Keeper's garden", w: 5, h: 3, q: "sw"}],
 		buildings: [{key: "lighthouse", is: "house_lighthouse", room: "rm_lighthouse"}]},
-	rm_starsand: {name: "Starsand Pier", w: 56, h: 40, sea: "t", kind: "town", links: {l: "lane", r: "lane", b: "road"}, landmarks: [{ph: "Fish market", w: 6, h: 3, q: "se"}, {ph: "Ferry to the island", w: 5, h: 3, q: "sw"}],
+	rm_starsand: {name: "Starsand Pier", corniche: true, w: 56, h: 40, sea: "t", kind: "town", links: {l: "lane", r: "lane", b: "road"}, landmarks: [{ph: "Fish market", w: 6, h: 3, q: "se"}, {ph: "Ferry to the island", w: 5, h: 3, q: "sw"}],
 		buildings: [{key: "guild", is: "house_guild_hall", room: "rm_guild"}], pier: "t", pierStone: true,
 		decor: [{is: "obelisk"}, {is: "stall_stripe"}]},
 	rm_hangar: {name: "Hangar 12", buildings: [{key: "tinker", is: "house_tinker_workshop", room: "rm_tinker"},
 			{key: "brassbolt", ph: "Brassbolt home", w: 7, h: 6, room: "rm_home_brassbolt"}], w: 52, h: 38, sea: "t", kind: "town", links: {l: "lane", r: "beach", b: "road"}, landmarks: [{ph: "Old hangar", w: 9, h: 5, q: "se"}],
 		decor: [{is: "barn"}, {is: "shed"}, {is: "wagon"}, {is: "stall_cart"}], pier: "t"},
-	// The witch's tower on the cliff top (plateau), a ladder up from the street; the beach runs west to Hangar 12
-	// over the river by a footbridge (the Beach Bridge project mends it)
-	rm_plummet: {name: "Plummet's Point", cliffEast: true, plateau: true, sea: "t", river: true, kind: "wild", links: {b: "lane", l: "beach"}, landmarks: [{ruin: "temple", q: "sw"}, {ph: "Cliff lookout", w: 4, h: 3, q: "se"}],
+	// Split diagonally by a cliff: the witch's tower on the high ground to the south-east, reached over the cliff tops
+	// from Beacon Hill's ladder; the beach and lowland to the north-west, reached along the beach from Hangar 12 over
+	// the river by a footbridge (the Beach Bridge project mends it)
+	rm_plummet: {name: "Plummet's Point", split: true, sea: "t", river: true, kind: "wild", links: {b: "cliff", l: "beach"}, landmarks: [{ruin: "temple", q: "nw"}],
 		buildings: [{key: "tower", is: "house_witch_tower", room: "rm_witch_tower", plateau: true}]},
 
 	rm_olivebay: {name: "Olive Bay", w: 48, h: 36, sea: "l", kind: "town", links: {t: "lane", r: "road", b: "lane"}, landmarks: [{ph: "Olive grove", w: 8, h: 5, q: "se"}],
@@ -48,7 +49,7 @@ const ROOMS = {
 	rm_gracetower: {name: "Grace Tower", w: 52, h: 38, kind: "town", links: {t: "road", l: "road", b: "road"}, landmarks: [{ph: "Shrine", w: 3, h: 3, q: "se"}],
 		buildings: [{key: "smithy", is: "house_smithy", room: "rm_village_smithy"}, {key: "whitlow", is: "house_family_house", room: "rm_home_whitlow"}],
 		decor: [{is: "clock_tower"}]},
-	rm_beaconhill: {name: "Beacon Hill", cliffEast: true, w: 50, h: 40, river: true, kind: "rural", links: {t: "lane", b: "lane"}, landmarks: [{is: "prop_campfire", q: "sw"}, {ph: "Miners' camp", w: 5, h: 3, q: "se"}],
+	rm_beaconhill: {name: "Beacon Hill", cliffEast: true, w: 50, h: 40, river: true, kind: "rural", links: {t: "cliff", b: "lane"}, landmarks: [{is: "prop_campfire", q: "sw"}, {ph: "Miners' camp", w: 5, h: 3, q: "se"}],
 		buildings: [{key: "ironvein", is: "house_cottage", room: "rm_town_home_se"}], mine: true,
 		decor: [{is: "stall_cart"}]},
 
@@ -71,7 +72,7 @@ const ROOMS = {
 	rm_winghill: {name: "Wing Hill", w: 54, h: 38, kind: "town", links: {t: "road", l: "road", r: "road", b: "road"}, landmarks: [{ph: "Travelling merchant", w: 3, h: 2, q: "se"}],
 		buildings: [{key: "kassar", is: "house_family_house", room: "rm_home_kassar"}],
 		decor: [{is: "stall_stripe"}, {is: "stall_white"}, {is: "stall_green"}, {is: "stall_blue"}, {is: "fruit_table"}, {is: "stall_cart"}]},
-	rm_dahya: {name: "Dahya", w: 56, h: 38, kind: "town", links: {t: "road", l: "road", r: "road", b: "road"}, landmarks: [{ph: "Playground", w: 6, h: 4, q: "se"}],
+	rm_dahya: {name: "Dahya", pineForest: true, w: 56, h: 38, kind: "town", links: {t: "road", l: "road", r: "road", b: "road"}, landmarks: [{ph: "Playground", w: 6, h: 4, q: "se"}],
 		buildings: [{key: "larkspun", is: "house_cottage", room: "rm_town_home_e"}, {key: "clothes", is: "house_weaver", room: "rm_town_outfitter"},
 			{key: "tawil", is: "house_townhouse", room: "rm_home_tawil"}], pines: true},
 	rm_resolve: {name: "Resolve's Rise", w: 50, h: 38, kind: "rural", links: {t: "lane", l: "road", b: "road"}, landmarks: [{ph: "Herb garden", w: 6, h: 4, q: "se"}],

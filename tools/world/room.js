@@ -31,6 +31,8 @@ function geom(id){
 	if(R.farm) return {farm: true, W: FARM.w, H: FARM.h};
 	const sea = R.sea || "";
 	const x0 = (sea.includes("l") ? SEA : 0) + (R.river ? RIVER[1] + 2 : 0), y0 = sea.includes("t") ? SEA : 0;
+	// A split room is a set size: a wide beach and lowland, and room for the high ground and the tower
+	if(R.split){ const W = x0 + 54, H = y0 + 34; return {W, H, x0, y0, cx: Math.floor((x0 + W) / 2), ry: Math.floor((y0 + H) / 2)}; }
 	const bsize = b => b.ph ? [b.w, b.h] : size(b.is);
 	const lmSize = lm => lm.is ? size(lm.is) : lm.ruin ? (lm.ruin === "house" ? [8, 4] : [8, 5]) : [lm.w, lm.h];
 	const side = [0, 0];
@@ -53,7 +55,7 @@ function geom(id){
 	const lmN = Math.max(lmH("nw"), lmH("ne")), lmS = Math.max(lmH("sw"), lmH("se"));
 	const decorH = Math.max(0, ...(R.decor || []).map(d => size(d.is)[1] + 2));
 	const north = Math.max(R.dense ? 16 : R.kind === "wild" ? 12 : 6, tallest + 2 + lmN, R.mine ? 9 + lmN : 0, R.plateau ? tallest + 5 : 0);
-	const south = Math.max(R.dense ? 18 : R.kind === "wild" ? 14 : 9, 3 + decorH + lmS + 2, R.plaza ? 12 + lmS : 0, sea.includes("l") ? 10 : 0);
+	const south = Math.max(R.dense ? 18 : R.pineForest ? 18 : R.kind === "wild" ? 14 : 9, 3 + decorH + lmS + 2, R.plaza ? 12 + lmS : 0, sea.includes("l") ? 10 : 0);
 	const ry = y0 + north + 1, H = ry + 2 + south;
 	const cx = x0 + 2 + left + 3;
 	return {W, H, x0, y0, cx, ry};
@@ -63,9 +65,16 @@ function geom(id){
 // The row of a beach link (a way along the sand between two rooms on the north coast): the middle of the sand
 const BEACH_ROW = WATER + Math.floor(SAND / 2);
 
+// A cliff link's column: Beacon Hill's ladder up its mine cliff, or the east of a split room's cliff top
+function cliffCol(id){
+	const R = ROOMS[id], g = geom(id);
+	return R.mine ? g.cx + 8 : g.W - 10;
+}
+
 function arrive(id, s){
 	const g = geom(id);
 	if(g.farm) return FARM.arrive[s];
+	if((ROOMS[id].links || {})[s] === "cliff") return [cliffCol(id) * 32 + 16, s === "t" ? 72 : g.H * 32 - 72];
 	if((ROOMS[id].links || {})[s] === "beach") return s === "l" ? [64, BEACH_ROW * 32 + 16] : [g.W * 32 - 64, BEACH_ROW * 32 + 16];
 	if(s === "l") return [64, g.ry * 32 + 16];
 	if(s === "r") return [g.W * 32 - 64, g.ry * 32 + 16];
@@ -82,8 +91,9 @@ const FACE = {l: "left", r: "right", t: "up", b: "down"};
 function transition(id, s){
 	const g = geom(id), to = neighbour(id, s), [tx, ty] = arrive(to, OPP[s]);
 	const y = ((ROOMS[id].links || {})[s] === "beach" ? BEACH_ROW : g.ry) * 32 + 16;
+	const x = ((ROOMS[id].links || {})[s] === "cliff" ? cliffCol(id) : g.cx) * 32 + 16;
 	const at = {l: [8, y, 1, 6], r: [g.W * 32 - 8, y, 1, 6],
-	            t: [g.cx * 32 + 16, 8, 6, 1], b: [g.cx * 32 + 16, g.H * 32 - 8, 6, 1]}[s];
+	            t: [x, 8, 6, 1], b: [x, g.H * 32 - 8, 6, 1]}[s];
 	return {obj: "obj_transition", x: at[0], y: at[1], sx: at[2], sy: at[3],
 		code: `targetRoom = ${to};\ntargetX = ${tx};\ntargetY = ${ty};\nPlayerFacingBefore = dir.${FACE[s]};\nPlayerFacingAfter = dir.${FACE[s]};`};
 }
@@ -102,8 +112,20 @@ function spec(id){
 	const free = (c1, r1, w, h) => { for(let r = r1 - 1; r < r1 + h + 1; r++) for(let c = c1 - 1; c < c1 + w + 1; c++){ if(r < 0 || c < 0 || r >= H || c >= W || taken.has(c + "," + r) || at(c, r) !== ".") return false; } return true; };
 
 	// The coast
-	if(sea.includes("t")){ put(0, W - 1, 0, WATER - 1, "~"); put(0, W - 1, WATER, SEA - 1, "_"); }
-	if(sea.includes("l")){ put(0, WATER - 1, 0, H - 1, "~"); put(WATER, SEA - 1, sea.includes("t") ? WATER : 0, H - 1, "_"); }
+	// The north shore is rocky (dirt, with stones and boulders scattered on it later); the west coast is sand, its sea
+	// and beach widening and narrowing like a real shore (straight near the street's row and the room's ends, so the
+	// pier and the ways along it line up)
+	if(sea.includes("t")){ put(0, W - 1, 0, WATER - 1, "~"); put(0, W - 1, WATER, SEA - 1, ","); }
+	if(sea.includes("l")){
+		const ph = (seed % 97) / 15, ph2 = (seed % 89) / 11;
+		for(let rr = sea.includes("t") ? WATER : 0; rr < H; rr++){
+			const env = Math.min(1, Math.abs(rr - ry) / 6, rr / 4, (H - 1 - rr) / 4);
+			const wl = WATER + Math.round(env * 2 * Math.sin(rr * 0.21 + ph));
+			const end = SEA - Math.round(env * (2.5 + 2.5 * Math.sin(rr * 0.16 + ph2)));
+			put(0, wl - 1, rr, rr, "~"); put(wl, end - 1, rr, rr, "_");
+		}
+		if(sea.includes("t")) put(0, WATER - 1, 0, WATER - 1, "~");
+	}
 	// The river down the west side (from a spring partway down at Abda's Ascent)
 	const riverX = (sea.includes("l") ? SEA : 0) + RIVER[0];
 	if(R.river === "spring") put(riverX, riverX + 3, 0, ry - 8, "~"), put(riverX - 1, riverX + 6, ry - 11, ry - 7, "~");
@@ -119,11 +141,13 @@ function spec(id){
 	// (a beach link has no street: you walk along the sand)
 	const sl = links.l && links.l !== "beach", sr = links.r && links.r !== "beach";
 	const xa = sl ? 0 : x0 + 2, xb = sr ? W - 1 : W - 3;
-	put(xa, cx, ry - 1, ry + 1, sl ? ch("l") : inner);
-	put(cx, xb, ry - 1, ry + 1, sr ? ch("r") : inner);
-	put(cx - 1, cx + 1, ry - 1, ry + 1, inner);
-	if(links.t) put(cx - 1, cx + 1, 0, ry - 2, ch("t"));
-	if(links.b) put(cx - 1, cx + 1, ry + 2, H - 1, ch("b"));
+	if(!R.split){
+		put(xa, cx, ry - 1, ry + 1, sl ? ch("l") : inner);
+		put(cx, xb, ry - 1, ry + 1, sr ? ch("r") : inner);
+		put(cx - 1, cx + 1, ry - 1, ry + 1, inner);
+	}
+	if(links.t && links.t !== "cliff") put(cx - 1, cx + 1, 0, ry - 2, ch("t"));
+	if(links.b && links.b !== "cliff") put(cx - 1, cx + 1, ry + 2, H - 1, ch("b"));
 	// Bridges where a street crosses the river: planks over walkable water
 	if(R.river && R.river !== "spring" && sl){
 		put(riverX, riverX + 3, ry - 1, ry + 1, "b");
@@ -153,6 +177,13 @@ function spec(id){
 		things.push({is: "cliff_cave", at: [cave, 0]}, {is: "cliff", at: [W - 12, 0]});
 		for(let c = W - 26; c >= cx + 3; c -= 12) things.push({is: "cliff", at: [c, 0]});
 		put(cave, cave + 1, 7, ry - 2, ",");
+		// The ladder up the cliff: from the ledge to the top, where the way north runs on to Plummet's cliff top
+		if(links.t === "cliff"){
+			const lc = cx + 5;
+			things.push({is: "cliff_ladder", at: [lc, 0]});
+			put(lc + 3, lc + 3, 0, 3, ",");
+			points.ladder = [(lc + 3) * 32 + 16, 6 * 32 + 16];
+		}
 		instances.push({obj: "obj_mine_door", x: (cave + 1) * 32, y: 140});
 		points.cave = [(cave + 1) * 32, 168];
 		points.miner = [(cave - 3) * 32 + 16, 200];   // where the miner works, beside the cave (not in front of the lift)
@@ -166,7 +197,7 @@ function spec(id){
 	const pierSide = R.pier ?? (sea.includes("t") ? "t" : sea.includes("l") ? "l" : null);
 	if(pierSide === "t"){
 		const pc = Math.min(W - 6, cx + 10);
-		put(pc, pc + 2, 1, WATER - 1, "b"); put(pc, pc + 2, SEA, ry - 2, ",");
+		put(pc, pc + 2, 1, WATER - 1, "b"); if(!R.split) put(pc, pc + 2, SEA, ry - 2, ",");
 		if(R.pierStone) things.push({is: "stone_pier", repeat: [1, 2], at: [pc, 1]});
 		else things.push({src: [17, 20, 1, 1], repeat: [3, WATER + 1], at: [pc, 1]});
 		points.pier_end = [(pc + 1) * 32 + 16, 2 * 32 + 16];
@@ -190,45 +221,81 @@ function spec(id){
 			things.push({src: [fc, fr, 1, 1], at: [c, rr]});
 		}
 	};
-	const cliffy = n => n && ROOMS[n] && (ROOMS[n].cliffEast || ROOMS[n].plateau);
+	const cliffy = n => n && ROOMS[n] && (ROOMS[n].cliffEast || ROOMS[n].split);
+	// High ground drawn from a test inP(c, r): a 3-row cliff face where it drops away to the south, its rim along the
+	// north, its sides, and its top. Edges at the room's border are left open (the high ground runs on).
+	const highGround = (inP, c1, r1, c2, r2) => {
+		const P = (c, rr) => (c < 0 || c >= W) ? inP(Math.max(0, Math.min(W - 1, c)), rr) : (rr < 0 || rr >= H) ? inP(c, Math.max(0, Math.min(H - 1, rr))) : inP(c, rr);
+		for(let rr = r1; rr <= r2; rr++) for(let c = c1; c <= c2; c++){
+			if(!inP(c, rr)) continue;
+			let fb = 0;
+			for(let k = 1; k <= 3; k++) if(!P(c, rr + k)){ fb = k; break; }
+			const fr = fb ? 2 + (3 - fb) : (!P(c, rr - 1) ? 0 : 1);
+			const fc = !P(c - 1, rr) ? 5 : !P(c + 1, rr) ? 7 : 6;
+			things.push({src: [fc, fr, 1, 1], at: [c, rr]});
+			grid[rr][c] = "X";
+			taken.add(c + "," + rr);
+		}
+	};
 
 	// Cliffs down the world's east edge, from Plummet's Point to Whispering Woods: high ground you can't climb, its
 	// edge running on from room to room (open where the room above or below has it too), ending in a cliff face
 	if(R.cliffEast){
-		const r1 = R.mine ? 7 : R.plateau ? ry - 4 : (sea.includes("t") ? SEA : 0);
-		const openT = !R.mine && (R.plateau || cliffy(neighbour(id, "t"))), openB = !!cliffy(neighbour(id, "b"));
-		put(W - 7, W - 1, r1, H - 1, "X");
-		plateau(W - 7, r1, W - 1, H - 1, {r: true, t: openT, b: openB});
-		// Pines on the high ground, so it reads as wild hilltop rather than bare earth
-		for(let rr = r1 + 1, k = 0; rr <= H - (openB ? 5 : 8); rr += 4, k++) things.push({is: "pine", at: [W - 6 + (k * 3) % 4, rr]});
-		take(W - 7, r1, 7, H - r1, 0);
+		const r1 = R.mine ? 7 : (sea.includes("t") ? SEA : 0);
+		const openT = !R.mine && cliffy(neighbour(id, "t")), openB = !!cliffy(neighbour(id, "b"));
+		const ph = (seed % 61) / 9, ph2 = (seed % 53) / 7, span = Math.max(1, H - 1 - r1);
+		const bandW = rr => 7 + Math.round(Math.sin(Math.PI * (rr - r1) / span) * (3 * Math.sin(rr * 0.31 + ph) + 2 * Math.sin(rr * 0.12 + ph2) + 2));
+		const inBand = (c, rr) => rr >= r1 && (rr < H || openB) && c >= W - bandW(Math.min(rr, H - 1)) && (rr > r1 || openT || true);
+		// rows past the room's ends count as band where the band runs on (no rim or face drawn there)
+		const inB = (c, rr) => rr < r1 ? (openT && c >= W - 7) : rr >= H ? (openB && c >= W - 7) : inBand(c, rr);
+		highGround(inB, W - 14, r1, W - 1, H - 1);
+		// Pines on the high ground, so it reads as wild hilltop
+		for(let rr = r1 + 1, k = 0; rr <= H - (openB ? 5 : 8); rr += 4, k++){
+			const c = W - bandW(rr + 4) + 2 + (k * 3) % Math.max(1, bandW(rr + 4) - 3);
+			if(inB(c, rr + 4) && inB(c + 1, rr + 4)) things.push({is: "pine", at: [c, rr]});
+		}
 	}
 
-	// Plummet's Point: the east of the room is a plateau above the street, with a ladder up its face; the witch's
-	// tower stands on top (buildings with plateau: true)
-	if(R.plateau){
-		const pc1 = cx + 3, pr2 = ry - 2;
-		put(pc1, W - 1, y0, pr2, "X");
-		plateau(pc1, y0, W - 1, pr2, {r: true});
-		put(pc1 + 1, W - 8, y0 + 1, ry - 5, ",");   // the top you can walk on (the east band beyond stays solid)
-		const rc = pc1 + 2;
-		things.push({is: "cliff_ladder", at: [rc, ry - 6]});
-		put(rc + 3, rc + 3, ry - 5, ry - 2, ",");   // the ladder
-		points.ladder = [(rc + 3) * 32 + 16, (ry - 1) * 32 + 16];
-		points.cliff_top = [(rc + 3) * 32 + 16, (ry - 5) * 32 + 16];
-		let bx = rc + 7;
+	// A split room (Plummet's Point): a diagonal cliff divides it. The high ground fills the south-east, reached only
+	// over the cliff tops from the room below (a cliff link); the beach and lowland fill the north-west, reached only
+	// along the beach from the left. The witch's tower (buildings with plateau: true) stands on the high ground.
+	if(R.split){
+		const xL = x0 + 8, rT = y0 + 3;
+		const top = c => c < xL ? H : rT + Math.round((W - 1 - c) / (W - 1 - xL) * (H - 1 - rT));
+		const inP = (c, rr) => c >= xL && c < W && rr >= top(c) && rr < H;
+		for(let rr = 0; rr < H; rr++) for(let c = 0; c < W; c++){
+			if(!inP(c, rr)) continue;
+			const north = !inP(c, rr - 1), west = !inP(c - 1, rr);
+			things.push({src: [west ? 5 : 6, north ? 0 : 1, 1, 1], at: [c, rr]});
+			grid[rr][c] = (north || west) ? "X" : ",";
+			taken.add(c + "," + rr);
+		}
+		// The tower, standing on the high ground near its east edge
+		let bx = W - 15;
 		for(const b of (R.buildings || []).filter(b => b.plateau)){
-			const [w, h] = size(b.is), d = doorOf(b.is), top = ry - 6 - h + 1;
-			things.push({is: b.is, at: [bx, top]});
-			const dx = (bx + d[0]) * 32 + 16, dy = (top + d[1]) * 32 + 16, inside = INTERIORS.doorPoint(b.room);
+			const [w, h] = size(b.is), d = doorOf(b.is), foot = H - 6, tp = foot - h + 1;
+			things.push({is: b.is, at: [bx, tp]});
+			const dx = (bx + d[0]) * 32 + 16, dy = (tp + d[1]) * 32 + 16, inside = INTERIORS.doorPoint(b.room);
 			instances.push({obj: "obj_transition", x: dx, y: dy, sx: 2, sy: 1,
 				code: `targetRoom = ${b.room};\ntargetX = ${inside[0]};\ntargetY = ${inside[1]};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`});
 			exits[b.key] = [dx, dy + 36];
 			points[b.key + "_front"] = [dx, dy + 52];
-			for(let y = top; y < top + h; y++) for(let x = bx; x < bx + w; x++) taken.add(x + "," + y);
-			bx += w + 2;
+			bx -= w + 3;
 		}
-		take(pc1, y0, W - pc1, pr2 - y0 + 1, 0);
+		// Spots up there for the witch and her son, and pines on the high ground
+		points.cliff_a = [(W - 20) * 32 + 16, (H - 4) * 32 + 16];
+		points.cliff_b = [(W - 6) * 32 + 16, (H - 12) * 32 + 16];
+		const pr = rng(seed + 23);
+		for(let k = 0; k < 40; k++){
+			const c = xL + 2 + Math.floor(pr() * (W - xL - 4)), rr = top(c) + 2 + Math.floor(pr() * 6);
+			if(rr + 5 >= H - 1 || c + 1 >= W) continue;
+			if(Math.abs(c - (W - 10)) < 3 || (c >= W - 17 && c <= W - 8 && rr + 5 >= H - 18)) continue;   // the way in, the tower
+			let ok = true;
+			for(let y = rr + 3; y <= rr + 4; y++) for(let x = c; x <= c + 1; x++) if(!inP(x, y) || grid[y][x] !== ",") ok = false;
+			if(!ok) continue;
+			things.push({is: "pine", at: [c, rr]});
+			for(let y = rr + 3; y <= rr + 4; y++) for(let x = c; x <= c + 1; x++) grid[y][x] = "X";
+		}
 	}
 
 	// A beach link crosses a river on the sand by a footbridge: broken until the Beach Bridge project is done (a
@@ -256,6 +323,26 @@ function spec(id){
 		points.river = [(cx + 1) * 32, 0];   // Lantern Night's lanterns drift down from here
 		areas.square = [cx - 9, ry + 2, cx + 9, ry + 9];
 		take(cx - 9, ry + 2, 19, 8, 0);
+	}
+
+	if(sea.includes("t")){
+		const sr = rng(seed + 31), kinds = ["rock_grey_big", "rock_grey", "pebbles_grey", "pebbles_grey2", "rock_grey_tall", "rock_grey_big2", "pebbles_brown", "rock_brown_big", "pebbles_grey"];
+		for(let k = 0; k < Math.round(W * 0.6); k++){
+			const is = kinds[Math.floor(sr() * kinds.length)], [w, h] = size(is);
+			const c = 1 + Math.floor(sr() * (W - 2 - w)), rr = WATER + 1 + Math.floor(sr() * (SAND - 2 - h));
+			if((links.l === "beach" || links.r === "beach") && rr + h - 1 >= BEACH_ROW - 1 && rr <= BEACH_ROW + 1) continue;
+			let ok = true;
+			for(let y = rr - 1; y <= rr + h; y++) for(let x = c - 1; x <= c + w; x++) if(at(x, y) !== "," || taken.has(x + "," + y)) ok = false;
+			if(!ok) continue;
+			things.push({is, at: [c, rr]});
+			for(let y = rr; y < rr + h; y++) for(let x = c; x < c + w; x++) taken.add(x + "," + y);
+		}
+	}
+	if(R.corniche){
+		const cy = y0;   // the promenade: the first two rows of land below the shore
+		put(Math.max(0, x0), W - 1, cy, cy + 1, ":");
+		for(let c = x0 + 3; c < W - 2; c += 6) if(at(c, cy + 2) === ".") things.push({is: "prop_lamp", at: [c, cy - 1]});
+		points.corniche = [(cx + 4) * 32 + 16, cy * 32 + 16];
 	}
 
 	// Streets are taken (no trees on them), and the coast and river too
@@ -419,6 +506,7 @@ function spec(id){
 		const r1 = north ? rr + h : ry + 2, r2 = north ? ry - 2 : rr - 1;
 		let clear = r1 <= r2;
 		for(let y = r1; y <= r2 && clear; y++) for(const x of [lc, lc + 1]) if(at(x, y) !== "." || inBox(x, y) || (taken.has(x + "," + y) && !(y >= rr - 1 && y <= rr + h))) clear = false;
+		if(R.split) clear = false;   // no street to lead to
 		if(north && clear){ put(lc, lc + 1, r1, r2, ","); for(let y = r1; y <= r2; y++) taken.add(lc + "," + y), taken.add((lc + 1) + "," + y); }
 		if(!north && clear){ put(lc, lc + 1, r1, r2, ","); for(let y = r1; y <= r2; y++) taken.add(lc + "," + y), taken.add((lc + 1) + "," + y); }
 	}
@@ -448,7 +536,9 @@ function spec(id){
 	const kinds2 = R.pines ? [["pine", 8], ["sapling", 1]] : undefined;
 	quads.forEach((q, i) => {
 		const area = Math.max(0, (q[2] - q[0]) * (q[3] - q[1]));
-		things.push(...woods(grid.map(r => r.join("")), q, Math.round(area * density * (R.pines && i < 2 ? 4 : 1)), seed + i, kinds2, taken, !!R.dense));
+		const forest = R.pineForest && i >= 2;
+		things.push(...woods(grid.map(r => r.join("")), q, Math.round(area * (forest ? 0.2 : density) * (R.pines && i < 2 ? 4 : 1)), seed + i,
+			forest ? [["pine", 10], ["sapling", 1]] : kinds2, taken, !!R.dense || forest));
 	});
 	// Spawn areas: the four corners of land, clear of the streets (resource_areas in scripts/gathering)
 	const names = ["nw", "ne", "sw", "se"];
@@ -458,7 +548,7 @@ function spec(id){
 
 	// Ways out, and where you arrive by each
 	for(const [s, k] of Object.entries(links)){
-		if(k !== "road" && k !== "lane" && k !== "beach") continue;
+		if(k !== "road" && k !== "lane" && k !== "beach" && k !== "cliff") continue;
 		instances.push(transition(id, s));
 		points["road_" + s] = arrive(id, s);
 	}

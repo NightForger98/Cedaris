@@ -1,5 +1,1 @@
-targetRoom = rm_southbeach;
-targetX = 1072;
-targetY = 72;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+sprite_index = spr_house_fisherman_hut;

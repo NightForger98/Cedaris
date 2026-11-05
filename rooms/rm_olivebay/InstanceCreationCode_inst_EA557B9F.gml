@@ -1,5 +1,3 @@
-targetRoom = rm_pigeonrocks;
-targetX = 944;
-targetY = 72;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+label = "Saba home";
+boxW = 224;
+boxH = 192;

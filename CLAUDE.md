@@ -79,9 +79,22 @@ overnight while they slept, as a prototype:
   `world.js` are no longer used.
 - **Coast**: 5 rows of water and 10 of sand. Every coastal room has a pier; Starsand's is stone (`pierStone`). A
   west-coast pier sits on the street's row, and the street runs across the sand to it.
-- **East cliffs** (`cliffEast`: Plummet's Point, Beacon Hill, Victory Hill, Yarzeh Woods above the Whisperwood path):
-  a solid band of `rock_spire` pieces. **Ruins** (`{ruin: "house" | "temple", q}` landmarks) are built from TS_terrain
-  pieces (`ruin_*` in tiles.js).
+- **East cliffs** (`cliffEast`: Beacon Hill, Victory Hill, Whispering Woods): high ground drawn by `highGround()` in
+  `room.js` from the cliff 9-slice in TS_terrain (cols 5-7, rows 0-4): the rim, the sides, the top, and a 3-row face
+  wherever the ground drops away to the south. The band's width curves (7 at the room's ends so rooms meet), with
+  pines on top. **Ruins** (`{ruin: "house" | "temple", q}` landmarks) are built from TS_terrain pieces (`ruin_*`).
+- **Plummet's Point is split** (`split: true`): a diagonal cliff with the high ground and the witch's tower in the
+  south-east and the beach and lowland in the north-west. A `"cliff"` link (`cliffCol()`) joins its high ground to
+  the top of Beacon Hill's mine cliff, which a ladder (`cliff_ladder`) climbs from the cave ledge. A `"beach"` link
+  runs along the sand to Hangar 12, over a footbridge that stays broken until the Beach Bridge project is done.
+  Morga and Rook keep to the high ground (`cliff_a` / `cliff_b`).
+- **Coast**: the north shore is rocky (dirt with `rock_grey*` / `pebbles_*`). The west coast's sea and sand widen and
+  narrow, but stay straight near the street's row and the room's ends. `corniche: true` (Manara's Light, Starsand,
+  Well's Head) adds a stone promenade with lamps along the shore, like Beirut's Corniche. `pineForest: true` (Dahya)
+  fills the south with a dense pine wood, after Horsh Beirut.
+- **Whispering Woods** (rm_yarzeh, once Yarzeh Woods): `dense` (overlapping canopies, `woods(..., tight)`) and the
+  richest forage. It has the shrine (an `obj` landmark) and night pixies and moths (`woods_room_start` in
+  scripts/forest). Whisperwood (rm_forest, obj_path) is gone.
 - **Two folders**: `D:\GameMakerProjects\HarvestValley-HOMEPC` is on `main`; `HarvestValley-WorldRebuild` beside it
   is a git worktree on `world-rebuild`. The user's test rooms (`testmapindoor1`, `roomtest2`) are in both, listed
   last in the room order and never committed. In the branch folder an uncommitted spec,

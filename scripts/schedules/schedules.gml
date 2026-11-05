@@ -37,8 +37,8 @@ function villager_routines(){
 		tomas:   {home: "rm_home_fairglass.tomas_bed", routine: [[7, "rm_wellshead.mid"], [10, "rm_glassworks.tomas_work"], [16, "rm_home_fairglass.home"], [20, "home"]]},
 		bram:    {home: "rm_home_hayward.bram_bed", work: {at: "rm_stables.bram_work", open: 7, close: 15, off: 3}, after: [[15, "rm_frere.mid"], [19, "home"]], dayoff: [[9, "rm_sthereza.mid"], [13, "rm_abda.mid"], [17, "home"]]},
 		della:   {home: "rm_home_hayward.della_bed", routine: [[7, "rm_stables.della_work"], [12, "rm_home_hayward.home"], [15, "rm_frere.mid"], [19, "home"]]},
-		morga:   {home: "rm_witch_tower.morga_bed", rainproof: true, routine: [[8, "rm_witch_tower.morga_work"], [12, "rm_plummet.s2"], [14, "rm_witch_tower.morga_work"], [21, "home"]]},
-		rook:    {home: "rm_witch_tower.rook_bed", kid: true, routine: [[9, "rm_plummet.mid"], [12, "rm_witch_tower.home"], [15, "rm_plummet.s3"], [18, "home"]]},
+		morga:   {home: "rm_witch_tower.morga_bed", rainproof: true, routine: [[8, "rm_witch_tower.morga_work"], [12, "rm_plummet.cliff_a"], [14, "rm_witch_tower.morga_work"], [21, "home"]]},
+		rook:    {home: "rm_witch_tower.rook_bed", kid: true, routine: [[9, "rm_plummet.cliff_a"], [12, "rm_witch_tower.home"], [15, "rm_plummet.cliff_b"], [18, "home"]]},
 		cassius: {home: "rm_home_goldcrest.cassius_bed", work: {at: "rm_bank.cassius_work", open: 9, close: 16, off: 6}, after: [[16, "rm_downtown.s2"], [18, "rm_town_inn.table_d"], [21, "home"]], dayoff: [[10, "rm_redstreet.s2"], [13, "rm_town_inn.table_d"], [16, "home"]]},
 		liora:   {home: "rm_home_goldcrest.liora_bed", routine: [[9, "rm_redstreet.s3"], [11, "rm_downtown.s4"], [14, "rm_olivebay.s3"], [17, "rm_town_inn.table_e"], [20, "home"]]},
 		lysa:    {home: "rm_town_inn.lysa_bed", work: {at: "rm_town_inn.lysa_work", open: 10, close: 22, off: 0}, dayoff: [[10, "rm_downtown.s3"], [13, "rm_verdun.s2"], [17, "rm_town_inn.bar_a"], [22, "home"]]},   // the tavern
@@ -79,7 +79,7 @@ function villager_routines(){
 		tobin:   {home: "rm_village_hesta.tobin_bed", kid: true, seasons: {summer: {routine: [[8, "rm_village_hesta.tobin_home"], [10, "rm_southbeach.s2"], [16, "rm_village_hesta.tobin_home"], [21, "home"]]}}, routine: [[8, "rm_village_hesta.tobin_home"], [9, "rm_sthereza.s1"], [12, "rm_sthereza.s3"], [16.5, "rm_village_hesta.tobin_home"], [21, "home"]]},
 		jul:     {home: "rm_village_hesta.hesta_home", kid: true, routine: [[21, "home"]]},   // the baby: stays home
 		aldous:  {home: "rm_home_ward.aldous_bed", rainproof: true, work: {at: "rm_church.aldous_work", open: 8, close: 18, off: 1}, dayoff: [[9, "rm_abda.s2"], [12, "rm_frere.s3"], [16, "rm_church.pew_a"], [19, "home"]]},   // the old church
-		alaric:  {home: "rm_home_ward.alaric_bed", work: {at: "rm_guild.alaric_work", open: 9, close: 17, off: 4}, after: [[17, "rm_abda.s3"], [20, "home"]], dayoff: [[8, "rm_plummet.s4"], [13, "rm_church.pew_b"], [17, "rm_town_inn.table_c"], [21, "home"]]},   // close-range weapons at the Guild
+		alaric:  {home: "rm_home_ward.alaric_bed", work: {at: "rm_guild.alaric_work", open: 9, close: 17, off: 4}, after: [[17, "rm_abda.s3"], [20, "home"]], dayoff: [[8, "rm_beaconhill.mid"], [13, "rm_church.pew_b"], [17, "rm_town_inn.table_c"], [21, "home"]]},   // close-range weapons at the Guild
 	};
 	return t;
 }

@@ -1,5 +1,1 @@
-targetRoom = rm_redstreet;
-targetX = 64;
-targetY = 400;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+sprite_index = spr_house_olive_press;

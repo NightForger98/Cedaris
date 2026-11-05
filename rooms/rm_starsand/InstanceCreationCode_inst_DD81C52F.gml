@@ -1,5 +1,1 @@
-targetRoom = rm_hangar;
-targetX = 64;
-targetY = 880;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+sprite_index = spr_prop_lamp;

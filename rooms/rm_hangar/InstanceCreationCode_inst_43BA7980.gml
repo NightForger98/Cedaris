@@ -1,3 +1,1 @@
-label = "Old hangar";
-boxW = 288;
-boxH = 160;
+sprite_index = spr_house_tinker_workshop;

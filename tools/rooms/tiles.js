@@ -84,6 +84,15 @@ const things = {
 	sprout:      {src: [10, 31, 1, 1], role: "decor"},
 	lilypads:    {src: [8, 30, 1, 1], role: "decor"},
 	lilypads2:   {src: [8, 31, 1, 1], role: "decor"},
+	// The rocky north shore: grey boulders, stones and pebbles (and a few brown ones)
+	rock_grey_big:  {src: [27, 23, 2, 2], above: 1, solid: [[0, 1, 2, 1]]},
+	rock_grey_big2: {src: [27, 26, 2, 2], above: 1, solid: [[0, 1, 2, 1]]},
+	rock_grey_tall: {src: [29, 26, 1, 2], above: 1, solid: [[0, 1, 1, 1]]},
+	rock_grey:      {src: [26, 25, 1, 1], solid: [[0, 0, 1, 1]]},
+	pebbles_grey:   {src: [27, 25, 1, 1]},
+	pebbles_grey2:  {src: [29, 25, 1, 1]},
+	rock_brown_big: {src: [26, 21, 2, 2], above: 1, solid: [[0, 1, 2, 1]]},
+	pebbles_brown:  {src: [22, 21, 1, 1]},
 	// Starsand's stone pier: grey slabs (repeat along it)
 	stone_pier:  {src: [16, 26, 3, 3]},
 	// A rock spire (a plateau with its cliff face), stacked into the cliffs along the world's east edge

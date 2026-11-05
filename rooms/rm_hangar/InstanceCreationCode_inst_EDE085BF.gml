@@ -1,5 +1,5 @@
-targetRoom = rm_beaconhill;
-targetX = 656;
+targetRoom = rm_gracetower;
+targetX = 560;
 targetY = 72;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

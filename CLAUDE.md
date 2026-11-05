@@ -56,6 +56,19 @@ overnight while they slept, as a prototype:
   `obj_plyr`). The brick hall (tavern, guild) has no door in its art: `tools/rooms/tiles.js` (`doorArt`) moves its
   way in to column 6 and `room.js` places `obj_door_art` (`spr_door_brick`, the brick market's door, depth 1100)
   there. The brick bay has no wall for a door, so the Goldcrest home and the library use brick_gable / brick_market.
+  (Since the sprite houses below, no room uses the brick hall; `obj_door_art` stays for any building that needs it.)
+- **Sprite houses and dressing** (2026-11-06): every building in the world is now one of the user's Meshy / PixelLab
+  house sprites (`spr_house_*`), placed as `house_<name>` things (`tools/rooms/sprite_buildings.js`: door x per sprite,
+  measured by eye; foot rows solid; the door cell is the way in). `build.js` turns a sprite thing into an
+  `obj_building` (draws up from its y, depth-sorted by its foot) and `render.js` / the world map draw them. Small
+  PixelLab props (`spr_prop_*`: bench, lamp, fountain, planter, campfire) are `prop_<name>` things the same way.
+  `room.js` now also lays out: neighbours' houses you can't enter (`fill`, door cell solid) along the north side and,
+  in town, a row south of the street (`fillSouth`); props beside each building; street lamps and benches in town;
+  the fountain and benches on Downtown's square; and `landmarks` per room (`{is, q}` or `{ph: "Label", w, h, q}` in a
+  corner "nw" | "ne" | "sw" | "se", with a lane to the street when clear). A `ph` landmark is an `obj_placeholder`
+  (a labelled box) until it has art: Sea arch, Tide pools, Museum, Botanical garden, Shipwreck, Beach bar,
+  Graveyard, Monastery, Ranger's cabin, Fish market, Olive grove and the rest in `world.js`. Roads now draw over a
+  dirt layer (`":"` has `under: ["dirt"]`), so lanes meet roads with no grass seam.
 - **Two folders**: `D:\GameMakerProjects\HarvestValley-HOMEPC` is on `main`; `HarvestValley-WorldRebuild` beside it
   is a git worktree on `world-rebuild`. The user's test rooms (`testmapindoor1`, `roomtest2`) are in both, listed
   last in the room order and never committed. In the branch folder an uncommitted spec,
@@ -73,8 +86,9 @@ candidate's own lines - real scenes still to write. House plans from Rowan's are
 horse, the minecart, the sewers and the cave passage, teleporting; a different routine on shop days off per season
 (most have one day-off routine all year); explosives for Fen; real stock for the bakery, flowers and furniture;
 roads and lanes look the same
-(both brown - a cobble tile for roads would make the boost visible); the PixelLab/Meshy house sprites aren't
-placed yet (the buildings are library buildings); the rooms are sparse (one street cross each) and want dressing.
+(both brown - a cobble tile for roads would make the boost visible); the placeholder landmarks need art and
+something to do there; the farm (`rm_1`, its own spec) still has its stamp farmhouse, not the Meshy one; interiors
+weren't changed to match the new outsides.
 
 ### Working with the user
 

@@ -1,14 +1,18 @@
-# Doors: the tavern and the guild (the brick hall, whose art has no door) get one drawn (obj_door_art), and a door
-# takes you through when you walk into it from any side - straight or diagonally - but not back out the moment you arrive
+# Doors and the sprite buildings: a door takes you through when you walk into it from any side - straight or
+# diagonally - but not back out the moment you arrive. The houses are sprites (obj_building, tools/rooms/sprite_buildings.js)
+# with their way in at the door; landmarks without art yet are labelled placeholders (obj_placeholder).
 start story
 wait 60
 call autotest_date 0 2
 time 12
-room rm_downtown 940 660
+room rm_downtown 840 700
 wait 40
-call autotest_door_art
-expect 1 door art | 832,576 depth 1100 visible spr_door_brick
-shot 01_tavern_door
+call autotest_buildings
+expect house_tavern
+expect house_town_hall
+expect house_tool_shop
+expect prop_fountain
+shot 01_downtown
 keydown up
 keydown left
 wait 70
@@ -31,9 +35,21 @@ call autotest_room_name
 expect rm_downtown
 call autotest_where
 expectnot inside a solid
+# Behind a house you're hidden by it (it sorts by its foot): stand north of the tavern
 room rm_starsand
 wait 40
-call autotest_door_art
-expect 1 door art
-shot 02_guild_door
+call autotest_buildings
+expect house_guild_hall
+shot 02_guild
+room rm_uptown
+wait 40
+call autotest_buildings
+expect house_hospital
+expect house_library
+expect [Museum]
+shot 03_uptown
+room rm_plummet
+wait 40
+call autotest_buildings
+expect house_witch_tower
 quit

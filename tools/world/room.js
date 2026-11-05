@@ -148,6 +148,9 @@ function spec(id){
 	if(R.plaza){
 		put(cx - 9, cx + 9, ry + 2, ry + 9, ":");
 		things.push({is: "statue", at: [cx + 4, ry + 5]}, {is: "board_notes", at: [cx - 6, ry + 2]});
+		// A fountain in the middle of the square, benches either side of it
+		if(T.things.prop_fountain) things.push({is: "prop_fountain", at: [cx - 2, ry + 4]});
+		if(T.things.prop_bench) things.push({is: "prop_bench", at: [cx - 6, ry + 6]}, {is: "prop_bench", at: [cx + 6, ry + 7]});
 		instances.push({obj: "obj_quest_board", x: (cx - 6) * 32 + 16, y: (ry + 2) * 32 + 26});
 		points.board = [(cx - 6) * 32 + 16, (ry + 4) * 32];
 		points.crowd = [(cx - 7) * 32, (ry + 6) * 32];
@@ -161,6 +164,7 @@ function spec(id){
 
 	// Buildings on the north side of the street, doors on it: left of the crossing, then right
 	let left = cx - 3, right = cx + 3;
+	const boxes = [];   // what stands on the street's north side: buildings and the props beside them [c, r, w, h]
 	const yard = (R.buildings || []).map(b => Object.assign({}, b, {size: size(b.is), door: doorOf(b.is)}));
 	let side = 0;
 	for(const b of yard){
@@ -185,6 +189,48 @@ function spec(id){
 		points[b.key + "_front"] = [dx, dy + 52];
 		// A bit of path from the door down to the street, if the door sits above the building's bottom row
 		for(let r = top + d[1] + 1; r < ry - 1; r++) put(bx + d[0], bx + d[0] + 1, r, r, inner);
+		boxes.push([bx, top, w, h]);
+	}
+
+	// More houses along the street that you can't go into (neighbours' homes), outward from the real ones, so a town
+	// street is lined with houses and a country road has a farmhouse or two. No way in: their door cell stays solid.
+	const fillers = {town: ["house_townhouse", "house_family_house", "house_small_house", "house_tavern_inn", "house_cottage"],
+	                 rural: ["house_cottage", "house_small_house"]}[R.kind] || [];
+	const fillMax = R.fill ?? {town: 6, rural: 2}[R.kind] ?? 0;
+	const fillRand = rng(seed + 11);
+	let fk = Math.floor(fillRand() * 5);
+	for(let k = 0, placedN = 0; k < fillMax * 2 && placedN < fillMax; k++){
+		const is = fillers[fk++ % fillers.length], [w, h] = size(is), top = ry - 1 - h;
+		if(top < y0 + 1) continue;
+		let c = null;
+		for(let tries = 0; tries < 2 && c === null; tries++, side ^= 1){
+			if(side === 0 && left - w + 1 >= x0 + 1){ const cc = left - w + 1; if(free(cc, top, w, h - 1)){ c = cc; left = c - 3; } else left -= 2; }
+			else if(side === 1 && right + w - 1 <= W - 2){ const cc = right; if(free(cc, top, w, h - 1)){ c = cc; right = c + w + 2; } else right += 2; }
+		}
+		if(c === null) continue;
+		const def = T.things[is];
+		things.push({is, at: [c, top], solid: def.solid.concat([[def.door[0], def.door[1], 1, 1]])});
+		take(c, top, w, h, 1);
+		boxes.push([c, top, w, h]);
+		placedN++;
+	}
+
+	// Street props: something by each building's side wall, on the street's edge (barrels by a town house, a bucket
+	// or hay by a farm), so a street isn't bare between the doors
+	const inBox = (c, r) => boxes.some(([bx, by, bw, bh]) => c >= bx && c < bx + bw && r >= by && r < by + bh);
+	const propRand = rng(seed + 5);
+	const propKinds = R.kind === "town" ? ["barrels", "prop_planter", "crate_open", "barrel", "prop_planter"] : ["barrel", "bucket", "crate_open", "wheelbarrow", "barrels"];
+	for(const [bx, by, bw, bh] of boxes.slice()){
+		for(const c of [bx - 2, bx + bw + 1]){
+			if(propRand() < 0.25) continue;
+			const is = propKinds[Math.floor(propRand() * propKinds.length)], [pw, ph] = size(is), r1 = ry - 1 - ph;
+			let ok = c >= 1 && c + pw < W - 1;
+			for(let y = r1; y < r1 + ph && ok; y++) for(let x = c; x < c + pw && ok; x++) if(at(x, y) !== "." || inBox(x, y)) ok = false;
+			if(!ok) continue;
+			things.push({is, at: [c, r1]});
+			boxes.push([c, r1, pw, ph]);
+			for(let y = r1; y < r1 + ph; y++) for(let x = c; x < c + pw; x++) taken.add(x + "," + y);
+		}
 	}
 
 	// Decor south of the street, outward from the crossing
@@ -216,6 +262,74 @@ function spec(id){
 		for(let c = cx; c <= W - 1; c++) for(let r = ry - 1; r <= ry + 1; r++) taken.add(c + "," + r);
 		instances.push({obj: "obj_path", x: (W - 2) * 32 + 8, y: ry * 32 + 16});
 		points.bridge = [(W - 5) * 32, ry * 32 + 16];
+	}
+
+	// In town, a row of neighbours' houses south of the street too (after the decor and the square, in what's left),
+	// their fronts facing south like every building in the game
+	if(R.kind === "town"){
+		let sl = cx - 4, sr = cx + 4, sside = 0, placedS = 0;
+		for(let k = 0; k < 16 && placedS < (R.fillSouth ?? 4); k++, sside ^= 1){
+			const is = fillers[fk++ % fillers.length], [w, h] = size(is), top = ry + 4;
+			if(top + h > H - 2) continue;
+			let c = sside === 0 ? sl - w + 1 : sr;
+			if(c < x0 + 1 || c + w > W - 1) continue;
+			if(!free(c, top, w, h)){ if(sside === 0) sl -= 2; else sr += 2; k--; if(sl < x0 && sr > W) break; continue; }
+			const def = T.things[is];
+			things.push({is, at: [c, top], solid: def.solid.concat([[def.door[0], def.door[1], 1, 1]])});
+			take(c, top, w, h, 1);
+			if(sside === 0) sl = c - 3; else sr = c + w + 2;
+			placedS++;
+		}
+	}
+
+	// Landmarks: one in each corner of land that has one (q: "nw" | "ne" | "sw" | "se"), as near its middle as there's
+	// room, with a lane to the street when the way is clear. A landmark is a thing (is) or, where there's no art yet,
+	// a labelled placeholder box (ph: "Sea arch", w, h in cells; obj_placeholder draws it).
+	const quadsL = {nw: [x0 + 1, y0 + 1, cx - 4, ry - 4], ne: [cx + 4, y0 + 1, W - 2, ry - 4],
+	                sw: [x0 + 1, ry + 4, cx - 4, H - 2], se: [cx + 4, ry + 4, W - 2, H - 2]};
+	for(const lm of R.landmarks || []){
+		const q = quadsL[lm.q];
+		if(!q) throw new Error(`${id}: landmark ${lm.is || lm.ph} has no corner "${lm.q}"`);
+		const [w, h] = lm.is ? size(lm.is) : [lm.w, lm.h];
+		const mc = Math.round((q[0] + q[2] - w) / 2), mr = Math.round((q[1] + q[3] - h) / 2);
+		let spot = null;
+		for(let d = 0; d < 14 && !spot; d++) for(let dr = -d; dr <= d && !spot; dr++) for(let dc = -d; dc <= d && !spot; dc++){
+			if(Math.max(Math.abs(dr), Math.abs(dc)) !== d) continue;
+			const c = mc + dc * 2, rr = mr + dr;
+			if(c >= q[0] && rr >= q[1] && c + w - 1 <= q[2] && rr + h - 1 <= q[3] && free(c, rr, w, h)) spot = [c, rr];
+		}
+		if(!spot){ console.log(`  ${id}: no room for landmark ${lm.is || lm.ph} (${lm.q})`); continue; }
+		const [c, rr] = spot;
+		if(lm.is) things.push({is: lm.is, at: [c, rr]});
+		else things.push({placeholder: lm.ph, src: [0, 0, w, h], solid: [[0, Math.max(0, h - 2), w, Math.min(h, 2)]], at: [c, rr]});
+		take(c, rr, w, h, 1);
+		points["lm_" + lm.q] = [(c + Math.floor(w / 2)) * 32 + 16, (rr + h) * 32 + 24];
+		// A lane from its front to the street, if every cell on the way is clear grass
+		const lc = c + Math.floor(w / 2), north = rr < ry;
+		const r1 = north ? rr + h : ry + 2, r2 = north ? ry - 2 : rr - 1;
+		let clear = r1 <= r2;
+		for(let y = r1; y <= r2 && clear; y++) for(const x of [lc, lc + 1]) if(at(x, y) !== "." || inBox(x, y) || (taken.has(x + "," + y) && !(y >= rr - 1 && y <= rr + h))) clear = false;
+		if(north && clear){ put(lc, lc + 1, r1, r2, ","); for(let y = r1; y <= r2; y++) taken.add(lc + "," + y), taken.add((lc + 1) + "," + y); }
+		if(!north && clear){ put(lc, lc + 1, r1, r2, ","); for(let y = r1; y <= r2; y++) taken.add(lc + "," + y), taken.add((lc + 1) + "," + y); }
+	}
+
+	// Street lamps along the south edge of a town's street, every few cells; a bench by every other one
+	if(R.kind === "town" && T.things.prop_lamp){
+		const lampRand = rng(seed + 17);
+		let n = 0;
+		for(let c = xa + 3; c <= xb - 3; c += 7){
+			if(Math.abs(c - cx) < 4) continue;
+			const r1 = ry + 2 - 3;   // the lamp's 4 cells: its foot on the grass edge just south of the street
+			if(at(c, ry + 2) !== "." || taken.has(c + "," + (ry + 2))) continue;
+			things.push({is: "prop_lamp", at: [c, r1]});
+			taken.add(c + "," + (ry + 2));
+			if(T.things.prop_bench && n++ % 2 === 0 && lampRand() < 0.8){
+				const bc = c + 1;
+				let ok = true;
+				for(let y = ry + 2; y <= ry + 3; y++) for(let x = bc; x <= bc + 1; x++) if(at(x, y) !== "." || taken.has(x + "," + y)) ok = false;
+				if(ok){ things.push({is: "prop_bench", at: [bc, ry + 2]}); take(bc, ry + 2, 2, 2, 0); }
+			}
+		}
 	}
 
 	// Woods over the free grass: thick in the wild, light in town

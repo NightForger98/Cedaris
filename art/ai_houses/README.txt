@@ -85,3 +85,43 @@ fisherman_hut (168x163), Marlo's - made a different way, since plain prompts alw
 3. originals/fisherman_hut.png: stitched by hand on magenta - the recoloured roof, the new walls, and the base's stone
    footing moved up 10 rows (the old door's bottom in it replaced by stone from beside it). ai_house.js clears the
    magenta (FIX). No net or lantern came out; the fish in the crate read as white blobs.
+
+Third batch, 2026-11-05 (same settings and ending as above):
+witch_tower (256x400 canvas, 151x336): "pixel art witch's tower ... A tall slightly crooked round dark grey stone tower,
+  much taller than wide, filling the whole canvas edge to edge, topped by a tall pointed purple slate cone roof that
+  leans a little. Straight-on front view ... no side walls visible ... Small windows glowing green, ivy climbing up the
+  stone. One arched wooden door at the bottom middle, a black iron cauldron and clay herb pots beside the door."
+guild_hall (384x320, 300x197): "pixel art adventurers' guild hall ... A long low wide two-storey building, much wider
+  than tall, its roof ridge running left to right ... dark slate roof ... Grey stone ground floor, brown timber-framed
+  upper floor with small windows. One big arched wooden double door at the bottom middle, above it a hanging red
+  banner showing a crossed sword and bow. A wooden weapon rack ... a wooden notice board with pinned papers ..."
+  The banner came out as crossed swords; the timber upper floor is only a thin band under the roof.
+tool_shop (288x288, 200x214): "pixel art tool shop building ... A wide two-storey half-timbered shop, wider than tall,
+  its roof ridge running left to right ... red clay tile roof ... Cream plaster with dark brown beams, small shuttered
+  upper windows. One wooden door at the bottom middle, a big shop window beside it showing hoes, axes, watering cans
+  and pickaxes. One hanging wooden sign showing only a picture of a hammer and wrench, no letters." The door came out
+  on the left, not in the middle.
+hospital (352x320, 260x210): "pixel art small town clinic building ... A long low wide two-storey building ... blue
+  slate roof ... White plaster walls with pale stone corners and a pale stone base, tall narrow windows with white
+  frames. One wooden double door at the bottom middle with two pale stone steps, above the door a white sign with a
+  red cross, no letters." It wrote "CLINIC" on the sign anyway: originals/hospital_with_text.png is as made;
+  originals/hospital.png has the letters painted out with the sign's white and the cross moved to the sign's middle
+  (by script, no generation).
+library (352x320, 299x240): "pixel art stately town library building ... A long low wide two-storey building ... dark
+  slate roof ... with a small round green copper dome in the middle ... Red brick walls with pale stone trim, tall
+  arched windows showing bookshelves inside. A pale stone portico at the bottom middle with two white columns and a
+  triangular pediment, under it one wooden double door with stone steps." The dome came out tiny, on a chimney.
+
+Street props (canvases under 200x200 come transparent; ai_house.js only trims them). Each ends "Crisp pixels, 1px
+dark outline, light from the top left, soft muted palette. No ground, no shadow, no text, simple and readable."
+prop_bench (80x56, 62x34): "wooden park bench with black iron legs and armrests ... Straight-on front view ... long and
+  low, symmetrical. Brown wooden slats for the seat and backrest."
+prop_lamp (48x104, 22x99): "black iron street lamp post with a warm glowing lantern on top ... a tall thin post on a
+  small square base, the lit lantern glass warm yellow-orange, symmetrical."
+prop_fountain (128x128, 110x117): "round stone town fountain ... Seen from the front and slightly above: a wide round
+  grey stone basin full of blue water, a central stone pillar with a small top bowl, water spouting up ..." It came
+  out seen from a corner a little, with the spout off-centre.
+prop_planter (80x56, 60x43): "rectangular grey stone flower planter box full of red and yellow flowers with green
+  leaves ... the long front face of the box parallel to the screen ..."
+prop_campfire (64x56): "small campfire ... a ring of grey stones around a few crossed brown logs, with warm orange and
+  yellow flames rising from the middle ... no smoke".

@@ -1,5 +1,5 @@
 targetRoom = rm_downtown;
-targetX = 848;
+targetX = 752;
 targetY = 660;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

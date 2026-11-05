@@ -1,5 +1,5 @@
 targetRoom = rm_manara;
-targetX = 560;
-targetY = 724;
+targetX = 528;
+targetY = 756;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

@@ -1,5 +1,1 @@
-targetRoom = rm_verdun;
-targetX = 64;
-targetY = 560;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+sprite_index = spr_house_small_house;

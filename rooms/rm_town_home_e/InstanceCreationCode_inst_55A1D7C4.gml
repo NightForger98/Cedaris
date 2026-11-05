@@ -1,5 +1,5 @@
 targetRoom = rm_dahya;
-targetX = 560;
-targetY = 532;
+targetX = 720;
+targetY = 564;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

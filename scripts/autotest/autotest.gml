@@ -914,3 +914,11 @@ function autotest_door_art(){
 	with(obj_door_art) s += " | " + string(x) + "," + string(y) + " depth " + string(depth) + (visible ? " visible " : " hidden ") + sprite_get_name(sprite_index);
 	return s;
 }
+
+/// @description Test: the sprite buildings (obj_building) and placeholders (obj_placeholder) in this room.
+function autotest_buildings(){
+	var s = string(instance_number(obj_building)) + " buildings, " + string(instance_number(obj_placeholder)) + " placeholders:";
+	with(obj_building) s += " " + string_replace(sprite_get_name(sprite_index), "spr_", "");
+	with(obj_placeholder) s += " [" + label + "]";
+	return s;
+}

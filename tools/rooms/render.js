@@ -17,6 +17,14 @@ function tilesetImage(name){
 	return sheets[name] = {img, cols: Math.floor(img.w / ts.tileWidth), tw: ts.tileWidth, th: ts.tileHeight};
 }
 
+// A sprite's first frame
+const spriteImages = {};
+function spriteImage(name){
+	if(spriteImages[name]) return spriteImages[name];
+	const spr = readYy(`sprites/${name}/${name}.yy`);
+	return spriteImages[name] = readPng(path.join(root, "sprites", name, spr.frames[0].name + ".png"));
+}
+
 // Tile data bits: 0-18 the index, 28 mirror, 29 flip, 30 rotate (only the index is used by these rooms)
 function renderRoom(roomName, opts = {}){
 	const room = typeof roomName === "string" ? readYy(`rooms/${roomName}/${roomName}.yy`) : roomName;
@@ -34,6 +42,32 @@ function renderRoom(roomName, opts = {}){
 			blit(out, ts.img, (k % ts.cols) * ts.tw, Math.floor(k / ts.cols) * ts.th, ts.tw, ts.th, (i % w) * ts.tw + (l.x || 0), Math.floor(i / w) * ts.th + (l.y || 0));
 		});
 	});
+	// Sprite buildings and drawn doors (obj_building, obj_door_art), over the tiles, the nearer (lower) ones last
+	if(typeof roomName === "string"){
+		const drawn = [];
+		layers.filter(l => l.resourceType === "GMRInstanceLayer").forEach(l => l.instances.forEach(inst => {
+			const o = inst.objectId.name;
+			if(o === "obj_door_art") drawn.push({spr: "spr_door_brick", x: inst.x, y: inst.y, sort: inst.y + 48});
+			if(o === "obj_placeholder") drawn.push({box: true, x: inst.x, y: inst.y, sort: inst.y, name: inst.name});
+			if(o !== "obj_building") return;
+			const f = path.join(root, "rooms", roomName, "InstanceCreationCode_" + inst.name + ".gml");
+			const m = fs.existsSync(f) && fs.readFileSync(f, "utf8").match(/sprite_index = (spr_\w+)/);
+			if(m){ const img = spriteImage(m[1]); drawn.push({spr: m[1], x: inst.x, y: inst.y - img.h, sort: inst.y}); }
+		}));
+		drawn.sort((a, b) => a.sort - b.sort).forEach(d => {
+			if(d.box){
+				const f = path.join(root, "rooms", roomName, "InstanceCreationCode_" + d.name + ".gml"), s = fs.existsSync(f) ? fs.readFileSync(f, "utf8") : "";
+				const bw = +(s.match(/boxW = (\d+)/) || [0, 64])[1], bh = +(s.match(/boxH = (\d+)/) || [0, 64])[1];
+				for(let y = 0; y < bh; y++) for(let x = 0; x < bw; x++){
+					const edge = x < 2 || y < 2 || x >= bw - 2 || y >= bh - 2, o = ((d.y - bh + y) * out.w + d.x + x) * 4;
+					if(d.x + x < 0 || d.y - bh + y < 0 || d.x + x >= out.w || d.y - bh + y >= out.h) continue;
+					const c = edge ? [250, 220, 90] : [150, 110, 190];
+					for(let k = 0; k < 3; k++) out.px[o + k] = edge ? c[k] : Math.round(out.px[o + k] * 0.5 + c[k] * 0.5);
+				}
+				return;
+			}
+			const img = spriteImage(d.spr); blit(out, img, 0, 0, img.w, img.h, Math.round(d.x), Math.round(d.y)); });
+	}
 	if(opts.instances !== false){
 		layers.filter(l => l.resourceType === "GMRInstanceLayer").forEach(l => l.instances.forEach(inst => {
 			const o = inst.objectId.name;

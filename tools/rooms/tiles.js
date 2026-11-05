@@ -22,7 +22,7 @@ const terrains = {
 const legend = {
 	".": {terrain: "grass"},
 	",": {terrain: "dirt"},
-	":": {terrain: "path"},
+	":": {terrain: "path", under: ["dirt"]},   // dirt under roads too, so a lane runs into a road with no grass seam
 	"_": {terrain: "sand"},
 	"~": {terrain: "water", solid: true, water: true},
 	"=": {terrain: "soil"},
@@ -90,6 +90,12 @@ const things = {
 const library = require("./buildings.json");
 for(const [name, def] of Object.entries(library)){
 	if(things[name]) throw new Error("building " + name + " has the name of a thing already");
+	things[name] = def;
+}
+
+// Sprite buildings (the Meshy and PixelLab houses): "house_<name>", see tools/rooms/sprite_buildings.js
+for(const [name, def] of Object.entries(require("./sprite_buildings.js").things)){
+	if(things[name]) throw new Error("sprite building " + name + " has the name of a thing already");
 	things[name] = def;
 }
 

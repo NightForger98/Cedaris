@@ -92,6 +92,8 @@ function autotile(def, has, W, H, rand){
 // A thing is a stamp (tools/rooms/stamps/<name>.json) or a rectangle of a tileset, with how many of its top rows
 // draw over the player ("above") and which cells block movement ("solid": [dx, dy, w, h] rects inside it).
 function thingGrids(def){
+	// A sprite building (tools/rooms/sprite_buildings.js) has no tiles: build() places an obj_building for it
+	if(def.sprite || def.placeholder) return {w: def.src[2], h: def.src[3], layers: []};
 	if(def.stamp){
 		const st = JSON.parse(fs.readFileSync(path.join(__dirname, "stamps", def.stamp + ".json"), "utf8"));
 		// crop: [x, y, w, h], a part of the stamp
@@ -218,8 +220,16 @@ function build(roomName, opts = {}){
 		if(typeof t.is === "string" && !T.things[t.is]) throw new Error(`${roomName}: unknown thing "${t.is}"`);
 		things.push(def);
 	}
+	const spriteThings = [];
 	for(const def of things){
 		const [c0, r0] = def.at, gr = thingGrids(def), above = def.above || 0;
+		// Its sprite's bottom on the box's bottom edge (obj_building draws up from its y, and depth-sorts by it)
+		// A placeholder (a landmark without art yet): obj_placeholder draws a labelled box over its cells
+		if(def.placeholder) spriteThings.push({obj: "obj_placeholder", x: c0 * CELL, y: (r0 + gr.h) * CELL,
+			code: `label = "${def.placeholder}";
+boxW = ${gr.w * CELL};
+boxH = ${gr.h * CELL};`});
+		if(def.sprite) spriteThings.push({obj: "obj_building", x: c0 * CELL + def.ox, y: (r0 + gr.h) * CELL, code: `sprite_index = ${def.sprite};`});
 		gr.layers.forEach(l => {
 			const below = l.tiles.map((row, y) => y < above ? row.map(() => 0) : row);
 			const over = l.tiles.map((row, y) => y < above ? row : row.map(() => 0));
@@ -269,7 +279,7 @@ function build(roomName, opts = {}){
 	const px = v => Array.isArray(v) ? v : [v.x, v.y];
 	// Exits go on the hidden layer with the collision boxes (their sprite is only a marker)
 	const hidden = ["obj_transition", "obj_col_box"];
-	for(const i of spec.instances || []){
+	for(const i of [...spriteThings, ...(spec.instances || [])]){
 		const [x, y] = i.cell ? [i.cell[0] * CELL + (i.dx ?? 16), i.cell[1] * CELL + (i.dy ?? 16)] : px(i);
 		(hidden.includes(i.obj) ? cols : insts).push(instance(roomName, i.obj, x, y, i.sx || 1, i.sy || 1, i.code || ""));
 	}

@@ -71,7 +71,7 @@ call tool_upgrade Hoe
 key esc
 wait 10
 inv
-room rm_north 1000 230
+room rm_beaconhill 1050 220
 wait 30
 hold 6
 call autotest_goto iron_vein

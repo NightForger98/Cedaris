@@ -24,9 +24,9 @@ inv
 # The cursed Mithril axe charges to 6 with the yellow glow
 call autotest_charge
 charge 6 01_cursed_axe
-# Father Aldous in the town square lifts it - and blesses the axe
+# Father Aldous in the old church (Abda's Ascent) lifts it - and blesses the axe
 time 11
-room rm_town 1300 600
+room rm_church 288 360
 wait 40
 call autotest_goto_person aldous
 key e

@@ -79,6 +79,8 @@ shot rm_frere
 room rm_abda
 wait 30
 shot rm_abda
+call autotest_world_links
+expect all linked
 call autotest_schedule_check
 expect all on time
 call autotest_long_walks 8

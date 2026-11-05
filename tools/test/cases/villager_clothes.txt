@@ -1,13 +1,13 @@
-# Villagers wear everyday clothes (villager_wardrobe): on a festival day everyone is in the village crowd
+# Villagers wear everyday clothes (villager_wardrobe): on a festival day everyone is in the Downtown crowd
 start story
 wait 60
 call autotest_date 2 16
-room rm_2 660 640
+room rm_downtown 768 864
 wait 90
 call autotest_people
 call autotest_villager_clothes
 shot 01_crowd
-room rm_2 660 420
+room rm_downtown 1008 688
 wait 60
 shot 02_crowd_top
 quit

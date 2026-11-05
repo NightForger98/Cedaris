@@ -884,3 +884,26 @@ function autotest_road_here(){
 
 /// @description The room the player is in, by name.
 function autotest_room_name(){ return room_get_name(room); }
+
+/// @description Every way between two outdoor rooms: you arrive on walkable ground, and there's a way back.
+/// Returns "all linked (n ways)" or the problems.
+function autotest_world_links(){
+	var w = room_walk(), rooms = world_outdoors(), s = "", n = 0;
+	for(var i = 0; i < array_length(rooms); i++){
+		var a = rooms[i], wa = w[$ a];
+		if(wa == undefined) continue;   // Whisperwood: built at runtime
+		for(var d = 0; d < array_length(wa.doors); d++){
+			var door = wa.doors[d], b = door[2];
+			if(!world_is_outdoors(b)) continue;
+			n++;
+			var wb = w[$ b];
+			if(wb == undefined){ s += a + ">" + b + " no such room; "; continue; }
+			var cx = door[3] div 32, cy = door[4] div 32;
+			if(cx < 0 || cy < 0 || cx >= wb.w || cy >= wb.h || string_char_at(wb.grid, cy * wb.w + cx + 1) == "0") s += a + ">" + b + " arrives on a wall; ";
+			var back = false;
+			for(var k = 0; k < array_length(wb.doors); k++) if(wb.doors[k][2] == a) back = true;
+			if(!back) s += a + ">" + b + " no way back; ";
+		}
+	}
+	return (s == "") ? "all linked (" + string(n) + " ways)" : s;
+}

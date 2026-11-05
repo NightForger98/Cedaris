@@ -25,7 +25,9 @@ call autotest_villager_at marlo
 call autotest_villager_at tobin
 call autotest_weather sun
 # Stepping round you: stand where Posy is
-room rm_town 500 400
+call autotest_date 0 2
+time 11
+room rm_flowershop 256 300
 wait 60
 call autotest_villager_at posy
 call autotest_block posy

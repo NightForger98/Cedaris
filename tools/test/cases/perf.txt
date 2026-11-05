@@ -2,7 +2,7 @@
 start story
 wait 60
 time 12
-room rm_beach 1300 2048
+room rm_downtown 1008 688
 wait 120
 call autotest_fps_now
 keydown right
@@ -11,7 +11,7 @@ call autotest_fps_now
 keyup right
 wait 60
 call autotest_fps_now
-room rm_valley 1296 900
+room rm_yarzeh 900 700
 wait 120
 call autotest_fps_now
 keydown right
@@ -20,7 +20,7 @@ call autotest_fps_now
 keyup right
 wait 60
 call autotest_fps_now
-room rm_town 1040 640
+room rm_ovenswindow 1000 650
 wait 120
 call autotest_fps_now
 keydown right
@@ -29,7 +29,7 @@ call autotest_fps_now
 keyup right
 wait 60
 call autotest_fps_now
-room rm_2 800 600
+room rm_sthereza 1000 650
 wait 120
 call autotest_fps_now
 keydown right
@@ -47,7 +47,7 @@ call autotest_fps_now
 keyup right
 wait 60
 call autotest_fps_now
-room rm_cross 1040 576
+room rm_winghill 848 600
 wait 120
 call autotest_fps_now
 keydown right
@@ -56,7 +56,7 @@ call autotest_fps_now
 keyup right
 wait 60
 call autotest_fps_now
-room rm_north 1000 416
+room rm_beaconhill 900 650
 wait 120
 call autotest_fps_now
 keydown right
@@ -65,7 +65,7 @@ call autotest_fps_now
 keyup right
 wait 60
 call autotest_fps_now
-room rm_south 1040 600
+room rm_victoryhill 900 650
 wait 120
 call autotest_fps_now
 keydown right

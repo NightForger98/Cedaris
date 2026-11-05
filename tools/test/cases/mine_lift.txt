@@ -2,7 +2,7 @@
 start story
 wait 60
 time 10
-room rm_north 992 176
+room rm_beaconhill 1184 176
 face n
 wait 20
 # Nothing reached yet: E goes straight down to floor 1
@@ -15,7 +15,7 @@ mine 7
 wait 40
 call mine_leave
 wait 90
-pos 992 176
+pos 1184 176
 face n
 wait 10
 key e
@@ -41,7 +41,7 @@ expect floor 2
 start free
 wait 60
 time 10
-room rm_north 992 176
+room rm_beaconhill 1184 176
 face n
 wait 20
 key e

@@ -14,10 +14,10 @@ time 18
 call autotest_villager_at brom
 call autotest_date 0 2
 call autotest_villager_at brom
-# Elda's 2-heart event at the river, with a choice
+# Elda's 2-heart event in her potion shop, with a choice
 call autotest_set_friend elda 520
-time 8
-room rm_2 600 400
+time 11
+room rm_town_apothecary 256 300
 wait 40
 call autotest_goto_person elda
 wait 40

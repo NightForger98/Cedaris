@@ -39,7 +39,7 @@ function villager_routines(){
 		clara:   {home: "rm_home_whitlow.clara_bed", routine: [[9, "rm_gracetower.s1"], [12, "rm_home_whitlow.home"], [15, "rm_downtown.s5"], [18, "home"]]},
 		brom:    {home: "rm_village_smithy.brom_bed", hammer: true, work: {at: "rm_village_smithy.brom_work", open: 9, close: 17, off: 3}, after: [[17.5, "rm_gracetower.s2"], [19, "rm_town_inn.table_a"], [21.5, "home"]], dayoff: [[8, "rm_whitesand.pier_b"], [13, "rm_town_inn.table_a"], [18, "rm_gracetower.s2"], [20, "home"]]},
 		kael:    {home: "rm_village_smithy.shop_b", work: {at: "rm_village_smithy.shop_a", open: 9, close: 17, off: 4}, after: [[17, "rm_gracetower.s4"], [19, "rm_town_inn.table_g"], [22, "home"]], dayoff: [[9, "rm_beaconhill.s3"], [13, "rm_guild.customer"], [17, "rm_town_inn.table_g"], [21, "home"]]},
-		garrick: {home: "rm_town_home_se.ida_home", rainproof: true, work: {at: "rm_beaconhill.cave", open: 8, close: 18, off: 6}, dayoff: [[9, "rm_beaconhill.s4"], [13, "rm_village_smithy.shop_b"], [16, "rm_town_inn.table_c"], [22, "home"]]},   // mines (by the cave)
+		garrick: {home: "rm_town_home_se.ida_home", rainproof: true, work: {at: "rm_beaconhill.miner", open: 8, close: 18, off: 6}, dayoff: [[9, "rm_beaconhill.s4"], [13, "rm_village_smithy.shop_b"], [16, "rm_town_inn.table_c"], [22, "home"]]},   // mines (by the cave)
 		fen:     {home: "rm_town_home_se.fen_bed", work: {at: "rm_beaconhill.stall", open: 8, close: 17, off: 0}, dayoff: [[9, "rm_victoryhill.s2"], [12, "rm_downtown.s1"], [16, "rm_town_home_se.fen_home"], [20.5, "home"]]},   // the mine stall: ore and explosives
 		marlo:   {home: "rm_home_gullwater.marlo_bed", rainproof: true, seasons: {winter: {after: [[12, "rm_town_inn.door_table"], [20.5, "home"]]}}, work: {at: "rm_whitesand.pier_end", open: 6, close: 12, off: 6}, after: [[12, "rm_beach_hut.marlo_home"], [17, "rm_pigeonrocks.s2"], [19, "home"]], dayoff: [[9, "rm_pigeonrocks.s3"], [12, "rm_village_store.shop_c"], [14, "rm_home_gullwater.home"], [21, "home"]]},
 		nerissa: {home: "rm_home_gullwater.nerissa_bed", routine: [[7, "rm_whitesand.pier_b"], [12, "rm_pigeonrocks.s4"], [16, "rm_beach_hut.marlo_home"], [19, "home"]]},
@@ -83,7 +83,15 @@ function villager_names(){
 	return names;
 }
 
-function villager_routine(_key){ return villager_routines()[$ _key]; }
+/// @description A villager's routine; once married, your spouse comes home to the farmhouse (scripts/marriage).
+function villager_routine(_key){
+	var r = villager_routines()[$ _key];
+	if(r == undefined || !marriage_married() || marriage_spouse() != _key) return r;
+	var m = {}, keys = variable_struct_get_names(r);
+	for(var i = 0; i < array_length(keys); i++) m[$ keys[i]] = r[$ keys[i]];
+	m.home = "rm_12.spouse";
+	return m;
+}
 
 /// @description The room a villager lives in ("rm_village_store").
 function villager_home_room(_key){

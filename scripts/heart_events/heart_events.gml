@@ -49,7 +49,8 @@ function heart_event_table(){
 		 lines: ["Seen lights out past Yarzeh Woods at night. Pinkish. Dancing.", "My grandmother called them pixies. Said they bless a farm that's kind to them.",
 		         "Me, I just keep watch. But if you're out there at night... be kind."]},
 	];
-	return t;
+	static withCourting = array_concat(t, marriage_court_events());   // the courting events (scripts/marriage)
+	return withCourting;
 }
 
 function heart_event_seen(_id){

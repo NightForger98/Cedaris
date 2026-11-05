@@ -1,0 +1,35 @@
+# Marriage (FoMT rules, scripts/marriage): a farmer can court the other gender only; a proposal needs 10 hearts, the
+# four courting events and the first house upgrade; the Blue Feather and the house plans are in the shops; the
+# wedding is the next morning and the spouse moves into the farmhouse
+start story
+wait 60
+call autotest_date 0 2
+time 10
+call player_gender
+expect male
+call autotest_propose garth
+expect someone else
+call autotest_propose posy
+expect not ready
+call autotest_set_friend posy 2500
+call autotest_propose posy
+expect hardly know
+call marriage_feather_for_sale
+expect 0
+call autotest_court_events posy
+call marriage_feather_for_sale
+expect 1
+call autotest_propose posy
+expect Ask Rowan
+call autotest_house_plans
+expect house 1
+call autotest_propose posy
+expect Yes!
+call autotest_spouse
+expect posy engaged
+call autotest_next_day
+call autotest_spouse
+expect posy married, home rm_12.spouse
+call autotest_court_event_count
+expect 64
+quit

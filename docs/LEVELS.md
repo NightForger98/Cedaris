@@ -1,5 +1,12 @@
 # Level creation plan
 
+> **2026-11-05: the world was rebuilt** (branch `world-rebuild`): 25 outdoor rooms on a 5 x 5 grid laid out like Beirut,
+> generated from data in `tools/world/world.js` (see `design/world_plan.md` for who lives where, the shops, the roads
+> and the travel rules). The rooms, map and "who lives where" sections below describe the old world (the village,
+> Brindlemoor, Hollow Vale, the coast, North/South Road, the Crossroads), which is archived on the developer's
+> desktop. The approach below - designed rooms, a generated mine - still holds: the rooms are designed as data and
+> laid out by a deterministic generator, not by tile rules.
+
 How Harvest Valley's places get made. In short: the places people live in are designed by hand, and the
 mine is generated while the game runs.
 

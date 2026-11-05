@@ -1,15 +1,16 @@
-# Milestone 10.2-10.3: village projects; the bridge opens Whisperwood; foraging; night creatures; the shrine
+# Milestone 10.2-10.3: town projects (the board in Downtown); the bridge out of Yarzeh Woods opens Whisperwood; foraging; night creatures; the shrine
 start story
 wait 60
 # The bridge is out until its project is done
-room rm_2 1370 592
+room rm_yarzeh 1568 688
 wait 40
 face e
 key e
 wait 5
 shot 01_bridge_out
 # The projects page
-pos 976 400
+room rm_downtown 816 800
+wait 30
 face n
 key e
 wait 5
@@ -19,7 +20,8 @@ key esc
 wait 30
 give m|wood 30
 call project_give bridge wood
-pos 976 400
+room rm_downtown 816 800
+wait 30
 face n
 key e
 wait 5
@@ -35,7 +37,8 @@ call project_give bridge stone
 call project_give bridge iron
 call project_done bridge
 # Across to Whisperwood
-pos 1370 592
+room rm_yarzeh 1568 688
+wait 30
 face e
 key e
 wait 80

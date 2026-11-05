@@ -147,6 +147,7 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"marriage","path":"scripts/marriage/marriage.yy",},},
     {"id":{"name":"world_rooms","path":"scripts/world_rooms/world_rooms.yy",},},
     {"id":{"name":"rm_church","path":"rooms/rm_church/rm_church.yy",},},
     {"id":{"name":"rm_library","path":"rooms/rm_library/rm_library.yy",},},

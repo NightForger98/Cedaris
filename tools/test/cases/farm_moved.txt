@@ -65,7 +65,7 @@ wait 30
 call autotest_where
 expect rm_12
 expectnot inside a solid
-room rm_north 992 176
+room rm_beaconhill 1184 176
 face n
 wait 20
 shot 02_cave

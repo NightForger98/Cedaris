@@ -1,4 +1,15 @@
-# Harvest Valley - the new world (proposal)
+# Harvest Valley - the new world
+
+> **Status (2026-11-05, branch `world-rebuild`):** prototype built:
+> - the 25 rooms, roads, lanes and blocked ways;
+> - every building and household below, the shops (Guild, mine stall, bakery, flowers, hospital and so on);
+> - schedules for all 46 villagers;
+> - the speeds, road boost and time freeze;
+> - the story-mode gender creator.
+>
+> Marriage is being added. Not built yet: house/farm upgrades as buildings, the horse, minecart, sewers, cave passage
+> and teleporting.
+> Generated from `tools/world/world.js` (see CLAUDE.md, "The new world").
 
 Based on `harvestvalleyconceptmap.docx`. The map is a 5x5 grid of rooms laid out like Beirut, and each room is sized to what's in it.
 (M) = marriageable. Each person is shown as name - race - job. Current villagers are **bold**; everyone else is new.

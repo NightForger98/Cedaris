@@ -50,6 +50,9 @@ function item_materials(){
 		{key: "wool",    name: "Wool",        tier: 0, shape: "cloth",   colour: make_colour_rgb(235, 228, 210), price: 5,  stats: {warmth: 1.5},              desc: "Warm, thick cloth for coats and hats."},
 		{key: "leather", name: "Leather",     tier: 0, shape: "hide",    colour: make_colour_rgb(140, 90, 50),   price: 6,  stats: {defense: 1, warmth: 0.5},  desc: "Tough hide for belts, boots and vests."},
 		{key: "fur",     name: "Fur",         tier: 0, shape: "hide",    colour: make_colour_rgb(175, 135, 95),  price: 8,  stats: {warmth: 2.5},              desc: "Keeps the winter out."},
+		// Marriage (scripts/marriage): the proposal token, and the plans for the next farmhouse upgrade (built overnight)
+		{key: "blue_feather", name: "Blue Feather", tier: 0, shape: "feather", colour: make_colour_rgb(80, 140, 235), price: 1000, stats: {}, desc: "A token of love. Give it to the one you want to marry."},
+		{key: "house_plans", name: "House Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(230, 220, 190), price: 1000, stats: {}, desc: "Rowan's plans for your farmhouse. Her crew builds it overnight."},
 		{key: "feather", name: "Feather",     tier: 0, shape: "feather", colour: make_colour_rgb(240, 240, 250), price: 5,  stats: {speed: 0.75},              desc: "Light as air. Plumes and trims."},
 		{key: "bone",    name: "Bone",        tier: 0, shape: "bone",    colour: make_colour_rgb(232, 226, 200), price: 5,  stats: {defense: 0.75},            desc: "Horns, toggles and grim decorations."},
 		{key: "copper",  name: "Copper Bar",  tier: 0, shape: "bar",     colour: make_colour_rgb(205, 120, 70),  price: 10, stats: {defense: 1},               icon: [3, 2], desc: "Soft metal for fittings and trims."},

@@ -132,6 +132,8 @@ function day_advance(_passedOut){
 	var blessed = project_pixie_blessing(); // the shrine's pixies
 	resources_new_day(); // stumps regrow, rocks and weeds come back
 	var paid = shipping_payout();
+	var wed = marriage_new_day();   // house plans built overnight, the wedding
+	global.world.morningNote = wed;
 
 	// You: passing out costs gold and leaves you half rested
 	var lost = 0;
@@ -144,5 +146,5 @@ function day_advance(_passedOut){
 	global.vitals.health = vitals_max_health();
 	global.vitals.mana = mana_max();   // a night's sleep restores your magic
 	global.vitals.light = 0;
-	return {lost: lost, died: died, paid: paid, blessed: blessed};
+	return {lost: lost, died: died, paid: paid, blessed: blessed, wed: wed};
 }

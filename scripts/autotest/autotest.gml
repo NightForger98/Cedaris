@@ -881,3 +881,6 @@ function autotest_road_here(){
 	var on = world_is_road(room_get_name(room), floor(obj_plyr.x / 32), floor(obj_plyr.y / 32));
 	return (on ? "road" : "off road") + " at " + string(floor(obj_plyr.x / 32)) + "," + string(floor(obj_plyr.y / 32)) + ", speed " + string(obj_plyr.spd);
 }
+
+/// @description The room the player is in, by name.
+function autotest_room_name(){ return room_get_name(room); }

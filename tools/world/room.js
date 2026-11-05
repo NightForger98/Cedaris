@@ -123,6 +123,7 @@ function spec(id){
 		put(cave, cave + 1, 7, ry - 2, ",");
 		instances.push({obj: "obj_mine_door", x: (cave + 1) * 32, y: 140});
 		points.cave = [(cave + 1) * 32, 168];
+		points.miner = [(cave - 3) * 32 + 16, 200];   // where the miner works, beside the cave (not in front of the lift)
 		areas.cliff_west = [cx + 4, 4, cave - 2, 6];
 		areas.cliff_east = [cave + 3, 4, W - 2, 6];
 		take(cx + 3, 0, W - cx - 3, 7, 0);

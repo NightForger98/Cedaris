@@ -4,13 +4,13 @@
 function room_layout(){
 	static t = {
 		rm_1: {points: {start: [816, 592], door: [816, 564], path_north: [1296, 72], road_t: [1296, 72], road_l: [64, 576]}, areas: {meadow: [42, 8, 49, 15], west: [18, 21, 33, 31], woods: [18, 32, 33, 33], pasture: [60, 28, 75, 31], field: [35, 21, 58, 31], far_west: [1, 20, 14, 22]}},
-		rm_12: {points: {door: [160, 472], stairs: [160, 180]}, areas: {}},
+		rm_12: {points: {door: [160, 472], spouse: [272, 312], stairs: [160, 180]}, areas: {}},
 		rm_123: {points: {stairs: [96, 180]}, areas: {}},
 		rm_abda: {points: {church_front: [656, 804], ward_front: [1104, 836], road_l: [64, 848], mid: [944, 848], s1: [656, 816], s2: [752, 880], s3: [848, 816], s4: [1040, 880], s5: [1136, 816], s6: [1232, 880]}, areas: {nw: [7, 1, 25, 22], ne: [33, 1, 52, 22], sw: [7, 30, 25, 48], se: [33, 30, 52, 48]}},
 		rm_bakery: {points: {door: [256, 312], customer: [208, 248], browse: [400, 248], sera_work: [144, 120]}, areas: {}},
 		rm_bank: {points: {door: [256, 312], customer: [208, 248], browse: [400, 248], cassius_work: [144, 120]}, areas: {}},
 		rm_beach_hut: {points: {door: [224, 280], marlo_bed: [48, 184], marlo_home: [144, 248]}, areas: {}},
-		rm_beaconhill: {points: {cave: [1184, 168], ironvein_front: [688, 580], stall: [720, 856], road_t: [880, 72], road_b: [880, 1208], mid: [880, 624], s1: [592, 592], s2: [688, 656], s3: [784, 592], s4: [976, 656], s5: [1072, 592], s6: [1168, 656]}, areas: {cliff_west: [31, 4, 34, 6], cliff_east: [39, 4, 48, 6], nw: [7, 1, 23, 15], ne: [31, 1, 48, 15], sw: [7, 23, 23, 38], se: [31, 23, 48, 38]}},
+		rm_beaconhill: {points: {cave: [1184, 168], miner: [1072, 200], ironvein_front: [688, 580], stall: [720, 856], road_t: [880, 72], road_b: [880, 1208], mid: [880, 624], s1: [592, 592], s2: [688, 656], s3: [784, 592], s4: [976, 656], s5: [1072, 592], s6: [1168, 656]}, areas: {cliff_west: [31, 4, 34, 6], cliff_east: [39, 4, 48, 6], nw: [7, 1, 23, 15], ne: [31, 1, 48, 15], sw: [7, 23, 23, 38], se: [31, 23, 48, 38]}},
 		rm_church: {points: {door: [288, 408], aldous_work: [304, 216], pew_a: [176, 312], pew_b: [400, 312], pew_c: [176, 376], pew_d: [400, 376]}, areas: {}},
 		rm_dahya: {points: {larkspun_front: [560, 548], clothes_front: [1072, 580], tawil_front: [272, 580], road_t: [880, 72], road_l: [64, 592], road_r: [1728, 592], road_b: [880, 1144], mid: [880, 592], s1: [592, 560], s2: [688, 624], s3: [784, 560], s4: [976, 624], s5: [1072, 560], s6: [1168, 624]}, areas: {nw: [1, 1, 23, 14], ne: [31, 1, 54, 14], sw: [1, 22, 23, 36], se: [31, 22, 54, 36]}},
 		rm_downtown: {points: {board: [816, 800], crowd: [768, 864], river: [1024, 0], tavern_front: [784, 676], bank_front: [1232, 676], tools_front: [464, 644], stall: [560, 984], road_t: [1008, 72], road_l: [64, 688], road_r: [1984, 688], road_b: [1008, 1336], mid: [1008, 688], s1: [720, 656], s2: [816, 720], s3: [912, 656], s4: [1104, 720], s5: [1200, 656], s6: [1296, 720]}, areas: {square: [22, 23, 40, 30], nw: [1, 1, 27, 17], ne: [35, 1, 62, 17], sw: [1, 25, 27, 42], se: [35, 25, 62, 42]}},

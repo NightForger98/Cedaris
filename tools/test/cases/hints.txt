@@ -22,7 +22,7 @@ expect late
 expect showing It's getting late
 shot 03_late
 # Shown once: back on the farm, nothing new is queued
-room rm_cross 1296 600
+room rm_winghill 848 1100
 wait 30
 room rm_1 816 600
 wait 30

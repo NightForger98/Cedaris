@@ -45,6 +45,7 @@ module.exports = {
 
 	points: {
 		door: [160, 472],     // coming in from the farm
+		spouse: [272, 312],   // where your husband or wife spends the night (scripts/marriage)
 		stairs: [160, 180],   // coming down from upstairs
 	},
 };

@@ -496,6 +496,7 @@ function people_taste(_key, _id){
 function people_gift(_key, _stack){
 	var p = people_state(_key), v = villager_def(_key);
 	if(p.gifted == day_index()) return "You've already given " + v.name + " something today.";
+	if(_stack.id == "m|blue_feather") return marriage_propose(_key, _stack);   // the proposal (scripts/marriage)
 	var d = item_def(_stack.id);
 	if(d.type == "held" || d.type == "clothing") return "You can't give that away.";
 	var taste = people_taste(_key, _stack.id);
@@ -542,14 +543,14 @@ function people_trade(_key){
 		case "inn":       inv.shopStock = shop_inn_stock(); inv.shopTitle = "The Tavern - today's menu"; break;
 		case "outfitter": inv.shopStock = shop_outfitter_stock(); inv.shopTitle = "Larkspun Clothes"; break;
 		case "apothecary":inv.shopStock = shop_apothecary_stock(); inv.shopTitle = "Silverbough Potions"; break;
-		case "tools":     inv.shopStock = shop_list([["o|sprinkler", 0], ["c|held|Axe", 400], ["c|held|Pickaxe", 400], ["c|held|Scythe", 300], ["m|fibre", 0], ["m|stone", 0]]); inv.shopTitle = "Whitlow Tools"; break;
+		case "tools":     inv.shopStock = shop_tools_stock(); inv.shopTitle = "Whitlow Tools"; break;
 		case "guild_ranged": inv.shopStock = shop_list([["c|held|Slingshot", 300], ["c|held|Boomerang", 900], ["c|held|Crossbow", 2400]]); inv.shopTitle = "Adventurers' Guild - Hask's bows and slings"; break;
 		case "guild_melee":  inv.shopStock = shop_list([["c|held|Dagger", 250], ["c|held|Club", 300], ["c|held|Arming Sword", 700], ["c|held|Spear", 800], ["c|held|Saber", 1400], ["c|held|Mace", 1600]]); inv.shopTitle = "Adventurers' Guild - Sir Alaric's blades"; break;
 		case "explosives":   inv.shopStock = shop_list([["m|copper_ore", 0], ["m|iron_ore", 0], ["m|coal", 0], ["m|silver_ore", 0]]); inv.shopTitle = "Fen's Mine Stall - ore (explosives coming soon)"; break;
 		case "fish":      inv.shopStock = shop_list([["x|sardine", 0], ["x|perch", 0], ["x|seabass", 0]]); inv.shopTitle = "Marlo's Fish Shack"; break;
 		case "bakery":    inv.shopStock = shop_list([["f|corn_fritters", 0], ["f|gourd_pie", 0], ["f|hash_browns", 0]]); inv.shopTitle = "Night's Bakery"; break;
 		case "flowers":   inv.shopStock = shop_list([["w|herb", 0], ["w|mushroom", 0], ["m|pixie_dust", 0]]); inv.shopTitle = "Posy's Flowers"; break;
-		case "furniture": inv.shopStock = shop_list([["m|wood", 0], ["m|stone", 0]]); inv.shopTitle = "Oakhart Furniture - house upgrades coming soon"; break;
+		case "furniture": inv.shopStock = shop_furniture_stock(); inv.shopTitle = "Oakhart Furniture - house plans"; break;
 		case "hospital":  inv.shopStock = shop_list([["f|antidote", 120], ["w|herb", 0]]); inv.shopTitle = "Uptown Hospital"; break;
 	}
 }

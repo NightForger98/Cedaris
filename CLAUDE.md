@@ -14,16 +14,52 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 - **Controls** (defaults; rebind them in Options > Controls): arrows move (Shift runs, Ctrl walks); left click or Space uses the held tool (hold to charge it);
   1-9, 0 pick the hotbar slot; E talks / uses (in a dialogue: G gives what you hold, T trades or tells you the shop's
   hours); I inventory; M world map; F casts with a staff, Q changes spell; Esc pauses; Insert toggles debug mode.
-- **The world**: the Crossroads (`rm_cross`, a placeholder name) is the hub in the middle, where the farm used to be.
-  Brindlemoor is north, the village east (Whisperwood beyond the river), the Saltmere Coast down the whole west side,
-  Hollow Vale south, and the farm at the foot of the vale. North Road (the cliff and the mine's cave) is east of the
-  town, South Road east of the vale. Map, layout and who lives where: `docs/LEVELS.md`.
+- **The world** (branch `world-rebuild`, 2026-11-05): 25 outdoor rooms on a 5 x 5 grid laid out like Beirut - the
+  sea along the top and the west, the river and the eastern hills (Beacon Hill's mine, Victory Hill, Yarzeh Woods)
+  in the east, Downtown in the middle, Player Farm (`rm_1`) in the bottom row with Wing Hill's market above it.
+  The rooms are generated from `tools/world/world.js`; who lives where, the shops, roads and travel rules are in
+  `design/world_plan.md`.
 - **Art**: LPC (CC-BY-SA / GPL / OGA-BY), credited in `LPC_CREDITS.csv`, in each pack's credits file in `art/`, and
   in game.
 
 ## Handoff
 
-Last updated 2026-10-29: the world rebuild, the mine elevator, the art clean-up and a round of polish are done.
+Last updated 2026-11-05: **the new world prototype** on branch `world-rebuild` (not merged into `main`). See
+"The new world (world-rebuild)" just below; everything after it describes `main` before the rebuild.
+
+### The new world (world-rebuild)
+
+The user designed a new map (Beirut as a 5 x 5 grid of 25 rooms, `harvestvalleyconceptmap.docx` on their desktop)
+and agreed the plan in `design/world_plan.md` (rooms, families, shops, marriage, upgrades, roads, travel). Built
+overnight while they slept, as a prototype:
+
+- **Rooms**: `tools/world/world.js` (the grid: size, coast, river, links road/lane/rocks/trees, buildings, decor) ->
+  `node tools/world/make_specs.js` writes thin specs in `tools/rooms/specs` (outdoor rooms from `tools/world/room.js`,
+  18 new interiors from `interior_data.js` / `interiors.js`) and re-points the 15 reused old interiors' exits ->
+  `node tools/rooms/build.js <rooms>` -> `node tools/world/world_gml.js` (writes `scripts/world_rooms`: outdoor list,
+  place names, fishing water, road cells, resource areas) -> `node tools/rooms/worldmap.js` (now a grid layout).
+  The farm (`rm_1`) keeps its own spec; its ways out (north to Wing Hill, west to South Beach) use `room.js`'s
+  `arrive`. The old outdoor rooms are gone (copies in the desktop folder "Harvest Valley - old rooms (pre-rebuild)").
+- **People**: 46 villagers (21 old, 25 new) in `villager_table` and `villager_routines`; the routines were written
+  from a checked list (every "room.spot" exists). New shops in `people_trade` (`shop_list`). Honey is `a|honey`.
+- **Travel and time**: `GAME_MIN_SECONDS` 1.0; the clock stands still indoors and in the mine (`clock_tick`);
+  player 1.5 / 3 / 4.5 px a frame, `ROAD_BOOST` 1.25 on road cells (`world_is_road`); `WALK_SPEED` 120. Boots and
+  other gear already change speed through the Speed stat (`inv_speed_multiplier`), and it stacks.
+- **Story-mode creator**: gender first, matching parts only (`character_story_rules`, `player_gender()`).
+- **Saves**: version 12; older saves wake on the farm with the rest of the world rolled again.
+- **Fixed on the way (affects main too)**: buildings were scrambled in game because `TS_buildings.yy` said 64
+  output columns while the IDE writes `output_tileset.png` 58 wide (ceil(sqrt(tiles))). Now 58, and
+  `tools/rooms/output_tileset.js` (run by `build.sh`) writes any missing or mismatched sheet.
+- **Tests**: `new_world` (every room loads, all 46 on time - longest walk 74 min, the clock frozen indoors, the road
+  boost) and `creator_story` pass; the results of the rest are in "Test status" below.
+
+**Not done yet** (next, in the plan's order): marriage (FoMT rules: events at 2/4/6/8 hearts, Blue Feather at the
+tool store, 10 hearts + the first house upgrade); house upgrades at Rowan's and farm buildings at Garth's; the
+horse, the minecart, the sewers and the cave passage, teleporting; a different routine on shop days off per season
+(most have one day-off routine all year); explosives for Fen; real stock for the bakery, flowers and furniture;
+the old villagers' lines still mention Brindlemoor, the village and Hollow Vale; roads and lanes look the same
+(both brown - a cobble tile for roads would make the boost visible); the PixelLab/Meshy house sprites aren't
+placed yet (the buildings are library buildings); the rooms are sparse (one street cross each) and want dressing.
 
 ### Working with the user
 
@@ -188,7 +224,11 @@ shows them; check with the user, then discard them before committing.
 - `docs/LEVELS.md` - **the level creation plan** (agreed): towns and the farm are designed rooms; the mine is
   generated at runtime in GML, seeded per floor. Not a WFC/Python pipeline - read why before proposing one. Also the
   world map, who lives where, and every shop's hours and day off.
-- Rooms: `rm_0` boot, `rm_menu`, `rm_creator`, `rm_cross` the Crossroads (the hub), `rm_2` village (east), `rm_town`
+- Rooms (world-rebuild): `rm_0` boot, `rm_menu`, `rm_creator`; the 25 outdoor rooms of `tools/world/world.js`
+  (`rm_wellshead` ... `rm_abda`, the farm `rm_1`); the new interiors (`rm_hotel`, `rm_guild`, `rm_bank`, `rm_toolstore`,
+  `rm_bakery`, `rm_flowershop`, `rm_furniture`, `rm_hospital`, `rm_library`, `rm_church`, `rm_lighthouse`,
+  `rm_witch_tower`, `rm_home_*`); the old interiors below, in new places (`REUSED` in `interior_data.js`).
+  Before the rebuild: `rm_cross` the Crossroads (the hub), `rm_2` village (east), `rm_town`
   Brindlemoor (north), `rm_beach` (west), `rm_valley` Hollow Vale (south), `rm_1` the farm (below the vale),
   `rm_north` (North Road: east of the town, north of the village; the cliff and the mine's cave), `rm_south` (South
   Road: south of the village, east of the vale), `rm_12` farmhouse downstairs, `rm_123` upstairs (`BED_ROOM`),
@@ -255,8 +295,10 @@ shows them; check with the user, then discard them before committing.
 - **A new house**: a building in an outdoor spec placed with `tools/rooms/house.js` (the thing, its door and the
   interior's exit), plus an interior spec; run `node tools/rooms/sync_exits.js <room>`. For a shop, add a noun in
   `building_label`.
-- **A new outdoor room**: also add it to `room_is_outdoors`, `save_room_name`, the schedules' outdoor lists, the
-  debug room list and `OUTDOORS` in `tools/rooms/worldmap.js`.
+- **A new outdoor room** (world-rebuild): add it to `GRID` / `ROOMS` in `tools/world/world.js`, then run
+  `make_specs.js`, `build.js`, `world_gml.js` and `worldmap.js` (see "The new world"); the outdoor list, names, debug
+  hop list and schedules all read `scripts/world_rooms`. A new house: a `buildings` entry in its room there, and an
+  interior in `tools/world/interior_data.js` (`home(...)` / `shop(...)`).
 - Counters are two cells tall: leave a gap so the keeper can get out (the builder's reach check catches it).
 
 ### Room builder (`tools/rooms`)

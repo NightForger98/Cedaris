@@ -1,1 +1,5 @@
-sprite_index = spr_house_small_house;
+targetRoom = rm_victoryhill;
+targetX = 64;
+targetY = 752;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

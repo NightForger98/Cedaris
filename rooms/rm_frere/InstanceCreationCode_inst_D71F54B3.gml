@@ -1,5 +1,5 @@
-targetRoom = rm_sthereza;
-targetX = 1856;
-targetY = 624;
-PlayerFacingBefore = dir.left;
-PlayerFacingAfter = dir.left;
+targetRoom = rm_resolve;
+targetX = 464;
+targetY = 792;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

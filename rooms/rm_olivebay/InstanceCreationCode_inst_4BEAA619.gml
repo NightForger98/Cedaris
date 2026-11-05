@@ -1,1 +1,1 @@
-sprite_index = spr_prop_planter;
+sprite_index = spr_prop_lamp;

@@ -1,0 +1,79 @@
+# The five families added on 2026-11-06: each one's workshop is open on a working day (a Saturday: nobody's day off),
+# its keeper is at work and their shop sells their goods; walk in through the Olive Press's door from Olive Bay
+start story
+wait 60
+call autotest_date 0 6
+time 11
+room rm_olivebay
+wait 40
+call autotest_buildings
+expect house_olive_press
+call autotest_to_point olivepress_front 0 0
+wait 5
+keydown up
+wait 50
+keyup up
+wait 60
+call autotest_room_name
+expect rm_olive_press
+call autotest_villager_at rami
+expect rm_olive_press
+expect (work)
+shot 01_olive_press
+call people_trade rami
+wait 10
+call autotest_shop_stock
+expect Olive Oil
+shot 02_olive_shop
+key esc
+wait 10
+call autotest_villager_at ottilie
+expect rm_tinker
+call people_trade ottilie
+wait 10
+call autotest_shop_stock
+expect Gear
+key esc
+wait 10
+call autotest_villager_at hal
+expect rm_boatyard
+call people_trade hal
+wait 10
+call autotest_shop_stock
+expect Rope
+key esc
+wait 10
+call autotest_villager_at iris
+expect rm_glassworks
+call people_trade iris
+wait 10
+call autotest_shop_stock
+expect Glass Jar
+key esc
+wait 10
+call autotest_villager_at bram
+expect rm_stables
+call people_trade bram
+wait 10
+call autotest_shop_stock
+expect Horse Feed
+key esc
+wait 10
+room rm_frere
+wait 40
+call autotest_buildings
+expect house_stables
+expect [Hayward home]
+shot 03_frere
+room rm_southbeach
+wait 40
+call autotest_buildings
+expect house_boatyard
+shot 04_southbeach
+room rm_hangar
+wait 40
+shot 05_hangar
+room rm_wellshead
+wait 40
+shot 06_wellshead
+quit

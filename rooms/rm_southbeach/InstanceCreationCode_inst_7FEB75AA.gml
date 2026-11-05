@@ -1,1 +1,3 @@
-sprite_index = spr_house_cottage;
+label = "Turtle nests";
+boxW = 128;
+boxH = 64;

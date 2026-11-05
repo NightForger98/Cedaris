@@ -53,6 +53,14 @@ function item_materials(){
 		// Marriage (scripts/marriage): the proposal token, and the plans for the next farmhouse upgrade (built overnight)
 		{key: "blue_feather", name: "Blue Feather", tier: 0, shape: "feather", colour: make_colour_rgb(80, 140, 235), price: 1000, stats: {}, desc: "A token of love. Give it to the one you want to marry."},
 		{key: "house_plans", name: "House Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(230, 220, 190), price: 1000, stats: {}, desc: "Rowan's plans for your farmhouse. Her crew builds it overnight."},
+		// The new families' workshops (2026-11-06): olive oil, glass, rope, gears, horse things
+		{key: "olive_oil", name: "Olive Oil",  tier: 0, shape: "orb",   colour: make_colour_rgb(190, 180, 60),  price: 40,  stats: {}, desc: "Pressed at the Saba olive press in Olive Bay."},
+		{key: "glass",     name: "Glass",      tier: 0, shape: "gem",   colour: make_colour_rgb(190, 230, 240), price: 20,  stats: {}, desc: "Clear glass from the Fairglass glassworks."},
+		{key: "glass_jar", name: "Glass Jar",  tier: 0, shape: "orb",   colour: make_colour_rgb(210, 240, 245), price: 30,  stats: {}, desc: "For jams and pickles, one day."},
+		{key: "rope",      name: "Rope",       tier: 0, shape: "fibre", colour: make_colour_rgb(185, 150, 95),  price: 15,  stats: {}, desc: "Boatyard rope, tarred against the sea."},
+		{key: "gear",      name: "Gear",       tier: 0, shape: "bar",   colour: make_colour_rgb(200, 165, 70),  price: 35,  stats: {}, desc: "A brass gear from the Brassbolt workshop."},
+		{key: "horse_feed",name: "Horse Feed", tier: 0, shape: "fibre", colour: make_colour_rgb(220, 195, 110), price: 12,  stats: {}, desc: "Oats and hay from Hayward Stables."},
+		{key: "saddle",    name: "Saddle",     tier: 0, shape: "hide",  colour: make_colour_rgb(120, 75, 40),   price: 600, stats: {}, desc: "For the horse you'll have one day."},
 		{key: "feather", name: "Feather",     tier: 0, shape: "feather", colour: make_colour_rgb(240, 240, 250), price: 5,  stats: {speed: 0.75},              desc: "Light as air. Plumes and trims."},
 		{key: "bone",    name: "Bone",        tier: 0, shape: "bone",    colour: make_colour_rgb(232, 226, 200), price: 5,  stats: {defense: 0.75},            desc: "Horns, toggles and grim decorations."},
 		{key: "copper",  name: "Copper Bar",  tier: 0, shape: "bar",     colour: make_colour_rgb(205, 120, 70),  price: 10, stats: {defense: 1},               icon: [3, 2], desc: "Soft metal for fittings and trims."},

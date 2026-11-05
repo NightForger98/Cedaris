@@ -1,5 +1,5 @@
 targetRoom = rm_starsand;
-targetX = 624;
-targetY = 756;
+targetX = 336;
+targetY = 788;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

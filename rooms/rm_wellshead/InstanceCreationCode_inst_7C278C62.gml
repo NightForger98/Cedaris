@@ -1,5 +1,3 @@
-targetRoom = rm_manara;
-targetX = 64;
-targetY = 784;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+label = "Fairglass home";
+boxW = 224;
+boxH = 192;

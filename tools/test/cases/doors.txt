@@ -5,8 +5,11 @@ start story
 wait 60
 call autotest_date 0 2
 time 12
-room rm_downtown 840 700
+room rm_downtown
 wait 40
+# Start down and to the right of the tavern's door, then walk up and left into it
+call autotest_to_point tavern_front 80 0
+wait 5
 call autotest_buildings
 expect house_tavern
 expect house_town_hall
@@ -25,7 +28,7 @@ expect rm_town_inn
 wait 30
 call autotest_room_name
 expect rm_town_inn
-pos 352 380
+call autotest_to_point door 0 -20
 wait 5
 keydown down
 wait 120

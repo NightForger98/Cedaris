@@ -1,1 +1,3 @@
-sprite_index = spr_house_small_house;
+label = "Shipwreck";
+boxW = 224;
+boxH = 128;

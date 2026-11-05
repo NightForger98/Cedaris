@@ -1,1 +1,5 @@
-sprite_index = spr_house_small_house;
+targetRoom = rm_gracetower;
+targetX = 64;
+targetY = 368;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

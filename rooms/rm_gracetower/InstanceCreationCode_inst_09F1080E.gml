@@ -1,1 +1,5 @@
-sprite_index = spr_house_smithy;
+targetRoom = rm_home_whitlow;
+targetX = 224;
+targetY = 280;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

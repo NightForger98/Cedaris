@@ -1,1 +1,5 @@
-sprite_index = spr_house_family_house;
+targetRoom = rm_downtown;
+targetX = 1440;
+targetY = 752;
+PlayerFacingBefore = dir.left;
+PlayerFacingAfter = dir.left;

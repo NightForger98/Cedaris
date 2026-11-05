@@ -922,3 +922,11 @@ function autotest_buildings(){
 	with(obj_placeholder) s += " [" + label + "]";
 	return s;
 }
+
+/// @description Test: stand at a named spot of this room (room_layout), offset by dx, dy pixels. Returns where.
+function autotest_to_point(_key, _dx = "0", _dy = "0"){
+	var p = layout_point(room_get_name(room), _key);
+	if(p == undefined) return "no point " + _key;
+	with(obj_plyr){ x = p[0] + real(_dx); y = p[1] + real(_dy); }
+	return string(p[0] + real(_dx)) + "," + string(p[1] + real(_dy));
+}

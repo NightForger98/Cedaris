@@ -1,5 +1,5 @@
 targetRoom = rm_southbeach;
-targetX = 1472;
-targetY = 592;
+targetX = 1536;
+targetY = 304;
 PlayerFacingBefore = dir.left;
 PlayerFacingAfter = dir.left;

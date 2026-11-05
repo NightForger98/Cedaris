@@ -1,1 +1,3 @@
-sprite_index = spr_house_small_house;
+label = "Hayward home";
+boxW = 224;
+boxH = 192;

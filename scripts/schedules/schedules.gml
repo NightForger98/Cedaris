@@ -26,6 +26,17 @@ function villager_routines(){
 		yubaba:  {home: "rm_hotel.yubaba_bed", work: {at: "rm_hotel.yubaba_work", open: 7, close: 21, off: 6}, dayoff: [[9, "rm_wellshead.s2"], [12, "rm_town_inn.table_a"], [16, "rm_hotel.home"], [21, "home"]]},   // the hotel; Boh minds it on Sundays
 		boh:     {home: "rm_hotel.boh_bed", work: {at: "rm_hotel.boh_work", open: 8, close: 18, off: 3}, after: [[18, "rm_wellshead.s3"], [20, "home"]], dayoff: [[9, "rm_manara.s2"], [12, "rm_starsand.s3"], [16, "rm_town_inn.table_b"], [20, "home"]]},
 		coralie: {home: "rm_lighthouse.coralie_bed", rainproof: true, work: {at: "rm_lighthouse.coralie_work", open: 6, close: 14, off: 5}, after: [[14, "rm_manara.s3"], [18, "rm_lighthouse.home"], [22, "home"]], dayoff: [[9, "rm_starsand.s2"], [13, "rm_town_inn.table_c"], [17, "home"]]},
+		// The five families added on 2026-11-06: the one who runs the workshop, and the one who helps
+		rami:    {home: "rm_home_saba.rami_bed", work: {at: "rm_olive_press.rami_work", open: 8, close: 16, off: 0}, after: [[16, "rm_olivebay.mid"], [19, "rm_home_saba.table"], [22, "home"]], dayoff: [[9, "rm_olivebay.mid"], [13, "rm_redstreet.mid"], [17, "home"]]},
+		noor:    {home: "rm_home_saba.noor_bed", routine: [[7, "rm_olivebay.mid"], [11, "rm_olive_press.noor_work"], [16, "rm_home_saba.home"], [20, "home"]]},
+		ottilie: {home: "rm_home_brassbolt.ottilie_bed", work: {at: "rm_tinker.ottilie_work", open: 9, close: 18, off: 2}, after: [[18, "rm_hangar.mid"], [20, "home"]], dayoff: [[10, "rm_downtown.mid"], [14, "rm_starsand.mid"], [18, "home"]]},
+		gus:     {home: "rm_home_brassbolt.gus_bed", kid: true, routine: [[9, "rm_hangar.mid"], [12, "rm_tinker.gus_work"], [16, "rm_starsand.mid"], [18, "home"]]},
+		hal:     {home: "rm_home_saltwhistle.hal_bed", work: {at: "rm_boatyard.hal_work", open: 8, close: 16, off: 4}, after: [[16, "rm_southbeach.pier_b"], [19, "home"]], dayoff: [[7, "rm_southbeach.pier_end"], [12, "rm_whitesand.mid"], [17, "home"]]},
+		marina:  {home: "rm_home_saltwhistle.marina_bed", routine: [[6, "rm_southbeach.pier_end"], [9, "rm_boatyard.marina_work"], [15, "rm_whitesand.mid"], [19, "home"]]},
+		iris:    {home: "rm_home_fairglass.iris_bed", work: {at: "rm_glassworks.iris_work", open: 9, close: 17, off: 1}, after: [[17, "rm_wellshead.mid"], [20, "home"]], dayoff: [[10, "rm_hotel.guest_a"], [14, "rm_manara.mid"], [18, "home"]]},
+		tomas:   {home: "rm_home_fairglass.tomas_bed", routine: [[7, "rm_wellshead.mid"], [10, "rm_glassworks.tomas_work"], [16, "rm_home_fairglass.home"], [20, "home"]]},
+		bram:    {home: "rm_home_hayward.bram_bed", work: {at: "rm_stables.bram_work", open: 7, close: 15, off: 3}, after: [[15, "rm_frere.mid"], [19, "home"]], dayoff: [[9, "rm_sthereza.mid"], [13, "rm_abda.mid"], [17, "home"]]},
+		della:   {home: "rm_home_hayward.della_bed", routine: [[7, "rm_stables.della_work"], [12, "rm_home_hayward.home"], [15, "rm_frere.mid"], [19, "home"]]},
 		morga:   {home: "rm_witch_tower.morga_bed", rainproof: true, routine: [[8, "rm_witch_tower.morga_work"], [12, "rm_plummet.s2"], [14, "rm_witch_tower.morga_work"], [21, "home"]]},
 		rook:    {home: "rm_witch_tower.rook_bed", kid: true, routine: [[9, "rm_plummet.mid"], [12, "rm_witch_tower.home"], [15, "rm_plummet.s3"], [18, "home"]]},
 		cassius: {home: "rm_home_goldcrest.cassius_bed", work: {at: "rm_bank.cassius_work", open: 9, close: 16, off: 6}, after: [[16, "rm_downtown.s2"], [18, "rm_town_inn.table_d"], [21, "home"]], dayoff: [[10, "rm_redstreet.s2"], [13, "rm_town_inn.table_d"], [16, "home"]]},

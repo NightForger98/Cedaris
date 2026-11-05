@@ -84,6 +84,19 @@ const things = {
 	sprout:      {src: [10, 31, 1, 1], role: "decor"},
 	lilypads:    {src: [8, 30, 1, 1], role: "decor"},
 	lilypads2:   {src: [8, 31, 1, 1], role: "decor"},
+	// Starsand's stone pier: grey slabs (repeat along it)
+	stone_pier:  {src: [16, 26, 3, 3]},
+	// A rock spire (a plateau with its cliff face), stacked into the cliffs along the world's east edge
+	rock_spire:  {src: [5, 0, 3, 5], above: 2, solid: [[0, 2, 3, 3]]},
+	// Ruins (room.js "ruin" landmarks build them from these): pillars, a stone head, broken walls, rubble
+	ruin_pillar: {src: [14, 12, 1, 4], above: 2, solid: [[0, 3, 1, 1]]},
+	ruin_head:   {src: [15, 12, 2, 3], above: 1, solid: [[0, 2, 2, 1]]},
+	ruin_ivy:    {src: [20, 12, 1, 3], above: 1, solid: [[0, 2, 1, 1]]},
+	ruin_stump:  {src: [17, 14, 1, 2], solid: [[0, 1, 1, 1]]},
+	ruin_columns:{src: [19, 15, 2, 3], above: 1, solid: [[0, 2, 2, 1]]},
+	ruin_rubble: {src: [15, 15, 2, 1]},
+	ruin_wall_brick: {src: [19, 23, 3, 3], above: 1, solid: [[0, 2, 3, 1]]},
+	ruin_wall_stone: {src: [20, 26, 4, 3], above: 1, solid: [[0, 2, 4, 1]]},
 };
 
 // The building library (tools/buildings/library.js --tileset): buildings on TS_buildings, by name

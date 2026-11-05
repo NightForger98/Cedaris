@@ -1,1 +1,5 @@
-sprite_index = spr_house_townhouse;
+targetRoom = rm_dahya;
+targetX = 816;
+targetY = 72;
+PlayerFacingBefore = dir.down;
+PlayerFacingAfter = dir.down;

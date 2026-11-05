@@ -77,6 +77,28 @@ Based on `harvestvalleyconceptmap.docx`. The map is a 5x5 grid of rooms laid out
 There are 16 marriage candidates: 6 men (Boh, Fen, Edwin, Garth, Bryn, Sir Alaric) and 10 women (Coralie, Liora, Clara,
 Nerissa, Tauriel, Zenya, Mira, Dikhaj, Sylva, Posy).
 
+### Five more families, each with a workshop (added 2026-11-06)
+The user asked for no houses you can't enter: instead, five new families, each with a home and a workshop. Each
+workshop leads into a feature still to come.
+
+| Family | Where | Who | Workshop: sells | Leads to |
+|---|---|---|---|---|
+| Saba | Olive Bay | Rami (olive presser), Noor (picks the olives) | Olive Press: olive oil | olives from the grove, cooking with oil |
+| Brassbolt | Hangar 12 | Ottilie (dwarf tinker), Gus (her son, a kid) | Tinker's Workshop: gears, sprinklers | the rail cart (minecart), the old airship |
+| Saltwhistle | South Beach | Captain Hal (boatwright), Marina (his daughter) | Boatyard: rope, wood | boats, the ferry to the island |
+| Fairglass | Well's Head | Iris (elf glassblower), Tomas (hauls the sand) | Glassworks: glass, glass jars | jars for preserves |
+| Hayward | Frere's Fray | Bram (beastkin stablemaster), Della (keeps the stables) | Stables: horse feed, saddles | the horse |
+
+The workshops are PixelLab art. The five homes are placeholders until they have art. None of the ten are
+marriage candidates yet.
+
+### Ruins and the story (proposal)
+Ruins stand on the outskirts: Well's Head and Abda's Ascent (a broken house), Plummet's Point and Yarzeh Woods (a
+fallen temple with a stone head). The proposed story is that they were outposts of the **Wardens**, an old order that
+guarded the valley's coast and the mine. They fell about a hundred years ago, which links them to the skeletons under
+Beacon Hill and to Morga's tower. The villagers' lines already hint at it: Tomas talks about "Wardens' work", and Gus
+wonders whether the ruins had machines.
+
 ### Changes to current villagers
 - **Fen** grows up, from teen to adult, so he can be a candidate.
 - **Hask** becomes an elf.

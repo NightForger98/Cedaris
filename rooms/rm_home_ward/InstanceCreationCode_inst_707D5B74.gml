@@ -1,5 +1,5 @@
 targetRoom = rm_abda;
-targetX = 1104;
-targetY = 756;
+targetX = 848;
+targetY = 660;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

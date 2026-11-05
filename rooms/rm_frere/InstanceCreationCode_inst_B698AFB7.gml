@@ -1,1 +1,3 @@
-sprite_index = spr_house_cottage;
+label = "Monastery";
+boxW = 224;
+boxH = 192;

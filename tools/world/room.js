@@ -12,7 +12,8 @@ const T = require("../rooms/tiles.js");
 const woods = require("../rooms/woods.js");
 const INTERIORS = require("./interior_data.js");
 
-const SEA = 10;        // sea rows/cols (7 water + 3 sand)
+const WATER = 5, SAND = 10;   // the coast: a band of sea, then a wide beach (sand takes most of it)
+const SEA = WATER + SAND;      // coast rows/cols in all
 const RIVER = [1, 4];  // river cols (west side), then a cell of bank
 const SIDES = {l: [0, -1], r: [0, 1], t: [-1, 0], b: [1, 0]};
 const OPP = {l: "r", r: "l", t: "b", b: "t"};
@@ -21,16 +22,39 @@ const size = is => { const s = T.things[is].src; return [s[2], s[3]]; };
 const doorOf = is => { const b = T.things[is]; return b.door || [Math.floor(b.src[2] / 2), b.src[3] - 1]; };
 
 // The room's frame: size, land box, the crossing (cx, ry)
+// Each room is sized to what's in it (not one size for all): wide enough for its buildings either side of the
+// crossing (they alternate left, right), its decor south of the street, its corner landmarks, the square, the mine,
+// the pier and the cliffs; tall enough for its tallest building or northern landmark above the street and its decor
+// or southern landmarks below. Wild rooms (woods) keep a bigger minimum, so they still feel like woods.
 function geom(id){
 	const R = ROOMS[id];
 	if(R.farm) return {farm: true, W: FARM.w, H: FARM.h};
-	const W = R.w, H = R.h, sea = R.sea || "";
+	const sea = R.sea || "";
 	const x0 = (sea.includes("l") ? SEA : 0) + (R.river ? RIVER[1] + 2 : 0), y0 = sea.includes("t") ? SEA : 0;
-	const tallest = Math.max(0, ...(R.buildings || []).map(b => size(b.is)[1]));
-	let ry = Math.floor((y0 + H - 1) / 2);
-	ry = Math.max(ry, y0 + tallest + 3);
-	if(ry > H - 6) throw new Error(`${id}: too short for its buildings`);
-	const cx = Math.floor((x0 + W - 1) / 2);
+	const bsize = b => b.ph ? [b.w, b.h] : size(b.is);
+	const lmSize = lm => lm.is ? size(lm.is) : lm.ruin ? (lm.ruin === "house" ? [8, 4] : [8, 5]) : [lm.w, lm.h];
+	const side = [0, 0];
+	(R.buildings || []).forEach((b, i) => { side[i % 2] += bsize(b)[0] + 3; });
+	const decorW = [0, 0];
+	(R.decor || []).forEach((d, i) => { decorW[i % 2] += size(d.is)[0] + 2; });
+	const lms = R.landmarks || [];
+	const lmW = q => Math.max(0, ...lms.filter(l => l.q === q).map(l => lmSize(l)[0] + 4));
+	const lmH = q => Math.max(0, ...lms.filter(l => l.q === q).map(l => lmSize(l)[1] + 3));
+	const min = R.kind === "wild" ? 16 : 9;
+	let left = Math.max(min, side[0], decorW[0], lmW("nw"), lmW("sw"), R.plaza ? 10 : 0);
+	let right = Math.max(min, side[1], decorW[1], lmW("ne"), lmW("se"), R.plaza ? 10 : 0, R.mine ? 20 : 0,
+		R.pier === "t" || (sea.includes("t") && R.pier !== null) ? 13 : 0);
+	right += R.cliffEast ? 7 : 0;
+	const W = x0 + 2 + left + 7 + right + 2;
+	const tallest = Math.max(0, ...(R.buildings || []).map(b => bsize(b)[1]));
+	// A northern landmark stands above the buildings, a southern one below the decor (each corner can share its
+	// side with them), so their heights add up
+	const lmN = Math.max(lmH("nw"), lmH("ne")), lmS = Math.max(lmH("sw"), lmH("se"));
+	const decorH = Math.max(0, ...(R.decor || []).map(d => size(d.is)[1] + 2));
+	const north = Math.max(R.kind === "wild" ? 12 : 6, tallest + 2 + lmN, R.mine ? 9 + lmN : 0);
+	const south = Math.max(R.kind === "wild" ? 14 : 9, 3 + decorH + lmS + 2, R.plaza ? 12 + lmS : 0, sea.includes("l") ? 10 : 0);
+	const ry = y0 + north + 1, H = ry + 2 + south;
+	const cx = x0 + 2 + left + 3;
 	return {W, H, x0, y0, cx, ry};
 }
 
@@ -72,12 +96,12 @@ function spec(id){
 	const free = (c1, r1, w, h) => { for(let r = r1 - 1; r < r1 + h + 1; r++) for(let c = c1 - 1; c < c1 + w + 1; c++){ if(r < 0 || c < 0 || r >= H || c >= W || taken.has(c + "," + r) || at(c, r) !== ".") return false; } return true; };
 
 	// The coast
-	if(sea.includes("t")){ put(0, W - 1, 0, SEA - 4, "~"); put(0, W - 1, SEA - 3, SEA - 1, "_"); }
-	if(sea.includes("l")){ put(0, SEA - 4, 0, H - 1, "~"); put(SEA - 3, SEA - 1, sea.includes("t") ? SEA - 3 : 0, H - 1, "_"); }
+	if(sea.includes("t")){ put(0, W - 1, 0, WATER - 1, "~"); put(0, W - 1, WATER, SEA - 1, "_"); }
+	if(sea.includes("l")){ put(0, WATER - 1, 0, H - 1, "~"); put(WATER, SEA - 1, sea.includes("t") ? WATER : 0, H - 1, "_"); }
 	// The river down the west side (from a spring partway down at Abda's Ascent)
 	const riverX = (sea.includes("l") ? SEA : 0) + RIVER[0];
 	if(R.river === "spring") put(riverX, riverX + 3, 0, ry - 8, "~"), put(riverX - 1, riverX + 6, ry - 11, ry - 7, "~");
-	else if(R.river) put(riverX, riverX + 3, sea.includes("t") ? SEA - 3 : 0, H - 1, "~");
+	else if(R.river) put(riverX, riverX + 3, sea.includes("t") ? WATER : 0, H - 1, "~");
 
 	// Streets: the kind of each way out; inside, cobbles if any way out is a road
 	const kinds = Object.values(links);
@@ -130,18 +154,33 @@ function spec(id){
 	}
 
 	// A pier out to sea
-	if(R.pier === "t"){
+	// Every stretch of coast has a pier out over the water from the beach, for fishing (Starsand's is stone)
+	const pierSide = R.pier ?? (sea.includes("t") ? "t" : sea.includes("l") ? "l" : null);
+	if(pierSide === "t"){
 		const pc = Math.min(W - 6, cx + 10);
-		put(pc, pc + 2, 2, SEA - 1, "b"); put(pc, pc + 2, SEA, ry - 2, ",");
-		things.push({src: [17, 20, 1, 1], repeat: [3, SEA - 3], at: [pc, 2]});
-		points.pier_end = [(pc + 1) * 32 + 16, 3 * 32 + 16];
-		points.pier_b = [(pc + 1) * 32 + 16, 5 * 32 + 16];
-	} else if(R.pier === "l"){
-		const pr = Math.min(H - 4, ry + 6);
-		put(2, SEA - 1, pr, pr + 1, "b"); put(SEA, x0 + 1, pr, pr + 1, ",");
-		things.push({src: [17, 20, 1, 1], repeat: [SEA - 2, 2], at: [2, pr]});
-		points.pier_end = [3 * 32 + 16, pr * 32 + 16];
-		points.pier_b = [5 * 32 + 16, pr * 32 + 16];
+		put(pc, pc + 2, 1, WATER - 1, "b"); put(pc, pc + 2, SEA, ry - 2, ",");
+		if(R.pierStone) things.push({is: "stone_pier", repeat: [1, 2], at: [pc, 1]});
+		else things.push({src: [17, 20, 1, 1], repeat: [3, WATER + 1], at: [pc, 1]});
+		points.pier_end = [(pc + 1) * 32 + 16, 2 * 32 + 16];
+		points.pier_b = [(pc + 1) * 32 + 16, 4 * 32 + 16];
+	} else if(pierSide === "l"){
+		// On the street's row: the street runs on across the sand to it
+		const pr = ry;
+		put(1, WATER - 1, pr, pr + 1, "b"); put(WATER + 1, xa, ry - 1, ry + 1, ",");
+		things.push({src: [17, 20, 1, 1], repeat: [WATER + 1, 2], at: [1, pr]});
+		points.pier_end = [2 * 32 + 16, pr * 32 + 16];
+		points.pier_b = [4 * 32 + 16, pr * 32 + 16];
+	}
+
+	// Cliffs down the world's east edge, from Plummet's Point to Yarzeh Woods: rock spires stacked into a ridge (a
+	// solid band you can't cross); in the woods they stop above the way east to Whisperwood
+	if(R.cliffEast){
+		const r1 = R.mine ? 7 : (sea.includes("t") ? WATER : 0), r2 = R.whisperwood ? ry - 3 : H - 1;
+		put(W - 7, W - 1, r1, r2, "x");
+		for(let rr = r1 - 1, k = 0; rr <= r2 - 3; rr += 3, k++){
+			things.push({is: "rock_spire", at: [W - 7 + (k % 2), rr]}, {is: "rock_spire", at: [W - 4 + ((k + 1) % 2), rr + 1]});
+		}
+		take(W - 7, r1, 7, r2 - r1 + 1, 0);
 	}
 
 	// The town square
@@ -164,15 +203,26 @@ function spec(id){
 
 	// Buildings on the north side of the street, doors on it: left of the crossing, then right
 	let left = cx - 3, right = cx + 3;
+	// A building can be a placeholder until its art is made: {key, ph: "Label", w, h, room} - a labelled box with its
+	// door in the middle of its bottom row (obj_placeholder), the way in as for any building
+	for(const b of R.buildings || []){
+		if(!b.ph) continue;
+		const name = "ph_" + id + "_" + b.key, dc = Math.floor(b.w / 2);
+		T.things[name] = {placeholder: b.ph, src: [0, 0, b.w, b.h], door: [dc, b.h - 1],
+			solid: [[0, b.h - 2, b.w, 1], [0, b.h - 1, dc, 1], [dc + 1, b.h - 1, b.w - dc - 1, 1]]};
+		b.is = name;
+	}
 	const boxes = [];   // what stands on the street's north side: buildings and the props beside them [c, r, w, h]
 	const yard = (R.buildings || []).map(b => Object.assign({}, b, {size: size(b.is), door: doorOf(b.is)}));
 	let side = 0;
 	for(const b of yard){
 		const [w, h] = b.size, top = ry - 1 - h;
 		let c = null;
+		// Clear grass for the whole building (a pier's lane or the like may cross the street's edge): slide outward
+		const clear = cc => { for(let y = top; y < top + h; y++) for(let x = cc; x < cc + w; x++) if(at(x, y) !== ".") return false; return true; };
 		for(let tries = 0; tries < 2 && c === null; tries++, side ^= 1){
-			if(side === 0 && left - w + 1 >= x0 + 1){ c = left - w + 1; left = c - 3; }
-			else if(side === 1 && right + w - 1 <= W - 2){ c = right; right = c + w + 2; }
+			if(side === 0){ let cc = left - w + 1; while(cc >= x0 + 1 && !clear(cc)) cc--; if(cc >= x0 + 1){ c = cc; left = c - 3; } }
+			else { let cc = right; while(cc + w - 1 <= W - 2 && !clear(cc)) cc++; if(cc + w - 1 <= W - 2){ c = cc; right = c + w + 2; } }
 		}
 		if(c === null) throw new Error(`${id}: no room on the street for ${b.key}`);
 		const bx = c, d = b.door;
@@ -196,7 +246,7 @@ function spec(id){
 	// street is lined with houses and a country road has a farmhouse or two. No way in: their door cell stays solid.
 	const fillers = {town: ["house_townhouse", "house_family_house", "house_small_house", "house_tavern_inn", "house_cottage"],
 	                 rural: ["house_cottage", "house_small_house"]}[R.kind] || [];
-	const fillMax = R.fill ?? {town: 6, rural: 2}[R.kind] ?? 0;
+	const fillMax = R.fill ?? 0;   // none by default: the user wants every house to be someone's you can go into
 	const fillRand = rng(seed + 11);
 	let fk = Math.floor(fillRand() * 5);
 	for(let k = 0, placedN = 0; k < fillMax * 2 && placedN < fillMax; k++){
@@ -266,9 +316,9 @@ function spec(id){
 
 	// In town, a row of neighbours' houses south of the street too (after the decor and the square, in what's left),
 	// their fronts facing south like every building in the game
-	if(R.kind === "town"){
+	if(R.kind === "town" && (R.fillSouth ?? 0) > 0){
 		let sl = cx - 4, sr = cx + 4, sside = 0, placedS = 0;
-		for(let k = 0; k < 16 && placedS < (R.fillSouth ?? 4); k++, sside ^= 1){
+		for(let k = 0; k < 16 && placedS < R.fillSouth; k++, sside ^= 1){
 			const is = fillers[fk++ % fillers.length], [w, h] = size(is), top = ry + 4;
 			if(top + h > H - 2) continue;
 			let c = sside === 0 ? sl - w + 1 : sr;
@@ -289,8 +339,13 @@ function spec(id){
 	                sw: [x0 + 1, ry + 4, cx - 4, H - 2], se: [cx + 4, ry + 4, W - 2, H - 2]};
 	for(const lm of R.landmarks || []){
 		const q = quadsL[lm.q];
-		if(!q) throw new Error(`${id}: landmark ${lm.is || lm.ph} has no corner "${lm.q}"`);
-		const [w, h] = lm.is ? size(lm.is) : [lm.w, lm.h];
+		if(!q) throw new Error(`${id}: landmark ${lm.is || lm.ph || lm.ruin} has no corner "${lm.q}"`);
+		const RUINS = {   // ruins built from pieces: [thing, dx, dy]
+			house: {w: 8, h: 4, parts: [["ruin_wall_brick", 0, 0], ["ruin_wall_stone", 4, 0], ["ruin_rubble", 1, 3], ["ruin_rubble", 5, 3], ["ruin_stump", 3, 2]]},
+			temple: {w: 8, h: 5, parts: [["ruin_pillar", 0, 0], ["ruin_ivy", 2, 1], ["ruin_head", 3, 1], ["ruin_columns", 6, 1], ["ruin_rubble", 1, 4], ["ruin_stump", 5, 3]]},
+		};
+		const ruin = lm.ruin ? RUINS[lm.ruin] : null;
+		const [w, h] = lm.is ? size(lm.is) : ruin ? [ruin.w, ruin.h] : [lm.w, lm.h];
 		const mc = Math.round((q[0] + q[2] - w) / 2), mr = Math.round((q[1] + q[3] - h) / 2);
 		let spot = null;
 		for(let d = 0; d < 14 && !spot; d++) for(let dr = -d; dr <= d && !spot; dr++) for(let dc = -d; dc <= d && !spot; dc++){
@@ -301,6 +356,7 @@ function spec(id){
 		if(!spot){ console.log(`  ${id}: no room for landmark ${lm.is || lm.ph} (${lm.q})`); continue; }
 		const [c, rr] = spot;
 		if(lm.is) things.push({is: lm.is, at: [c, rr]});
+		else if(ruin) for(const [p, dx, dy] of ruin.parts) things.push({is: p, at: [c + dx, rr + dy]});
 		else things.push({placeholder: lm.ph, src: [0, 0, w, h], solid: [[0, Math.max(0, h - 2), w, Math.min(h, 2)]], at: [c, rr]});
 		take(c, rr, w, h, 1);
 		points["lm_" + lm.q] = [(c + Math.floor(w / 2)) * 32 + 16, (rr + h) * 32 + 24];
@@ -343,8 +399,8 @@ function spec(id){
 	// Spawn areas: the four corners of land, clear of the streets (resource_areas in scripts/gathering)
 	const names = ["nw", "ne", "sw", "se"];
 	quads.forEach((q, i) => { if(q[2] - q[0] >= 4 && q[3] - q[1] >= 4) areas[names[i]] = [q[0] + 1, q[1] + 1, q[2] - 1, q[3] - 1]; });
-	if(sea.includes("l")) areas.shore = [SEA - 3, Math.max(sea.includes("t") ? SEA : 1, 1), SEA - 1, H - 2];
-	if(sea.includes("t")) areas.shore_top = [Math.max(x0, 1), SEA - 3, W - 2, SEA - 1];
+	if(sea.includes("l")) areas.shore = [WATER + 1, Math.max(sea.includes("t") ? SEA : 1, 1), SEA - 1, H - 2];
+	if(sea.includes("t")) areas.shore_top = [Math.max(x0, 1), WATER + 1, W - 2, SEA - 1];
 
 	// Ways out, and where you arrive by each
 	for(const [s, k] of Object.entries(links)){

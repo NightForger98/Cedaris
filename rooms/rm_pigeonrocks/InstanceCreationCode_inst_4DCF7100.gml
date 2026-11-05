@@ -1,3 +1,5 @@
-label = "Sea arch";
-boxW = 160;
-boxH = 128;
+targetRoom = rm_verdun;
+targetX = 64;
+targetY = 400;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

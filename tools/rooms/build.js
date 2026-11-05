@@ -288,7 +288,7 @@ boxH = ${gr.h * CELL};`});
 	const file = `rooms/${roomName}/${roomName}.yy`;
 	// A new room starts from the village's settings (views, physics) and is registered in the project
 	const isNew = !fs.existsSync(path.join(root, file));
-	const room = readYy(isNew ? "rooms/rm_2/rm_2.yy" : file);
+	const room = readYy(isNew ? "rooms/rm_town_inn/rm_town_inn.yy" : file);   // (rm_2, the old template, is gone)
 	if(isNew){
 		room["%Name"] = room.name = roomName;
 		room.creationCodeFile = "";

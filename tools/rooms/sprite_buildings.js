@@ -19,6 +19,7 @@ const DOORS = {
 	mill: 182, ranch_barn: 142, silo: 60, small_house: 84, smithy: 112, tavern: 115, tavern_inn: 92, townhouse: 122,
 	town_hall: 165, weaver: 161, windmill: 99,
 	witch_tower: 75, guild_hall: 150, tool_shop: 50, hospital: 130, library: 150,
+	olive_press: 117, tinker_workshop: 82, boatyard: 112, glassworks: 132, stables: 137,
 };
 
 // Props drawn as one sprite (spr_prop_<name>, PixelLab): "prop_<name>", centred in a box of whole tiles, standing on

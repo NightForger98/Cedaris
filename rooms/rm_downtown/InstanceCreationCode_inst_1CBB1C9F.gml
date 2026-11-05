@@ -1,1 +1,5 @@
-sprite_index = spr_house_tool_shop;
+targetRoom = rm_redstreet;
+targetX = 960;
+targetY = 400;
+PlayerFacingBefore = dir.left;
+PlayerFacingAfter = dir.left;

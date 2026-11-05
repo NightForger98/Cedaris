@@ -1,1 +1,5 @@
-sprite_index = spr_house_small_house;
+targetRoom = rm_starsand;
+targetX = 64;
+targetY = 816;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

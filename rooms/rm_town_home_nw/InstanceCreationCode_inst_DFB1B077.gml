@@ -1,5 +1,5 @@
 targetRoom = rm_ovenswindow;
-targetX = 752;
-targetY = 596;
+targetX = 592;
+targetY = 788;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

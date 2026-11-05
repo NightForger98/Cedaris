@@ -70,6 +70,23 @@ const NEW = {
 	rm_library: shop(["edwin"], [{is: "bookshelf", at: [1, 2]}, {is: "shelf_books", at: [2, 2]}, {is: "bookshelf", at: [11, 2]}, {is: "shelf_books", at: [12, 2]},
 		{is: "bookshelf", at: [13, 2]}, {is: "table", at: [11, 6]}, {is: "books", at: [5, 4]}, {is: "scroll", at: [7, 4]}, {is: "candle", at: [12, 7]}],
 		{wall: "panel", floor: "parquet", spots_extra: {reading: [10, 8], wynn_study: [13, 9]}}),
+	// The five families added on 2026-11-06, and their workshops
+	rm_home_saba: home(["rami", "noor"], {wall: "paper", floor: "wood"}),
+	rm_home_brassbolt: home(["ottilie", "gus"], {wall: "panel", floor: "wood"}),
+	rm_home_saltwhistle: home(["hal", "marina"], {wall: "blue", floor: "wood"}),
+	rm_home_fairglass: home(["iris", "tomas"], {wall: "paper", floor: "checker"}),
+	rm_home_hayward: home(["bram", "della"], {wall: "stone", floor: "wood"}),
+	rm_olive_press: shop(["rami", "noor"], [{is: "cask", at: [1, 2]}, {is: "barrels", at: [11, 2]}, {is: "jars", at: [5, 4]}, {is: "bottles", at: [7, 4]},
+		{is: "sacks", at: [13, 3]}, {is: "pots", at: [1, 7]}, {is: "crate_tall", at: [13, 7]}], {wall: "stone", floor: "stone"}),
+	rm_tinker: shop(["ottilie", "gus"], [{is: "shelf_open", at: [1, 2]}, {is: "axe", at: [11, 1]}, {is: "crate_tall", at: [12, 2]}, {is: "chest", at: [13, 3]},
+		{is: "table", at: [11, 6]}, {is: "lantern", at: [5, 4]}, {is: "rope", at: [2, 7]}, {is: "barrels", at: [1, 8]}], {wall: "panel", floor: "stone"}),
+	rm_boatyard: shop(["hal", "marina"], [{is: "rope", at: [1, 2]}, {is: "lantern", at: [5, 4]}, {is: "crate_tall", at: [12, 2]}, {is: "barrels", at: [13, 3]},
+		{is: "table", at: [11, 6]}, {is: "sacks", at: [1, 7]}, {is: "chest", at: [13, 8]}], {wall: "blue", floor: "wood"}),
+	rm_glassworks: shop(["iris", "tomas"], [{is: "stove_pipe", at: [1, 1]}, {is: "oven", at: [2, 2]}, {is: "bottles", at: [5, 4]}, {is: "jars", at: [7, 4]},
+		{is: "shelf_dishes", at: [11, 2]}, {is: "shelf_open", at: [12, 2]}, {is: "table_round", at: [12, 7]}, {is: "vase", at: [1, 8]}], {wall: "paper", floor: "checker"}),
+	rm_stables: shop(["bram", "della"], [{is: "sacks", at: [1, 2]}, {is: "barrels", at: [12, 2]}, {is: "rope", at: [11, 2]}, {is: "pump", at: [1, 7]},
+		{is: "crate_tall", at: [13, 7]}, {is: "lantern", at: [5, 4]}], {w: 18, wall: "panel", floor: "wood"}),
+
 	// The old church: an altar (the long table) at the top, benches
 	rm_church: {w: 18, h: 14, door: 8, wall: "stone", floor: "stone",
 		furniture: [{is: "table", at: [8, 3]}, {is: "candle", at: [8, 4]}, {is: "candle", at: [9, 4]}, {is: "portrait", at: [8, 1]},

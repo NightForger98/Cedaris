@@ -125,3 +125,33 @@ prop_planter (80x56, 60x43): "rectangular grey stone flower planter box full of 
   leaves ... the long front face of the box parallel to the screen ..."
 prop_campfire (64x56): "small campfire ... a ring of grey stones around a few crossed brown logs, with warm orange and
   yellow flames rising from the middle ... no smoke".
+
+Fourth batch, 2026-11-05: workshops for five new families (352x320 canvases, same settings and ending as above,
+"... no smoke" where there's a chimney). One try each - the trial's last 5 generations.
+olive_press (263x152): "pixel art olive press house ... A long low wide building ... terracotta clay tile roof ... Rough
+  pale stone walls. One wooden door at the bottom middle with clay oil jars and woven baskets of olives beside it. On
+  the right, under the same roof, an open bay showing a big round stone olive mill wheel. A small hanging wooden sign
+  showing only a picture of an olive branch, no letters." The wheel came out as a wooden cart wheel, the baskets as
+  potted plants, the sign as a framed picture on the wall, and the door a little left of the middle.
+tinker_workshop (173x274): "pixel art inventor's workshop ... A long low wide red brick building ... the big grey
+  corrugated tin sheet roof ... One wide wooden garage-style double door at the bottom middle. Brass gears and copper
+  pipes fixed on the brick wall, a small brass chimney on the roof. On one side a small lean-to over a wooden
+  workbench with tools. A hanging sign shaped like a gear, no letters." It came out gable-front (ridge front to back)
+  and narrow; the gears are small, and there are no pipes.
+boatyard (304x148): "pixel art boatyard shed ... A long low wide weathered grey-brown timber plank shed ... weathered
+  wooden shingle roof ... A wide open front at the bottom middle showing a half-built wooden rowing boat on two
+  trestles inside. Oars leaning on the wall, coiled ropes, a small lantern hanging by the opening. A hanging wooden
+  sign shaped like an anchor, no letters." The wood is purple-grey; the sign is square, with an anchor on it.
+glassworks (234x152): "pixel art glassblower's workshop ... A long low wide building ... dark slate roof ... Pale stone
+  walls. One wooden door at the bottom middle. On one side a big shop window with shelves of colourful glass bottles
+  and jars in blue, green and amber. On the other side a round red brick furnace chimney rising above the roof, with
+  a small arched opening at its foot glowing warm orange." originals/glassworks_with_mark.png is as made: it had a
+  small signature-like mark in the bottom right corner, painted over in originals/glassworks.png. Bottles in both
+  windows; the glow is in the chimney top; a bit of fence was added on the left.
+stables (304x271): "pixel art horse stable barn ... A long low wide barn ... brown wooden shingle roof ... with a small
+  wooden cupola in the middle of the ridge ... Dark timber frame with white plaster panels. One big wooden double door
+  at the bottom middle, on each side a row of wooden stall half doors, a brown horse's head looking out over one of
+  them. Hay bales by the wall, a leather saddle on a wooden rail. A hanging sign shaped like a horseshoe, no letters."
+  It came out gable-front, with "HARSE" on the sign and a grey drop shadow on the right. originals/stables_with_text.png
+  is as made; in originals/stables.png the letters are painted over with the sign's brown, a small horseshoe is
+  drawn by hand in their place, and the shadow is cleared. No saddle; one stall rail with the horse, one hay bale.

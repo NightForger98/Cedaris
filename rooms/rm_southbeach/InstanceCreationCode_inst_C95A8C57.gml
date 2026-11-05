@@ -1,5 +1,5 @@
 targetRoom = rm_whitesand;
-targetX = 880;
-targetY = 1144;
+targetX = 944;
+targetY = 632;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

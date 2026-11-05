@@ -2,7 +2,9 @@
 start story
 wait 60
 gold 1000
-room rm_beaconhill 1184 176
+room rm_beaconhill
+wait 30
+call autotest_to_point cave 0 8
 face n
 wait 5
 shot 00_cave

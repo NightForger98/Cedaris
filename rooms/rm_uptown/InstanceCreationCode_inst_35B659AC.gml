@@ -1,1 +1,5 @@
-sprite_index = spr_house_cottage;
+targetRoom = rm_ovenswindow;
+targetX = 64;
+targetY = 816;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

@@ -1,1 +1,5 @@
-sprite_index = spr_house_market_small;
+targetRoom = rm_bakery;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

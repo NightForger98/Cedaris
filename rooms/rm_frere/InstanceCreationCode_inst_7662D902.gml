@@ -1,4 +1,4 @@
-targetRoom = rm_village_elda;
+targetRoom = rm_stables;
 targetX = 256;
 targetY = 312;
 PlayerFacingBefore = dir.up;

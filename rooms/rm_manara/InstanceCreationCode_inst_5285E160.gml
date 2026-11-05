@@ -1,3 +1,5 @@
-label = "Lookout point";
-boxW = 128;
-boxH = 96;
+targetRoom = rm_redstreet;
+targetX = 528;
+targetY = 72;
+PlayerFacingBefore = dir.down;
+PlayerFacingAfter = dir.down;

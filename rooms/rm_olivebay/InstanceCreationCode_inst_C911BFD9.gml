@@ -1,1 +1,3 @@
-sprite_index = spr_house_townhouse;
+label = "Saba home";
+boxW = 224;
+boxH = 192;

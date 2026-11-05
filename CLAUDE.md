@@ -69,6 +69,19 @@ overnight while they slept, as a prototype:
   (a labelled box) until it has art: Sea arch, Tide pools, Museum, Botanical garden, Shipwreck, Beach bar,
   Graveyard, Monastery, Ranger's cabin, Fish market, Olive grove and the rest in `world.js`. Roads now draw over a
   dirt layer (`":"` has `under: ["dirt"]`), so lanes meet roads with no grass seam.
+- **No houses you can't enter** (2026-11-06, the user's call): the neighbours' houses are off (`fill` / `fillSouth`
+  default 0). Instead there are five new families with a home and a workshop each (design/world_plan.md: Saba olive
+  press, Brassbolt tinker, Saltwhistle boatyard, Fairglass glassworks, Hayward stables). That's 10 villagers in
+  `villager_table`, `villager_routines`, `people_trade` and 7 new materials, plus 10 interiors in
+  `interior_data.js`. A building can be `{key, ph: "Label", w, h, room}` until it has art: an enterable labelled box.
+  The five homes are like that for now. Test case `families`.
+- **Rooms sized to their contents**: `geom()` in `room.js` works each room's size out from what's in it. `w` / `h` in
+  `world.js` are no longer used.
+- **Coast**: 5 rows of water and 10 of sand. Every coastal room has a pier; Starsand's is stone (`pierStone`). A
+  west-coast pier sits on the street's row, and the street runs across the sand to it.
+- **East cliffs** (`cliffEast`: Plummet's Point, Beacon Hill, Victory Hill, Yarzeh Woods above the Whisperwood path):
+  a solid band of `rock_spire` pieces. **Ruins** (`{ruin: "house" | "temple", q}` landmarks) are built from TS_terrain
+  pieces (`ruin_*` in tiles.js).
 - **Two folders**: `D:\GameMakerProjects\HarvestValley-HOMEPC` is on `main`; `HarvestValley-WorldRebuild` beside it
   is a git worktree on `world-rebuild`. The user's test rooms (`testmapindoor1`, `roomtest2`) are in both, listed
   last in the room order and never committed. In the branch folder an uncommitted spec,

@@ -1,5 +1,5 @@
 targetRoom = rm_frere;
-targetX = 560;
-targetY = 532;
+targetX = 624;
+targetY = 660;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

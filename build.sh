@@ -43,6 +43,9 @@ case "${1:-check}" in
   *)     echo "Usage: ./build.sh [check|run|clean]"; exit 2 ;;
 esac
 
+# The tilesets' padded sheets must match their .yy (the IDE writes them; a fresh clone has none)
+node tools/rooms/output_tileset.js || { echo "BUILD FAILED: tileset sheets"; exit 1; }
+
 # The compiler lets calls to missing functions through (they fail only when the line runs): catch them first
 node tools/check_calls.js "$(win "$RUNTIME")" || { echo "BUILD FAILED: unknown functions (see above)"; exit 1; }
 

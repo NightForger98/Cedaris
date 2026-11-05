@@ -29,6 +29,8 @@ function animal_products(){
 	static t = {
 		egg:  {name: "Egg",  energy: 25, sell: 30, colour: make_colour_rgb(245, 235, 210), desc: "Fresh from the coop."},
 		milk: {name: "Milk", energy: 35, sell: 60, colour: make_colour_rgb(250, 250, 255), desc: "Creamy, still warm."},
+		// No animal makes honey: the Night farm sells it, from its hives (Saint Thereza)
+		honey: {name: "Honey", energy: 30, sell: 50, colour: make_colour_rgb(235, 170, 50), desc: "From the Night farm's hives."},
 	};
 	return t;
 }
@@ -41,7 +43,7 @@ function animals_list(){
 /// @description Where animals roam on the farm: the fenced pasture (room pixels, from the farm's layout).
 function animal_pasture(){ static p = layout_area("rm_1", "pasture"); return p; }
 
-/// @description Thorne's livestock: a crate of each kind.
+/// @description Poupry's livestock (Meadowlark Farm): a crate of each kind.
 function animal_stock(){
 	var out = [], names = ["chicken", "sheep", "cow"];
 	for(var i = 0; i < 3; i++) array_push(out, {id: "n|" + names[i], price: animal_def(names[i]).price});

@@ -138,6 +138,8 @@ if(in_walk || in_run){
 }
 // Equipment Speed stat (feathers and pixie dust help, heavy metal slows you down)
 spd *= inv_speed_multiplier();
+// Roads (cobbles) speed you up, on foot or running (world_is_road: the road cells of the outdoor rooms)
+if(world_is_road(room_get_name(room), floor(x / 32), floor(y / 32))) spd *= ROAD_BOOST;
 if(world_time_ready() && vitals_exhausted()) spd *= 0.6; // exhausted: slow
 if(busy) spd *= 0.5; // charging: a slow shuffle, still facing the same way
 //RESETVARIABLES

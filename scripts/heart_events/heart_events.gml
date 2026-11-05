@@ -7,7 +7,7 @@
 /// lines: what they say; choice: {ask, options: [[your words, friendship, their reply]...]}; gift: [item id, n].
 function heart_event_table(){
 	static t = [
-		{id: "elda_2", who: "elda", hearts: 2, room: "rm_yarzeh", hours: [7, 10],
+		{id: "elda_2", who: "elda", hearts: 2, room: "rm_town_apothecary", hours: [10, 18],
 		 lines: ["Shh. Listen.", "The river's telling the reeds about the spring flood - the one forty years back.",
 		         "Most people walk past and hear water. You stopped."],
 		 choice: {ask: "What do you say?", options: [["\"I hear it too. Tell me more.\"", 60, "Then sit. It's a long story, and the river tells it better than I do."],
@@ -28,7 +28,7 @@ function heart_event_table(){
 		 lines: ["Come in, come in. I found your grandmother's recipe book.", "Her vegetable stew. She'd make it every winter, and the whole valley came.",
 		         "Take some. And take the book's secret: more pepper than you think."],
 		 gift: ["f|veg_stew", 2]},
-		{id: "thorne_4", who: "thorne", hearts: 4, room: "rm_valley_carpentry", hours: [9, 17],
+		{id: "thorne_4", who: "thorne", hearts: 4, room: "rm_victoryhill", hours: [7, 16],
 		 lines: ["Don't laugh.", "I carve things. Small things. When the big work's done.", "This one's for you. It's a duck. Or a dog."],
 		 choice: {ask: "What is it?", options: [["\"It's clearly a duck. It's wonderful.\"", 60, "...It was a dog. But I like duck better now."],
 		                                        ["\"Is it... a potato?\"", 10, "Hah! Fair. Keep it anyway."]]}},

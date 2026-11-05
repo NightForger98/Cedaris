@@ -1,8 +1,8 @@
 /// @description Insert description here
 // You can write your code in this editor
-w_spd= 1;
-n_spd= 2;
-r_spd= 3;
+w_spd= 1.5;
+n_spd= 3;
+r_spd= 4.5;   // walk / normal / run: px a frame (the new world is bigger; roads add ROAD_BOOST)
 spd = n_spd;
 x_frame =0;
 y_frame =0;

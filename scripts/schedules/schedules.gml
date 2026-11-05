@@ -8,11 +8,11 @@
 ///
 /// Where someone is comes from the clock alone, so nothing is saved, and people you can't see are always where
 /// they'd be: when one walks into the room you're in, an obj_villager appears at the door (villagers_update).
-/// On a festival day everyone spends the day in the village crowd instead.
+/// On a festival day everyone spends the day in the festival crowd in Downtown instead.
 ///
 /// Places are "room.point" (named points in tools/rooms/specs, reached through layout_point), or "home".
 
-#macro WALK_SPEED 80   // room pixels per game minute (about 2 px a frame, a brisk walk): from the town to the vale in an hour
+#macro WALK_SPEED 120  // room pixels per game minute (about 2 px a frame at the slower clock): the longest commute is about 75 minutes
 
 /// @description Homes, jobs and days. work: {at, open, close, off} - hours, and the weekday off (0 Mon - 6 Sun);
 /// they leave an hour before opening. after: their evening once work's done (default: home at closing time).
@@ -22,72 +22,53 @@
 /// watch, Pip minds the sheep, Hask hunts, and Elda loves it); everyone else stays in (villager_stops).
 function villager_routines(){
 	static t = {
-		// Shops: the ranch opens first (farm hours), the inn last and latest; each closes one day a week
-		wren:   {home: "rm_valley_ranch.wren_bed", work: {at: "rm_valley_ranch.wren_work", open: 8, close: 16, off: 1},
-		         after: [[16.5, "rm_valley.herbs"], [18, "home"]],
-		         dayoff: [[9, "rm_village_store.shop_a"], [10.5, "rm_2.square_d"], [13, "home"]]},   // groceries at Mara's
-		brom:   {home: "rm_village_smithy.brom_bed", work: {at: "rm_village_smithy.brom_work", open: 9, close: 17, off: 3}, hammer: true,
-		         after: [[17.5, "rm_2.square_c"], [19, "rm_town_inn.table_a"], [21.5, "home"]],
-		         dayoff: [[8, "rm_beach.pier_b"], [13, "rm_town_inn.table_a"], [18, "rm_2.square_c"], [20, "home"]]},
-		thorne: {home: "rm_valley_carpentry.thorne_bed", seasons: {summer: {after: [[17, "rm_beach.camp"], [19.5, "rm_town_inn.table_b"], [21.5, "home"]]}},   // summer evenings: a swim
-		         work: {at: "rm_valley_carpentry.thorne_work", open: 9, close: 17, off: 6},
-		         after: [[17, "rm_valley.yard"], [18.5, "rm_town_inn.table_b"], [21.5, "home"]],
-		         dayoff: [[8, "rm_valley.riverbank"], [12, "rm_2.square_e"], [15, "rm_village_smithy.shop_a"], [18, "rm_town_inn.table_b"], [21, "home"]]},
-		mara:   {home: "rm_village_store.mara_bed", work: {at: "rm_village_store.mara_work", open: 9, close: 18, off: 2},
-		         dayoff: [[9.5, "rm_town_outfitter.shop_a"], [11, "rm_town.square_c"], [13, "rm_village_elda.elda_table"], [16, "rm_2.square_a"], [18, "home"]]},
-		morga:  {home: "rm_town_apothecary.morga_bed", work: {at: "rm_town_apothecary.morga_work", open: 10, close: 18, off: 4},
-		         after: [[18, "rm_town.square_f"], [19.5, "home"]],
-		         dayoff: [[8, "rm_valley.herbs"], [13, "rm_village_elda.elda_table"], [16, "rm_town_inn.door_table"], [19, "home"]]},
-		bryn:   {home: "rm_town_outfitter.bryn_bed", work: {at: "rm_town_outfitter.bryn_work", open: 10, close: 19, off: 5},
-		         after: [[19, "rm_town_inn.table_d"], [22, "home"]],
-		         dayoff: [[9, "rm_village_smithy.shop_a"], [11, "rm_2.square_c"], [14, "rm_valley_ranch.shop_a"], [17, "rm_town_inn.table_d"], [21, "home"]]},
-		lysa:   {home: "rm_town_inn.lysa_bed", work: {at: "rm_town_inn.lysa_work", open: 10, close: 22, off: 0},
-		         dayoff: [[9, "rm_village_store.shop_c"], [11, "rm_valley_ranch.shop_a"], [14, "rm_2.square_a"], [17, "rm_town.square_f"], [20, "home"]]},
-		// Jobs without a counter
-		ida:    {home: "rm_town_home_se.ida_bed", work: {at: "rm_town_inn.ida_work", open: 6, close: 13, off: 6},   // baking for the inn
-		         after: [[13, "rm_town.square_c"], [16, "rm_town_home_se.ida_home"], [21, "home"]],
-		         dayoff: [[9, "rm_village_store.shop_a"], [11, "rm_2.square_d"], [14, "rm_town_home_se.ida_home"], [21, "home"]]},
-		marlo:  {home: "rm_beach_hut.marlo_bed", rainproof: true, seasons: {winter: {after: [[12, "rm_town_inn.door_table"], [20.5, "home"]]}},   // winter: warm by the inn's fire
-		         work: {at: "rm_beach.pier_end", open: 6, close: 12, off: 6},
-		         after: [[12, "rm_beach_hut.marlo_home"], [16, "rm_town_inn.door_table"], [20.5, "home"]],
-		         dayoff: [[9, "rm_beach.camp"], [12, "rm_village_store.shop_c"], [14, "rm_beach_hut.marlo_home"], [21, "home"]]},
-		pip:    {home: "rm_valley_ranch.pip_bed", rainproof: true, work: {at: "rm_valley.pasture", open: 7, close: 16, off: 6},
-		         after: [[16, "rm_2.square_b"], [19, "home"]],
-		         dayoff: [[10, "rm_2.square_b"], [13, "rm_beach.camp"], [17, "home"]]},
-		hask:   {home: "rm_town_home_sw.hask_bed", rainproof: true, work: {at: "rm_valley.hunt", open: 7, close: 15, off: 3},
-		         after: [[15, "rm_town_inn.table_f"], [21, "home"]],
-		         dayoff: [[10, "rm_town_outfitter.shop_a"], [12, "rm_town_home_sw.hask_home"], [17, "rm_town_inn.table_f"], [21, "home"]]},
-		// Father Aldous: no house or temple yet - the town square by day, a bed at the inn by night
-		aldous: {home: "rm_town_inn.aldous_bed", rainproof: true, routine: [[9, "rm_town.square_c"], [18, "home"]]},
-		garrick:{home: "rm_town_inn.garrick_bed", rainproof: true, work: {at: "rm_town.watch", open: 8, close: 18, off: 6},
-		         after: [[18, "rm_town_inn.table_c"], [22, "home"]],
-		         dayoff: [[9, "rm_beach.camp"], [13, "rm_village_smithy.shop_b"], [16, "rm_town_inn.table_c"], [22, "home"]]},
-		nell:   {home: "rm_town_home_e.nell_bed", work: {at: "rm_town_home_e.nell_wheel", open: 8, close: 14, off: 2},
-		         after: [[14, "rm_town_outfitter.shop_b"], [15.5, "rm_town.square_d"], [18, "home"]],   // cloth for Bryn
-		         dayoff: [[9.5, "rm_valley_ranch.shop_a"], [13, "rm_2.square_e"], [16, "rm_town.square_d"], [18, "home"]]},
-		posy:   {home: "rm_town_inn.posy_bed", seasons: {winter: {work: {at: "rm_town_inn.bar_a", open: 10, close: 16, off: 0}, after: [[16, "home"]]}},   // winter: dried flowers at the inn
-		         work: {at: "rm_town.stall", open: 9, close: 17, off: 0},
-		         after: [[17, "rm_town_inn.bar_a"], [21, "home"]],
-		         dayoff: [[9, "rm_valley.herbs"], [14, "rm_2.square_a"], [17, "rm_town_inn.bar_a"], [21, "home"]]},
-		edwin:  {home: "rm_town_home_nw.edwin_bed", work: {at: "rm_2.board", open: 9, close: 15, off: 6},   // the village notices
-		         after: [[15, "rm_town_home_nw.edwin_desk"], [18.5, "rm_town_inn.table_e"], [21.5, "home"]],
-		         dayoff: [[10, "rm_town_home_nw.edwin_desk"], [14, "rm_town.board"], [17, "rm_town_inn.table_e"], [21, "home"]]},
-		rowan:  {home: "rm_village_rowan.rowan_bed", work: {at: "rm_valley.yard", open: 9, close: 17, off: 5},   // Thorne's yard
-		         after: [[17, "rm_2.square_f"], [19, "home"]],
-		         dayoff: [[9, "rm_village_store.shop_b"], [11, "rm_2.riverbank_b"], [15, "home"]]},
-		// No job: every day the same
-		elda:   {home: "rm_village_elda.elda_bed", rainproof: true,
-		         seasons: {fall: {routine: [[7, "rm_valley.herbs"], [13, "rm_village_elda.elda_table"], [16, "rm_2.square_e"], [18, "home"]]}},   // fall: mushrooms in the vale
-		         routine: [[7, "rm_2.riverbank"], [11, "rm_valley.herbs"], [14, "rm_village_elda.elda_table"], [16, "rm_2.square_e"], [18, "home"]]},
-		hesta:  {home: "rm_village_hesta.hesta_bed",
-		         seasons: {spring: {routine: [[7, "rm_village_hesta.hesta_home"], [9, "rm_village_store.shop_b"], [10.5, "rm_2.square_a"], [17.5, "rm_village_hesta.hesta_home"], [21, "home"]]}},   // spring: seeds, and a long chat on the square
-		         routine: [[7, "rm_village_hesta.hesta_home"], [10, "rm_village_store.shop_b"], [11.5, "rm_village_hesta.hesta_home"], [15, "rm_2.square_a"], [17.5, "rm_village_hesta.hesta_home"], [21, "home"]]},
-		tobin:  {home: "rm_village_hesta.tobin_bed", kid: true,
-		         seasons: {summer: {routine: [[8, "rm_village_hesta.tobin_home"], [10, "rm_beach.camp"], [16, "rm_village_hesta.tobin_home"], [21, "home"]]}},   // summer: the beach
-		         routine: [[8, "rm_village_hesta.tobin_home"], [9, "rm_2.square_d"], [12, "rm_town.square_a"], [16.5, "rm_village_hesta.tobin_home"], [21, "home"]]},
-		fen:    {home: "rm_town_home_se.fen_bed", kid: true,
-		         seasons: {summer: {routine: [[8, "rm_town_home_se.fen_home"], [10, "rm_beach.camp"], [16, "rm_town_home_se.fen_home"], [20.5, "home"]]}},
-		         routine: [[8, "rm_town_home_se.fen_home"], [10, "rm_town.square_b"], [12, "rm_town.square_e"], [17, "rm_town_home_se.fen_home"], [20.5, "home"]]},
+		// The new world (design/world_plan.md): generated from a checked list, every place a named spot in the room specs
+		yubaba:  {home: "rm_hotel.yubaba_bed", work: {at: "rm_hotel.yubaba_work", open: 7, close: 21, off: 6}, dayoff: [[9, "rm_wellshead.s2"], [12, "rm_town_inn.table_a"], [16, "rm_hotel.home"], [21, "home"]]},   // the hotel; Boh minds it on Sundays
+		boh:     {home: "rm_hotel.boh_bed", work: {at: "rm_hotel.boh_work", open: 8, close: 18, off: 3}, after: [[18, "rm_wellshead.s3"], [20, "home"]], dayoff: [[9, "rm_manara.s2"], [12, "rm_starsand.s3"], [16, "rm_town_inn.table_b"], [20, "home"]]},
+		coralie: {home: "rm_lighthouse.coralie_bed", rainproof: true, work: {at: "rm_lighthouse.coralie_work", open: 6, close: 14, off: 5}, after: [[14, "rm_manara.s3"], [18, "rm_lighthouse.home"], [22, "home"]], dayoff: [[9, "rm_starsand.s2"], [13, "rm_town_inn.table_c"], [17, "home"]]},
+		morga:   {home: "rm_witch_tower.morga_bed", rainproof: true, routine: [[8, "rm_witch_tower.morga_work"], [12, "rm_plummet.s2"], [14, "rm_witch_tower.morga_work"], [21, "home"]]},
+		rook:    {home: "rm_witch_tower.rook_bed", kid: true, routine: [[9, "rm_plummet.mid"], [12, "rm_witch_tower.home"], [15, "rm_plummet.s3"], [18, "home"]]},
+		cassius: {home: "rm_home_goldcrest.cassius_bed", work: {at: "rm_bank.cassius_work", open: 9, close: 16, off: 6}, after: [[16, "rm_downtown.s2"], [18, "rm_town_inn.table_d"], [21, "home"]], dayoff: [[10, "rm_redstreet.s2"], [13, "rm_town_inn.table_d"], [16, "home"]]},
+		liora:   {home: "rm_home_goldcrest.liora_bed", routine: [[9, "rm_redstreet.s3"], [11, "rm_downtown.s4"], [14, "rm_olivebay.s3"], [17, "rm_town_inn.table_e"], [20, "home"]]},
+		lysa:    {home: "rm_town_inn.lysa_bed", work: {at: "rm_town_inn.lysa_work", open: 10, close: 22, off: 0}, dayoff: [[10, "rm_downtown.s3"], [13, "rm_verdun.s2"], [17, "rm_town_inn.bar_a"], [22, "home"]]},   // the tavern
+		sanji:   {home: "rm_valley_ranch.shop_a", work: {at: "rm_town_inn.bar", open: 10, close: 21, off: 2}, dayoff: [[8, "rm_whitesand.pier_b"], [12, "rm_valley_ranch.ranch_table"], [16, "rm_ovenswindow.s2"], [20, "home"]]},   // the tavern's cook
+		ida:     {home: "rm_town_home_se.ida_bed", work: {at: "rm_town_inn.ida_work", open: 11, close: 20, off: 1}, dayoff: [[9, "rm_beaconhill.s2"], [12, "rm_bakery.customer"], [15, "rm_town_home_se.ida_home"], [21, "home"]]},   // serves at the tavern
+		ayla:    {home: "rm_home_kassar.ayla_bed", routine: [[9, "rm_winghill.s2"], [12, "rm_home_kassar.home"], [16, "rm_winghill.s5"], [18, "rm_town_inn.bar_b"], [22.5, "home"]]},   // dances at the tavern in the evenings
+		mara:    {home: "rm_home_whitlow.mara_bed", work: {at: "rm_toolstore.mara_work", open: 9, close: 17, off: 2}, dayoff: [[9, "rm_verdun.s3"], [11, "rm_bakery.customer"], [14, "rm_home_whitlow.home"], [21, "home"]]},
+		zenya:   {home: "rm_home_kassar.zenya_bed", work: {at: "rm_toolstore.zenya_work", open: 9, close: 17, off: 3}, after: [[17, "rm_winghill.s4"], [19, "rm_town_inn.table_f"], [22, "home"]], dayoff: [[10, "rm_starsand.s4"], [14, "rm_guild.customer"], [18, "rm_town_inn.table_f"], [22, "home"]]},
+		clara:   {home: "rm_home_whitlow.clara_bed", routine: [[9, "rm_gracetower.s1"], [12, "rm_home_whitlow.home"], [15, "rm_downtown.s5"], [18, "home"]]},
+		brom:    {home: "rm_village_smithy.brom_bed", hammer: true, work: {at: "rm_village_smithy.brom_work", open: 9, close: 17, off: 3}, after: [[17.5, "rm_gracetower.s2"], [19, "rm_town_inn.table_a"], [21.5, "home"]], dayoff: [[8, "rm_whitesand.pier_b"], [13, "rm_town_inn.table_a"], [18, "rm_gracetower.s2"], [20, "home"]]},
+		kael:    {home: "rm_village_smithy.shop_b", work: {at: "rm_village_smithy.shop_a", open: 9, close: 17, off: 4}, after: [[17, "rm_gracetower.s4"], [19, "rm_town_inn.table_g"], [22, "home"]], dayoff: [[9, "rm_beaconhill.s3"], [13, "rm_guild.customer"], [17, "rm_town_inn.table_g"], [21, "home"]]},
+		garrick: {home: "rm_town_home_se.ida_home", rainproof: true, work: {at: "rm_beaconhill.cave", open: 8, close: 18, off: 6}, dayoff: [[9, "rm_beaconhill.s4"], [13, "rm_village_smithy.shop_b"], [16, "rm_town_inn.table_c"], [22, "home"]]},   // mines (by the cave)
+		fen:     {home: "rm_town_home_se.fen_bed", work: {at: "rm_beaconhill.stall", open: 8, close: 17, off: 0}, dayoff: [[9, "rm_victoryhill.s2"], [12, "rm_downtown.s1"], [16, "rm_town_home_se.fen_home"], [20.5, "home"]]},   // the mine stall: ore and explosives
+		marlo:   {home: "rm_home_gullwater.marlo_bed", rainproof: true, seasons: {winter: {after: [[12, "rm_town_inn.door_table"], [20.5, "home"]]}}, work: {at: "rm_whitesand.pier_end", open: 6, close: 12, off: 6}, after: [[12, "rm_beach_hut.marlo_home"], [17, "rm_pigeonrocks.s2"], [19, "home"]], dayoff: [[9, "rm_pigeonrocks.s3"], [12, "rm_village_store.shop_c"], [14, "rm_home_gullwater.home"], [21, "home"]]},
+		nerissa: {home: "rm_home_gullwater.nerissa_bed", routine: [[7, "rm_whitesand.pier_b"], [12, "rm_pigeonrocks.s4"], [16, "rm_beach_hut.marlo_home"], [19, "home"]]},
+		sera:    {home: "rm_village_store.shop_c", work: {at: "rm_bakery.sera_work", open: 7, close: 15, off: 0}, after: [[15, "rm_village_hesta.hesta_home"], [20, "home"]], dayoff: [[9, "rm_sthereza.s2"], [12, "rm_village_hesta.hesta_home"], [20, "home"]]},   // the bakery
+		posy:    {home: "rm_flowershop.browse", work: {at: "rm_flowershop.posy_work", open: 9, close: 17, off: 0}, dayoff: [[9, "rm_yarzeh.s2"], [14, "rm_frere.s2"], [17, "rm_town_inn.bar_a"], [21, "home"]]},
+		rowan:   {home: "rm_village_rowan.rowan_bed", work: {at: "rm_furniture.rowan_work", open: 9, close: 17, off: 5}, after: [[17, "rm_victoryhill.s3"], [19, "home"]], dayoff: [[9, "rm_valley_carpentry.shop_a"], [11, "rm_ovenswindow.s3"], [15, "home"]]},   // the furniture shop
+		alban:   {home: "rm_village_elda.elda_bed", work: {at: "rm_hospital.alban_work", open: 9, close: 17, off: 6}, dayoff: [[9, "rm_frere.s3"], [13, "rm_town_inn.table_h"], [17, "home"]]},
+		marigold:{home: "rm_village_elda.elda_table", work: {at: "rm_hospital.marigold_work", open: 10, close: 16, off: 5}, dayoff: [[8, "rm_yarzeh.s3"], [13, "rm_resolve.s2"], [16, "home"]]},
+		edwin:   {home: "rm_town_home_nw.edwin_bed", work: {at: "rm_library.edwin_work", open: 9, close: 17, off: 6}, dayoff: [[10, "rm_town_home_nw.edwin_desk"], [14, "rm_uptown.s2"], [17, "rm_town_inn.table_e"], [21, "home"]]},
+		wynn:    {home: "rm_town_home_nw.edwin_desk", kid: true, routine: [[9, "rm_library.wynn_study"], [13, "rm_uptown.s3"], [16, "rm_ovenswindow.s4"], [19, "home"]]},
+		poupry:  {home: "rm_valley_ranch.ranch_table", rainproof: true, work: {at: "rm_valley_ranch.wren_work", open: 7, close: 16, off: 1}, dayoff: [[9, "rm_sthereza.s3"], [12, "rm_bakery.customer"], [15, "rm_valley_ranch.ranch_table"], [21, "home"]]},   // Meadowlark Farm: animals, milk, wool, eggs
+		tauriel: {home: "rm_valley_ranch.wren_work", routine: [[8, "rm_olivebay.s2"], [13, "rm_downtown.s6"], [17, "rm_ovenswindow.s1"], [20, "home"]]},   // paints the bay in the mornings
+		wren:    {home: "rm_valley_ranch.wren_bed", rainproof: true, work: {at: "rm_ovenswindow.s5", open: 7, close: 16, off: 2}, after: [[16, "rm_winghill.s3"], [19, "home"]], dayoff: [[9, "rm_winghill.s3"], [13, "rm_whitesand.pier_b"], [17, "home"]]},   // a farmhand at Meadowlark Farm
+		pip:     {home: "rm_valley_ranch.pip_bed", rainproof: true, work: {at: "rm_ovenswindow.s6", open: 7, close: 16, off: 6}, after: [[16, "rm_ovenswindow.s2"], [19, "home"]], dayoff: [[10, "rm_winghill.s1"], [13, "rm_whitesand.s2"], [17, "home"]]},
+		thorne:  {home: "rm_village_rowan.rowan_home", rainproof: true, seasons: {summer: {after: [[16, "rm_whitesand.pier_b"], [19.5, "rm_town_inn.table_b"], [21.5, "home"]]}}, work: {at: "rm_victoryhill.s2", open: 7, close: 16, off: 5}, after: [[16, "rm_valley_carpentry.rowan_work"], [18.5, "rm_town_inn.table_b"], [21.5, "home"]], dayoff: [[8, "rm_yarzeh.s4"], [12, "rm_victoryhill.s4"], [15, "rm_village_smithy.shop_a"], [18, "rm_town_inn.table_b"], [21, "home"]]},   // fells the trees
+		garth:   {home: "rm_valley_carpentry.thorne_bed", work: {at: "rm_valley_carpentry.thorne_work", open: 8, close: 17, off: 6}, after: [[17, "rm_victoryhill.s5"], [19, "rm_town_inn.table_h"], [22, "home"]], dayoff: [[9, "rm_victoryhill.s5"], [13, "rm_guild.customer"], [17, "rm_town_inn.table_h"], [21, "home"]]},   // the lumber mill: wood and building
+		nell:    {home: "rm_town_home_e.nell_bed", work: {at: "rm_town_outfitter.bryn_work", open: 9, close: 17, off: 0}, dayoff: [[9, "rm_valley_ranch.shop_a"], [13, "rm_dahya.s2"], [16, "rm_town_home_e.nell_wheel"], [18, "home"]]},   // the clothes store
+		mira:    {home: "rm_town_home_e.nell_wheel", work: {at: "rm_town_outfitter.shop_a", open: 10, close: 17, off: 3}, after: [[17, "rm_dahya.s4"], [19, "home"]], dayoff: [[10, "rm_winghill.s4"], [14, "rm_verdun.s4"], [18, "home"]]},
+		bryn:    {home: "rm_home_tawil.bryn_bed", work: {at: "rm_town_outfitter.shop_b", open: 9, close: 16, off: 4}, after: [[16, "rm_dahya.s5"], [18, "rm_town_inn.table_g"], [21, "home"]], dayoff: [[9, "rm_yarzeh.s5"], [14, "rm_dahya.s5"], [18, "home"]]},
+		dikhaj:  {home: "rm_home_tawil.dikhaj_bed", rainproof: true, routine: [[8, "rm_yarzeh.s2"], [11, "rm_winghill.stall"], [16, "rm_dahya.s3"], [19, "home"]]},   // runs the market stalls
+		elda:    {home: "rm_town_apothecary.morga_bed", rainproof: true, work: {at: "rm_town_apothecary.morga_work", open: 10, close: 18, off: 4}, dayoff: [[8, "rm_yarzeh.s3"], [13, "rm_village_elda.elda_table"], [16, "rm_resolve.s3"], [19, "home"]]},   // the potion shop
+		hask:    {home: "rm_town_home_sw.hask_bed", rainproof: true, work: {at: "rm_guild.hask_work", open: 9, close: 17, off: 3}, dayoff: [[7, "rm_yarzeh.s4"], [15, "rm_resolve.s4"], [19, "home"]]},   // ranged weapons at the Guild
+		sylva:   {home: "rm_town_home_sw.hask_home", routine: [[8, "rm_yarzeh.s3"], [13, "rm_resolve.s2"], [16, "rm_town_apothecary.shop_a"], [19, "home"]]},
+		soren:   {home: "rm_village_store.mara_bed", work: {at: "rm_village_store.mara_work", open: 8, close: 17, off: 6}, dayoff: [[9, "rm_sthereza.s4"], [12, "rm_bakery.customer"], [15, "rm_village_hesta.hesta_home"], [21, "home"]]},   // the Night farm: seeds and honey
+		hesta:   {home: "rm_village_hesta.hesta_bed", seasons: {spring: {routine: [[7, "rm_village_hesta.hesta_home"], [9, "rm_village_store.shop_b"], [10.5, "rm_sthereza.s3"], [17.5, "rm_village_hesta.hesta_home"], [21, "home"]]}}, routine: [[7, "rm_village_hesta.hesta_home"], [10, "rm_sthereza.s2"], [12, "rm_village_hesta.hesta_home"], [15, "rm_sthereza.s4"], [18, "home"]]},
+		tobin:   {home: "rm_village_hesta.tobin_bed", kid: true, seasons: {summer: {routine: [[8, "rm_village_hesta.tobin_home"], [10, "rm_southbeach.s2"], [16, "rm_village_hesta.tobin_home"], [21, "home"]]}}, routine: [[8, "rm_village_hesta.tobin_home"], [9, "rm_sthereza.s1"], [12, "rm_sthereza.s3"], [16.5, "rm_village_hesta.tobin_home"], [21, "home"]]},
+		jul:     {home: "rm_village_hesta.hesta_home", kid: true, routine: [[21, "home"]]},   // the baby: stays home
+		aldous:  {home: "rm_home_ward.aldous_bed", rainproof: true, work: {at: "rm_church.aldous_work", open: 8, close: 18, off: 1}, dayoff: [[9, "rm_abda.s2"], [12, "rm_frere.s3"], [16, "rm_church.pew_a"], [19, "home"]]},   // the old church
+		alaric:  {home: "rm_home_ward.alaric_bed", work: {at: "rm_guild.alaric_work", open: 9, close: 17, off: 4}, after: [[17, "rm_abda.s3"], [20, "home"]], dayoff: [[8, "rm_plummet.s4"], [13, "rm_church.pew_b"], [17, "rm_town_inn.table_c"], [21, "home"]]},   // close-range weapons at the Guild
 	};
 	return t;
 }

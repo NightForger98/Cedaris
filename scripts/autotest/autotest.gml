@@ -865,3 +865,19 @@ function autotest_witch(_spawn = "0"){
 	with(obj_monster) if(kind == "witch") n++;
 	return n;
 }
+
+/// @description Whether the clock moves here: ticks once and reports "frozen" (indoors, the mine) or "ticking".
+function autotest_clock_frozen(){
+	var m = global.clock.minutes;
+	clock_tick();
+	var moved = global.clock.minutes != m;
+	global.clock.minutes = m;
+	return moved ? "ticking" : "frozen";
+}
+
+/// @description Whether the player stands on road (the road boost) and their speed now.
+function autotest_road_here(){
+	if(!instance_exists(obj_plyr)) return "no player";
+	var on = world_is_road(room_get_name(room), floor(obj_plyr.x / 32), floor(obj_plyr.y / 32));
+	return (on ? "road" : "off road") + " at " + string(floor(obj_plyr.x / 32)) + "," + string(floor(obj_plyr.y / 32)) + ", speed " + string(obj_plyr.spd);
+}

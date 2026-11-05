@@ -8,7 +8,7 @@
     "TileSerialiseData":[],
   },
   "name":"TS_buildings",
-  "out_columns":64,
+  "out_columns":58,
   "out_tilehborder":2,
   "out_tilevborder":2,
   "parent":{

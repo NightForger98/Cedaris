@@ -7,7 +7,8 @@
 
 #macro DAY_START 360        // 6:00 am
 #macro DAY_END 1560         // 2:00 am: pass out
-#macro GAME_MIN_SECONDS 0.7 // real seconds per game minute (10 game minutes every 7 seconds)
+#macro GAME_MIN_SECONDS 1.0 // real seconds per game minute (10 game minutes every 10 seconds: a day is 20 real minutes)
+#macro ROAD_BOOST 1.25       // the player walks this much faster on roads (obj_plyr Step)
 #macro SEASON_DAYS 28
 #macro BED_ROOM rm_123         // the room with your bed (obj_bed, upstairs in the farmhouse); you wake up next to it
 
@@ -38,8 +39,10 @@ function clock_text(){
 	return string(h12) + ":" + ((mm < 10) ? "0" : "") + string(mm) + " " + ampm;
 }
 
-/// @description Advance the clock by one frame of play. Returns true when it's 2:00 am (time to pass out).
+/// @description Advance the clock by one frame of play (outdoors only). Returns true when it's 2:00 am (time to pass out).
 function clock_tick(){
+	// Time stands still indoors and in the mine, as in Harvest Moon (only the outdoor rooms keep the clock going)
+	if(!room_is_outdoors()) return false;
 	global.clock.minutes += 1 / (GAME_MIN_SECONDS * game_get_speed(gamespeed_fps));
 	return global.clock.minutes >= DAY_END;
 }

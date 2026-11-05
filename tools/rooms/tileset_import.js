@@ -25,7 +25,7 @@ const yy = `{
     "TileSerialiseData":[],
   },
   "name":"${ts}",
-  "out_columns":${cols},
+  "out_columns":${Math.ceil(Math.sqrt(count))},
   "out_tilehborder":2,
   "out_tilevborder":2,
   "parent":{

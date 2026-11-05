@@ -22,7 +22,7 @@ function villager_table(){
 		                ["You've got a good arm for the pickaxe. Seen the iron down past floor five?", "The furnace never sleeps. Neither do I, some nights.", "Bars, bring me bars. I'll make you something worth holding."],
 		                ["You're the best customer I've had in years. Don't tell the others.", "My father forged by this same anvil. He'd have liked you.", "Whatever you need, friend. Whatever you need."]],
 		        rewards: [["m|coal", 10], ["m|iron", 5], ["d|metal|bronze", 1], ["m|steel", 5], ["m|mithril", 1]]},
-		mara:  {name: "Mara", title: "the Seed Seller", shop: "seeds", look: "mara",
+		mara:  {name: "Mara Whitlow", title: "of the Tool Store", shop: "tools", look: "mara",
 		        loves: ["p|gourd", "f|tomato_salad", "f|gourd_pie", "m|gem"], likes: ["p|", "f|"], dislikes: ["m|stone", "m|coal"], hates: ["m|bone", "m|troll_hide"],
 		        lines: [["Seeds for the season, fresh as the morning!", "Plant before it rains and the crops will thank you.", "Water every day. Every day!"],
 		                ["Your field's looking greener. I've noticed.", "Corn takes its time, but it gives and gives.", "Did you know gourds love the fall? Like me."],
@@ -34,19 +34,19 @@ function villager_table(){
 		                ["You till straighter rows than the last farmer. Much straighter.", "I found a four-leaf weed once. I ate it.", "If you see my hat, it's not lost. It's on an adventure."],
 		                ["Best farm in the valley. I tell everyone.", "When I'm old I want a farm just like this one.", "Thanks for stopping by the ranch. Really."]],
 		        rewards: [["s|potato", 10], ["d|cloth|orange", 1], ["f|hash_browns", 3], ["d|cloth|brown", 1], ["m|gem", 3]]},
-		rowan: {name: "Rowan", title: "the Fence-mender", race: "Beastkin", body: "female", seed: 1202,
+		rowan: {name: "Rowan", title: "the Furniture-maker", race: "Beastkin", body: "female", seed: 1202, shop: "furniture",
 		        loves: ["m|wood", "m|iron", "f|veg_stew"], likes: ["m|", "f|"], dislikes: ["p|tomato"], hates: ["m|silk"],
 		        lines: [["Fences don't fix themselves. Well, they do, if you're me.", "Something's been at the posts again. Big teeth.", "Wood's best cut in the morning."],
 		                ["You chop a mean tree. Bring me the offcuts sometime.", "I hear things from the cave at night. Scratching.", "My ears never lie: rain tomorrow. Maybe."],
 		                ["You're good company. Quiet when it counts.", "I made you a gate latch. Don't tell Pip, he'll want one.", "Whatever's down in that mine, you'll beat it."]],
 		        rewards: [["m|wood", 30], ["d|cloth|walnut", 1], ["m|leather", 5], ["d|cloth|forest", 1], ["m|fur", 5]]},
-		elda:  {name: "Elda", title: "the Herbalist", race: "Elf", body: "female", seed: 2101,
+		elda:  {name: "Elda", title: "the Potion-seller", race: "Elf", body: "female", seed: 2101, shop: "apothecary",
 		        loves: ["p|artichoke", "f|stuffed_artichoke", "m|frost_crystal", "m|pixie_dust", "w|toadstool"], likes: ["p|", "m|gem", "m|fibre", "w|"], dislikes: ["m|bone", "m|coal"], hates: ["m|ember_core", "f|fiery_chilli"],
 		        lines: [["The river remembers every leaf it carries.", "Weeds are only plants nobody's asked about.", "Mind the mushrooms by the bridge. Not all are friendly."],
 		                ["Your hands smell of soil. Good. Honest.", "There's frost deep in the mine that never melts. I'd love a piece.", "Magic grows like crops: slowly, then all at once."],
 		                ["I've seen four hundred springs. This one's my favourite.", "You listen to the land. Few do.", "Take this - for the road, and the dark under it."]],
 		        rewards: [["k|rain", 1], ["d|cloth|teal", 1], ["m|moonsilk", 1], ["d|cloth|lavender", 1], ["m|pixie_dust", 2]]},
-		thorne:{name: "Thorne", title: "the Carpenter", race: "Orc", body: "male", seed: 2202, shop: "carpentry",
+		thorne:{name: "Thorne", title: "the Lumberjack", race: "Orc", body: "male", seed: 2202,
 		        loves: ["m|wood", "m|iron", "f|hash_browns", "f|fiery_chilli"], likes: ["m|stone", "m|copper", "f|"], dislikes: ["p|tomato", "f|tomato_salad"], hates: ["m|silk", "m|feather"],
 		        lines: [["Measure twice. Cut once. Shout if you miss.", "Good oak is getting hard to find.", "Mind your feet, there's nails everywhere."],
 		                ["You've got calluses. I respect that.", "I'm building the village a new bridge. Need wood. Lots of it.", "Orcs don't smile. This is my smile."],
@@ -71,19 +71,19 @@ function villager_table(){
 		                ["You again! The usual? We don't have a usual. We should.", "Garrick says the road west is all salt and gulls now.", "A traveller paid me in fish once. Best tip I ever had."],
 		                ["You're practically family at this inn.", "I've kept a room for you, if you ever want to stay in town.", "Here - my grandmother's recipe. Don't tell a soul."]],
 		        rewards: [["f|veg_stew", 2], ["d|cloth|rose", 1], ["m|wool", 6], ["d|cloth|teal", 1], ["m|gem", 2]]},
-		garrick:{name: "Garrick", title: "the Watchman", race: "Dwarf", body: "male", seed: 4202,
+		garrick:{name: "Garrick", title: "the Miner", race: "Dwarf", body: "male", seed: 4202,
 		        loves: ["m|iron", "m|steel", "f|fiery_chilli"], likes: ["m|", "f|"], dislikes: ["p|artichoke"], hates: ["m|silk", "m|pixie_dust"],
 		        lines: [["Halt! Oh. Just a farmer. Carry on.", "Nothing gets past me. Except pigeons.", "Quiet night. I like quiet nights."],
 		                ["You walk like someone who's been down a mine. Respect.", "Saw lights over the sea again. Don't like it.", "Brom makes a fine blade. Tell him I said so. Don't."],
 		                ["If trouble ever follows you up that ladder, I'll be waiting for it.", "You've earned the town's trust. Mine too.", "Take this. A watchman's spare. Keep it sharp."]],
 		        rewards: [["m|iron", 5], ["d|cloth|charcoal", 1], ["m|coal", 10], ["d|cloth|maroon", 1], ["m|steel", 3]]},
-		bryn:  {name: "Bryn", title: "the Outfitter", race: "Beastkin", body: "male", seed: 4303, shop: "outfitter",
+		bryn:  {name: "Bryn", title: "the Leatherworker", race: "Beastkin", body: "male", seed: 4303,
 		        loves: ["m|leather", "m|fur", "m|silk", "m|moonsilk"], likes: ["m|wool", "m|fibre", "m|iron", "f|"], dislikes: ["w|toadstool"], hates: ["m|bone", "m|coal"],
 		        lines: [["Boots, belts, britches. If it's worn, I sell it.", "Stand still, I'm guessing your size. Done.", "Garrick keeps asking for a cape. Watchmen don't need capes."],
 		                ["You wear your clothes like you work in them. Good. That's what they're for.", "Leather from the valley, wool from the vale. Best in the north.", "Brom makes the swords. I make sure you look good holding one."],
 		                ["I'd dress you for free if I could afford it. I can't. Sorry.", "You're the best-turned-out farmer I've ever met.", "I stitched this one with you in mind. Go on."]],
 		        rewards: [["m|leather", 5], ["d|cloth|walnut", 1], ["m|silk", 3], ["d|cloth|navy", 1], ["m|moonsilk", 1]]},
-		morga: {name: "Morga", title: "the Apothecary", race: "Orc", body: "female", seed: 4404, shop: "apothecary",
+		morga: {name: "Morga", title: "the Witch", race: "Orc", body: "female", seed: 4404,
 		        loves: ["w|toadstool", "m|pixie_dust", "m|frost_crystal", "f|forest_stew"], likes: ["w|", "m|gem", "x|", "f|"], dislikes: ["p|corn"], hates: ["f|fiery_chilli", "m|ember_core"],
 		        lines: [["Don't touch the green jar. Or the blue one. Just - don't touch.", "Scrolls, staves, simples. Spells cost mana, my prices cost gold.", "Bring me toadstools. The ugly ones."],
 		                ["You've a feel for magic, farmer. I can smell it on you. Also soil.", "Heal is the first spell anyone should learn. Fireball is the second.", "The forest across the river grows things even I can't name."],
@@ -91,51 +91,51 @@ function villager_table(){
 		        rewards: [["w|herb", 5], ["d|cloth|lavender", 1], ["m|pixie_dust", 2], ["d|cloth|teal", 1], ["k|heal", 1]]},
 		// Brindlemoor's townsfolk: Posy keeps a flower stall in the square, Edwin, Nell, Hask, Ida and Fen live in the
 		// town's homes
-		posy:  {name: "Posy", title: "the Flower-seller", race: "Halfling", body: "female", seed: 4505,
+		posy:  {name: "Posy", title: "the Flower-seller", race: "Halfling", body: "female", seed: 4505, shop: "flowers",
 		        loves: ["w|herb", "m|pixie_dust", "f|gourd_pie"], likes: ["w|", "p|", "f|"], dislikes: ["m|stone"], hates: ["m|coal", "m|bone"],
 		        lines: [["Flowers! Fresh flowers! Well. Fresh-ish.", "Everything I sell, I picked on the cliff path this morning.", "You've got soil under your nails. I like you already."],
 		                ["Daisies for luck, roses for trouble. You look like a daisy person.", "Garrick pretends he doesn't like flowers. He buys one every week.", "The valley's full of herbs this time of year. Bring me some?"],
 		                ["You make this town brighter, you know.", "I saved you the best bunch. Don't let it wilt.", "If I ever have a garden as big as your farm I'll never leave it."]],
 		        rewards: [["w|herb", 4], ["d|cloth|rose", 1], ["m|fibre", 10], ["d|cloth|lavender", 1], ["m|pixie_dust", 2]]},
-		edwin: {name: "Edwin", title: "the Scribe", race: "Elf", body: "male", seed: 4606,
+		edwin: {name: "Edwin", title: "the Librarian", race: "Elf", body: "male", seed: 4606,
 		        loves: ["m|silk", "m|gem", "f|moonfin_soup"], likes: ["m|", "x|", "f|"], dislikes: ["p|corn"], hates: ["m|troll_hide", "f|fiery_chilli"],
 		        lines: [["Mind the ink. It's older than you.", "I copy the town's records. Births, deaths, the price of turnips.", "Quiet, please. I'm thinking in Elvish."],
 		                ["Ah, the farmer. I wrote you down in the ledger. Favourably.", "Brindlemoor was a waystation once, before the ladder. I have the maps.", "Morga borrows my books and returns them smelling of toadstools."],
 		                ["I've started a chapter about you. It's mostly about turnips.", "You're the most interesting thing to happen to this town in a century.", "Here. A page from my own collection. Treat it kindly."]],
 		        rewards: [["m|fibre", 10], ["d|cloth|navy", 1], ["m|silk", 3], ["d|cloth|charcoal", 1], ["m|gem", 2]]},
-		nell:  {name: "Nell", title: "the Weaver", race: "Human", body: "female", seed: 4707,
+		nell:  {name: "Nell", title: "the Clothier", race: "Human", body: "female", seed: 4707, shop: "outfitter",
 		        loves: ["m|wool", "m|silk", "m|moonsilk", "f|carrot_soup"], likes: ["m|fibre", "m|", "f|"], dislikes: ["m|coal"], hates: ["m|bone", "m|ember_core"],
 		        lines: [["Wool in, cloth out. That's the whole secret.", "Bryn sells what I weave. He takes the credit, too.", "My wheel's been going since before you were born."],
 		                ["Bring me wool and I'll be your friend for life. Probably.", "That's a good stitch on your sleeve. Did you do it? No? Shame.", "The sheep in the vale make the softest fleece. Wren knows it."],
 		                ["I wove this pattern after you. It's mostly green and stubborn.", "You've got a weaver's patience. Ever thought of trying?", "Take this. It's the best I've made all year."]],
 		        rewards: [["m|wool", 8], ["d|cloth|teal", 1], ["m|silk", 3], ["d|cloth|maroon", 1], ["m|moonsilk", 2]]},
-		hask:  {name: "Hask", title: "the Hunter", race: "Human", body: "male", seed: 4808,
+		hask:  {name: "Hask", title: "the Huntsman", race: "Elf", body: "male", seed: 4808, shop: "guild_ranged",
 		        loves: ["m|fur", "m|leather", "f|veg_stew"], likes: ["m|bone", "m|", "f|"], dislikes: ["m|silk"], hates: ["m|pixie_dust", "w|toadstool"],
 		        lines: [["Tracks in the valley again. Big ones.", "Don't bother me before the sun's up. Or after.", "The forest over the river's no place for a farmer."],
 		                ["You've been in the mine? Then you know what it's like to be hunted.", "Wolves keep to the woods. Mostly.", "Garrick watches the gate. I watch the trees."],
 		                ["You'd make a fair hunter, if you ever put down the hoe.", "I'd trust you at my back in the forest. That's rare.", "Here. Good hide, well cured. Make something warm."]],
 		        rewards: [["m|leather", 5], ["d|cloth|walnut", 1], ["m|fur", 5], ["d|cloth|forest", 1], ["m|troll_hide", 1]]},
-		ida:   {name: "Ida", title: "the Baker", race: "Dwarf", body: "female", seed: 4909,
+		ida:   {name: "Ida", title: "of the Tavern", race: "Dwarf", body: "female", seed: 4909,
 		        loves: ["p|corn", "f|corn_fritters", "f|gourd_pie"], likes: ["p|", "a|", "f|"], dislikes: ["m|stone"], hates: ["m|coal", "f|fiery_chilli"],
 		        lines: [["Bread's up at dawn and so am I.", "Fen! Stop climbing the - oh, hello.", "Flour everywhere. Always. You get used to it."],
 		                ["Lysa buys my loaves for the inn. Says they're the best in the north.", "Your corn makes a fine fritter. Bring me more.", "Fen talks about you all day. 'The farmer this, the farmer that.'"],
 		                ["You're welcome at our table any night.", "I've baked you a loaf with your name on it. Literally. Look.", "Fen's drawn you a picture. It's on the wall. Next to the stove."]],
 		        rewards: [["f|corn_fritters", 2], ["d|cloth|red", 1], ["p|corn", 6], ["d|cloth|rose", 1], ["f|gourd_pie", 2]]},
-		fen:   {name: "Fen", title: "Ida's son", race: "Dwarf", body: "teen", seed: 5010,
+		fen:   {name: "Fen", title: "the Explosives Seller", race: "Dwarf", body: "male", seed: 5010, shop: "explosives",
 		        loves: ["m|gem", "m|feather", "f|corn_fritters"], likes: ["m|bone", "x|", "f|"], dislikes: ["p|artichoke"], hates: ["f|veg_stew", "m|coal"],
 		        lines: [["Are you the farmer? From down the ladder? Is it true you've got a cave?", "Mum says I can't go to the mine till I'm tall. Dwarves don't get tall!", "I found a shiny rock. It's probably a diamond."],
 		                ["Tobin's my friend. We're going to be knights together.", "I climbed the town hall. Don't tell Garrick.", "Can you bring me a feather? For my hat?"],
 		                ["When I grow up I'm going to have a farm. And a dragon.", "You're the best grown-up in Brindlemoor. Don't tell Mum.", "I made you this! It's a... it's a thing. It's for you."]],
 		        rewards: [["m|feather", 4], ["d|cloth|sky", 1], ["m|gem", 1], ["d|cloth|green", 1], ["m|void_pearl", 1]]},
 		// The Saltmere Coast, west of the farm
-		marlo: {name: "Old Marlo", title: "the Fisher", race: "Human", body: "male", seed: 5101,
+		marlo: {name: "Old Marlo", title: "the Fisher", race: "Human", body: "male", seed: 5101, shop: "fish",
 		        loves: ["x|mooneel", "x|seabass", "f|grilled_perch"], likes: ["x|", "f|"], dislikes: ["p|potato"], hates: ["m|ember_core"],
 		        lines: [["Fish don't care how early you got up. But it helps.", "Cast past the end of the pier. That's where the big ones sulk.", "Salt in the air, salt in the beard."],
 		                ["You've got patience. The sea likes that.", "Eels come up at night when the moon's on the water.", "Crabs walk sideways 'cause they're shy. Like me."],
 		                ["You're a better fisher than I was at your age. Don't let it go to your head.", "This old rod caught a whale. Well. A big sardine.", "The sea gives back to those who wait. Here."]],
 		        rewards: [["x|sardine", 5], ["d|cloth|sky", 1], ["m|leather", 5], ["d|cloth|teal", 1], ["x|mooneel", 1]]},
 		// Hollow Vale, through the woods south of the farm
-		wren:  {name: "Wren", title: "the Shepherd", race: "Halfling", body: "teen", seed: 6101, shop: "animals",
+		wren:  {name: "Wren", title: "the Farmhand", race: "Halfling", body: "teen", seed: 6101,
 		        loves: ["m|wool", "w|herb", "f|carrot_soup"], likes: ["p|", "w|", "m|fibre"], dislikes: ["m|coal"], hates: ["m|bone", "m|troll_hide"],
 		        lines: [["The vale's quiet. That's why I like it.", "My sheep wander off. I wander after them. It works.", "Herbs grow thick by the river. Help yourself."],
 		                ["You came all the way down here again? You must like the view.", "The old willows by the bridge are older than the town.", "If you hear singing in the trees, don't follow it."],
@@ -149,6 +149,157 @@ function villager_table(){
 		                ["You work hard. The valley notices, and so do I.", "There are witches deep in the mine, where the mithril runs. Their bolts carry curses.", "A cursed tool is a burden - but a blessed one is a gift. I can make the one the other."],
 		                ["You've a good heart. I'd stake my collar on it.", "When the temple is built, I'll keep a pew for you at the front.", "Take this, with my blessing. Literally."]],
 		        rewards: [["w|herb", 6], ["d|cloth|white", 1], ["f|antidote", 3], ["d|cloth|gold", 1], ["m|moonsilk", 3]]},
+
+		// ---------------- The new world's people (design/world_plan.md). (M) marriage candidates are marked in
+		// villager_candidates (schedules).
+		yubaba: {name: "Yubaba", title: "of the Riviera Hotel", race: "Human", body: "female", seed: 7001,
+		        loves: ["m|gold", "m|gem", "f|moonfin_soup"], likes: ["m|silver", "f|", "x|"], dislikes: ["m|stone", "w|"], hates: ["m|bone", "m|troll_hide"],
+		        lines: [["Guests pay first. Everyone pays first.", "Wipe your feet. This floor is older than you.", "The sea air is free. The rooms are not."],
+		                ["You're not as scruffy as you look, farmer.", "Boh! Stop eating the guests' breakfast!", "Forty years I've run this hotel. Nothing gets past me."],
+		                ["You're welcome here any time. Don't tell the others I said so.", "My son likes you. I approve. Mostly.", "Sit. Have tea. On the house - just this once."]],
+		        rewards: [["m|silver", 3], ["f|moonfin_soup", 1], ["m|gold", 2], ["d|cloth|purple", 1], ["m|gem", 2]]},
+		boh:    {name: "Boh", title: "of the Riviera Hotel", race: "Human", body: "male", seed: 7002,
+		        loves: ["f|gourd_pie", "f|corn_fritters", "a|milk"], likes: ["f|", "p|"], dislikes: ["m|stone", "m|coal"], hates: ["w|toadstool", "m|bone"],
+		        lines: [["Mother says I mustn't talk to guests. You're not a guest, are you?", "I carry the bags. Big bags. Heavy bags.", "Hello! Do you have any snacks?"],
+		                ["I'm stronger than I look. I lifted a whole trunk today.", "Mother worries too much. I can look after myself.", "The lighthouse looks lonely at night. Like me, sometimes."],
+		                ["You're my favourite person. Don't tell Mother.", "I'd like a farm one day. With you showing me how.", "I saved you the best pastry from breakfast."]],
+		        rewards: [["f|corn_fritters", 2], ["d|cloth|red", 1], ["f|gourd_pie", 2], ["d|cloth|gold", 1], ["m|gem", 1]]},
+		coralie:{name: "Coralie", title: "the Lighthouse Keeper", race: "Human", body: "female", seed: 7003,
+		        loves: ["x|mooneel", "m|frost_crystal", "f|moonfin_soup"], likes: ["x|", "m|", "f|"], dislikes: ["p|potato"], hates: ["m|coal", "m|ember_core"],
+		        lines: [["The lamp needs oil and I need sleep. One of us gets it.", "Ships trust the light. I trust the ships.", "Mind the stairs. All two hundred of them."],
+		                ["You can see the whole bay from the top. Come up some evening.", "I keep a log of every ship. And every storm.", "Lonely? No. The sea talks plenty."],
+		                ["I wrote your name in the log today. Under 'good things'.", "Stay for the sunset. It's better with company.", "The light's brighter when you visit. I'm sure of it."]],
+		        rewards: [["x|sardine", 3], ["d|cloth|navy", 1], ["x|seabass", 2], ["d|cloth|sky", 1], ["m|frost_crystal", 2]]},
+		rook:   {name: "Rook", title: "the Witch's son", race: "Orc", body: "teen", seed: 7004, kid: true,
+		        loves: ["m|feather", "m|bone", "m|gem"], likes: ["m|", "w|"], dislikes: ["f|veg_stew"], hates: ["m|pixie_dust", "a|milk"],
+		        lines: [["Mum says strangers bring trouble. Are you trouble?", "I'm not allowed past the cliff.", "Do you know any knights?"],
+		                ["Mum's teaching me potions. Mostly they explode.", "I found a crow feather. It's lucky.", "Some nights I watch the road. Waiting for someone."],
+		                ["You're the only one who visits. Thanks.", "When I'm grown I'll be a knight. A real one.", "Here. A lucky feather. For you."]],
+		        rewards: [["m|feather", 3], ["m|bone", 3], ["m|gem", 1], ["d|cloth|charcoal", 1], ["m|pixie_dust", 1]]},
+		cassius:{name: "Cassius Goldcrest", title: "the Banker", race: "Human", body: "male", seed: 7005,
+		        loves: ["m|gold", "m|mithril", "m|gem"], likes: ["m|silver", "m|", "f|"], dislikes: ["w|", "p|"], hates: ["m|bone", "m|fibre"],
+		        lines: [["Money never sleeps. I do, occasionally.", "Interest compounds. So does trouble.", "A farmer. How... earthy."],
+		                ["Your accounts are looking healthier. I'm impressed.", "My daughter says I work too much. She's right.", "Gold is honest. People, less so."],
+		                ["You've done well for this town. Truly.", "Liora talks about you at dinner. Often.", "A good investment, you are. The best I've made."]],
+		        rewards: [["m|silver", 5], ["m|gold", 3], ["d|cloth|gold", 1], ["m|gem", 2], ["m|mithril", 1]]},
+		liora:  {name: "Liora Goldcrest", title: "the Banker's daughter", race: "Human", body: "female", seed: 7006,
+		        loves: ["m|silk", "m|moonsilk", "f|gourd_pie"], likes: ["m|", "f|", "w|herb"], dislikes: ["m|coal", "m|stone"], hates: ["m|bone", "m|troll_hide"],
+		        lines: [["Red Street's the best street. Everyone says so. Mostly me.", "Father wants me to learn the books. I want to see the world.", "Oh! You're the new farmer."],
+		                ["I read about faraway places every night.", "Do you ever just want to leave everything and sail off?", "Your hands are all calluses. That's rather nice."],
+		                ["Maybe the world can come to me. Maybe it already has.", "I kept a seat for you at the tavern.", "You're the most interesting thing that's happened here."]],
+		        rewards: [["m|silk", 2], ["d|cloth|rose", 1], ["f|gourd_pie", 2], ["d|cloth|lavender", 1], ["m|moonsilk", 1]]},
+		kael:   {name: "Kael Ashford", title: "the Blacksmith's son", race: "Human", body: "male", seed: 7007,
+		        loves: ["m|iron", "m|steel", "f|fiery_chilli"], likes: ["m|", "f|"], dislikes: ["p|artichoke"], hates: ["m|silk", "m|pixie_dust"],
+		        lines: [["Dad does the hard bits. I do the hot bits.", "Mind the anvil. It bites.", "Ore in, ingots out. That's the trade."],
+		                ["I made my first sword last week. It bent.", "Dad won't say it, but he's proud of you.", "The forge sings when the iron's right."],
+		                ["I'll make you something special one day.", "You're good for the old man. Keeps him smiling.", "Thanks for always bringing the good ore."]],
+		        rewards: [["m|coal", 10], ["m|iron", 5], ["m|steel", 2], ["d|metal|bronze", 1], ["m|gold", 2]]},
+		clara:  {name: "Clara Whitlow", title: "Mara's daughter", race: "Human", body: "female", seed: 7008,
+		        loves: ["p|tomato", "f|tomato_salad", "w|herb"], likes: ["p|", "f|", "w|"], dislikes: ["m|coal"], hates: ["m|bone", "x|"],
+		        lines: [["Mum's at the tool store. I'm at the window, watching the world.", "Grace Tower chimes every hour. You get used to it.", "Hello, farmer."],
+		                ["I grow tomatoes on the windowsill. Don't laugh.", "Mum wants me to take over the store. I'd rather paint.", "The old quarter has the best stories."],
+		                ["You make this place feel new.", "I painted you. Badly. Want to see?", "Stay for supper? Mum won't mind. Much."]],
+		        rewards: [["s|tomato", 10], ["d|cloth|teal", 1], ["f|tomato_salad", 2], ["d|cloth|green", 1], ["m|gem", 1]]},
+		nerissa:{name: "Nerissa Gullwater", title: "the Fisher's daughter", race: "Human", body: "female", seed: 7009,
+		        loves: ["x|salmon", "x|seabass", "f|grilled_perch"], likes: ["x|", "f|"], dislikes: ["p|potato"], hates: ["m|ember_core", "m|coal"],
+		        lines: [["Pigeon Rocks. Two rocks, a thousand pigeons.", "Dad says I've salt in my veins.", "Mind the nets."],
+		                ["I can out-swim anyone in this town.", "Ever seen the rocks at sunset? Pink as coral.", "Dad's getting old. I worry."],
+		                ["Come swimming with me sometime.", "I named a gull after you. He's very handsome. Or pretty.", "You're the best catch in Harvest Valley."]],
+		        rewards: [["x|sardine", 4], ["d|cloth|sky", 1], ["x|salmon", 2], ["d|cloth|navy", 1], ["x|moonfin", 1]]},
+		wynn:   {name: "Wynn Quill", title: "Edwin's sister", race: "Elf", body: "teen", seed: 7010, kid: true,
+		        loves: ["m|feather", "m|gem", "f|corn_fritters"], likes: ["m|", "f|"], dislikes: ["p|potato"], hates: ["m|bone", "m|coal"],
+		        lines: [["Edwin says I'm too loud for the library.", "I've read every book in Uptown. Twice.", "Are you the farmer? Is farming boring?"],
+		                ["I'm writing a story. You're in it.", "Edwin pretends to be stern. He's soft as butter.", "Do you know any dragons?"],
+		                ["You're my favourite character.", "I'll read you my story when it's done.", "You're the best grown-up. Mostly."]],
+		        rewards: [["m|feather", 3], ["d|cloth|lavender", 1], ["m|gem", 1], ["f|corn_fritters", 2], ["m|pixie_dust", 1]]},
+		poupry: {name: "Poupry Meadowlark", title: "of Meadowlark Farm", race: "Human", body: "female", seed: 7011, shop: "animals",
+		        loves: ["a|egg", "w|herb", "f|carrot_soup"], likes: ["a|", "p|", "w|"], dislikes: ["m|coal"], hates: ["m|bone", "m|troll_hide"],
+		        lines: [["Milk, wool, eggs! Fresh every morning!", "The chickens know my voice. They come running.", "Welcome to Meadowlark Farm!"],
+		                ["Sanji cooks, I farm, Tauriel paints. It works.", "Wren and Pip are good hands. Lazy before nine, though.", "Animals know a kind heart."],
+		                ["You're family to us now.", "Take some eggs. No, take more.", "The farm's never been happier than since you came."]],
+		        rewards: [["a|egg", 6], ["a|milk", 3], ["d|cloth|yellow", 1], ["m|wool", 5], ["d|cloth|pink", 1]]},
+		sanji:  {name: "Sanji Meadowlark", title: "the Tavern Cook", race: "Human", body: "male", seed: 7012,
+		        loves: ["x|salmon", "f|fiery_chilli", "p|tomato"], likes: ["f|", "x|", "p|"], dislikes: ["m|stone"], hates: ["m|bone", "w|toadstool"],
+		        lines: [["A kitchen is a battlefield. I always win.", "Never waste food. Never.", "You look hungry. You always look hungry."],
+		                ["Bring me good fish and I'll make you a feast.", "Poupry's eggs make the best omelettes in the world.", "Cooking is love you can taste."],
+		                ["For you, the chef's special. Every day.", "You eat like you mean it. I like that.", "My kitchen's door is always open to you."]],
+		        rewards: [["f|grilled_perch", 2], ["f|fiery_chilli", 2], ["d|cloth|red", 1], ["f|moonfin_soup", 1], ["d|cloth|charcoal", 1]]},
+		tauriel:{name: "Tauriel Meadowlark", title: "the Artist", race: "Human", body: "female", seed: 7013,
+		        loves: ["m|gem", "m|frost_crystal", "w|herb"], likes: ["m|", "w|", "f|"], dislikes: ["m|coal"], hates: ["m|bone", "m|troll_hide"],
+		        lines: [["Hold still. The light on you is lovely.", "I paint the bay every morning. It's never the same twice.", "Hello! Mind the wet paint."],
+		                ["Mum wants me to milk cows. I want to paint them.", "Colours are everywhere if you look.", "I sold a painting in Downtown! Just one."],
+		                ["I painted you. It's my best one.", "You see the world the way I do.", "Will you sit for me again? I'll never tire of it."]],
+		        rewards: [["d|cloth|teal", 1], ["m|gem", 1], ["d|cloth|purple", 1], ["m|frost_crystal", 1], ["m|moonsilk", 1]]},
+		garth:  {name: "Garth Oakhart", title: "of the Lumber Mill", race: "Orc", body: "male", seed: 7014, shop: "carpentry",
+		        loves: ["m|wood", "m|iron", "f|veg_stew"], likes: ["m|", "f|"], dislikes: ["p|tomato"], hates: ["m|silk", "m|feather"],
+		        lines: [["Wood for sale. Barns built. Coops too.", "The mill turns all day. So do I.", "Need lumber? I've got lumber."],
+		                ["Dad fells them, I mill them, Mum designs the houses.", "A good barn lasts a hundred years.", "Strong arms, simple life."],
+		                ["I'd build you anything. Just ask.", "You work as hard as any orc I know.", "Stay for supper. Mum's stew is famous."]],
+		        rewards: [["m|wood", 30], ["m|iron", 3], ["d|cloth|walnut", 1], ["m|steel", 2], ["d|cloth|forest", 1]]},
+		zenya:  {name: "Zenya Kassar", title: "of the Tool Store", race: "Human", body: "female", seed: 7015,
+		        loves: ["m|steel", "m|ember_core", "f|fiery_chilli"], likes: ["m|", "f|"], dislikes: ["w|herb", "m|silk"], hates: ["p|", "a|milk"],
+		        lines: [["What? I'm working. Buy something or don't.", "Mara's alright. For a boss.", "Rules are for people with no imagination."],
+		                ["You're not as dull as the rest of them.", "I fixed a hoe nobody could fix. Don't tell Mara.", "Ayla dances. I fight. We're a good pair."],
+		                ["Fine. You're my favourite. Happy?", "Let's get out of this town one night. Just us.", "You actually get me. That's rare."]],
+		        rewards: [["m|iron", 5], ["d|cloth|charcoal", 1], ["m|steel", 2], ["d|cloth|red", 1], ["m|ember_core", 1]]},
+		ayla:   {name: "Ayla Kassar", title: "the Dancer", race: "Human", body: "female", seed: 7016,
+		        loves: ["m|silk", "m|moonsilk", "f|gourd_pie"], likes: ["m|", "f|", "w|"], dislikes: ["m|coal"], hates: ["m|bone", "m|troll_hide"],
+		        lines: [["Come to the tavern on the weekend! I dance!", "Zenya's all bark. Mostly.", "Hello, sweetie."],
+		                ["Dancing is just walking with joy.", "The market's the best place for people-watching.", "My feet hurt. Worth it."],
+		                ["I'll dance a song just for you.", "You're like family now.", "Look after my sister. She won't ask, but she needs it."]],
+		        rewards: [["m|silk", 2], ["d|cloth|rose", 1], ["f|gourd_pie", 2], ["d|cloth|gold", 1], ["m|moonsilk", 1]]},
+		mira:   {name: "Mira Larkspun", title: "Nell's daughter", race: "Human", body: "female", seed: 7017,
+		        loves: ["m|wool", "m|cotton", "m|linen"], likes: ["m|", "f|"], dislikes: ["m|coal"], hates: ["m|bone", "m|ember_core"],
+		        lines: [["Mum weaves, I sew. Between us, Dahya's dressed.", "That shirt's seen better days.", "Hello! Need mending?"],
+		                ["I'm designing a new coat. It's going to be wonderful.", "The pines here smell lovely after rain.", "Bryn's leather and our cloth - the best in town."],
+		                ["I made this for you. Try it on!", "You make everything feel cosier.", "Come by any time. I'll put the kettle on."]],
+		        rewards: [["m|wool", 5], ["d|cloth|green", 1], ["m|linen", 3], ["d|cloth|sky", 1], ["m|moonsilk", 1]]},
+		dikhaj: {name: "Dikhaj Tawil", title: "Bryn's sister", race: "Beastkin", body: "female", seed: 7018,
+		        loves: ["x|salmon", "m|fur", "f|forest_stew"], likes: ["x|", "m|", "f|"], dislikes: ["p|corn"], hates: ["m|silk", "w|toadstool"],
+		        lines: [["Bryn tans the hides. I find them.", "The market's loud. I like loud.", "Sniff. You smell like hay."],
+		                ["I run the stalls at Wing Hill some days.", "Bryn worries about me. He shouldn't.", "Ever chased a deer barefoot? You should."],
+		                ["You're pack now.", "I'll show you the secret trails in the woods.", "Brought you a fish. Fresh. Very fresh."]],
+		        rewards: [["m|fur", 3], ["x|perch", 3], ["d|cloth|brown", 1], ["m|leather", 3], ["d|cloth|forest", 1]]},
+		sylva:  {name: "Sylva Silverbough", title: "the Elf's daughter", race: "Elf", body: "female", seed: 7019,
+		        loves: ["w|herb", "m|pixie_dust", "f|stuffed_artichoke"], likes: ["w|", "p|", "m|gem"], dislikes: ["m|coal"], hates: ["m|ember_core", "f|fiery_chilli"],
+		        lines: [["The woods are listening. Speak softly.", "Mother brews, Father hunts, I wander.", "Good day, farmer."],
+		                ["I know every herb in Yarzeh Woods.", "Elves live long. We learn to be patient.", "The river sings at dawn."],
+		                ["A century from now I'll still remember you.", "Walk the woods with me at dusk.", "You have an old soul. I like it."]],
+		        rewards: [["w|herb", 5], ["d|cloth|forest", 1], ["m|pixie_dust", 1], ["d|cloth|green", 1], ["m|frost_crystal", 1]]},
+		soren:  {name: "Soren Night", title: "of the Night Farm", race: "Human", body: "male", seed: 7020, shop: "seeds",
+		        loves: ["p|gourd", "p|corn", "f|veg_stew"], likes: ["p|", "f|", "s|"], dislikes: ["m|coal"], hates: ["m|troll_hide", "m|bone"],
+		        lines: [["Seeds and honey. The best in the valley.", "Your grandmother taught me to farm, you know.", "Morning, cousin."],
+		                ["Our farm has everything. We only sell the seeds.", "Jul kept us up all night. Worth it.", "Mother still treats me like I'm ten."],
+		                ["Family's family. Whatever you need.", "Here, the good seeds. Don't tell the customers.", "You've made Grandmother's farm proud."]],
+		        rewards: [["s|corn", 10], ["s|gourd", 5], ["d|cloth|green", 1], ["f|veg_stew", 2], ["d|cloth|walnut", 1]]},
+		sera:   {name: "Sera Night", title: "the Baker", race: "Human", body: "female", seed: 7021, shop: "bakery",
+		        loves: ["p|corn", "f|corn_fritters", "f|gourd_pie"], likes: ["p|", "a|", "f|"], dislikes: ["m|stone"], hates: ["m|coal", "f|fiery_chilli"],
+		        lines: [["Bread's up at dawn and so am I.", "Flour everywhere. Always.", "Fresh loaves on Verdun Street!"],
+		                ["Jul's first word was 'bun'. I'm so proud.", "Soren eats half my stock. Every day.", "The secret's a long rise."],
+		                ["Take a pie. No charge for family.", "You're always welcome at our table.", "You've got flour on your nose. Hold still."]],
+		        rewards: [["f|corn_fritters", 3], ["f|gourd_pie", 2], ["d|cloth|yellow", 1], ["a|egg", 5], ["d|cloth|pink", 1]]},
+		jul:    {name: "Jul Night", title: "the Baby", race: "Human", body: "child", seed: 7022, kid: true,
+		        loves: ["a|milk", "f|corn_fritters", "m|feather"], likes: ["f|", "a|"], dislikes: ["m|stone"], hates: ["f|fiery_chilli", "m|bone"],
+		        lines: [["Ba!", "Goo.", "*giggles*"], ["*reaches for you*", "Fa-mer!", "*claps*"], ["*hugs your leg*", "*sleepy smile*", "Fa-mer! Fa-mer!"]],
+		        rewards: [["m|feather", 1], ["a|milk", 1], ["m|feather", 2], ["a|milk", 2], ["m|gem", 1]]},
+		alban:  {name: "Dr. Alban Frere", title: "the Doctor", race: "Halfling", body: "male", seed: 7023, shop: "hospital",
+		        loves: ["w|herb", "f|antidote", "m|frost_crystal"], likes: ["w|", "f|"], dislikes: ["m|coal"], hates: ["m|bone", "w|toadstool"],
+		        lines: [["Rest, water, and a good night's sleep. That's half of medicine.", "The hospital's open if you're poorly.", "Don't overdo it in that mine."],
+		                ["Marigold's herbs fix more than my tonics do.", "You've a strong constitution. Look after it.", "Posy's the light of our lives."],
+		                ["Come by any time. Doctor's orders.", "You keep this town healthy, you know. Good food does that.", "I trust you with my daughter's heart."]],
+		        rewards: [["f|antidote", 2], ["w|herb", 5], ["d|cloth|sky", 1], ["m|frost_crystal", 1], ["d|cloth|navy", 1]]},
+		marigold:{name: "Marigold Frere", title: "the Herbalist", race: "Halfling", body: "female", seed: 7024,
+		        loves: ["w|herb", "w|mushroom", "f|forest_stew"], likes: ["w|", "p|"], dislikes: ["m|coal"], hates: ["m|ember_core", "m|bone"],
+		        lines: [["Chamomile for sleep. Mint for the belly. Patience for everything.", "Alban's medicine, my herbs. We make a good pair.", "Hello, dear."],
+		                ["Yarzeh Woods has herbs you won't find anywhere else.", "Posy gets her green thumb from me.", "Every weed is a herb nobody's met yet."],
+		                ["Here, a tea for your tired bones.", "You're one of the family now, dear.", "I've a jar of my best salve set aside for you."]],
+		        rewards: [["w|herb", 5], ["w|mushroom", 3], ["d|cloth|green", 1], ["f|forest_stew", 1], ["d|cloth|green", 1]]},
+		alaric: {name: "Sir Alaric Ward", title: "the Knight", race: "Human", body: "male", seed: 7025, shop: "guild_melee",
+		        loves: ["m|steel", "m|mithril", "f|veg_stew"], likes: ["m|", "f|"], dislikes: ["m|silk"], hates: ["m|pixie_dust", "w|toadstool"],
+		        lines: [["A blade for a blade. The Guild has what you need.", "Father prays. I guard. Between us, the town's safe.", "Stand straight, farmer."],
+		                ["I patrol the hills at night. Strange things in the woods.", "I have regrets. Every knight does.", "Train hard. The mine doesn't forgive."],
+		                ["I'd stand beside you in any fight.", "There's something I've never told anyone. Maybe one day, you.", "You have a knight's heart."]],
+		        rewards: [["m|iron", 5], ["m|steel", 3], ["d|metal|bronze", 1], ["d|cloth|navy", 1], ["m|mithril", 1]]},
 	};
 	return t;
 }
@@ -379,32 +530,46 @@ function people_trade(_key){
 	var v = villager_def(_key);
 	var inv = instance_create_depth(0, 0, -9000, obj_inventory);
 	inv.shop = true;
-	if(v.shop == "smith") inv.smith = true;
-	if(v.shop == "animals"){
-		inv.shopStock = animal_stock();
-		inv.shopTitle = "Wren's Ranch - livestock";
-	}
-	if(v.shop == "carpentry"){
-		inv.shopStock = shop_carpentry_stock();
-		inv.shopTitle = "Thorne's Carpentry";
-	}
-	if(v.shop == "seeds"){
-		inv.shopStock = item_seed_stock();
-		inv.shopTitle = "Mara's Seeds - " + season_name(global.clock.season);
-	}
-	if(v.shop == "inn"){
-		inv.shopStock = shop_inn_stock();
-		inv.shopTitle = "The Brindle Inn - today's menu";
-	}
-	if(v.shop == "outfitter"){
-		inv.shopStock = shop_outfitter_stock();
-		inv.shopTitle = "Bryn's Outfitters";
-	}
-	if(v.shop == "apothecary"){
-		inv.shopStock = shop_apothecary_stock();
-		inv.shopTitle = "Morga's Apothecary";
+	switch(v.shop){
+		case "smith": inv.smith = true; break;   // Brom: buys ore, sells ingots, upgrades tools
+		case "animals":   // Poupry's farm: animals, and the milk, wool and eggs (the Night farm keeps theirs)
+			inv.shopStock = array_concat(animal_stock(), shop_produce_stock());
+			inv.shopTitle = "Meadowlark Farm - animals and produce"; break;
+		case "carpentry": inv.shopStock = shop_carpentry_stock(); inv.shopTitle = "Oakhart Lumber Mill"; break;
+		case "seeds":     // the Night farm: seeds for the season, and honey
+			inv.shopStock = array_concat(item_seed_stock(), shop_honey_stock());
+			inv.shopTitle = "Night Farm - " + season_name(global.clock.season) + " seeds and honey"; break;
+		case "inn":       inv.shopStock = shop_inn_stock(); inv.shopTitle = "The Tavern - today's menu"; break;
+		case "outfitter": inv.shopStock = shop_outfitter_stock(); inv.shopTitle = "Larkspun Clothes"; break;
+		case "apothecary":inv.shopStock = shop_apothecary_stock(); inv.shopTitle = "Silverbough Potions"; break;
+		case "tools":     inv.shopStock = shop_list([["o|sprinkler", 0], ["c|held|Axe", 400], ["c|held|Pickaxe", 400], ["c|held|Scythe", 300], ["m|fibre", 0], ["m|stone", 0]]); inv.shopTitle = "Whitlow Tools"; break;
+		case "guild_ranged": inv.shopStock = shop_list([["c|held|Slingshot", 300], ["c|held|Boomerang", 900], ["c|held|Crossbow", 2400]]); inv.shopTitle = "Adventurers' Guild - Hask's bows and slings"; break;
+		case "guild_melee":  inv.shopStock = shop_list([["c|held|Dagger", 250], ["c|held|Club", 300], ["c|held|Arming Sword", 700], ["c|held|Spear", 800], ["c|held|Saber", 1400], ["c|held|Mace", 1600]]); inv.shopTitle = "Adventurers' Guild - Sir Alaric's blades"; break;
+		case "explosives":   inv.shopStock = shop_list([["m|copper_ore", 0], ["m|iron_ore", 0], ["m|coal", 0], ["m|silver_ore", 0]]); inv.shopTitle = "Fen's Mine Stall - ore (explosives coming soon)"; break;
+		case "fish":      inv.shopStock = shop_list([["x|sardine", 0], ["x|perch", 0], ["x|seabass", 0]]); inv.shopTitle = "Marlo's Fish Shack"; break;
+		case "bakery":    inv.shopStock = shop_list([["f|corn_fritters", 0], ["f|gourd_pie", 0], ["f|hash_browns", 0]]); inv.shopTitle = "Night's Bakery"; break;
+		case "flowers":   inv.shopStock = shop_list([["w|herb", 0], ["w|mushroom", 0], ["m|pixie_dust", 0]]); inv.shopTitle = "Posy's Flowers"; break;
+		case "furniture": inv.shopStock = shop_list([["m|wood", 0], ["m|stone", 0]]); inv.shopTitle = "Oakhart Furniture - house upgrades coming soon"; break;
+		case "hospital":  inv.shopStock = shop_list([["f|antidote", 120], ["w|herb", 0]]); inv.shopTitle = "Uptown Hospital"; break;
 	}
 }
+
+/// @description A stock list from [[id, price]...]: price 0 means half again what it's worth.
+function shop_list(_pairs){
+	var out = [];
+	for(var i = 0; i < array_length(_pairs); i++){
+		var d = item_def(_pairs[i][0]);
+		if(d == undefined) continue;
+		array_push(out, {id: _pairs[i][0], price: (_pairs[i][1] > 0) ? _pairs[i][1] : max(2, round(d.price * 1.5))});
+	}
+	return out;
+}
+
+/// @description Poupry's milk, wool and eggs.
+function shop_produce_stock(){ return shop_list([["a|milk", 0], ["a|egg", 0], ["m|wool", 0]]); }
+
+/// @description The Night farm's honey (the farm's own beehives) - a sweet food until honey is an item of its own.
+function shop_honey_stock(){ return shop_list([["a|honey", 0], ["f|gourd_pie", 0]]); }
 
 // ---------------------------------------------------------------- Brindlemoor's shops
 

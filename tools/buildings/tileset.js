@@ -44,7 +44,7 @@ module.exports = function(all){
 	fs.mkdirSync(dir, {recursive: true});
 	let yy = fs.readFileSync(path.join(root, "tilesets/TS_town/TS_town.yy"), "utf8")
 		.replaceAll("TS_town", "TS_buildings").replaceAll("spr_tile_town", "spr_tile_buildings")
-		.replace(/"out_columns":\d+/, '"out_columns":' + COLS)
+		.replace(/"out_columns":\d+/, '"out_columns":' + Math.ceil(Math.sqrt(COLS * (sheet.h / T))))   // as the IDE lays out output_tileset.png
 		.replace(/"tile_count":\d+/, '"tile_count":' + COLS * (sheet.h / T));
 	fs.writeFileSync(path.join(dir, "TS_buildings.yy"), yy);
 	const yypPath = path.join(root, "NewHarvest.yyp");

@@ -18,7 +18,7 @@
 // Colours (the blueprint's key - keep to these when painting):
 const C = {
 	deep: [36, 92, 158], sea: [64, 140, 204], shallow: [110, 180, 225], sand: [236, 214, 140], rocky: [176, 162, 136],
-	grass: [104, 172, 76], meadow: [128, 186, 88], forest: [40, 112, 52], pine: [30, 92, 58], cliff: [134, 92, 60],
+	grass: [104, 172, 76], meadow: [128, 186, 88], forest: [40, 112, 52], pine: [30, 92, 58], cliff: [134, 92, 60],   // meadow: parks, lawns
 	cliffTop: [120, 150, 84], highland: [96, 124, 70], rock: [150, 138, 124], snow: [240, 244, 248], road: [170, 168, 160], lane: [196, 164, 106],
 	plaza: [210, 200, 180], field: [138, 104, 62], river: [82, 158, 214], building: [250, 250, 250], pier: [120, 84, 52],
 	cave: [40, 34, 32],
@@ -127,36 +127,74 @@ for(let i = 0; i < river.length - 1; i++){
 }
 disc(246, 168, 3, 3, "river");
 
-// ---- roads (grey cobbles) and lanes (dirt)
+// ---- roads (grey cobbles) and lanes (dirt), after Beirut's real ones, made simpler and wide enough to walk (main roads 3
+// tiles, streets 2). The old rooms' roads and the villagers' routes are kept for reference: design/map/old_rooms.json
+// and old_rooms_on_new.png (see tools/map/old_rooms.js).
 const line = (pts, k, w, under) => { for(let i = 0; i < pts.length - 1; i++){
 	const [x1, y1] = pts[i], [x2, y2] = pts[i + 1], n = Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1), 1);
 	for(let t = 0; t <= n; t++){ const x = x1 + (x2 - x1) * t / n, y = y1 + (y2 - y1) * t / n;
 		for(let dy = -w; dy <= w; dy++) for(let dx = -w; dx <= w; dx++){ const cur = get(Math.round(x + dx) + M, Math.round(y + dy) + M);
 			if(cur === "river") set(x + dx + M, y + dy + M, "pier");            // a bridge
 			else if(!["deep", "sea", "shallow"].includes(cur) && (!under || under.includes(cur))) set(x + dx + M, y + dy + M, k); } } } };
-const lowland = ["grass", "rocky", "sand", "road", "lane", "pine"];
-// The town: the corniche round the peninsula, avenues out from the square by the port (Downtown), cross streets
-line([[34, 16], [70, 15], [120, 16], [134, 18]], "road", 1);                          // the corniche, north
-line([[13, 40], [12, 60], [14, 80], [24, 100]], "road", 1);                          // the corniche, west
-line([[22, 26], [34, 16]], "road", 1);
-line([[16, 36], [60, 36], [130, 36]], "road", 1); line([[14, 58], [60, 58], [134, 58]], "road", 1); line([[16, 80], [70, 82], [136, 80]], "road", 1);
-line([[40, 18], [38, 92]], "road", 1); line([[64, 16], [62, 96]], "road", 1); line([[100, 16], [104, 96]], "road", 1); line([[128, 20], [130, 90]], "road", 1);
-line([[88, 36], [112, 70], [126, 96]], "road", 1);                                   // a diagonal avenue, as Beirut has
-rect(78, 24, 96, 34, "plaza");                                                      // the square, by the port
-// Out of town: south through the Outskirts to the farm; down the West Beach; east over the river and up the mountain
-line([[62, 96], [64, 120], [70, 140], [72, 156]], "road", 1);
-line([[104, 96], [112, 118], [120, 140], [124, 156]], "lane", 1);
-line([[24, 100], [30, 130], [32, 160], [34, 196]], "lane", 1);
-line([[72, 156], [100, 158], [124, 156], [150, 160], [178, 164]], "lane", 1);         // the countryside lane
-line([[130, 58], [146, 58], [158, 56], [170, 52], [178, 54]], "lane", 1, lowland.concat(["cliffTop", "cliff", "highland"]));   // to the mine
-line([[178, 54], [190, 46], [198, 38], [210, 34], [220, 28], [230, 22]], "lane", 1, lowland.concat(["cliffTop", "cliff", "highland", "rock", "pine"]));  // up to the peak
-line([[136, 80], [150, 80], [160, 78], [170, 80]], "lane", 1, lowland.concat(["cliffTop", "cliff"]));   // to Victory Hill
-line([[150, 80], [164, 96], [180, 104], [190, 112]], "lane", 1, lowland.concat(["cliffTop", "cliff", "forest"]));  // into Whispering Woods
-line([[134, 18], [146, 10], [158, 4]], "lane", 1);                                   // over the river mouth to North Beach
+const lowland = ["grass", "rocky", "sand", "road", "lane", "pine", "plaza"];
+const hills = lowland.concat(["cliffTop", "cliff", "highland", "rock", "forest"]);
+const ROADS = {
+	// The main roads
+	corniche_north: [[24, 18], [40, 15], [70, 14], [100, 15], [134, 17]],                      // Avenue des Francais, the port's Charles Helou
+	coast_highway:  [[134, 17], [146, 9], [160, 2], [172, -4]],                                // on north-east along the coast, past the river mouth
+	corniche_west:  [[24, 18], [14, 28], [11, 44], [11, 62], [14, 80], [22, 96], [28, 120], [30, 150], [32, 175], [34, 196]],   // the Corniche, then down the West Beach
+	hamra:          [[14, 32], [58, 32]],                                                     // Hamra Street (Red Street)
+	the_ring:       [[58, 32], [70, 42], [104, 42], [124, 40], [140, 42], [150, 46]],          // Fouad Chehab, east over the river
+	mazraa:         [[11, 62], [50, 62], [80, 64], [110, 64]],                                // Corniche el-Mazraa / Salam
+	damascus_road:  [[90, 34], [100, 46], [110, 64], [114, 84], [112, 100], [118, 120], [132, 140], [150, 152], [170, 158]],   // south to Baabda (Abda)
+	bechara_khoury: [[80, 42], [80, 64], [78, 86], [72, 100]],
+	airport_road:   [[72, 100], [66, 122], [62, 146], [66, 162]],                             // on to the farm (where the airport would be)
+	south_boulevard:[[22, 96], [50, 98], [72, 100], [100, 104], [112, 100]],                  // Jnah to Tayouneh
+	// Streets
+	verdun:         [[40, 32], [40, 62], [44, 90]],
+	ain_mreisseh:   [[24, 18], [30, 26], [40, 32]],
+	basta:          [[64, 42], [62, 64]],
+	tariq_jdideh:   [[50, 62], [52, 90], [60, 98]],
+	achrafieh:      [[104, 42], [112, 50], [124, 52], [132, 46]],
+	sassine:        [[112, 50], [114, 64]],
+	furn_chebbak:   [[114, 84], [134, 84]],
+	old_saida_road: [[100, 104], [94, 130], [88, 150], [80, 160]],
+};
+const STREETS = ["verdun", "ain_mreisseh", "basta", "tariq_jdideh", "achrafieh", "sassine", "furn_chebbak", "old_saida_road"];
+const LANES = {
+	river_road:     [[131, 22], [135, 40], [138, 60], [141, 80], [145, 96]],                  // along the river's west bank
+	mountain_road:  [[150, 46], [164, 52], [178, 54], [190, 46], [200, 38], [212, 32], [222, 26], [230, 22]],   // Mansourieh, the mine, the peak
+	victory_hill:   [[146, 80], [156, 80], [166, 80]],
+	woods:          [[156, 80], [166, 96], [182, 104], [192, 110]],
+	countryside:    [[66, 162], [100, 158], [124, 156], [150, 158]],
+	farm_to_beach:  [[34, 170], [56, 170]],
+};
+for(const [name, pts] of Object.entries(ROADS)) line(pts, "road", STREETS.includes(name) ? 0.5 : 1, hills);
+for(const [name, pts] of Object.entries(LANES)) line(pts, "lane", 0.5, hills);
+rect(82, 22, 96, 32, "plaza");                     // Martyrs' Square, downtown by the port
+disc(102, 104, 3, 3, "plaza");                     // the Tayouneh roundabout, by the Horsh pines
+disc(110, 64, 2, 2, "plaza");                      // the Museum crossing
 
 // ---- the port (Starsand's piers) and the West Beach's piers; Pigeon Rocks offshore (the sea arch)
 const pier = (x, y, len, dx, dy) => { for(let k = 0; k < len; k++) for(let w = 0; w <= 1; w++) set(x + dx * k + (dy ? w : 0) + M, y + dy * k + (dx ? w : 0) + M, "pier"); };
-pier(84, 11, 9, 0, -1); pier(96, 11, 9, 0, -1); pier(108, 11, 9, 0, -1); pier(84, 3, 26, 1, 0);
+// The port: its basins and breakwater (east of Biel)
+pier(90, 11, 9, 0, -1); pier(102, 11, 9, 0, -1); pier(114, 11, 9, 0, -1); pier(90, 2, 30, 1, 0);
+// Biel: land built out into the sea north of downtown, a big hall on it, a stone pier along its north edge (Starsand Pier)
+rect(64, 1, 82, 12, "plaza");
+for(let x = 64; x <= 82; x++){ set(x + M, 0 + M, "pier"); set(x + M, -1 + M, "pier"); }
+// Zaitunay Bay: a marina basin cut into the shore, pontoons out into it, a promenade along it
+rect(46, 9, 60, 14, "shallow"); rect(46, 15, 60, 16, "plaza");
+for(const px of [48, 52, 56]) for(let y = 10; y <= 14; y++) set(px + M, y + M, "pier");
+// The Ain el-Mreisseh fishermen's harbour by the Riviera: a little basin and a jetty
+rect(32, 12, 37, 15, "shallow"); for(let x = 32; x <= 38; x++) set(x + M, 11 + M, "pier");
+// Palms along the Corniche (a tree every few tiles on the landward side)
+for(const [x, y] of [[26, 22], [16, 34], [14, 48], [14, 56], [16, 72], [18, 86], [44, 18], [62, 18], [124, 20]]) set(x + M, y + M, "forest");
+// Parks and grounds: Sanayeh Garden; the Hippodrome (a racetrack by the Horsh pines); Sports City's stadium at Jnah
+rect(46, 46, 54, 52, "meadow"); for(const [x, y] of [[47, 47], [52, 48], [49, 51]]) set(x + M, y + M, "forest");
+{ const cx = 72, cy = 120, rx = 9, ry = 6;
+  for(let y = cy - ry - 1; y <= cy + ry + 1; y++) for(let x = cx - rx - 1; x <= cx + rx + 1; x++){
+	const d = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2;
+	if(d <= 1.25 && d >= 0.75) set(x + M, y + M, "lane"); else if(d < 0.75) set(x + M, y + M, "meadow"); } }
 pier(22, 112, 10, -1, 0); pier(26, 170, 12, -1, 0);
 disc(2, 64, 3, 2, "rock");
 
@@ -187,7 +225,9 @@ b(24, 22, 9, 5, "Riviera hotel"); b(26, 29, 6, 4, "Glassworks"); b(18, 30, 5, 4,
 b(44, 40, 6, 5, "Goldcrest"); b(68, 26, 7, 5, "Tavern"); b(70, 38, 8, 6, "Bank"); b(98, 26, 6, 5, "Tools"); b(98, 38, 6, 5, "Guild hall");
 b(108, 40, 7, 5, "Smithy"); b(118, 40, 6, 5, "Whitlow");
 b(22, 62, 6, 4, "Bakery"); b(30, 62, 6, 4, "Flowers"); b(44, 62, 7, 4, "Furniture"); b(50, 48, 5, 4, "Cafe");
-b(68, 62, 8, 5, "Hospital"); b(78, 62, 8, 5, "Library"); b(72, 72, 8, 5, "Museum");
+b(68, 66, 8, 5, "Hospital"); b(78, 66, 8, 5, "Library"); b(113, 66, 8, 5, "Museum");
+b(68, 4, 9, 5, "Biel hall"); b(122, 20, 5, 6, "Silos"); b(58, 18, 5, 3, "Marina club");
+b(142, 20, 7, 4, "Bourj Hammoud market"); b(46, 114, 7, 6, "Stadium");
 b(108, 62, 6, 4, "Quill"); b(116, 62, 8, 5, "Meadowlark");
 // North Beach (the lighthouse on the peninsula's corner, the port, Hangar 12 past the river mouth)
 b(12, 30, 3, 7, "Lighthouse"); b(56, 18, 6, 4, "Fish market"); b(112, 18, 6, 4, "Ferry");
@@ -210,7 +250,23 @@ b(102, 162, 6, 4, "Night farm"); b(112, 164, 7, 4, "Seeds"); b(134, 164, 7, 6, "
 b(152, 174, 6, 4, "Hayward"); b(142, 176, 5, 4, "Frere"); b(166, 160, 6, 6, "Church"); b(174, 166, 5, 4, "Ward");
 // Bunny Island
 b(74, -20, 4, 3, "Burrow");
-for(const k of B) rect(k.x, k.y, k.x + k.w - 1, k.y + k.h - 1, "building");
+// Each building where it's put, or slid to the nearest clear spot (on open ground, a tile clear of roads, rivers and other
+// buildings), so the roads can be redrawn without moving every building by hand
+const open = ["grass", "rocky", "sand", "cliffTop", "highland", "pine", "forest", "plaza", "meadow"];
+const fits = (x, y, w, h) => { for(let yy = y - 1; yy <= y + h; yy++) for(let xx = x - 1; xx <= x + w; xx++){
+	const k = get(xx + M, yy + M), inside = xx >= x && yy >= y && xx < x + w && yy < y + h;
+	if(k === "building" || (inside && !open.includes(k)) || (!inside && ["river", "deep", "sea", "shallow"].includes(k))) return false; }
+	return true; };
+for(const k of B){
+	let best = null;
+	for(let d = 0; d <= 10 && !best; d++) for(let dy = -d; dy <= d && !best; dy++) for(let dx = -d; dx <= d; dx++){
+		if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
+		if(fits(k.x + dx, k.y + dy, k.w, k.h)){ best = [dx, dy]; break; }
+	}
+	if(!best){ console.log("no room for " + k.name); best = [0, 0]; }
+	k.x += best[0]; k.y += best[1];
+	rect(k.x, k.y, k.x + k.w - 1, k.y + k.h - 1, "building");
+}
 
 // ---- the blueprint: one pixel a tile
 const out = path.join(__dirname, "..", "..", "design", "map");
@@ -298,16 +354,25 @@ const text = (str, x, y, sc, col) => {
 const at = (x, y) => [(x + M) * S, (y + M) * S];
 const area = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 3, [255, 236, 150]); };
 const dist = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 2, [255, 255, 255]); };
-area("Beirut", 87, 46); area("North Beach", 40, 2); area("West Beach", 14, 146); area("The Mountain", 205, 64);
+area("Beirut", 87, 46); area("North Beach", 30, -2); area("West Beach", 14, 146); area("The Mountain", 205, 64);
 area("The Outskirts", 84, 145); area("Whispering Woods", 196, 128); area("Countryside", 140, 190); area("The Farm", 76, 196);
 area("Bunny Island", 70, -27);
+dist("Hippodrome", 72, 128); dist("Stadium", 48, 108); dist("Museum", 104, 78); dist("Sanayeh", 50, 44);
+dist("Bourj Hammoud", 148, 14);
 dist("Well's Head", 30, 10); dist("Red Street", 40, 50); dist("Downtown", 87, 20); dist("Grace Tower", 122, 50);
 dist("Verdun Street", 40, 70); dist("Uptown", 76, 80); dist("Oven's Window", 116, 70);
-dist("Manara's Light", 12, 40); dist("Starsand Pier", 96, -2); dist("Hangar 12", 170, 4);
+dist("Manara's Light", 12, 40); dist("Starsand Pier (Biel)", 74, -6); dist("Port", 104, -4); dist("Zaitunay Bay", 52, 4); dist("Hangar 12", 170, 4);
 dist("Pigeon Rocks", 8, 56); dist("White Sand", 34, 118); dist("Olive Bay", 36, 140); dist("South Beach", 36, 180);
 dist("Plummet's Point", 210, -10); dist("Beacon Hill", 176, 38); dist("Victory Hill", 170, 84);
 dist("Wing Hill", 58, 98); dist("Dahya", 100, 112); dist("Resolve's Rise", 128, 132);
 dist("Saint Thereza", 108, 152); dist("Frere's Fray", 144, 184); dist("Abda", 172, 154);
-dist("Mine", 178, 56); dist("Peak", 234, 8); dist("Ferry", 60, -6); dist("Riviera", 28, 18); dist("Beirut River", 156, 136);
+dist("Mine", 178, 56); dist("Peak", 234, 8); dist("Ferry", 46, -12); dist("Riviera", 28, 18); dist("Beirut River", 156, 136);
 writePng(path.join(out, "world_blueprint_preview.png"), P);
 console.log("world_blueprint.png " + TW + "x" + TH + " (1 px = 1 tile), preview " + P.w + "x" + P.h);
+
+// ---- the layout as data, for building the rooms and moving the villagers' routes over later: the roads and lanes by
+// name (points in world tiles) and every building's footprint where it ended up
+fs.writeFileSync(path.join(out, "world_layout.json"), JSON.stringify({
+	note: "World tiles: x 0-249 east, y 0-199 south (the blueprint image adds a 30-tile margin to the west and north). Roads are 3 tiles wide, streets and lanes 2.",
+	roads: ROADS, streets: STREETS, lanes: LANES, buildings: B.map(k => ({name: k.name, x: k.x, y: k.y, w: k.w, h: k.h})),
+}, null, 1));

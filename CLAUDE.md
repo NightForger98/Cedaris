@@ -474,9 +474,22 @@ Run from Git Bash in a scratch folder (`$W`), not inside the project; the script
    ```
 5. Convert (assembles universal sheets and palette-indexes them):
    `powershell -File convert.ps1 -Jobs $W/out/jobs.txt -OutDir $W/sheets > $W/convert_log.txt`
-6. Write everything into the project (close GameMaker first): `python -I finalize.py $W <project folder> $W/lpc`
-   (expects `out/`, `sheets/` and `convert_log.txt` inside `$W`; it reuses existing sprite ids, so unchanged sprites
-   produce no git changes). Then run `./build.sh`.
+   (its Add-Type needs a writable temp folder: if it fails with "Source file ... could not be found", set `$env:TEMP`
+   and `$env:TMP` to a folder of your own first. Any `MISSING` line means step 3 wasn't rerun after `plan.py` changed.)
+6. Measure the held items' inventory icons: `python -I icons.py $W`, then
+   `powershell -File icons.ps1 -Jobs $W/out/icon_jobs.txt -Out $W/out/icons.txt` (without this the catalog has no
+   `icon:` for tools and weapons).
+7. Write everything into the project (close GameMaker first): `python -I finalize.py $W <project folder> $W/lpc`
+   (expects `out/`, `sheets/` and `convert_log.txt` inside `$W`; it reuses existing sprite ids, and keeps the rows of
+   `LPC_CREDITS.csv` it didn't write). Then run `./build.sh`. Many PNGs come out re-encoded with the same pixels: revert
+   those before committing (compare decoded pixels with HEAD), so a commit holds only real changes.
+
+Python: installed with winget (`Python.Python.3.13`, user scope, 2026-11-05); run it as `py -I ...`.
+Bows (2026-11-05): the generator's three bows have no ordinary walk - they're carried by a `walk_128` sheet (128 px
+frames, frame for frame with the body's walk), which `character_draw` swaps in for any held item that has one while
+walking or standing (the long spears, katana, scimitar and longsword alt too). `plan.py` names them Bow / Recurve Bow /
+Great Bow (`RENAME`) and gives each one natural wood finish in fixed colours (`BOW_WOOD`); arrows (`m|arrow`) are
+their ammo, Hask sells both.
 
 LPC art is CC-BY-SA 3.0, GPL 3.0 and/or OGA-BY 3.0, depending on the piece; `LPC_CREDITS.csv` lists the authors and
 licences for every piece used, and the game's credits must include them.

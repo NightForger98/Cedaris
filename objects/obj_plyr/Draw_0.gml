@@ -31,7 +31,7 @@ if(charge != undefined) charge_draw_cells(id);
 // All layers, palettes and draw order live in character_draw (character_look script)
 if(charge != undefined){
 	// Held on the wind-up: the tool pulled back and glowing, the strain on the face (charging script)
-	var a = {act: act, i: 0, dir: actDir, fx: charge_fx(charge, actDir)};
+	var a = {act: act, i: charge_pose_step(act), dir: actDir, fx: charge_fx(charge, actDir)};
 	charge_draw_behind(id, xx, yy, a);
 	character_draw(look, 0, 0, xx, yy, 1, a);
 	charge_draw_front(id, xx, yy, actDir);

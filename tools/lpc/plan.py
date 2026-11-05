@@ -28,9 +28,17 @@ SLOT = {
     'weapon': 'held',
 }
 SKIP_FILES = {'body/special', 'body/wheelchair'}
+# Items whose generator name doesn't say what they are (the bows are just "Normal", "Recurve", "Great")
+RENAME = {'weapons/ranged/bow/weapon_ranged_bow_normal.json': 'Bow',
+          'weapons/ranged/bow/weapon_ranged_bow_recurve.json': 'Recurve Bow',
+          'weapons/ranged/bow/weapon_ranged_bow_great.json': 'Great Bow'}
+BOW_WOOD = {'weapons/ranged/bow/weapon_ranged_bow_normal.json': 'medium',
+            'weapons/ranged/bow/weapon_ranged_bow_recurve.json': 'dark',
+            'weapons/ranged/bow/weapon_ranged_bow_great.json': 'light'}
 # LPC custom (oversized) tool/weapon animations we support: they replay the body's slash or thrust rows.
-# backslash_128 / halfslash_128 need body rows we don't convert; walk_128 isn't a custom animation.
-CUSTOM_OK = {'tool_axe', 'tool_hammer', 'tool_rod', 'tool_whip', 'whip_oversize', 'slash_oversize',
+# backslash_128 / halfslash_128 need body rows we don't convert. walk_128 is how the bows are carried: the game draws
+# it in place of the held item while walking, frame for frame with the body's walk.
+CUSTOM_OK = {'walk_128', 'tool_axe', 'tool_hammer', 'tool_rod', 'tool_whip', 'whip_oversize', 'slash_oversize',
              'slash_reverse_oversize', 'thrust_oversize', 'slash_128', 'thrust_128'}
 
 def load(p):
@@ -97,7 +105,11 @@ for dp, dn, fn in os.walk(os.path.join(repo, 'sheet_definitions')):
 
         groups = groups_for(d)
         mode, variant = 'recolor', None
-        if groups is None:
+        if rel in BOW_WOOD:
+            # The bows: one natural wood finish each, in its own colours (their variant names would match cloth
+            # ramps, and half a bow recoloured as cloth looks wrong)
+            groups, mode, variant = None, 'variant_raw', BOW_WOOD[rel]
+        elif groups is None:
             m, variant = variant_choice(d)
             if m:
                 mode, groups = 'variant', [(m, variant)]
@@ -147,7 +159,9 @@ for dp, dn, fn in os.walk(os.path.join(repo, 'sheet_definitions')):
                     p = 'spritesheets/' + path + (a + '/' + fv + '.png' if fv else a + '.png')
                     if p in tree:
                         anim_files[a] = p
-                if 'walk' not in anim_files:
+                # A held item without a walk is drawn only while it's used - if it's carried by walk_128 (the bows)
+                carried = slot == 'held' and any(d[k].get('custom_animation') == 'walk_128' for k in d if k.startswith('layer_'))
+                if 'walk' not in anim_files and not (carried and anim_files):
                     continue
                 name = sprite_name(path, variant if mode.startswith('variant') else None)
                 sprites[name] = {'files': anim_files, 'groups': groups, 'mode': mode}
@@ -159,7 +173,7 @@ for dp, dn, fn in os.walk(os.path.join(repo, 'sheet_definitions')):
             skipped['no_art:' + str(d.get('type_name'))] += 1
             continue
         items.append({
-            'name': d.get('name', f[:-5]), 'file': rel, 'slot': slot, 'mode': mode,
+            'name': RENAME.get(rel, d.get('name', f[:-5])), 'file': rel, 'slot': slot, 'mode': mode,
             'groups': groups, 'layers': layers, 'actions': actions, 'anims': d.get('animations', []),
             'credits': d.get('credits', []),
         })

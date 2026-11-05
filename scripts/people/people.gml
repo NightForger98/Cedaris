@@ -605,7 +605,7 @@ function people_trade(_key){
 		case "outfitter": inv.shopStock = shop_outfitter_stock(); inv.shopTitle = "Larkspun Clothes"; break;
 		case "apothecary":inv.shopStock = shop_apothecary_stock(); inv.shopTitle = "Silverbough Potions"; break;
 		case "tools":     inv.shopStock = shop_tools_stock(); inv.shopTitle = "Whitlow Tools"; break;
-		case "guild_ranged": inv.shopStock = shop_list([["c|held|Slingshot", 300], ["c|held|Boomerang", 900], ["c|held|Crossbow", 2400]]); inv.shopTitle = "Adventurers' Guild - Hask's bows and slings"; break;
+		case "guild_ranged": inv.shopStock = shop_list([["m|arrow", 5], ["c|held|Slingshot", 300], ["c|held|Bow", 800], ["c|held|Boomerang", 900], ["c|held|Recurve Bow", 1800], ["c|held|Crossbow", 2400], ["c|held|Great Bow", 3500]]); inv.shopTitle = "Adventurers' Guild - Hask's bows and slings"; break;
 		case "guild_melee":  inv.shopStock = shop_list([["c|held|Dagger", 250], ["c|held|Club", 300], ["c|held|Arming Sword", 700], ["c|held|Spear", 800], ["c|held|Saber", 1400], ["c|held|Mace", 1600]]); inv.shopTitle = "Adventurers' Guild - Sir Alaric's blades"; break;
 		case "explosives":   inv.shopStock = shop_list([["m|copper_ore", 0], ["m|iron_ore", 0], ["m|coal", 0], ["m|silver_ore", 0]]); inv.shopTitle = "Fen's Mine Stall - ore (explosives coming soon)"; break;
 		case "fish":      inv.shopStock = shop_list([["x|sardine", 0], ["x|perch", 0], ["x|seabass", 0]]); inv.shopTitle = "Marlo's Fish Shack"; break;

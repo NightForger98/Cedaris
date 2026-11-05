@@ -410,6 +410,7 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 		var part = parts[$ slots[s].key];
 		if(part.item == -1) continue;
 		var it = cat.items[part.item];
+		if(slots[s].key == "held" && it.name == "Boomerang" && boomerang_out()) continue;   // thrown: it's flying
 		var pal = (part.pal == -1) ? it.defPal : part.pal;
 		var layers = it.layers;
 		var lsx = sx, lsy = sy, lsw = 64, ldx = _x, ldy = _y;
@@ -421,6 +422,17 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 			lsy = _action.dir * act.fs;
 			ldx = _x - (act.fs - 64) / 2 * _scale;
 			ldy = _y - (act.fs - 64) / 2 * _scale;
+		}
+		// Walking (or standing) with a held item carried by an oversized walk (the bows, the long spears, the katana):
+		// its walk_128 sheet, frame for frame with the body's walk (rows 8-11: n, w, s, e)
+		else if(act == undefined && slots[s].key == "held" && _row >= 8 && _row < 12 && variable_struct_exists(it.actions, "walk_128")){
+			var wfs = cat.anims[$ "walk_128"].fs;
+			layers = it.actions[$ "walk_128"];
+			lsw = wfs;
+			lsx = _frame * wfs;
+			lsy = (_row - 8) * wfs;
+			ldx = _x - (wfs - 64) / 2 * _scale;
+			ldy = _y - (wfs - 64) / 2 * _scale;
 		}
 		for(var l = 0; l < array_length(layers); l++){
 			var subs = layers[l][$ _look.body];
@@ -445,15 +457,22 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 		var e = list[i];
 		var held = (fx != undefined && e.slot == "held");
 		if(e.pal != -4 && _sil == -1) lorikeet_set(e.pal);
-		if(held) character_draw_held(e, _x, _y, _scale, fx, 1);
-		else draw_sprite_part_ext(e.spr, 0, e.sx, e.sy, e.sw, e.sw, e.dx, e.dy, _scale, _scale, c_white, 1);
-		// A charging tool glows (drawn again, added on top)
-		if(held && fx.glow > 0){
-			gpu_set_blendmode(bm_add);
-			character_draw_held(e, _x, _y, _scale, fx, fx.glow);
-			gpu_set_blendmode(bm_normal);
+		if(held){
+			// Its frame, coloured, onto a surface first (see character_held_surface), then turned with the surface
+			var hs = character_held_surface(e);
+			if(e.pal != -4 && _sil == -1) lorikeet_reset();
+			character_draw_held(hs, e, _x, _y, _scale, fx, 1);
+			// A charging tool glows (drawn again, added on top)
+			if(fx.glow > 0){
+				gpu_set_blendmode(bm_add);
+				character_draw_held(hs, e, _x, _y, _scale, fx, fx.glow);
+				gpu_set_blendmode(bm_normal);
+			}
 		}
-		if(e.pal != -4 && _sil == -1) lorikeet_reset();
+		else{
+			draw_sprite_part_ext(e.spr, 0, e.sx, e.sy, e.sw, e.sw, e.dx, e.dy, _scale, _scale, c_white, 1);
+			if(e.pal != -4 && _sil == -1) lorikeet_reset();
+		}
 		// Straining: the head goes red (under the hair, which is drawn after it)
 		if(fx != undefined && fx.blush > 0 && e.slot == "head" && _sil == -1){
 			gpu_set_fog(true, make_colour_rgb(235, 40, 40), 0, 1);
@@ -464,13 +483,27 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 	if(_sil != -1) gpu_set_fog(false, c_white, 0, 1);
 }
 
-/// @description The held item while charging: shifted and turned about the hands by fx (dx, dy, ang).
-function character_draw_held(_e, _x, _y, _scale, _fx, _alpha){
+/// @description The held item's frame drawn (with the palette shader that's set) onto a surface of its own, cleared
+/// first. Turning the frame straight from the sprite (draw_sprite_general) reads past the sprite's cropped edges on its
+/// texture page and shows bits of other sprites (a "pole axe" behind the axe); a plain draw_sprite_part doesn't.
+function character_held_surface(_e){
+	static surfs = {};
+	var key = string(_e.sw), s = surfs[$ key];
+	if(s == undefined || !surface_exists(s)){ s = surface_create(_e.sw, _e.sw); surfs[$ key] = s; }
+	surface_set_target(s);
+	draw_clear_alpha(c_black, 0);
+	draw_sprite_part(_e.spr, 0, _e.sx, _e.sy, _e.sw, _e.sw, 0, 0);
+	surface_reset_target();
+	return s;
+}
+
+/// @description The held item while charging (its frame on surface _s): shifted and turned about the hands by fx (dx,
+/// dy, ang).
+function character_draw_held(_s, _e, _x, _y, _scale, _fx, _alpha){
 	var px = _x + 32 * _scale, py = _y + 38 * _scale;            // the hands
 	var ox = _e.dx - px, oy = _e.dy - py, a = _fx.ang;
 	var rx = ox * dcos(a) + oy * dsin(a), ry = -ox * dsin(a) + oy * dcos(a);
-	draw_sprite_general(_e.spr, 0, _e.sx, _e.sy, _e.sw, _e.sw, px + rx + _fx.dx * _scale, py + ry + _fx.dy * _scale,
-	                    _scale, _scale, a, c_white, c_white, c_white, c_white, _alpha);
+	draw_surface_ext(_s, px + rx + _fx.dx * _scale, py + ry + _fx.dy * _scale, _scale, _scale, a, c_white, _alpha);
 }
 
 /// @description Draw one catalog item on its own (inventory icons). _crop = [x, y, w, h] of the frame.

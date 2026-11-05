@@ -314,7 +314,7 @@ function charge_draw_spin(_user, _xx, _yy){
 	if(m.t < m.pre){
 		// The flames flicker twice on the wind-up before the spin
 		charge_draw_flames(_xx, _yy, true);
-		character_draw(_user.look, 0, 0, _xx, _yy, 1, {act: act, i: 0, dir: m.start, fx: charge_fx(m.c, m.start)});
+		character_draw(_user.look, 0, 0, _xx, _yy, 1, {act: act, i: charge_pose_step(act), dir: m.start, fx: charge_fx(m.c, m.start)});
 		charge_draw_flames(_xx, _yy, false);
 		return;
 	}
@@ -405,4 +405,14 @@ function charge_draw_slam(_user){
 	draw_ellipse(_user.x - r, _user.y - 6 - r * 0.4, _user.x + r, _user.y - 6 + r * 0.4, true);
 	draw_ellipse(_user.x - r + 2, _user.y - 6 - r * 0.4 + 1, _user.x + r - 2, _user.y - 6 + r * 0.4 - 1, true);
 	draw_set_alpha(1);
+}
+
+/// @description The step of an action the player holds while charging: the wind-up. The axe's and hammer's chops
+/// (LPC tool_axe, tool_hammer) start with the tool hidden behind the head, so they hold step 2 (raised over the
+/// shoulder), the rod step 3 (drawn back for the cast); everything else its first step.
+function charge_pose_step(_act){
+	if(_act == undefined) return 0;
+	if(_act.name == "tool_axe" || _act.name == "tool_hammer") return 2;
+	if(_act.name == "tool_rod") return 3;   // the rod drawn back over the shoulder
+	return 0;
 }

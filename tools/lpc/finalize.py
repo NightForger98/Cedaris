@@ -334,10 +334,19 @@ for it in cat['items']:
         seen.add(k)
         rows.append([it['name'], c.get('file', ''), '; '.join(c.get('authors', [])), '; '.join(c.get('licenses', [])),
                      '; '.join(c.get('urls', [])), c.get('notes', '')])
+# Keep the rows this script doesn't write (other art: monsters, tiles, the PixelLab buildings...). Its own rows'
+# source is a generator path (no spaces, like weapon/ranged/bow/great); the others name a pack or tool in words.
+kept = []
+old = os.path.join(proj, 'LPC_CREDITS.csv')
+if os.path.exists(old):
+    for r in list(csv.reader(open(old, encoding='utf-8', newline='')))[1:]:
+        if len(r) > 1 and not re.fullmatch(r'[\w./-]+', r[1]):
+            kept.append(r)
 buf = io.StringIO()
 w = csv.writer(buf)
 w.writerow(['item', 'source', 'authors', 'licenses', 'urls', 'notes'])
 w.writerows(rows)
+w.writerows(kept)
 open(os.path.join(proj, 'LPC_CREDITS.csv'), 'w', encoding='utf-8', newline='').write(buf.getvalue())
 
 # ---------------------------------------------------------------- project file

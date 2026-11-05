@@ -1,0 +1,200 @@
+# Not in the suite (it only takes pictures): bash tools/test/autotest.sh tools/test/looks/charge_all.txt
+# Every tool's and weapon's charge-up (at its top level) and its release, facing east: screenshots for a look-over
+start story
+wait 60
+time 12
+pos 600 470
+give m|arrow 30
+give m|stone 30
+pos 600 470
+give c|held|Hoe
+equip c|held|Hoe
+call autotest_tool_tier Hoe 5
+face e
+wait 10
+shot hoe_0
+charge 6 hoe_charged
+snap 10 hoe_rel1
+wait 24
+shot hoe_rel2
+wait 40
+pos 600 470
+give c|held|Watering Can
+equip c|held|Watering Can
+face e
+wait 10
+shot watering_can_0
+charge 6 watering_can_charged
+snap 10 watering_can_rel1
+wait 24
+shot watering_can_rel2
+wait 40
+pos 600 470
+give c|held|Axe
+equip c|held|Axe
+call autotest_tool_tier Axe 5
+face e
+wait 10
+shot axe_0
+charge 6 axe_charged
+snap 10 axe_rel1
+wait 24
+shot axe_rel2
+wait 40
+pos 600 470
+give c|held|Pickaxe
+equip c|held|Pickaxe
+call autotest_tool_tier Pickaxe 5
+face e
+wait 10
+shot pickaxe_0
+charge 6 pickaxe_charged
+snap 10 pickaxe_rel1
+wait 24
+shot pickaxe_rel2
+wait 40
+pos 600 470
+give c|held|Scythe
+equip c|held|Scythe
+call autotest_tool_tier Scythe 5
+face e
+wait 10
+shot scythe_0
+charge 6 scythe_charged
+snap 10 scythe_rel1
+wait 24
+shot scythe_rel2
+wait 40
+pos 600 470
+give c|held|Hammer
+equip c|held|Hammer
+face e
+wait 10
+shot hammer_0
+charge 6 hammer_charged
+snap 10 hammer_rel1
+wait 24
+shot hammer_rel2
+wait 40
+pos 600 470
+give c|held|Shovel
+equip c|held|Shovel
+face e
+wait 10
+shot shovel_0
+charge 6 shovel_charged
+snap 10 shovel_rel1
+wait 24
+shot shovel_rel2
+wait 40
+pos 600 470
+give c|held|Fishing Rod
+equip c|held|Fishing Rod
+face e
+wait 10
+shot fishing_rod_0
+charge 6 fishing_rod_charged
+snap 10 fishing_rod_rel1
+wait 24
+shot fishing_rod_rel2
+wait 40
+pos 600 470
+give c|held|Dagger
+equip c|held|Dagger
+face e
+wait 10
+shot dagger_0
+charge 6 dagger_charged
+snap 10 dagger_rel1
+wait 24
+shot dagger_rel2
+wait 40
+pos 600 470
+give c|held|Arming Sword
+equip c|held|Arming Sword
+face e
+wait 10
+shot arming_sword_0
+charge 6 arming_sword_charged
+snap 10 arming_sword_rel1
+wait 24
+shot arming_sword_rel2
+wait 40
+pos 600 470
+give c|held|Spear
+equip c|held|Spear
+face e
+wait 10
+shot spear_0
+charge 6 spear_charged
+snap 10 spear_rel1
+wait 24
+shot spear_rel2
+wait 40
+pos 600 470
+give c|held|Club
+equip c|held|Club
+face e
+wait 10
+shot club_0
+charge 6 club_charged
+snap 10 club_rel1
+wait 24
+shot club_rel2
+wait 40
+pos 600 470
+give c|held|Mace
+equip c|held|Mace
+face e
+wait 10
+shot mace_0
+charge 6 mace_charged
+snap 10 mace_rel1
+wait 24
+shot mace_rel2
+wait 40
+pos 600 470
+give c|held|Slingshot
+equip c|held|Slingshot
+face e
+wait 10
+shot slingshot_0
+charge 6 slingshot_charged
+snap 10 slingshot_rel1
+wait 24
+shot slingshot_rel2
+wait 40
+pos 600 470
+give c|held|Bow
+equip c|held|Bow
+face e
+wait 10
+shot bow_0
+charge 6 bow_charged
+snap 10 bow_rel1
+wait 24
+shot bow_rel2
+wait 40
+pos 600 470
+give c|held|Boomerang
+equip c|held|Boomerang
+face e
+wait 10
+shot boomerang_0
+charge 6 boomerang_charged
+snap 10 boomerang_rel1
+wait 24
+shot boomerang_rel2
+wait 40
+pos 600 470
+give c|held|Crossbow
+equip c|held|Crossbow
+face e
+wait 10
+shot crossbow_0
+charge 6 crossbow_charged
+snap 10 crossbow_rel1
+wait 24
+shot crossbow_rel2
+wait 40
+quit

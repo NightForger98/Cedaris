@@ -97,7 +97,7 @@ function autotest_step(){
 	global.autotestKey = t.press;
 	t.press = -1;
 	// snap N name: a screenshot N frames on, even mid-action (spins, swings)
-	if((t[$ "snapIn"] ?? 0) > 0 && --t.snapIn == 0) screen_save("autotest/" + t.snapName + ".png");
+	if((t[$ "snapIn"] ?? 0) > 0 && --t.snapIn == 0) autotest_save("autotest/" + t.snapName + ".png");
 	if(t.wait > 0){ t.wait--; return; }
 	// Holding the button to charge (the charge command): let go once the level is reached, or if nothing charges
 	if((t[$ "chargeTo"] ?? -1) >= 0){
@@ -107,7 +107,7 @@ function autotest_step(){
 			t.chargeTo = -1;
 			t.wait = 2;
 		}
-		else if(c != undefined && c.level >= min(t.chargeTo, c.max) && t.chargeShot != ""){ screen_save("autotest/" + t.chargeShot + ".png"); t.chargeShot = ""; }
+		else if(c != undefined && c.level >= min(t.chargeTo, c.max) && t.chargeShot != ""){ autotest_save("autotest/" + t.chargeShot + ".png"); t.chargeShot = ""; }
 		return;
 	}
 	// Nothing happens while an action plays out, so its hit lands where it was aimed
@@ -230,7 +230,7 @@ function autotest_step(){
 				break;
 			case "snap": t.snapIn = real(a[1]); t.snapName = a[2]; break;
 			case "shot":
-				screen_save("autotest/" + a[1] + ".png");
+				autotest_save("autotest/" + a[1] + ".png");
 				break;
 			case "quit":
 				var rf = file_text_open_write("autotest/result.txt");
@@ -920,4 +920,24 @@ function autotest_to_point(_key, _dx = "0", _dy = "0"){
 	if(p == undefined) return "no point " + _key;
 	with(obj_plyr){ x = p[0] + real(_dx); y = p[1] + real(_dy); }
 	return string(p[0] + real(_dx)) + "," + string(p[1] + real(_dy));
+}
+
+/// @description Save a test screenshot: the game's drawing surface (without the HUD), which works even when the window
+/// can't be captured (screen_save gives a black picture then); the screen if there's no surface.
+function autotest_save(_path){
+	if(surface_exists(application_surface)) surface_save(application_surface, _path);
+	else screen_save(_path);
+}
+
+/// @description Test: save the thrown boomerang's picture (its surface) to autotest/boomerang_surface.png.
+function autotest_boomerang_surface(){
+	surface_save(projectile_boomerang_surface(), "autotest/boomerang_surface.png");
+	return "saved";
+}
+
+/// @description Test: where the shots in flight are, and the player.
+function autotest_shots_where(){
+	var s = "player " + string(round(obj_plyr.x)) + "," + string(round(obj_plyr.y)) + ":";
+	with(obj_projectile) s += " shot " + string(round(x)) + "," + string(round(y)) + (back ? " back" : " out") + " depth " + string(depth) + " vis " + string(visible);
+	return s;
 }

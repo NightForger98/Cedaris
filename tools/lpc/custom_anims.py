@@ -8,7 +8,8 @@ import re, json, sys, os
 src = open(sys.argv[1], encoding='utf-8').read()
 body = src[src.index('const customAnimations'):]
 anims = {}
-for m in re.finditer(r'\n  (\w+): \{\n    frameSize: (\d+),(.*?)\n  \},', body, re.S):
+# (some have options before frameSize, e.g. walk_128's skipFirstFrameInPreview)
+for m in re.finditer(r'\n  (\w+): \{\n(?:    \w+: \w+,\n)*?    frameSize: (\d+),(.*?)\n  \},', body, re.S):
     rows = re.findall(r'\[\s*((?:"[^"]+",?\s*)+)\]', m[3])
     anims[m[1]] = {'frameSize': int(m[2]), 'single': 'sourceSingleAnimation: true' in m[3],
                    'frames': [re.findall(r'"([^"]+)"', r) for r in rows]}

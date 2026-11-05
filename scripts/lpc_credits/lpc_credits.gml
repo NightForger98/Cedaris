@@ -2,7 +2,7 @@
 /// Artists of the LPC character art, for the credits screen. Full per-piece list: LPC_CREDITS.csv.
 function lpc_credits(){
 	return {
-		licences: ["CC-BY", "CC-BY 3.0", "CC-BY 3.0+", "CC-BY 4.0", "CC-BY 4.0+", "CC-BY-SA 3.0", "CC-BY-SA 3.0+", "CC-BY-SA 4.0", "CC0", "GPL 2.0", "GPL 2.0+", "GPL 3.0", "GPL 3.0+", "OGA-BY 3.0", "OGA-BY 3.0+", "OGA-BY-3.0", "OGA-SA 3.0", "the developer's own"],
+		licences: ["CC-BY", "CC-BY 3.0", "CC-BY 3.0+", "CC-BY 4.0", "CC-BY 4.0+", "CC-BY-SA 3.0", "CC-BY-SA 3.0+", "CC-BY-SA 4.0", "CC0", "GPL 2.0", "GPL 2.0+", "GPL 3.0", "GPL 3.0+", "OGA-BY 3.0", "OGA-BY 3.0+", "OGA-BY-3.0", "OGA-SA 3.0", "planter", "the developer's own"],
 		authors: [
 			"7Soul",
 			"??",
@@ -46,6 +46,7 @@ function lpc_credits(){
 			"Emilio J. Sanchez-Sierra",
 			"Evert",
 			"Fabzy",
+			"fountain",
 			"gr3yh47",
 			"Guido Bos",
 			"Hyptosis",

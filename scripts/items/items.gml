@@ -67,6 +67,7 @@ function item_materials(){
 		{key: "iron",    name: "Iron Bar",    tier: 0, shape: "bar",     colour: make_colour_rgb(150, 155, 165), price: 15, stats: {defense: 2, speed: -0.25}, icon: [1, 2], desc: "Chainmail, helmets and armour. Heavy."},
 		// Gathered (phase 2): wood, stone and fibre from the land, ore and coal from rocks; ore is smelted into bars
 		{key: "wood",       name: "Wood",        tier: 0, shape: "log",   colour: make_colour_rgb(150, 100, 55),  price: 2,  stats: {}, desc: "Chopped from trees and stumps."},
+		{key: "arrow",      name: "Arrow",       tier: 0, shape: "feather", colour: make_colour_rgb(185, 150, 105), price: 3,  stats: {}, desc: "Ammunition for the bows. Hask sells them."},
 		{key: "stone",      name: "Stone",       tier: 0, shape: "rock",  colour: make_colour_rgb(140, 138, 145), price: 2,  stats: {}, desc: "Broken from rocks. Good for building."},
 		{key: "fibre",      name: "Fibre",       tier: 0, shape: "fibre", colour: make_colour_rgb(120, 175, 70),  price: 1,  stats: {}, desc: "Cut from weeds and bushes. Weave it into linen or cotton at a crafting table."},
 		{key: "coal",       name: "Coal",        tier: 0, shape: "rock",  colour: make_colour_rgb(40, 38, 44),    price: 4,  stats: {}, icon: [0, 0], desc: "Fuel for the furnace."},
@@ -429,7 +430,7 @@ function item_shop_stock(){
 		["Dagger", 80], ["Arming Sword", 150], ["Saber", 180], ["Rapier", 200], ["Longsword", 250], ["Glowsword", 600],
 		["Mace", 160], ["Flail", 190], ["Waraxe", 220], ["Spear", 120], ["Halberd", 260], ["Cane", 30],
 		["Simple staff", 120], ["Gnarled staff", 180], ["Loop staff", 220], ["S staff", 240], ["Diamond staff", 400],
-		["Slingshot", 70], ["Crossbow", 300], ["Fishing Rod", 60], ["Club", 60], ["Boomerang", 90], ["Katana", 320],
+		["Slingshot", 70], ["Crossbow", 300], ["Fishing Rod", 60], ["Club", 60], ["Boomerang", 90], ["Bow", 140], ["Recurve Bow", 260], ["Great Bow", 420], ["Katana", 320],
 		["Scimitar", 240], ["Longsword alt", 280], ["Long spear", 200], ["Trident", 280], ["Dragon spear", 450],
 	];
 	s = [];

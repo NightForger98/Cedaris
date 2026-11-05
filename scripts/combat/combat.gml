@@ -35,7 +35,11 @@ function weapon_table(){
 		"Diamond staff": {dmg: [12, 16], reach: 38, arc: 100, knock: 5, crit: 0.05},
 		"Slingshot":     {dmg: [6, 10],  ranged: true, ammo: "m|stone", speed: 7,  range: 260, crit: 0.05},
 		"Crossbow":      {dmg: [16, 24], ranged: true, ammo: "",        speed: 10, range: 340, crit: 0.08},
-		"Boomerang":     {dmg: [8, 12],  ranged: true, ammo: "",        speed: 6,  range: 200, crit: 0.04},
+		// The bows shoot arrows (LPC bows: drawn with the shoot animation, carried with walk_128)
+		"Bow":           {dmg: [9, 14],  ranged: true, ammo: "m|arrow", speed: 8,  range: 300, crit: 0.07},
+		"Recurve Bow":   {dmg: [14, 20], ranged: true, ammo: "m|arrow", speed: 9,  range: 340, crit: 0.09},
+		"Great Bow":     {dmg: [22, 30], ranged: true, ammo: "m|arrow", speed: 10, range: 400, crit: 0.12},
+		"Boomerang":     {dmg: [8, 12],  ranged: true, ammo: "",        speed: 6,  range: 280, crit: 0.04, returns: true},
 		// Tools work in a pinch
 		"Axe":           {dmg: [3, 5],   reach: 32, arc: 90,  knock: 4, crit: 0.02},
 		"Pickaxe":       {dmg: [3, 5],   reach: 32, arc: 90,  knock: 4, crit: 0.02},
@@ -52,7 +56,7 @@ function weapon_class(_name){
 		case "Spear": case "Long spear": case "Trident": case "Halberd": case "Dragon spear": return "spear";
 		case "Club": case "Mace": case "Flail": case "Waraxe": case "Cane": return "heavy";
 		case "Dagger": return "dagger";
-		case "Slingshot": case "Crossbow": case "Boomerang": return "ranged";
+		case "Slingshot": case "Crossbow": case "Boomerang": case "Bow": case "Recurve Bow": case "Great Bow": return "ranged";
 	}
 	return "";
 }
@@ -157,12 +161,14 @@ function combat_player_hit(_user, _item, _dir, _w = undefined){
 	var w = _w ?? weapon_def(_item);   // a charged move passes its own, stronger stats
 	var ang = [90, 180, 270, 0][_dir];
 	if(w[$ "ranged"] ?? false){
+		if((w[$ "returns"] ?? false) && boomerang_out()) return false;   // still flying: catch it first
 		if(w.ammo != "" && !inv_is_free()){
 			if(inv_count(w.ammo) <= 0){ farm_message("No " + string_lower(item_def(w.ammo).name) + " to shoot"); return false; }
 			inv_take(w.ammo, 1);
 		}
 		instance_create_depth(_user.x + lengthdir_x(16, ang), _user.y - 20 + lengthdir_y(16, ang), _user.depth - 1, obj_projectile,
-		                      {dx: lengthdir_x(w.speed, ang), dy: lengthdir_y(w.speed, ang), life: w.range / w.speed, weapon: w, ang: ang});
+		                      {dx: lengthdir_x(w.speed, ang), dy: lengthdir_y(w.speed, ang), life: w.range / w.speed, weapon: w, ang: ang,
+		                       owner: _user, back: false, hits: []});
 		return true;
 	}
 	if(!instance_exists(obj_monster)) return false;
@@ -322,4 +328,24 @@ function monster_shoot(_m, _p){
 		instance_create_depth(_m.x, _m.y - 20 * _m.sc, _m.depth - 1, obj_enemy_shot,
 		                      {dx: lengthdir_x(sp, a2), dy: lengthdir_y(sp, a2), life: rg.range / sp * 1.3, dmg: dmg * 0.5, kind: rg.pair});
 	}
+}
+
+/// @description True while a thrown boomerang is still out (it isn't in your hand, and you can't throw it again).
+function boomerang_out(){
+	with(obj_projectile) if(weapon[$ "returns"] ?? false) return true;
+	return false;
+}
+
+/// @description A 24x24 surface with the boomerang's inventory art on it (made again if the surface was lost), for a
+/// thrown boomerang to be drawn spinning.
+function projectile_boomerang_surface(){
+	static s = -1;
+	if(!surface_exists(s)){
+		s = surface_create(24, 24);
+		surface_set_target(s);
+		draw_clear_alpha(c_black, 0);
+		item_draw_icon(item_stack("c|held|Boomerang", 1), -4, -4, 32);
+		surface_reset_target();
+	}
+	return s;
 }

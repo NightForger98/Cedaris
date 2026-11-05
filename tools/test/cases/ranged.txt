@@ -1,0 +1,43 @@
+# Ranged weapons: the boomerang flies out, turns back and is caught (it isn't in your hand meanwhile, and can't be
+# thrown again until it's back); the bows are carried with their walk_128 sheet and shoot arrows (one used a shot).
+start story
+wait 60
+time 12
+pos 600 470
+give c|held|Boomerang
+equip c|held|Boomerang
+face e
+wait 10
+use
+snap 30 boomerang_out
+call autotest_boomerang_surface
+call autotest_shots_where
+wait 20
+call boomerang_out
+expect 1
+wait 30
+shot boomerang_far
+call autotest_shots_where
+wait 60
+shot boomerang_back
+wait 60
+call boomerang_out
+expect 0
+give c|held|Bow
+give m|arrow 5
+equip c|held|Bow
+face s
+wait 10
+shot bow_standing
+keydown right
+wait 14
+shot bow_walking
+keyup right
+wait 10
+face e
+use
+snap 40 bow_shot
+wait 60
+inv
+expect m|arrowx4
+quit

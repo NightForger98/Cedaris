@@ -90,6 +90,8 @@ function load_game(_slot){
 	// Saves from before the inventory existed become free-mode inventories of what you wore
 	global.inv = variable_struct_exists(data, "inv") ? inv_from_save(data.inv) : inv_new_free(global.look);
 	global.gameMode = global.inv.mode;
+	// Story saves from before the gender choice: fix it from the body and head (character_gender), kept from now on
+	if(global.gameMode == "story" && !variable_struct_exists(global.look, "gender")) global.look.gender = character_gender(global.look);
 	inv_apply_look(global.look);
 	game.playtime = data.playtime;
 	// Version 1 saves kept only the farm's crops
@@ -253,6 +255,8 @@ function save_format_time(_seconds){
 function character_look_to_save(_look){
 	var cat = lpc_catalog();
 	var out = {race: _look.race, body: _look.body, parts: {}};
+	// Story mode's chosen gender (character_story_rules); looks without one don't save it
+	if(variable_struct_exists(_look, "gender")) out.gender = _look.gender;
 	var keys = variable_struct_get_names(_look.parts);
 	for(var i = 0; i < array_length(keys); i++){
 		var p = _look.parts[$ keys[i]];
@@ -268,6 +272,7 @@ function character_look_to_save(_look){
 
 function character_look_from_save(_data){
 	var look = character_empty_look(_data.race, _data.body);
+	if(variable_struct_exists(_data, "gender")) look.gender = _data.gender;
 	var keys = variable_struct_get_names(_data.parts);
 	for(var i = 0; i < array_length(keys); i++){
 		var k = keys[i];

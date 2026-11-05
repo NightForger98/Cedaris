@@ -1,0 +1,74 @@
+# Story mode's creator: the gender comes first, and every part offered after it is that gender's
+start story
+wait 30
+call game_new story
+wait 20
+call autotest_creator look
+expect stage gender
+shot creator_gender
+# Pick a woman: a woman's head and hair, no beard, nothing mismatched
+call autotest_creator gender female
+expect stage edit
+expect gender female (saved female) body female race Human head Human Female
+expect beard none
+expect problems ok
+call autotest_creator options head
+expect [Human Female]
+expect [Human Female Elderly]
+expectnot Male
+expectnot Child
+call autotest_creator options beard
+expect (none)
+call autotest_creator options hair
+expectnot [Balding]
+expectnot Child
+call autotest_creator row head 1
+expect problems ok
+call autotest_creator row beard 1
+expect beard none
+call autotest_creator randoms 40
+expect random bad 0
+expect gender female
+shot creator_female
+# Switch to a man, grow a beard, switch back: the beard and the man's head go
+call autotest_creator row body 1
+expect gender male (saved male) body male
+expect head Human Male
+expect problems ok
+call autotest_creator options head
+expect [Human Male]
+expectnot Female
+call autotest_creator options hair
+expectnot [Princess]
+expect [Balding]
+call autotest_creator row beard 1
+expectnot beard none
+call autotest_creator randoms 40
+expect random bad 0
+expect gender male
+call autotest_creator row body 1
+expect gender female
+expect beard none
+expect problems ok
+call autotest_creator reset
+expect gender female
+expect head Human Female
+expect problems ok
+# Done: the player is a woman, and stays one through a save and load
+call autotest_creator done
+wait 30
+call autotest_creator player
+expect gender female (saved female) body female
+expect problems ok
+call save_game test
+start story
+wait 30
+call autotest_creator player
+expect gender male
+call load_game test
+wait 30
+call autotest_creator player
+expect gender female (saved female) body female
+expect problems ok
+call save_delete test
+quit

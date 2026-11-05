@@ -14,6 +14,35 @@ draw_set_valign(fa_middle);
 draw_set_halign(fa_center);
 draw_text_colour(guiW / 2, 44, story ? "Create your farmer - Story Mode" : "Create your farmer - Free Mode", cAccent, cAccent, cAccent, cAccent, 1);
 
+// Story mode's first screen: man or woman
+if(stage == "gender"){
+	draw_text_transformed_colour(guiW / 2, cardY - 40, "Is your farmer a man or a woman?", 0.9, 0.9, 0, c_white, c_white, c_white, c_white, 1);
+	var ps = 5;
+	for(var i = 0; i < array_length(cards); i++){
+		var cd = cards[i];
+		var over = (i == hoverCard);
+		draw_set_colour(over ? cHover : cPanel);
+		draw_roundrect_ext(cd.x1, cd.y1, cd.x2, cd.y2, 16, 16, false);
+		if(over){ draw_set_colour(cAccent); draw_roundrect_ext(cd.x1, cd.y1, cd.x2, cd.y2, 16, 16, true); }
+		var ccx = (cd.x1 + cd.x2) / 2;
+		character_draw(genderLooks[i], floor(frame), facingRows[0], ccx - 32 * ps, cd.y1 + 30, ps);
+		var lc = over ? cAccent : c_white;
+		draw_text_transformed_colour(ccx, cd.y2 - 50, genderNames[$ cd.gender], 1, 1, 0, lc, lc, lc, lc, 1);
+	}
+	// Back
+	var b0 = buttons[0];
+	var overB = (mx >= b0.x1 && mx < b0.x2 && my >= b0.y1 && my < b0.y2);
+	draw_set_colour(overB ? cAccent : cButton);
+	draw_roundrect_ext(b0.x1, b0.y1, b0.x2, b0.y2, 10, 10, false);
+	var cb = overB ? cPanel : c_white;
+	draw_text_transformed_colour((b0.x1 + b0.x2) / 2, (b0.y1 + b0.y2) / 2, b0.label, 0.8, 0.8, 0, cb, cb, cb, cb, 1);
+	draw_text_transformed_colour(guiW / 2, guiH - 18, "Click one  -  M: male  -  F: female  -  Esc: back", 0.5, 0.5, 0, cDim, cDim, cDim, cDim, 1);
+	draw_set_colour(c_white);
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+	exit;
+}
+
 // Preview
 var pw = 64 * previewScale;
 draw_set_colour(cPanel);
@@ -49,7 +78,7 @@ for(var i = 0; i < rowCount; i++){
 	var name;
 	var picker = (s.key == "race" || s.key == "body");
 	if(s.key == "race") name = story ? look.race + " (story)" : look.race;
-	else if(s.key == "body") name = look.body;
+	else if(s.key == "body") name = story ? genderNames[$ look.body] : look.body;
 	else if(array_length(character_slot_options(s, look)) == 0) name = "-"; // nothing for this race and body
 	else if(part.item == -1) name = (s.key == "eyes") ? "normal" : "none";
 	else name = lpc_catalog().items[part.item].name;

@@ -220,6 +220,167 @@ function character_set_body(_look, _body){
 	character_validate(_look);
 }
 
+// ---------------------------------------------------------------- gender (story mode)
+// Story mode's farmer is a man or a woman (character_story_rules in character_races). The choice is kept in
+// look.gender and saved with the look; looks without it (free mode, villagers, old saves) get one worked out from
+// the body and head. Read it with character_gender(look), or player_gender() for the player.
+
+/// @description "male" or "female": the look's chosen gender, else worked out from its body type and head.
+function character_gender(_look){
+	var g = _look[$ "gender"];
+	if(g == "male" || g == "female") return g;
+	if(_look.body == "female" || _look.body == "pregnant") return "female";
+	if(_look.body == "male") return "male";
+	// Teen, muscular and child bodies are shared: the head says ("Human Female", "Orc female", "Minotaur female"...)
+	var h = _look.parts.head.item;
+	if(h != -1 && string_pos("female", string_lower(lpc_catalog().items[h].name)) > 0) return "female";
+	return "male";
+}
+
+/// @description The player's gender, "male" or "female".
+function player_gender(){
+	if(!variable_global_exists("look") || !is_struct(global.look)) return "male";
+	return character_gender(global.look);
+}
+
+/// @description A slot's options in story mode: what the body and race allow, narrowed to the look's gender.
+function character_story_options(_slot, _look){
+	var rules = character_story_rules();
+	var g = character_gender(_look);
+	if(array_get_index(rules.none[$ g], _slot.key) != -1) return [];
+	var only = rules.only[$ g][$ _slot.key];
+	var never = rules.never[$ g][$ _slot.key];
+	var opts = character_slot_options(_slot, _look);
+	var out = [];
+	for(var i = 0; i < array_length(opts); i++){
+		var n = lpc_catalog().items[opts[i]].name;
+		if(only != undefined && array_get_index(only, n) == -1) continue;
+		if(never != undefined && array_get_index(never, n) != -1) continue;
+		array_push(out, opts[i]);
+	}
+	// Required slots (the head) default to the first item in the gender's list
+	if(only != undefined && array_length(out) > 1){
+		var first = character_find_item(_slot.key, only[0]);
+		var at = array_get_index(out, first);
+		if(at > 0){ array_delete(out, at, 1); array_insert(out, 0, first); }
+	}
+	return out;
+}
+
+/// @description Make a look fit story mode: human, a man's or a woman's body, and only parts of that gender.
+/// Parts that don't fit are replaced (and forgotten, so a later free-mode validate can't bring them back).
+function character_story_validate(_look){
+	var rules = character_story_rules();
+	var g = character_gender(_look);
+	_look.gender = g;
+	if(_look.race != rules.race || _look.body != g){
+		_look.race = rules.race;
+		_look.body = g;
+		character_validate(_look);
+	}
+	var race = character_race(_look.race);
+	for(var k = 0; k < array_length(rules.keys); k++){
+		var key = rules.keys[k];
+		if(key == "body") continue;
+		var s = character_slot_by_key(key);
+		var part = _look.parts[$ key];
+		var opts = character_story_options(s, _look);
+		if(part.item != -1 && array_get_index(opts, part.item) == -1){
+			// e.g. a man's head on a woman's body (the closest allowed head), pigtails on a man (plain hair), a beard on a woman
+			if(character_slot_required(s, race)) part.item = character_closest_item(part.item, opts);
+			else if(key == "hair") part.item = character_find_item("hair", "Plain");
+			else part.item = -1;
+		}
+		if(part.item == -1 && character_slot_required(s, race) && array_length(opts) > 0) part.item = opts[0];
+		part.want = part.item;
+		var cols = character_palettes_for(key, part.item, _look);
+		if(key != "eyes" && part.pal != -1 && array_get_index(cols.pals, part.pal) == -1) part.pal = -1;
+	}
+}
+
+/// @description Story mode: make the look a man ("male") or a woman ("female"), swapping parts that don't fit.
+function character_story_set_gender(_look, _gender){
+	if(array_get_index(character_story_rules().genders, _gender) == -1) return;
+	_look.gender = _gender;
+	_look.body = _gender;
+	character_validate(_look);
+	character_story_validate(_look);
+}
+
+/// @description Story mode's starting look for a gender (Reset in the creator).
+function character_story_default_look(_gender){
+	var look = character_default_look();
+	if(_gender == "female"){
+		look.parts.head.item = character_find_item("head", "Human Female");
+		look.parts.hair.item = character_find_item("hair", "Long");
+	}
+	character_story_set_gender(look, _gender);
+	return look;
+}
+
+/// @description Story mode: random head, face and hair for the look's gender (the gender stays).
+function character_story_randomise(_look){
+	var rules = character_story_rules();
+	var g = character_gender(_look);
+	var race = character_race(rules.race);
+	for(var k = 0; k < array_length(rules.keys); k++){
+		var s = character_slot_by_key(rules.keys[k]);
+		var part = _look.parts[$ s.key];
+		if(s.key != "body"){
+			var opts = character_story_options(s, _look);
+			var n = array_length(opts);
+			var emptyChance = race.chance[$ s.key] ?? s.emptyChance;
+			part.item = (n == 0 || (!character_slot_required(s, race) && random(1) < emptyChance)) ? -1 : opts[irandom(n - 1)];
+			part.want = part.item;
+		}
+		var cols = character_palettes_for(s.key, part.item, _look);
+		var np = array_length(cols.pals);
+		part.pal = (np > 0) ? cols.pals[irandom(np - 1)] : -1;
+	}
+	_look.gender = g;
+	character_story_validate(_look);
+}
+
+/// @description Story mode: step a creator row (Gender flips man / woman; the rest step through that gender's parts).
+function character_story_cycle_item(_look, _slot, _dir){
+	if(_slot.key == "body"){
+		var gs = character_story_rules().genders;
+		var n = array_length(gs);
+		character_story_set_gender(_look, gs[(array_get_index(gs, character_gender(_look)) + _dir + n * 2) mod n]);
+		return;
+	}
+	var part = _look.parts[$ _slot.key];
+	var opts = character_story_options(_slot, _look);
+	var n = array_length(opts);
+	if(n == 0) return;
+	var lo = character_slot_required(_slot, character_race(_look.race)) ? 0 : -1;
+	var i = array_get_index(opts, part.item) + _dir;
+	if(i > n - 1) i = lo;
+	if(i < lo) i = n - 1;
+	part.item = (i == -1) ? -1 : opts[i];
+	part.want = part.item;
+	var cols = character_palettes_for(_slot.key, part.item, _look);
+	if(_slot.key != "eyes" && array_get_index(cols.pals, part.pal) == -1) part.pal = -1;
+}
+
+/// @description Test helper: every story-mode part of a look that doesn't fit its gender, or "ok".
+function character_story_problems(_look){
+	var rules = character_story_rules();
+	var g = character_gender(_look);
+	var out = "";
+	if(_look.race != rules.race) out += " race " + _look.race;
+	if(_look.body != g) out += " body " + _look.body + " for " + g;
+	for(var k = 0; k < array_length(rules.keys); k++){
+		var key = rules.keys[k];
+		if(key == "body") continue;
+		var it = _look.parts[$ key].item;
+		if(it != -1 && array_get_index(character_story_options(character_slot_by_key(key), _look), it) == -1){
+			out += " " + key + " " + lpc_catalog().items[it].name;
+		}
+	}
+	return (out == "") ? "ok" : string_trim(out);
+}
+
 /// @description Draw one 64x64 frame of a look. _frame is the sheet column, _row the sheet row.
 /// _action (optional) = {act, i, dir}: draw step i of an action (see the actions script) facing dir 0-3;
 /// then _frame and _row are ignored.
@@ -430,4 +591,49 @@ function character_random_look(_race = ""){
 	var look = character_empty_look("Human", "male");
 	character_randomise(look, _race);
 	return look;
+}
+
+/// @description Test helper (tools/test/cases/creator_story.txt): drive the creator in rm_creator and report.
+/// _what: "look" (the creator's look), "gender" g, "row" key dir, "options" key, "randoms" n, "reset", "done",
+/// "player" (global.look). Returns "stage .. gender .. body .. head .. hair .. beard .. problems ..".
+function autotest_creator(_what, _a = "", _b = ""){
+	var out = "";
+	if(_what == "player") return character_story_summary(global.look);
+	if(!instance_exists(obj_char_creator)) return "no creator";
+	with(obj_char_creator){
+		switch(_what){
+			case "gender": pickGender(_a); break;
+			case "row":
+				for(var i = 0; i < array_length(slots); i++) if(slots[i].key == _a) cycleRow(i, real(_b));
+				break;
+			case "options":
+				var opts = character_story_options(character_slot_by_key(_a), look);
+				out = "options " + _a + ":";
+				for(var i = 0; i < array_length(opts); i++) out += " [" + lpc_catalog().items[opts[i]].name + "]";
+				if(array_length(opts) == 0) out += " (none)";
+				break;
+			case "randoms":
+				// Randomise n times; count the looks that came out with the wrong gender or parts
+				var g = character_gender(look), bad = 0;
+				for(var i = 0; i < real(_a); i++){
+					act("random");
+					if(character_gender(look) != g || character_story_problems(look) != "ok") bad++;
+				}
+				out = "random bad " + string(bad) + " / ";
+				break;
+			case "reset": act("reset"); break;
+			case "done": act("done"); break;
+		}
+		if(_what != "options") out += "stage " + stage + " " + character_story_summary(look);
+	}
+	return out;
+}
+
+/// @description One line about a story look, for the tests.
+function character_story_summary(_look){
+	var p = _look.parts, cat = lpc_catalog().items;
+	var nm = function(_it, _cat){ return (_it == -1) ? "none" : _cat[_it].name; };
+	return "gender " + character_gender(_look) + " (saved " + string(_look[$ "gender"] ?? "-") + ") body " + _look.body
+		+ " race " + _look.race + " head " + nm(p.head.item, cat) + " hair " + nm(p.hair.item, cat)
+		+ " beard " + nm(p.beard.item, cat) + " problems " + character_story_problems(_look);
 }

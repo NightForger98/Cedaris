@@ -114,3 +114,33 @@ function character_random_race(){
 	}
 	return races[0].name;
 }
+
+/// Story mode's farmer: a human man or woman. The gender is the first choice in the creator, sets the body type
+/// (look.body), is kept in look.gender (saved with the look) and decides which heads, hair and beards are offered.
+/// Free mode ignores this table.
+///   genders - the choices, each also its body type (no teen, child, pregnant or muscular bodies in story mode)
+///   keys    - the creator rows (the rest of the look is the worn outfit; clothes are earned in the world)
+///   only    - per gender, per slot, the only items allowed (the first is the default for a required slot)
+///   never   - per gender, per slot, items never allowed
+///   none    - per gender, slots that are always empty
+function character_story_rules(){
+	static rules = undefined;
+	if(rules != undefined) return rules;
+	rules = {
+		race: "Human",
+		genders: ["male", "female"],
+		keys: ["body", "head", "eyes", "ears", "nose", "eyebrows", "hair", "beard"],
+		// Adult human heads of the right sex only: no child heads, no unisex "Human Elderly Small"
+		only: {
+			male:   {head: ["Human Male", "Human Male Small", "Human Male Gaunt", "Human Male Plump", "Human Male Elderly"]},
+			female: {head: ["Human Female", "Human Female Small", "Human Female Elderly"]},
+		},
+		// ("not" is a GML keyword, even as a struct key)
+		never: {
+			male:   {hair: ["Princess", "Pigtails", "Pigtails bangs", "Bunches", "Bangs bun"]},
+			female: {hair: ["Balding"]},
+		},
+		none: {male: [], female: ["beard"]},
+	};
+	return rules;
+}

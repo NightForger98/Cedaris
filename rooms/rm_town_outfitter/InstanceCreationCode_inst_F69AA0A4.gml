@@ -1,5 +1,5 @@
-targetRoom = rm_town;
-targetX = 1520;
-targetY = 340;
+targetRoom = rm_dahya;
+targetX = 1072;
+targetY = 564;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

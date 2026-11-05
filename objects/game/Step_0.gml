@@ -91,7 +91,9 @@ if(game_is_playing_room() && !instance_exists(obj_menu)){
 
 	// Debug (Insert): Page Up / Page Down hop between play rooms
 	if(debug && (keyboard_check_pressed(vk_pageup) || keyboard_check_pressed(vk_pagedown))){
-		var rooms = [rm_1, rm_2, rm_village_smithy, rm_village_store, rm_12, rm_123, rm_town, rm_town_inn, rm_town_outfitter, rm_town_apothecary, rm_beach, rm_valley, rm_north, rm_south, rm_cross, rm_valley_ranch, rm_valley_carpentry, rm_mine, rm_forest];
+		var rooms = [rm_12, rm_123, rm_mine];
+		var ws = world_outdoors();   // every outdoor room of the world, in grid order
+		for(var k = 0; k < array_length(ws); k++) array_push(rooms, asset_get_index(ws[k]));
 		var n = array_length(rooms);
 		var i = array_get_index(rooms, room);
 		spawnRoom = -1; // use the room's own player position

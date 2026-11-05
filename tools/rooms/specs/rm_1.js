@@ -7,14 +7,21 @@
 //
 // Map: . grass  , dirt  = field soil  ~ water. See tools/rooms/tiles.js for the rest.
 const W = 77, H = 40;
+// The ways out to Wing Hill and South Beach: where you arrive there comes from the world data
+const world = require("../../world/room.js");
+const way = (x, y, sx, sy, to, side, face) => {
+	const [tx, ty] = world.arrive(to, side);
+	return {obj: "obj_transition", x, y, sx, sy,
+		code: `targetRoom = ${to};\ntargetX = ${tx};\ntargetY = ${ty};\nPlayerFacingBefore = dir.${face};\nPlayerFacingAfter = dir.${face};`};
+};
 // The pond: [row, first col, last col]
 const pond = [[23, 6, 11], [24, 5, 12], [25, 4, 13], [26, 4, 13], [27, 4, 13], [28, 5, 12], [29, 6, 11]];
 const map = [];
 for(let r = 0; r < H; r++){
 	const row = Array(W).fill(".");
 	const put = (c1, c2, ch) => { for(let c = c1; c <= c2; c++) row[c] = ch; };
-	if(r <= 16) put(39, 41, ",");                  // the path down from the vale
-	if(r === 17 || r === 18) put(15, 75, ",");     // the lane across the farm
+	if(r <= 16) put(39, 41, ":");                  // the road down from Wing Hill
+	if(r === 17 || r === 18) put(0, 75, ",");      // the lane across the farm, and west to South Beach
 	if(r === 19) put(18, 34, ",");                 // in front of the farmhouse
 	if(r >= 14 && r <= 16) put(59, 75, ",");       // the barnyard
 	if(r >= 21 && r <= 31) put(35, 58, "=");       // the field
@@ -57,7 +64,7 @@ module.exports = {
 		{is: "oak", at: [70, 36]}, {is: "pine", at: [73, 34]}, {is: "pine", at: [75, 35]},
 		{is: "oak", at: [0, 34]}, {is: "pine", at: [3, 33]}, {is: "oak", at: [6, 35]}, {is: "pine", at: [9, 34]}, {is: "oak", at: [12, 36]},
 		{is: "pine", at: [15, 33]}, {is: "oak", at: [17, 22]}, {is: "pine", at: [34, 1]}, {is: "oak", at: [45, 2]},
-		{is: "pine", at: [0, 16]}, {is: "oak", at: [75, 16]},
+		{is: "oak", at: [75, 16]},
 	],
 
 	scatter: [
@@ -73,16 +80,18 @@ module.exports = {
 		// The farmhouse door
 		{obj: "obj_transition", x: 816, y: 528, sx: 2, sy: 1,
 		 code: "targetRoom = rm_12;\ntargetX = 160;\ntargetY = 472;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
-		// Up the path to Hollow Vale
-		{obj: "obj_transition", x: 1296, y: 16, sx: 6, sy: 2,
-		 code: "targetRoom = rm_valley;\ntargetX = 1296;\ntargetY = 2008;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
+		// Up the road to Wing Hill, west along the lane to South Beach (tools/world/room.js works out where you arrive)
+		way(1296, 16, 6, 2, "rm_winghill", "b", "up"),
+		way(8, 576, 1, 4, "rm_southbeach", "r", "left"),
 	],
 
 	// Named spots for scripts (scripts/room_layout): points in pixels, areas in cells [c1, r1, c2, r2]
 	points: {
 		start: [816, 592],       // a new game, in front of the farmhouse
 		door: [816, 564],        // back out of the farmhouse
-		path_north: [1296, 72],  // down from the vale
+		path_north: [1296, 72],  // down from Wing Hill
+		road_t: [1296, 72],
+		road_l: [64, 576],       // in from South Beach
 	},
 	areas: {
 		meadow: [42, 8, 49, 15],     // weeds and bushes by the path
@@ -90,6 +99,6 @@ module.exports = {
 		woods: [18, 32, 33, 33],     // a young wood at the woods' edge, west of the field
 		pasture: [60, 28, 75, 31],   // where animals roam
 		field: [35, 21, 58, 31],
-		far_west: [1, 15, 14, 21],   // the meadow between the windmill and the pond
+		far_west: [1, 20, 14, 22],   // the meadow between the lane and the pond
 	},
 };

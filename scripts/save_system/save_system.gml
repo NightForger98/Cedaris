@@ -2,18 +2,21 @@
 /// Saves are JSON files in the game's save folder (saves/slotN.json); settings live in settings.ini.
 
 #macro SAVE_SLOTS 3
-#macro SAVE_VERSION 11// 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine);
+#macro SAVE_VERSION 12// 3: resources in the world store, tool tiers and water in the inventory; 4: the mine (world.mine);
                       // 5: spells (inv.spells) and mana (vitals.mana); 6: weather (clock), projects, people, quests (world);
                       // 7: the built farm and village (see save_upgrade_rooms); 8: beaten mine bosses (world.mine.bosses);
                       // 9: heart events seen (world.events); 10: the farm, the vale and the coast grown (save_upgrade_grown);
-                      // 11: the farm rebuilt below Hollow Vale (save_upgrade_farm_moved)
+                      // 11: the farm rebuilt below Hollow Vale (save_upgrade_farm_moved); 12: the new world - 25 rooms
+                      // laid out like Beirut (save_upgrade_new_world)
 
 function save_path(_slot){ return "saves/slot" + string(_slot) + ".json"; }
 
 function save_exists(_slot){ return file_exists(save_path(_slot)); }
 
-/// @description Friendly name for a room, shown on save slots.
+/// @description Friendly name for a room, shown on save slots, signposts and the map: the place it's in.
 function save_room_name(_roomName){
+	var place = world_place_name(_roomName);   // scripts/world_rooms (tools/world/world.js)
+	if(place != undefined) return place;
 	switch(_roomName){
 		case "rm_1": return "The Farm";
 		case "rm_2": return "Village";
@@ -83,6 +86,8 @@ function load_game(_slot){
 	var data = save_read(_slot);
 	if(data == undefined) return false;
 	var rm = asset_get_index(data.room);
+	// Saves from before the new world may be in a room that's gone: they wake up on the farm
+	if(rm == -1 && (data[$ "version"] ?? 1) < 12){ rm = rm_1; data.room = "rm_1"; }
 	if(rm == -1) return false;
 
 	instance_activate_all(); // in case the game was paused
@@ -112,6 +117,8 @@ function load_game(_slot){
 	if(oldGrown) save_upgrade_grown();
 	var oldFarm = !oldRooms && (data[$ "version"] ?? 1) < 11;
 	if(oldFarm) save_upgrade_farm_moved();
+	var oldWorld = (data[$ "version"] ?? 1) < 12;
+	if(oldWorld) save_upgrade_new_world();
 
 	// Sheet row back to a facing direction (rows: 8 up, 9 left, 10 down, 11 right)
 	var facing = dir.down;
@@ -122,10 +129,11 @@ function load_game(_slot){
 	}
 	var at = [data.x, data.y];
 	if(oldRooms && rm == rm_1) at = layout_point("rm_1", "start");
-	if(oldRooms && rm == rm_2) at = layout_point("rm_2", "road_west");
+	
 	var g = grown[$ data.room];
 	if(oldGrown && g != undefined) at = [at[0] + g[0] * 32, at[1] + g[1] * 32];
 	if(oldFarm && rm == rm_1) at = layout_point("rm_1", "start");
+	if(oldWorld && rm != rm_1 && rm != rm_12 && rm != rm_123){ rm = rm_1; at = layout_point("rm_1", "start"); }
 	with(game){
 		spawnRoom = rm;
 		spawnX = at[0];
@@ -407,4 +415,25 @@ function game_unpause(){
 		if(pauseShot != -1){ sprite_delete(pauseShot); pauseShot = -1; }
 		resumeLock = 2;
 	}
+}
+
+/// @description Saves before version 12: the world was rebuilt (25 new rooms). The farm and the farmhouse keep
+/// everything; every other room's rocks, trees and placed things are rolled again (placed things go back in the bag),
+/// and resource regrowth starts afresh (resource_areas changed).
+function save_upgrade_new_world(){
+	var names = variable_struct_get_names(global.world.rooms ?? {});
+	for(var i = 0; i < array_length(names); i++){
+		if(names[i] == "rm_1" || names[i] == "rm_12" || names[i] == "rm_123") continue;
+		var r = world_room(names[i]);
+		var p = r[$ "placed"];
+		if(is_array(p)) for(var k = 0; k < array_length(p); k++) inv_add(item_stack("o|" + p[k].kind, 1));
+		r.placed = [];
+		r.objects = [];
+		r.due = {};
+		r.seeded = false;
+	}
+	var farm = world_room("rm_1");
+	farm.objects = [];
+	farm.due = {};
+	farm.seeded = false;
 }

@@ -67,13 +67,9 @@ function resource_table(){
 /// @description Where resources spawn: cells [gx1, gy1, gx2, gy2] in a room, a cap, how many come back each
 /// day, how many on the first visit, and weighted kinds. Each cell is checked against the room's collisions.
 function resource_areas(){
-	static a = [
-		// North Road (areas named in tools/rooms/specs/rm_north.js): the dirt under the cliff, either side of the mine's
-		// cave - rocks and ore (these were the farm's, before the farm moved; their places in this list are kept)
-		{room: "rm_north", cells: layout_cells("rm_north", "cliff_west"), max: 6, perDay: 1, start: 4,
-		 kinds: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]]},
-		{room: "rm_north", cells: layout_cells("rm_north", "cliff_east"), max: 7, perDay: 2, start: 5,
-		 kinds: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]]},
+	// The farm's and Whisperwood's own areas, then every generated room's (scripts/world_rooms, from tools/world).
+	// Saves count regrowth by place in this list: the new world (save version 12) started it afresh.
+	static a = array_concat([
 		// Farm (areas named in tools/rooms/specs/rm_1.js): the meadow by the path - weeds, bushes and stones (no trees)
 		{room: "rm_1", cells: layout_cells("rm_1", "meadow"), max: 12, perDay: 3, start: 9,
 		 kinds: [["weeds", 55], ["bush", 25], ["stone", 20]]},
@@ -83,59 +79,12 @@ function resource_areas(){
 		// Farm: the edge of the woods in the south - a young wood
 		{room: "rm_1", cells: layout_cells("rm_1", "woods"), max: 10, perDay: 2, start: 7,
 		 kinds: [["oak", 25], ["pine", 25], ["weeds", 30], ["bush", 10], ["stone", 10]]},
-		// Saltmere Coast: stones and driftwood scrub on the sand and the grass behind it
-		{room: "rm_beach", cells: layout_cells("rm_beach", "shore"), max: 10, perDay: 2, start: 7,
-		 kinds: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]]},
-		// Hollow Vale: a wild valley - wood and forage
-		{room: "rm_valley", cells: layout_cells("rm_valley", "west"), max: 16, perDay: 4, start: 12,
-		 kinds: [["oak", 20], ["pine", 15], ["bush", 15], ["weeds", 15], ["stone", 10], ["forage_herb", 15], ["forage_mushroom", 10]]},
-		{room: "rm_valley", cells: layout_cells("rm_valley", "east"), max: 14, perDay: 3, start: 10,
-		 kinds: [["oak", 20], ["pine", 20], ["bush", 10], ["forage_herb", 20], ["forage_mushroom", 15], ["forage_toadstool", 10], ["stone", 5]]},
+		{room: "rm_1", cells: layout_cells("rm_1", "far_west"), max: 8, perDay: 2, start: 6,
+		 kinds: [["weeds", 40], ["bush", 15], ["stone", 25], ["oak", 10], ["pine", 10]]},
 		// Whisperwood: its clearings (walls and water are skipped) - wood, forage and a few stones
 		{room: "rm_forest", cells: [2, 2, 45, 27], max: 34, perDay: 8, start: 28,
 		 kinds: [["oak", 16], ["pine", 16], ["bush", 14], ["weeds", 10], ["stone", 6], ["forage_mushroom", 16], ["forage_herb", 12], ["forage_toadstool", 5]]},
-		// The grown rooms' new land (kept at the end: saves count each area's regrowth by its place in this list)
-		{room: "rm_1", cells: layout_cells("rm_1", "far_west"), max: 8, perDay: 2, start: 6,
-		 kinds: [["weeds", 40], ["bush", 15], ["stone", 25], ["oak", 10], ["pine", 10]]},
-		{room: "rm_valley", cells: layout_cells("rm_valley", "east_low"), max: 10, perDay: 2, start: 7,
-		 kinds: [["oak", 20], ["pine", 15], ["bush", 15], ["weeds", 15], ["stone", 10], ["forage_herb", 15], ["forage_mushroom", 10]]},
-		{room: "rm_valley", cells: layout_cells("rm_valley", "woods_w"), max: 12, perDay: 3, start: 9,
-		 kinds: [["oak", 25], ["pine", 25], ["bush", 10], ["weeds", 10], ["forage_mushroom", 20], ["forage_toadstool", 10]]},
-		{room: "rm_beach", cells: layout_cells("rm_beach", "shore_north"), max: 8, perDay: 2, start: 6,
-		 kinds: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]]},
-		{room: "rm_beach", cells: layout_cells("rm_beach", "shore_south"), max: 8, perDay: 2, start: 6,
-		 kinds: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]]},
-		{room: "rm_beach", cells: layout_cells("rm_beach", "shore_far"), max: 6, perDay: 1, start: 5,
-		 kinds: [["stone", 35], ["boulder", 20], ["weeds", 20], ["bush", 15], ["copper_vein", 10]]},
-		// The halves of areas split to keep them off the roads
-		{room: "rm_beach", cells: layout_cells("rm_beach", "shore_mid"), max: 6, perDay: 1, start: 4,
-		 kinds: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]]},
-		{room: "rm_valley", cells: layout_cells("rm_valley", "east_far"), max: 8, perDay: 2, start: 6,
-		 kinds: [["oak", 20], ["pine", 20], ["bush", 10], ["forage_herb", 20], ["forage_mushroom", 15], ["forage_toadstool", 10], ["stone", 5]]},
-		// The open country between the places: the Crossroads, North Road and South Road
-		{room: "rm_cross", cells: layout_cells("rm_cross", "nw"), max: 8, perDay: 2, start: 6,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_cross", cells: layout_cells("rm_cross", "ne"), max: 9, perDay: 2, start: 7,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_cross", cells: layout_cells("rm_cross", "sw"), max: 9, perDay: 2, start: 7,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_cross", cells: layout_cells("rm_cross", "se"), max: 9, perDay: 2, start: 7,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_north", cells: layout_cells("rm_north", "meadow_w"), max: 14, perDay: 3, start: 10,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_north", cells: layout_cells("rm_north", "meadow_e"), max: 5, perDay: 1, start: 3,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_south", cells: layout_cells("rm_south", "nw"), max: 7, perDay: 2, start: 5,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_south", cells: layout_cells("rm_south", "mid"), max: 4, perDay: 1, start: 3,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_south", cells: layout_cells("rm_south", "band"), max: 5, perDay: 1, start: 3,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_south", cells: layout_cells("rm_south", "south"), max: 14, perDay: 3, start: 10,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-		{room: "rm_south", cells: layout_cells("rm_south", "east"), max: 5, perDay: 1, start: 3,
-		 kinds: [["oak", 18], ["pine", 18], ["bush", 14], ["weeds", 18], ["stone", 14], ["boulder", 3], ["forage_herb", 10], ["forage_mushroom", 5]]},
-	];
+	], world_resource_areas());
 	return a;
 }
 

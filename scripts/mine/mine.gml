@@ -301,11 +301,11 @@ function mine_goto(_floor){
 	}
 }
 
-/// @description Climb out at the cave mouth, under the cliff on North Road.
+/// @description Climb out at the cave mouth, under the cliff on Beacon Hill.
 function mine_leave(){
 	with(game){
-		spawnRoom = rm_north;
-		var p = layout_point("rm_north", "cave");
+		spawnRoom = rm_beaconhill;
+		var p = layout_point("rm_beaconhill", "cave");
 		spawnX = p[0]; spawnY = p[1];
 		spawnPlayerFacing = dir.down;
 		restartRoom = false;

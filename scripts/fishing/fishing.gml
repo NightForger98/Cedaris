@@ -29,8 +29,8 @@ function fish_def(_key){ return fish_table()[$ _key]; }
 /// @description Which water this room's fishing is in.
 function fishing_place(){
 	if(room == rm_forest) return "forest";
-	if(room == rm_beach) return "sea";
-	if(room == rm_valley || room == rm_north || room == rm_south) return "river";
+	var w = world_water(room_get_name(room));   // the coast is sea, the east's river is river (scripts/world_rooms)
+	if(w != undefined) return w;
 	return "farm";
 }
 

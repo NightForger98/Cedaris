@@ -141,11 +141,11 @@ function forest_goto(){
 	}
 }
 
-/// @description Back to the village, at the bridge.
+/// @description Back to Yarzeh Woods, at the way in.
 function forest_leave(){
 	with(game){
-		spawnRoom = rm_2;
-		var p = layout_point("rm_2", "bridge");
+		spawnRoom = rm_yarzeh;
+		var p = layout_point("rm_yarzeh", "bridge");
 		spawnX = p[0]; spawnY = p[1];
 		spawnPlayerFacing = dir.left;
 		restartRoom = false;

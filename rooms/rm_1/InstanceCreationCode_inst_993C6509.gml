@@ -1,5 +1,5 @@
-targetRoom = rm_12;
-targetX = 160;
-targetY = 472;
+targetRoom = rm_winghill;
+targetX = 848;
+targetY = 1144;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

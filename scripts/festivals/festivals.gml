@@ -95,6 +95,6 @@ function festival_weigh_in(_f){
 /// @description On a festival day the village is decorated; everyone spends the day in its crowd (their schedule
 /// for the day, see villager_stops), so they come in like anyone else.
 function festival_room_start(){
-	if(festival_today() == undefined || room != rm_2) return;
+	if(festival_today() == undefined || room != rm_downtown) return;
 	instance_create_depth(0, 0, 0, obj_festival_decor);
 }

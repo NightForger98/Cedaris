@@ -3,8 +3,8 @@
 //
 //   node tools/rooms/worldmap.js            (run it again after changing an outdoor room)
 //
-// Rooms are placed by their exits: the farm at the middle, and each room through an exit on an edge of the room it
-// was reached from (the exit's offset lines up the two sides). Whisperwood is built while the game runs, so the map
+// Rooms are placed on the world's 5 x 5 grid (tools/world/world.js): each column as wide as its widest room, each row
+// as tall as its tallest, every room centred in its cell. Whisperwood is built while the game runs, so the map
 // shows it as woods east of the village. A building is any house-like thing (it has a door) with an exit at its door.
 const fs = require("fs");
 const path = require("path");
@@ -17,29 +17,31 @@ const T = require("./tiles.js");
 
 const SCALE = 0.25;        // map pixels per room pixel
 const GAP = 64;            // room pixels between neighbouring rooms
-const OUTDOORS = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north", "rm_south", "rm_cross"];
+const {GRID} = require("../world/world.js");
+const OUTDOORS = GRID.flat();
 const FOREST = {w: 48 * 32, h: 30 * 32};   // FOREST_W x FOREST_H in scripts/forest
 
 const spec = n => require(path.join(__dirname, "specs", n + ".js"));
 const size = n => { const r = readYy(`rooms/${n}/${n}.yy`); return [r.roomSettings.Width, r.roomSettings.Height]; };
 
-// Place the outdoor rooms by walking their exits out from the farm
+// Place the outdoor rooms on the grid
 function layout(){
-	const pos = {rm_1: [0, 0]}, queue = ["rm_1"];
-	while(queue.length){
-		const a = queue.shift(), [aw, ah] = size(a);
-		for(const [x, y, b, tx, ty] of roomWalk(a, spec(a)).doors){
-			if(!OUTDOORS.includes(b) || pos[b]) continue;
-			const [bw, bh] = size(b), [ax, ay] = pos[a];
-			if(x < 64) pos[b] = [ax - bw - GAP, ay + y - ty];
-			else if(x > aw - 64) pos[b] = [ax + aw + GAP, ay + y - ty];
-			else if(y < 64) pos[b] = [ax + x - tx, ay - bh - GAP];
-			else pos[b] = [ax + x - tx, ay + ah + GAP];
-			queue.push(b);
-		}
-	}
-	const [vw] = size("rm_2");
-	pos.rm_forest = [pos.rm_2[0] + vw + GAP, pos.rm_2[1]];
+	const cols = GRID[0].map((_, c) => Math.max(...GRID.map(row => size(row[c])[0])));
+	const rows = GRID.map(row => Math.max(...row.map(n => size(n)[1])));
+	const pos = {};
+	let y = 0;
+	GRID.forEach((row, r) => {
+		let x = 0;
+		row.forEach((n, c) => {
+			const [w, h] = size(n);
+			pos[n] = [x + Math.floor((cols[c] - w) / 2), y + Math.floor((rows[r] - h) / 2)];
+			x += cols[c] + GAP;
+		});
+		y += rows[r] + GAP;
+	});
+	// Whisperwood: east of Yarzeh Woods, past the map's edge
+	const [yw] = size("rm_yarzeh");
+	pos.rm_forest = [pos.rm_yarzeh[0] + yw + GAP, pos.rm_yarzeh[1]];
 	return pos;
 }
 
@@ -112,9 +114,9 @@ function build(){
 	}
 	// Rooms reached from inside another (upstairs) map to the same door
 	for(const b of Object.keys(inside)) for(const [, , c] of roomWalk(b, spec(b)).doors) if(!inside[c] && !OUTDOORS.includes(c)) inside[c] = inside[b];
-	// The mine's cave, under the cliff on North Road
-	const cave = spec("rm_north").points.cave;
-	inside.rm_mine = at([pos.rm_north[0] + cave[0], pos.rm_north[1] + cave[1]]);
+	// The mine's cave, under the cliff on Beacon Hill
+	const cave = spec("rm_beaconhill").points.cave;
+	inside.rm_mine = at([pos.rm_beaconhill[0] + cave[0], pos.rm_beaconhill[1] + cave[1]]);
 
 	fs.mkdirSync(path.join(root, "build"), {recursive: true});
 	const png = path.join(root, "build", "world_map.png");

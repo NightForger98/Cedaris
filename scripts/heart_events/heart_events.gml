@@ -7,7 +7,7 @@
 /// lines: what they say; choice: {ask, options: [[your words, friendship, their reply]...]}; gift: [item id, n].
 function heart_event_table(){
 	static t = [
-		{id: "elda_2", who: "elda", hearts: 2, room: "rm_2", hours: [7, 11],
+		{id: "elda_2", who: "elda", hearts: 2, room: "rm_yarzeh", hours: [7, 10],
 		 lines: ["Shh. Listen.", "The river's telling the reeds about the spring flood - the one forty years back.",
 		         "Most people walk past and hear water. You stopped."],
 		 choice: {ask: "What do you say?", options: [["\"I hear it too. Tell me more.\"", 60, "Then sit. It's a long story, and the river tells it better than I do."],
@@ -16,11 +16,11 @@ function heart_event_table(){
 		 lines: ["See this hammer? My father's. His father's before him.", "The handle's been replaced six times. The head, never.",
 		         "Here - I made a few bars too many this week. Don't tell anyone I'm soft."],
 		 gift: ["m|steel", 2]},
-		{id: "pip_2", who: "pip", hearts: 2, room: "rm_valley", hours: [7, 16],
+		{id: "pip_2", who: "pip", hearts: 2, room: "rm_ovenswindow", hours: [7, 16],
 		 lines: ["Have you seen a sheep? Small, grumpy, answers to Pudding?", "Wren's going to have my ears if I lose another one."],
 		 choice: {ask: "Help Pip look?", options: [["\"Let's find her together.\"", 80, "There! In the reeds! Pudding, you menace. ...Thanks. I owe you one."],
 		                                           ["\"Sorry, I'm busy.\"", 0, "Right. Course you are. Pudding! PUDDING!"]]}},
-		{id: "tobin_2", who: "tobin", hearts: 2, room: "rm_2", hours: [9, 12],
+		{id: "tobin_2", who: "tobin", hearts: 2, room: "rm_sthereza", hours: [9, 12],
 		 lines: ["Psst! I caught a monster!", "It's in my hat. Look. Carefully.", "...It's a frog. But it's a BIG frog."],
 		 choice: {ask: "What do you think?", options: [["\"That's the bravest catch I've ever seen.\"", 60, "I KNEW it. I'm naming him Sir Croaks."],
 		                                               ["\"It's just a frog, Tobin.\"", -10, "...He's a big frog."]]}},
@@ -32,11 +32,11 @@ function heart_event_table(){
 		 lines: ["Don't laugh.", "I carve things. Small things. When the big work's done.", "This one's for you. It's a duck. Or a dog."],
 		 choice: {ask: "What is it?", options: [["\"It's clearly a duck. It's wonderful.\"", 60, "...It was a dog. But I like duck better now."],
 		                                        ["\"Is it... a potato?\"", 10, "Hah! Fair. Keep it anyway."]]}},
-		{id: "marlo_2", who: "marlo", hearts: 2, room: "rm_beach", hours: [6, 12],
+		{id: "marlo_2", who: "marlo", hearts: 2, room: "rm_whitesand", hours: [6, 12],
 		 lines: ["Sea's quiet today. Good for thinking.", "Fifty years I've fished this pier. The secret? Patience.",
 		         "And this lure. Don't tell the gulls."],
 		 gift: ["x|perch", 3]},
-		{id: "mara_6", who: "mara", hearts: 6, room: "rm_village_store", hours: [9, 18],
+		{id: "mara_6", who: "mara", hearts: 6, room: "rm_toolstore", hours: [9, 18],
 		 lines: ["I've been saving these for someone who'd treat them right.", "Seeds from my mother's garden. Gourds the size of a cart wheel, she swore.",
 		         "Plant them in fall. And come show me when they're ripe."],
 		 gift: ["s|gourd", 5]},
@@ -45,8 +45,8 @@ function heart_event_table(){
 		         "Now look at it. Sit, the first drink's on the house."],
 		 choice: {ask: "Join them?", options: [["\"Only if Garrick tells the bear story.\"", 50, "Oh, he will. He always will."],
 		                                       ["\"I should get back to the farm.\"", 10, "Another night, then."]]}},
-		{id: "garrick_4", who: "garrick", hearts: 4, room: "rm_town", hours: [8, 18],
-		 lines: ["Seen lights in Whisperwood at night. Pinkish. Dancing.", "My grandmother called them pixies. Said they bless a farm that's kind to them.",
+		{id: "garrick_4", who: "garrick", hearts: 4, room: "rm_beaconhill", hours: [8, 18],
+		 lines: ["Seen lights out past Yarzeh Woods at night. Pinkish. Dancing.", "My grandmother called them pixies. Said they bless a farm that's kind to them.",
 		         "Me, I just keep watch. But if you're out there at night... be kind."]},
 	];
 	return t;

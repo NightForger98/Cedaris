@@ -124,9 +124,9 @@ function sched_place(_key, _place){
 function villager_stops(_key){
 	var r = villager_routine(_key);
 	if(festival_today() != undefined){
-		// The whole day in the village crowd, six to a row from the crowd point (the festival's people come and stay)
-		var k = array_get_index(villager_names(), _key), c = layout_point("rm_2", "crowd");
-		return [[0, {room: "rm_2", x: c[0] + (k mod 6) * 64, y: c[1] + (k div 6) * 80}]];
+		// The whole day in the festival crowd in Downtown, six to a row from the crowd point (the festival's people come and stay)
+		var k = array_get_index(villager_names(), _key), c = layout_point("rm_downtown", "crowd");
+		return [[0, {room: "rm_downtown", x: c[0] + (k mod 6) * 64, y: c[1] + (k div 6) * 80}]];
 	}
 	// This season's changes to their week, if they have any
 	static seasonKeys = ["spring", "summer", "fall", "winter"];
@@ -149,7 +149,7 @@ function villager_stops(_key){
 		stops = array_concat(stops, (after != undefined) ? after : [[work.close, "home"]]);
 	}
 	// Winter evenings: nobody lingers outdoors after 5pm (it's dark and freezing)
-	static outside = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north", "rm_south", "rm_cross"];
+	var outside = world_outdoors();
 	if(global.clock.season mod 4 == 3){
 		for(var i = 1; i < array_length(stops); i++){
 			var pl = stops[i][1];
@@ -159,7 +159,7 @@ function villager_stops(_key){
 	}
 	// Rain: anything outdoors becomes staying in (home), unless they're the kind to go out in it anyway
 	if(weather_is_wet() && !(r[$ "rainproof"] ?? false)){
-		static outdoors = ["rm_1", "rm_2", "rm_town", "rm_beach", "rm_valley", "rm_north", "rm_south", "rm_cross"];
+		var outdoors = world_outdoors();
 		for(var i = 1; i < array_length(stops); i++){
 			var pl = stops[i][1];
 			if(is_struct(pl) || pl == "home") continue;

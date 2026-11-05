@@ -2,7 +2,7 @@
 if(fest == undefined) exit;
 var cols = [make_colour_rgb(230, 80, 80), make_colour_rgb(250, 200, 70), make_colour_rgb(110, 190, 230), make_colour_rgb(150, 220, 110), make_colour_rgb(230, 140, 220)];
 // Two strings across the square (its area in the village's layout), sagging in the middle
-var sq = layout_area("rm_2", "square");
+var sq = layout_area("rm_downtown", "square");
 var x1 = sq[0], span = sq[2] - sq[0], flags = floor(span / 31);
 for(var row = 0; row < 2; row++){
 	var y0 = sq[1] + 64 + row * (sq[3] - sq[1]) * 0.45;
@@ -15,7 +15,7 @@ for(var row = 0; row < 2; row++){
 	}
 }
 if(fest.kind == "lanterns" && global.clock.minutes >= 1080){
-	var river = layout_point("rm_2", "river");
+	var river = layout_point("rm_downtown", "river");
 	for(var i = 0; i < 9; i++){
 		var t = ((current_time / 9000 + i / 9) mod 1);
 		var lx = river[0] + sin(t * 6 + i) * 14, ly = river[1] + t * room_height;

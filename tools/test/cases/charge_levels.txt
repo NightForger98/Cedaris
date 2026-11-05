@@ -1,6 +1,6 @@
-# Weapon charges have three levels (the glow, the red face, the anger mark), each stronger (docs/CHARGING.md): a sword
-# slashes wide at 1 (not behind you), spins at 2 and 3; a mace swings wide at 1, slams all round at 2 and 3; the top
-# level knocks monsters far back; a bow's arrow pierces one monster at 2.
+# Weapon charges have three levels (the glow, the red face, the anger mark), each hitting harder and knocking further
+# (docs/CHARGING.md): a sword slashes wide at 1 (not behind you), spins all round at 2 and 3; a mace swings a wider
+# arc in front at each level (never behind you); the top level knocks far and stuns; a bow's arrow pierces one at 2.
 start story
 wait 60
 gold 1000
@@ -21,7 +21,7 @@ face e
 call autotest_monster_ring slime 26
 call autotest_toughen
 charge 1
-wait 40
+wait 30
 call autotest_monster_hits
 expect hit 3 of 4
 log Arming Sword level 1
@@ -30,7 +30,7 @@ face e
 call autotest_monster_ring slime 26
 call autotest_toughen
 charge 2
-wait 40
+wait 30
 call autotest_monster_hits
 expect hit 4 of 4
 log Arming Sword level 2
@@ -39,18 +39,20 @@ face e
 call autotest_monster_ring slime 26
 call autotest_toughen
 charge 3
-wait 40
+wait 30
 call autotest_monster_hits
 expect hit 4 of 4
 call autotest_knocked_over 40
 expect yes
+call autotest_monsters_stunned
+expect stunned
 log Arming Sword level 3
 equip c|held|Mace
 face e
 call autotest_monster_ring slime 26
 call autotest_toughen
 charge 1
-wait 40
+wait 30
 call autotest_monster_hits
 expect hit 1 of 4
 log Mace level 1
@@ -59,20 +61,22 @@ face e
 call autotest_monster_ring slime 26
 call autotest_toughen
 charge 2
-wait 40
+wait 30
 call autotest_monster_hits
-expect hit 4 of 4
+expect hit 3 of 4
 log Mace level 2
 equip c|held|Mace
 face e
 call autotest_monster_ring slime 26
 call autotest_toughen
 charge 3
-wait 40
+wait 30
 call autotest_monster_hits
-expect hit 4 of 4
+expect hit 3 of 4
 call autotest_knocked_over 110
 expect yes
+call autotest_monsters_stunned
+expect stunned
 log Mace level 3
 equip c|held|Bow
 face e

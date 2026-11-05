@@ -192,12 +192,13 @@ function monster_damage(_inst, _w, _ang){
 	with(_inst){
 		hp -= dmg;
 		flash = 8;
-		hurtT = _w[$ "stun"] ?? 10;   // a charged slam stuns longer
+		hurtT = (_w[$ "stunTop"] ?? false) ? monster_stun_time(id) : (_w[$ "stun"] ?? 10);   // a top-level charge stuns
 		attacking = false;
 		kx = lengthdir_x(_w[$ "knock"] ?? 3, _ang);
 		ky = lengthdir_y(_w[$ "knock"] ?? 3, _ang);
 	}
 	popup(_inst.x, _inst.y - 58, (crit ? "Crit! " : "") + string(dmg), crit ? make_colour_rgb(255, 220, 80) : c_white);
+	if((_w[$ "stunTop"] ?? false) && _inst.hp > 0) popup(_inst.x, _inst.y - 72, "Stunned!", make_colour_rgb(255, 230, 120));
 	if(_inst.hp <= 0) monster_kill(_inst);
 }
 
@@ -348,4 +349,15 @@ function projectile_boomerang_surface(){
 		surface_reset_target();
 	}
 	return s;
+}
+
+/// @description How long a top-level charged hit stuns a monster, in frames: about 1.7 s for an ordinary one, longer
+/// for small creatures (slimes, bats, snakes), shorter for big ones (muscular, scaled up) and much shorter for bosses,
+/// and less the deeper the floor it came from (its toughness).
+function monster_stun_time(_inst){
+	var d = _inst.def, f = 1;
+	if(d[$ "boss"] ?? false) f = 0.35;
+	else if((d[$ "body"] ?? "") == "muscular" || (d[$ "scale"] ?? 1) > 1.3) f = 0.6;
+	else if(variable_struct_exists(d, "spr") && d.hp <= 20) f = 1.4;
+	return max(20, round(100 * f / max(1, _inst.toughness)));
 }

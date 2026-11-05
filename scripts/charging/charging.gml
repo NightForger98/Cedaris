@@ -375,14 +375,17 @@ function charge_draw_swing(_user){
 // ---------------------------------------------------------------- weapons
 
 /// @description A charged weapon lands (from charge_release): stronger stats for its kind and level, then the usual hit.
-/// Level 1 (the glow), 2 (red face), 3 (anger, the top): swords slash wide (180) / spin once / spin twice; spears lunge
-/// one, two, three tiles, reaching further; heavy weapons swing wide / slam the ground round you / slam a big ring,
-/// stunning; the dagger stabs 2, 3, 4 times; bows and slings shoot faster, further and harder, piercing one monster at
-/// level 2 and all of them at 3; the boomerang flies further. Every top-level release knocks hard and shakes the screen.
+/// A tap is the weapon's own stats; each level (1 the glow, 2 the red face, 3 the anger mark, the top) hits harder
+/// (x1.25 / x1.5 / x2) and knocks further (x1.5 / x2.25 / x3.5). Swords slash wide (180) / spin / spin twice (all round);
+/// heavy weapons swing wide (150) / wider (200) / slam a big arc (270) in front; spears lunge 1 / 2 / 3 tiles, reaching
+/// further; the dagger stabs 2 / 3 / 4 times; bows and slings shoot faster and further, piercing one monster at level 2
+/// and all at 3; the boomerang flies further. The top level also stuns what it hits (monster_stun_time) and shakes the
+/// screen.
 function charge_weapon_hit(_user, _name, _level, _dir){
 	var w = variable_clone(weapon_def(_name)), lv = clamp(_level, 1, 3);
 	var mult = [1, 1.25, 1.5, 2][lv];
 	var dmg = function(_w, _m){ _w.dmg = [round(_w.dmg[0] * _m), round(_w.dmg[1] * _m)]; };
+	w.knock = (w[$ "knock"] ?? 3) * [1, 1.5, 2.25, 3.5][lv];
 	switch(charge_kind(_name)){
 		case "spin_slash":
 			w.arc = (lv == 1) ? 180 : 360; w.reach *= [1, 1.1, 1.2, 1.3][lv]; dmg(w, mult);
@@ -391,12 +394,10 @@ function charge_weapon_hit(_user, _name, _level, _dir){
 			w.reach *= [1, 1.3, 1.6, 2][lv]; w.arc = max(w.arc, 60); dmg(w, mult);
 			break;
 		case "slam":
-			w.arc = (lv == 1) ? 150 : 360; w.reach *= [1, 1.2, 1.4, 2][lv];
-			w.knock = (w[$ "knock"] ?? 3) * [1, 1.3, 2, 3][lv]; w.stun = [10, 10, 40, 70][lv];
-			dmg(w, mult);
+			w.arc = [0, 150, 200, 270][lv]; w.reach *= [1, 1.2, 1.4, 1.8][lv]; dmg(w, mult);
 			break;
 		case "flurry":
-			break;   // each stab a normal one; the last of a top-level flurry knocks back (below)
+			break;   // each stab a normal one (but knocking further); the last of a top-level flurry stuns
 		case "draw":
 			var b = [1, 1.35, 1.7, 2][lv];
 			w.speed *= b; w.range *= b; dmg(w, b);
@@ -405,7 +406,7 @@ function charge_weapon_hit(_user, _name, _level, _dir){
 	}
 	var top = (lv >= 3) && (charge_kind(_name) != "flurry" || (_user.motion == undefined || _user.motion.left <= 0));
 	if(top){
-		w.knock = max(w[$ "knock"] ?? 3, 12);
+		w.stunTop = true;
 		global.camShake = 10;
 	}
 	combat_player_hit(_user, _name, _dir, w);

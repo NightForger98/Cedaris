@@ -23,7 +23,9 @@ built from the reference frames for facing right (left mirrors it), up and down.
 - Upgradable tools: one level per tier (Basic 0, Copper 1 ... Mithril 5, Cursed/Blessed 6; see below). A Basic tool
   can't charge.
 - Weapons: a fixed 3 levels, since weapons can't be upgraded: the glow, the red face, the anger mark. Each is a
-  stronger release, and the top one knocks monsters hard and shakes the screen (2026-11-05, the user: "levels for the
+  stronger release: damage ×1.25 / ×1.5 / ×2 and knockback ×1.5 / ×2.25 / ×3.5 of a tap's (a tap keeps the weapon's own). The top
+  one also stuns what it hits - about 1.7 s, longer for small creatures, shorter for big ones, much shorter for bosses and
+  monsters from deeper floors (`monster_stun_time`) - and shakes the screen (2026-11-05, the user: "levels for the
   attack like the daggers"). A hit while charging still knocks the charge out, so the top level is a risk next to monsters.
 
 **Energy:** a charged tool costs `tool_energy_cost × (1 + level)`. A charged weapon release costs 2 energy per level
@@ -72,7 +74,7 @@ direction goes through the same stages in the same order; only where the tool si
 | Hoe | tills 1 cell | Stardew area in front: L1 3×1, L2 5×1, L3 3×3, L4 6×3, L5 9×3 |
 | Swords | slash | L1 **wide slash** (180°, not behind you, ×1.25); L2 **spin** (360°, ×1.5); L3 **two spins** (×2, knockback) |
 | Spears, Halberd | thrust | **Lunge** 1 / 2 / 3 cells forward (stops at walls), reach ×1.3 / ×1.6 / ×2, ×1.25 / ×1.5 / ×2 damage, L3 knockback |
-| Club, Mace, Flail, Waraxe | swing | L1 **wide swing** (150° in front, ×1.3 knockback); L2 **ground slam** all round (reach ×1.4, ×2 knockback, stun); L3 **big slam** (reach ×2, ×3 knockback, longer stun) |
+| Club, Mace, Flail, Waraxe | swing | L1 **wide swing** (150° in front); L2 **wider** (200°, a ground slam); L3 **big slam** (270° in front, reach ×1.8) - a swing never reaches behind you |
 | Dagger | stab | **Flurry**: 2 / 3 / 4 quick stabs; the last of a level-3 flurry knocks back |
 | Slingshot, Bows, Crossbow, Boomerang | shot | **Draw**: speed, range and damage ×1.35 / ×1.7 / ×2; the shot pierces 1 monster at L2 and all at L3 (the boomerang hits everything it passes anyway); L3 knockback |
 | Staffs | spell (F) | no charge |

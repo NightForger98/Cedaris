@@ -987,3 +987,9 @@ function autotest_knocked_over(_px){
 	with(obj_monster) if(point_distance(x, y, xstart, ystart) > real(_px)) return "yes";
 	return "no";
 }
+
+/// @description Test: "stunned" if any monster is still reeling (hurt more than half a second more), else "not stunned".
+function autotest_monsters_stunned(){
+	with(obj_monster) if(hurtT > 30) return "stunned";
+	return "not stunned";
+}

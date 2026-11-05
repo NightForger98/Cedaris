@@ -34,34 +34,39 @@ function geom(id){
 	const bsize = b => b.ph ? [b.w, b.h] : size(b.is);
 	const lmSize = lm => lm.is ? size(lm.is) : lm.ruin ? (lm.ruin === "house" ? [8, 4] : [8, 5]) : [lm.w, lm.h];
 	const side = [0, 0];
-	(R.buildings || []).forEach((b, i) => { side[i % 2] += bsize(b)[0] + 3; });
+	(R.buildings || []).filter(b => !b.plateau).forEach((b, i) => { side[i % 2] += bsize(b)[0] + 3; });
 	const decorW = [0, 0];
 	(R.decor || []).forEach((d, i) => { decorW[i % 2] += size(d.is)[0] + 2; });
 	const lms = R.landmarks || [];
 	const lmW = q => Math.max(0, ...lms.filter(l => l.q === q).map(l => lmSize(l)[0] + 4));
 	const lmH = q => Math.max(0, ...lms.filter(l => l.q === q).map(l => lmSize(l)[1] + 3));
-	const min = R.kind === "wild" ? 16 : 9;
+	const min = R.dense ? 22 : R.kind === "wild" ? 16 : 9;   // a dense wood is a big place
 	let left = Math.max(min, side[0], decorW[0], lmW("nw"), lmW("sw"), R.plaza ? 10 : 0);
 	let right = Math.max(min, side[1], decorW[1], lmW("ne"), lmW("se"), R.plaza ? 10 : 0, R.mine ? 20 : 0,
 		R.pier === "t" || (sea.includes("t") && R.pier !== null) ? 13 : 0);
 	right += R.cliffEast ? 7 : 0;
+	right += R.plateau ? 8 + Math.max(0, ...(R.buildings || []).filter(b => b.plateau).map(b => bsize(b)[0] + 2)) : 0;
 	const W = x0 + 2 + left + 7 + right + 2;
 	const tallest = Math.max(0, ...(R.buildings || []).map(b => bsize(b)[1]));
 	// A northern landmark stands above the buildings, a southern one below the decor (each corner can share its
 	// side with them), so their heights add up
 	const lmN = Math.max(lmH("nw"), lmH("ne")), lmS = Math.max(lmH("sw"), lmH("se"));
 	const decorH = Math.max(0, ...(R.decor || []).map(d => size(d.is)[1] + 2));
-	const north = Math.max(R.kind === "wild" ? 12 : 6, tallest + 2 + lmN, R.mine ? 9 + lmN : 0);
-	const south = Math.max(R.kind === "wild" ? 14 : 9, 3 + decorH + lmS + 2, R.plaza ? 12 + lmS : 0, sea.includes("l") ? 10 : 0);
+	const north = Math.max(R.dense ? 16 : R.kind === "wild" ? 12 : 6, tallest + 2 + lmN, R.mine ? 9 + lmN : 0, R.plateau ? tallest + 5 : 0);
+	const south = Math.max(R.dense ? 18 : R.kind === "wild" ? 14 : 9, 3 + decorH + lmS + 2, R.plaza ? 12 + lmS : 0, sea.includes("l") ? 10 : 0);
 	const ry = y0 + north + 1, H = ry + 2 + south;
 	const cx = x0 + 2 + left + 3;
 	return {W, H, x0, y0, cx, ry};
 }
 
 // Where you arrive in a room coming through its side s
+// The row of a beach link (a way along the sand between two rooms on the north coast): the middle of the sand
+const BEACH_ROW = WATER + Math.floor(SAND / 2);
+
 function arrive(id, s){
 	const g = geom(id);
 	if(g.farm) return FARM.arrive[s];
+	if((ROOMS[id].links || {})[s] === "beach") return s === "l" ? [64, BEACH_ROW * 32 + 16] : [g.W * 32 - 64, BEACH_ROW * 32 + 16];
 	if(s === "l") return [64, g.ry * 32 + 16];
 	if(s === "r") return [g.W * 32 - 64, g.ry * 32 + 16];
 	if(s === "t") return [g.cx * 32 + 16, 72];
@@ -76,7 +81,8 @@ function neighbour(id, s){
 const FACE = {l: "left", r: "right", t: "up", b: "down"};
 function transition(id, s){
 	const g = geom(id), to = neighbour(id, s), [tx, ty] = arrive(to, OPP[s]);
-	const at = {l: [8, g.ry * 32 + 16, 1, 6], r: [g.W * 32 - 8, g.ry * 32 + 16, 1, 6],
+	const y = ((ROOMS[id].links || {})[s] === "beach" ? BEACH_ROW : g.ry) * 32 + 16;
+	const at = {l: [8, y, 1, 6], r: [g.W * 32 - 8, y, 1, 6],
 	            t: [g.cx * 32 + 16, 8, 6, 1], b: [g.cx * 32 + 16, g.H * 32 - 8, 6, 1]}[s];
 	return {obj: "obj_transition", x: at[0], y: at[1], sx: at[2], sy: at[3],
 		code: `targetRoom = ${to};\ntargetX = ${tx};\ntargetY = ${ty};\nPlayerFacingBefore = dir.${FACE[s]};\nPlayerFacingAfter = dir.${FACE[s]};`};
@@ -110,14 +116,16 @@ function spec(id){
 	const inner = kinds.includes("road") || (R.buildings || []).length > 1 ? ":" : lane;
 	const ch = s => links[s] === "road" ? ":" : lane;
 	// Across: from the west edge (or the land's edge) to the east
-	const xa = links.l ? 0 : x0 + 2, xb = links.r ? W - 1 : W - 3;
-	put(xa, cx, ry - 1, ry + 1, links.l ? ch("l") : inner);
-	put(cx, xb, ry - 1, ry + 1, links.r ? ch("r") : inner);
+	// (a beach link has no street: you walk along the sand)
+	const sl = links.l && links.l !== "beach", sr = links.r && links.r !== "beach";
+	const xa = sl ? 0 : x0 + 2, xb = sr ? W - 1 : W - 3;
+	put(xa, cx, ry - 1, ry + 1, sl ? ch("l") : inner);
+	put(cx, xb, ry - 1, ry + 1, sr ? ch("r") : inner);
 	put(cx - 1, cx + 1, ry - 1, ry + 1, inner);
 	if(links.t) put(cx - 1, cx + 1, 0, ry - 2, ch("t"));
 	if(links.b) put(cx - 1, cx + 1, ry + 2, H - 1, ch("b"));
 	// Bridges where a street crosses the river: planks over walkable water
-	if(R.river && R.river !== "spring" && links.l){
+	if(R.river && R.river !== "spring" && sl){
 		put(riverX, riverX + 3, ry - 1, ry + 1, "b");
 		things.push({src: [17, 20, 1, 1], repeat: [4, 3], at: [riverX, ry - 1]});
 	}
@@ -172,15 +180,67 @@ function spec(id){
 		points.pier_b = [4 * 32 + 16, pr * 32 + 16];
 	}
 
-	// Cliffs down the world's east edge, from Plummet's Point to Yarzeh Woods: rock spires stacked into a ridge (a
-	// solid band you can't cross); in the woods they stop above the way east to Whisperwood
-	if(R.cliffEast){
-		const r1 = R.mine ? 7 : (sea.includes("t") ? WATER : 0), r2 = R.whisperwood ? ry - 3 : H - 1;
-		put(W - 7, W - 1, r1, r2, "x");
-		for(let rr = r1 - 1, k = 0; rr <= r2 - 3; rr += 3, k++){
-			things.push({is: "rock_spire", at: [W - 7 + (k % 2), rr]}, {is: "rock_spire", at: [W - 4 + ((k + 1) % 2), rr + 1]});
+	// A plateau drawn in cliff tiles (TS_terrain cols 5-7, rows 0-4, a 9-slice): its north edge, its sides, its top,
+	// and three rows of cliff face along the bottom. open: sides that run on past the room's edge (no edge drawn).
+	const plateau = (c1, r1, c2, r2, open = {}) => {
+		for(let rr = r1; rr <= r2; rr++) for(let c = c1; c <= c2; c++){
+			const face = !open.b && rr > r2 - 3;
+			const fr = face ? 2 + rr - (r2 - 2) : (rr === r1 && !open.t ? 0 : 1);
+			const fc = (c === c1 && !open.l) ? 5 : (c === c2 && !open.r) ? 7 : 6;
+			things.push({src: [fc, fr, 1, 1], at: [c, rr]});
 		}
-		take(W - 7, r1, 7, r2 - r1 + 1, 0);
+	};
+	const cliffy = n => n && ROOMS[n] && (ROOMS[n].cliffEast || ROOMS[n].plateau);
+
+	// Cliffs down the world's east edge, from Plummet's Point to Whispering Woods: high ground you can't climb, its
+	// edge running on from room to room (open where the room above or below has it too), ending in a cliff face
+	if(R.cliffEast){
+		const r1 = R.mine ? 7 : R.plateau ? ry - 4 : (sea.includes("t") ? SEA : 0);
+		const openT = !R.mine && (R.plateau || cliffy(neighbour(id, "t"))), openB = !!cliffy(neighbour(id, "b"));
+		put(W - 7, W - 1, r1, H - 1, "X");
+		plateau(W - 7, r1, W - 1, H - 1, {r: true, t: openT, b: openB});
+		// Pines on the high ground, so it reads as wild hilltop rather than bare earth
+		for(let rr = r1 + 1, k = 0; rr <= H - (openB ? 5 : 8); rr += 4, k++) things.push({is: "pine", at: [W - 6 + (k * 3) % 4, rr]});
+		take(W - 7, r1, 7, H - r1, 0);
+	}
+
+	// Plummet's Point: the east of the room is a plateau above the street, with a ladder up its face; the witch's
+	// tower stands on top (buildings with plateau: true)
+	if(R.plateau){
+		const pc1 = cx + 3, pr2 = ry - 2;
+		put(pc1, W - 1, y0, pr2, "X");
+		plateau(pc1, y0, W - 1, pr2, {r: true});
+		put(pc1 + 1, W - 8, y0 + 1, ry - 5, ",");   // the top you can walk on (the east band beyond stays solid)
+		const rc = pc1 + 2;
+		things.push({is: "cliff_ladder", at: [rc, ry - 6]});
+		put(rc + 3, rc + 3, ry - 5, ry - 2, ",");   // the ladder
+		points.ladder = [(rc + 3) * 32 + 16, (ry - 1) * 32 + 16];
+		points.cliff_top = [(rc + 3) * 32 + 16, (ry - 5) * 32 + 16];
+		let bx = rc + 7;
+		for(const b of (R.buildings || []).filter(b => b.plateau)){
+			const [w, h] = size(b.is), d = doorOf(b.is), top = ry - 6 - h + 1;
+			things.push({is: b.is, at: [bx, top]});
+			const dx = (bx + d[0]) * 32 + 16, dy = (top + d[1]) * 32 + 16, inside = INTERIORS.doorPoint(b.room);
+			instances.push({obj: "obj_transition", x: dx, y: dy, sx: 2, sy: 1,
+				code: `targetRoom = ${b.room};\ntargetX = ${inside[0]};\ntargetY = ${inside[1]};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`});
+			exits[b.key] = [dx, dy + 36];
+			points[b.key + "_front"] = [dx, dy + 52];
+			for(let y = top; y < top + h; y++) for(let x = bx; x < bx + w; x++) taken.add(x + "," + y);
+			bx += w + 2;
+		}
+		take(pc1, y0, W - pc1, pr2 - y0 + 1, 0);
+	}
+
+	// A beach link crosses a river on the sand by a footbridge: broken until the Beach Bridge project is done (a
+	// labelled placeholder and a collision box over its east half, both gone once it's mended)
+	if(R.river && R.river !== "spring" && links.l === "beach"){
+		const by = BEACH_ROW;
+		put(riverX, riverX + 3, by - 1, by + 1, "b");
+		things.push({src: [17, 20, 1, 1], repeat: [4, 3], at: [riverX, by - 1]});
+		instances.push({obj: "obj_col_box", x: (riverX + 3) * 32, y: by * 32 + 16, sx: 4, sy: 6, code: `if(project_done("bridge")) instance_destroy();`});
+		instances.push({obj: "obj_placeholder", x: riverX * 32, y: (by + 2) * 32,
+			code: `label = "Broken bridge";\nboxW = 128;\nboxH = 96;\nif(project_done("bridge")) instance_destroy();`});
+		points.beach_bridge = [(riverX + 5) * 32, by * 32 + 16];
 	}
 
 	// The town square
@@ -213,7 +273,7 @@ function spec(id){
 		b.is = name;
 	}
 	const boxes = [];   // what stands on the street's north side: buildings and the props beside them [c, r, w, h]
-	const yard = (R.buildings || []).map(b => Object.assign({}, b, {size: size(b.is), door: doorOf(b.is)}));
+	const yard = (R.buildings || []).filter(b => !b.plateau).map(b => Object.assign({}, b, {size: size(b.is), door: doorOf(b.is)}));
 	let side = 0;
 	for(const b of yard){
 		const [w, h] = b.size, top = ry - 1 - h;
@@ -306,14 +366,6 @@ function spec(id){
 		}
 	}
 
-	// Whisperwood: a way east out of Yarzeh Woods (obj_path; scripts/forest builds the wood when you step on it)
-	if(R.whisperwood){
-		put(cx, W - 3, ry - 1, ry + 1, lane);
-		for(let c = cx; c <= W - 1; c++) for(let r = ry - 1; r <= ry + 1; r++) taken.add(c + "," + r);
-		instances.push({obj: "obj_path", x: (W - 2) * 32 + 8, y: ry * 32 + 16});
-		points.bridge = [(W - 5) * 32, ry * 32 + 16];
-	}
-
 	// In town, a row of neighbours' houses south of the street too (after the decor and the square, in what's left),
 	// their fronts facing south like every building in the game
 	if(R.kind === "town" && (R.fillSouth ?? 0) > 0){
@@ -345,7 +397,8 @@ function spec(id){
 			temple: {w: 8, h: 5, parts: [["ruin_pillar", 0, 0], ["ruin_ivy", 2, 1], ["ruin_head", 3, 1], ["ruin_columns", 6, 1], ["ruin_rubble", 1, 4], ["ruin_stump", 5, 3]]},
 		};
 		const ruin = lm.ruin ? RUINS[lm.ruin] : null;
-		const [w, h] = lm.is ? size(lm.is) : ruin ? [ruin.w, ruin.h] : [lm.w, lm.h];
+		if(lm.obj && !lm.w) throw new Error(`${id}: landmark ${lm.obj} needs w, h`);
+		const [w, h] = lm.is ? size(lm.is) : ruin ? [ruin.w, ruin.h] : [lm.w, lm.h];   // (an obj landmark gives w, h)
 		const mc = Math.round((q[0] + q[2] - w) / 2), mr = Math.round((q[1] + q[3] - h) / 2);
 		let spot = null;
 		for(let d = 0; d < 14 && !spot; d++) for(let dr = -d; dr <= d && !spot; dr++) for(let dc = -d; dc <= d && !spot; dc++){
@@ -357,6 +410,7 @@ function spec(id){
 		const [c, rr] = spot;
 		if(lm.is) things.push({is: lm.is, at: [c, rr]});
 		else if(ruin) for(const [p, dx, dy] of ruin.parts) things.push({is: p, at: [c + dx, rr + dy]});
+		else if(lm.obj) instances.push({obj: lm.obj, x: (c + w / 2) * 32, y: (rr + h) * 32 - 8});
 		else things.push({placeholder: lm.ph, src: [0, 0, w, h], solid: [[0, Math.max(0, h - 2), w, Math.min(h, 2)]], at: [c, rr]});
 		take(c, rr, w, h, 1);
 		points["lm_" + lm.q] = [(c + Math.floor(w / 2)) * 32 + 16, (rr + h) * 32 + 24];
@@ -389,12 +443,12 @@ function spec(id){
 	}
 
 	// Woods over the free grass: thick in the wild, light in town
-	const density = {town: 0.004, rural: 0.012, wild: 0.045}[R.kind || "rural"];
+	const density = R.dense ? 0.22 : {town: 0.004, rural: 0.012, wild: 0.045}[R.kind || "rural"];
 	const quads = [[x0, y0, cx - 3, ry - 3], [cx + 3, y0, W - 1, ry - 3], [x0, ry + 3, cx - 3, H - 1], [cx + 3, ry + 3, W - 1, H - 1]];
 	const kinds2 = R.pines ? [["pine", 8], ["sapling", 1]] : undefined;
 	quads.forEach((q, i) => {
 		const area = Math.max(0, (q[2] - q[0]) * (q[3] - q[1]));
-		things.push(...woods(grid.map(r => r.join("")), q, Math.round(area * density * (R.pines && i < 2 ? 4 : 1)), seed + i, kinds2, taken));
+		things.push(...woods(grid.map(r => r.join("")), q, Math.round(area * density * (R.pines && i < 2 ? 4 : 1)), seed + i, kinds2, taken, !!R.dense));
 	});
 	// Spawn areas: the four corners of land, clear of the streets (resource_areas in scripts/gathering)
 	const names = ["nw", "ne", "sw", "se"];
@@ -404,7 +458,7 @@ function spec(id){
 
 	// Ways out, and where you arrive by each
 	for(const [s, k] of Object.entries(links)){
-		if(k !== "road" && k !== "lane") continue;
+		if(k !== "road" && k !== "lane" && k !== "beach") continue;
 		instances.push(transition(id, s));
 		points["road_" + s] = arrive(id, s);
 	}

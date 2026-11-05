@@ -6,7 +6,7 @@
 ///   "d|<palette material>|<colour>"  dye that recolours equipment, e.g. "d|cloth|red", "d|metal|gold"
 ///   "s|<crop>", "p|<crop>|<quality>"  seeds and produce (see farming); "f|<dish>" cooked food (see food)
 ///   "k|<spell>"                spell scroll (see magic)
-///   "w|<forage>"               something wild from Whisperwood (see forest)
+///   "w|<forage>"               something wild from the woods (see forest)
 ///   "o|<kind>"                 something you place, like a sprinkler (see placeables)
 ///   "x|<fish>"                 a fish (see fishing)
 ///   "n|<animal>", "a|<product>"  a crate of livestock, eggs and milk (see animals)

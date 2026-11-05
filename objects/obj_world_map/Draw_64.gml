@@ -13,7 +13,6 @@ draw_set_alpha(1);
 draw_set_font(fnt_eq);
 ui_text(guiW / 2, my - 34, "World Map", 0.8, c.accent);
 draw_sprite_ext(spr_world_map, 0, mx, my, s, s, 0, c_white, 1);
-forest_draw_on_map(mx, my, s); // the real Whisperwood (the map tool only has a stand-in)
 
 // Each place's name over its top edge
 var names = variable_struct_get_names(m.rooms);

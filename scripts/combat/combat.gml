@@ -90,7 +90,7 @@ function monster_table(){
 		drake:      {name: "Ember Drake", boss: true, scale: 2.2, race: "Lizardfolk", body: "muscular", head: "Lizard male", skins: ["amber"],
 		             wear: [], weapon: "", from: 30, hp: 900, dmg: [24, 32], def: 6, speed: 1.1, reach: 56, ranged: {range: 240, shot: "fire", speed: 4.5, spread: 5},
 		             drops: [["m|dragon_scale", 3, 4, 1], ["m|phoenix_feather", 1, 1, 0.5], ["m|ember_core", 2, 3, 1], ["m|mithril", 2, 3, 1]], gold: [1000, 1500]},
-		// Whisperwood at night: harmless, quick to flee (passive), drawn by obj_monster (look: "pixie" / "moth")
+		// Whispering Woods at night: harmless, quick to flee (passive), drawn by obj_monster (look: "pixie" / "moth")
 		pixie:      {name: "Pixie", look: "pixie", passive: true, flies: true, frames: 1, from: 1, hp: 6, dmg: [0, 0], def: 0, speed: 1.9, reach: 0,
 		             drops: [["m|pixie_dust", 1, 1, 0.6]], gold: [0, 0]},
 		moth:       {name: "Moon Moth", look: "moth", passive: true, flies: true, frames: 3, from: 1, hp: 4, dmg: [0, 0], def: 0, speed: 1.4, reach: 0,

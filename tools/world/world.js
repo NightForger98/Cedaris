@@ -29,10 +29,12 @@ const ROOMS = {
 		buildings: [{key: "guild", is: "house_guild_hall", room: "rm_guild"}], pier: "t", pierStone: true,
 		decor: [{is: "obelisk"}, {is: "stall_stripe"}]},
 	rm_hangar: {name: "Hangar 12", buildings: [{key: "tinker", is: "house_tinker_workshop", room: "rm_tinker"},
-			{key: "brassbolt", ph: "Brassbolt home", w: 7, h: 6, room: "rm_home_brassbolt"}], w: 52, h: 38, sea: "t", kind: "town", links: {l: "lane", r: "rocks", b: "road"}, landmarks: [{ph: "Old hangar", w: 9, h: 5, q: "se"}],
+			{key: "brassbolt", ph: "Brassbolt home", w: 7, h: 6, room: "rm_home_brassbolt"}], w: 52, h: 38, sea: "t", kind: "town", links: {l: "lane", r: "beach", b: "road"}, landmarks: [{ph: "Old hangar", w: 9, h: 5, q: "se"}],
 		decor: [{is: "barn"}, {is: "shed"}, {is: "wagon"}, {is: "stall_cart"}], pier: "t"},
-	rm_plummet: {name: "Plummet's Point", cliffEast: true, w: 44, h: 40, sea: "t", river: true, kind: "wild", links: {b: "lane"}, landmarks: [{ruin: "temple", q: "sw"}, {ph: "Cliff lookout", w: 4, h: 3, q: "se"}],
-		buildings: [{key: "tower", is: "house_witch_tower", room: "rm_witch_tower"}]},
+	// The witch's tower on the cliff top (plateau), a ladder up from the street; the beach runs west to Hangar 12
+	// over the river by a footbridge (the Beach Bridge project mends it)
+	rm_plummet: {name: "Plummet's Point", cliffEast: true, plateau: true, sea: "t", river: true, kind: "wild", links: {b: "lane", l: "beach"}, landmarks: [{ruin: "temple", q: "sw"}, {ph: "Cliff lookout", w: 4, h: 3, q: "se"}],
+		buildings: [{key: "tower", is: "house_witch_tower", room: "rm_witch_tower", plateau: true}]},
 
 	rm_olivebay: {name: "Olive Bay", w: 48, h: 36, sea: "l", kind: "town", links: {t: "lane", r: "road", b: "lane"}, landmarks: [{ph: "Olive grove", w: 8, h: 5, q: "se"}],
 		buildings: [{key: "olivepress", is: "house_olive_press", room: "rm_olive_press"}, {key: "saba", ph: "Saba home", w: 7, h: 6, room: "rm_home_saba"}],
@@ -74,7 +76,9 @@ const ROOMS = {
 			{key: "tawil", is: "house_townhouse", room: "rm_home_tawil"}], pines: true},
 	rm_resolve: {name: "Resolve's Rise", w: 50, h: 38, kind: "rural", links: {t: "lane", l: "road", b: "road"}, landmarks: [{ph: "Herb garden", w: 6, h: 4, q: "se"}],
 		buildings: [{key: "silverbough", is: "house_cottage", room: "rm_town_home_sw"}, {key: "potions", is: "house_alchemist", room: "rm_town_apothecary"}]},
-	rm_yarzeh: {name: "Yarzeh Woods", cliffEast: true, w: 54, h: 44, river: true, kind: "wild", links: {t: "lane", b: "trees"}, whisperwood: true, landmarks: [{ph: "Ranger's cabin", w: 5, h: 4, q: "nw"}, {ruin: "temple", q: "sw"}, {ph: "Hidden glade", w: 5, h: 5, q: "se"}]},
+	// Whispering Woods (once Yarzeh Woods): the deep wood itself now (Whisperwood, the generated forest east of it,
+	// is gone), its shrine in a clearing; pixies and moths come out at night (scripts/forest)
+	rm_yarzeh: {name: "Whispering Woods", cliffEast: true, dense: true, river: true, kind: "wild", links: {t: "lane", b: "trees"}, landmarks: [{ph: "Ranger's cabin", w: 5, h: 4, q: "nw"}, {ruin: "temple", q: "sw"}, {obj: "obj_shrine", w: 2, h: 3, q: "se"}]},
 
 	rm_southbeach: {name: "South Beach", buildings: [{key: "boatyard", is: "house_boatyard", room: "rm_boatyard"},
 			{key: "saltwhistle", ph: "Saltwhistle home", w: 7, h: 6, room: "rm_home_saltwhistle"}], w: 48, h: 38, sea: "l", kind: "rural", links: {t: "lane", r: "lane"}, landmarks: [{ph: "Shipwreck", w: 7, h: 4, q: "se"}, {ph: "Turtle nests", w: 4, h: 2, q: "sw"}]},

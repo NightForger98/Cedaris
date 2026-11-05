@@ -4,8 +4,7 @@
 //   node tools/rooms/worldmap.js            (run it again after changing an outdoor room)
 //
 // Rooms are placed on the world's 5 x 5 grid (tools/world/world.js): each column as wide as its widest room, each row
-// as tall as its tallest, every room centred in its cell. Whisperwood is built while the game runs, so the map
-// shows it as woods east of the village. A building is any house-like thing (it has a door) with an exit at its door.
+// as tall as its tallest, every room centred in its cell. A building is any house-like thing (it has a door) with an exit at its door.
 const fs = require("fs");
 const path = require("path");
 const {execFileSync} = require("child_process");
@@ -19,7 +18,6 @@ const SCALE = 0.25;        // map pixels per room pixel
 const GAP = 64;            // room pixels between neighbouring rooms
 const {GRID} = require("../world/world.js");
 const OUTDOORS = GRID.flat();
-const FOREST = {w: 48 * 32, h: 30 * 32};   // FOREST_W x FOREST_H in scripts/forest
 
 const spec = n => require(path.join(__dirname, "specs", n + ".js"));
 const size = n => { const r = readYy(`rooms/${n}/${n}.yy`); return [r.roomSettings.Width, r.roomSettings.Height]; };
@@ -39,9 +37,6 @@ function layout(){
 		});
 		y += rows[r] + GAP;
 	});
-	// Whisperwood: east of Yarzeh Woods, past the map's edge
-	const [yw] = size("rm_yarzeh");
-	pos.rm_forest = [pos.rm_yarzeh[0] + yw + GAP, pos.rm_yarzeh[1]];
 	return pos;
 }
 
@@ -63,21 +58,11 @@ function shrink(img){
 	return out;
 }
 
-// Whisperwood for the map: grass thick with pines (the real wood is generated in the game)
-function forestImage(){
-	const img = newImage(FOREST.w, FOREST.h, [46, 110, 52, 255]);
-	const ts = tilesetImage("TS_terrain"), [c, r, w, h] = T.things.pine.src;
-	let s = 99;
-	const rand = () => (s = (s * 16807) % 2147483647) / 2147483647;
-	for(let k = 0; k < 160; k++)
-		blit(img, ts.img, c * 32, r * 32, w * 32, h * 32, Math.floor(rand() * (FOREST.w - 64)), Math.floor(rand() * (FOREST.h - 160)));
-	return img;
-}
 
 function build(){
 	const pos = layout();
-	const xs = Object.entries(pos).map(([n, [x]]) => [x, x + (n === "rm_forest" ? FOREST.w : size(n)[0])]).flat();
-	const ys = Object.entries(pos).map(([n, [, y]]) => [y, y + (n === "rm_forest" ? FOREST.h : size(n)[1])]).flat();
+	const xs = Object.entries(pos).map(([n, [x]]) => [x, x + size(n)[0]]).flat();
+	const ys = Object.entries(pos).map(([n, [, y]]) => [y, y + size(n)[1]]).flat();
 	const x0 = Math.min(...xs), y0 = Math.min(...ys);
 	const W = Math.ceil((Math.max(...xs) - x0) * SCALE), H = Math.ceil((Math.max(...ys) - y0) * SCALE);
 	const map = newImage(W, H);
@@ -85,7 +70,7 @@ function build(){
 
 	const rooms = {};
 	for(const [n, p] of Object.entries(pos)){
-		const img = shrink(n === "rm_forest" ? forestImage() : renderRoom(n, {instances: false}));
+		const img = shrink(renderRoom(n, {instances: false}));
 		const [mx, my] = at(p);
 		blit(map, img, 0, 0, img.w, img.h, mx, my);
 		rooms[n] = [mx, my, img.w, img.h];

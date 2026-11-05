@@ -67,7 +67,7 @@ function resource_table(){
 /// @description Where resources spawn: cells [gx1, gy1, gx2, gy2] in a room, a cap, how many come back each
 /// day, how many on the first visit, and weighted kinds. Each cell is checked against the room's collisions.
 function resource_areas(){
-	// The farm's and Whisperwood's own areas, then every generated room's (scripts/world_rooms, from tools/world).
+	// The farm's own areas, then every generated room's (scripts/world_rooms, from tools/world).
 	// Saves count regrowth by place in this list: the new world (save version 12) started it afresh.
 	static a = array_concat([
 		// Farm (areas named in tools/rooms/specs/rm_1.js): the meadow by the path - weeds, bushes and stones (no trees)
@@ -81,9 +81,6 @@ function resource_areas(){
 		 kinds: [["oak", 25], ["pine", 25], ["weeds", 30], ["bush", 10], ["stone", 10]]},
 		{room: "rm_1", cells: layout_cells("rm_1", "far_west"), max: 8, perDay: 2, start: 6,
 		 kinds: [["weeds", 40], ["bush", 15], ["stone", 25], ["oak", 10], ["pine", 10]]},
-		// Whisperwood: its clearings (walls and water are skipped) - wood, forage and a few stones
-		{room: "rm_forest", cells: [2, 2, 45, 27], max: 34, perDay: 8, start: 28,
-		 kinds: [["oak", 16], ["pine", 16], ["bush", 14], ["weeds", 10], ["stone", 6], ["forage_mushroom", 16], ["forage_herb", 12], ["forage_toadstool", 5]]},
 	], world_resource_areas());
 	return a;
 }

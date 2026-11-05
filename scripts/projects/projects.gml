@@ -7,9 +7,9 @@
 /// @description The projects. need: [[cost key, n]...]. who: the villager behind it (helping is friendship).
 function project_table(){
 	static t = [
-		{key: "bridge", name: "Mend the East Bridge", who: "thorne",
-		 desc: "The old bridge east of the village fell in years ago. Mend it and the road to Whisperwood opens.",
-		 need: [["wood", 60], ["stone", 40], ["iron", 5]], reward: "The road to Whisperwood is open"},
+		{key: "bridge", name: "Mend the Beach Bridge", who: "thorne",
+		 desc: "The footbridge over the river on the beach at Plummet's Point fell in years ago. Mend it and the beach path from Hangar 12 opens.",
+		 need: [["wood", 60], ["stone", 40], ["iron", 5]], reward: "The beach path to Plummet's Point is open"},
 		{key: "well", name: "Raise the Old Well", who: "elda",
 		 desc: "The village well is dry and choked with rubble. A working well means water piped to your field.",
 		 need: [["stone", 50], ["copper", 10], ["frost_crystal", 1]], reward: "Sprinklers can be made at the crafting table"},
@@ -18,7 +18,7 @@ function project_table(){
 		 need: [["f|hash_browns", 1], ["f|carrot_soup", 1], ["f|tomato_salad", 1], ["f|corn_fritters", 1], ["f|veg_stew", 1]],
 		 reward: "Hesta's cooking keeps you going: +40 max energy for good"},
 		{key: "shrine", name: "Light the Forest Shrine", who: "elda",
-		 desc: "Deep in Whisperwood stands a shrine the pixies once loved. Bring it light and treasures, and they'll return.",
+		 desc: "Deep in Whispering Woods stands a shrine the pixies once loved. Bring it light and treasures, and they'll return.",
 		 need: [["moonsilk", 2], ["gem", 5], ["frost_crystal", 1], ["ember_core", 1]], reward: "Pixies visit your farm at night and bless your crops"},
 	];
 	return t;

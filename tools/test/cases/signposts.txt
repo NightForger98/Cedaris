@@ -22,7 +22,7 @@ wait 10
 call autotest_signs
 expect Oven's Window@w
 expect Beacon Hill@n
-expect Yarzeh Woods@s
+expect Whispering Woods@s
 shot 03_victory_bridge
 room rm_12 160 400
 wait 10

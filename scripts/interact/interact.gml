@@ -10,7 +10,7 @@ function interact_near(_range){
 	var d = point_distance(x, y, px, py);
 	if(d >= _range) return false;
 	static kinds = [obj_npc_parent, obj_crafting_table, obj_furnace, obj_shipping_bin, obj_bed, obj_kitchen,
-	                obj_mine_door, obj_mine_ladder, obj_chest, obj_quest_board, obj_path, obj_shrine, obj_animal];
+	                obj_mine_door, obj_mine_ladder, obj_chest, obj_quest_board, obj_shrine, obj_animal];
 	var me = id, closer = false;
 	for(var k = 0; k < array_length(kinds) && !closer; k++){
 		with(kinds[k]){

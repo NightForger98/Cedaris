@@ -46,7 +46,7 @@ function heart_event_table(){
 		 choice: {ask: "Join them?", options: [["\"Only if Garrick tells the bear story.\"", 50, "Oh, he will. He always will."],
 		                                       ["\"I should get back to the farm.\"", 10, "Another night, then."]]}},
 		{id: "garrick_4", who: "garrick", hearts: 4, room: "rm_beaconhill", hours: [8, 18],
-		 lines: ["Seen lights out past Yarzeh Woods at night. Pinkish. Dancing.", "My grandmother called them pixies. Said they bless a farm that's kind to them.",
+		 lines: ["Seen lights deep in Whispering Woods at night. Pinkish. Dancing.", "My grandmother called them pixies. Said they bless a farm that's kind to them.",
 		         "Me, I just keep watch. But if you're out there at night... be kind."]},
 	];
 	static withCourting = array_concat(t, marriage_court_events());   // the courting events (scripts/marriage)

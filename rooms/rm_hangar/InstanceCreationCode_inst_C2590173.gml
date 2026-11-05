@@ -1,5 +1,5 @@
-targetRoom = rm_tinker;
-targetX = 256;
-targetY = 312;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+targetRoom = rm_starsand;
+targetX = 1120;
+targetY = 816;
+PlayerFacingBefore = dir.left;
+PlayerFacingAfter = dir.left;

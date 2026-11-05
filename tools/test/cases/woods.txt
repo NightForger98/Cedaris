@@ -1,0 +1,75 @@
+# Town projects (the board in Downtown) and Whispering Woods (once Yarzeh Woods; Whisperwood is gone): the Beach Bridge
+# project mends the footbridge on Plummet's Point's beach (the way along the sand from Hangar 12); foraging in the
+# dense wood; the shrine in its clearing; night creatures
+start story
+wait 60
+# The beach bridge is broken until its project is done: from Hangar 12's beach you can't get across
+room rm_plummet
+wait 40
+call autotest_buildings
+expect [Broken bridge]
+call autotest_to_point beach_bridge 0 0
+wait 5
+keydown left
+wait 60
+keyup left
+wait 30
+call autotest_room_name
+expect rm_plummet
+shot 01_bridge_out
+# The projects page
+room rm_downtown
+wait 30
+call autotest_to_point board 0 0
+face n
+key e
+wait 5
+call autotest_board_page projects
+shot 02_board
+key esc
+wait 30
+give m|wood 60
+give m|stone 40
+give m|iron 5
+call project_give bridge wood
+call project_give bridge stone
+call project_give bridge iron
+call project_done bridge
+expect 1
+# Mended: along the beach west to Hangar 12
+room rm_plummet
+wait 40
+call autotest_buildings
+expectnot Broken bridge
+call autotest_to_point beach_bridge 0 0
+wait 5
+keydown left
+wait 90
+keyup left
+wait 40
+call autotest_room_name
+expect rm_hangar
+shot 03_hangar_beach
+# Whispering Woods: thick with trees, forage to pick
+room rm_yarzeh
+wait 40
+call autotest_room_name
+call autotest_resources
+expect forage
+shot 04_woods
+hold 7
+call autotest_goto forage_mushroom
+use 1
+inv
+call autotest_goto_shrine
+expect shrine
+wait 5
+shot 05_shrine
+# Night: pixies and moths
+time 21
+room rm_yarzeh
+wait 60
+call autotest_monsters
+expect ":
+shot 06_night
+quit

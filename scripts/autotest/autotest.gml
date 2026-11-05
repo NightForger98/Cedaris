@@ -443,15 +443,6 @@ function autotest_project_finish(_key){
 	return project_done(_key);
 }
 
-/// @description The forest's layout, in short.
-function autotest_forest(){
-	if(!variable_global_exists("forestMap")) return "no map";
-	var f = global.forestMap, open = 0;
-	for(var x1 = 0; x1 < FOREST_W; x1++) for(var y1 = 0; y1 < FOREST_H; y1++) if(f.grid[x1][y1] == 0) open++;
-	return "open " + string(open) + " entrance " + string(f.entrance) + " shrine " + string(f.shrine) + " pond " + string(f.pond)
-	       + " trees " + string(instance_number(obj_resource));
-}
-
 /// @description Stand south of the shrine.
 function autotest_goto_shrine(){ with(obj_shrine){ obj_plyr.x = x; obj_plyr.y = y + 30; return "shrine"; } return "none"; }
 

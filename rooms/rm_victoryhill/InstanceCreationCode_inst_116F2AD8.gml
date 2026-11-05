@@ -1,5 +1,5 @@
 targetRoom = rm_yarzeh;
-targetX = 880;
+targetX = 1072;
 targetY = 72;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

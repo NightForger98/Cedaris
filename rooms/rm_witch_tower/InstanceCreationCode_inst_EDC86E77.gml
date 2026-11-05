@@ -1,5 +1,5 @@
 targetRoom = rm_plummet;
-targetX = 720;
-targetY = 916;
+targetX = 1328;
+targetY = 884;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

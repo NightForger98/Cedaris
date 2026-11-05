@@ -1,5 +1,5 @@
-targetRoom = rm_home_brassbolt;
-targetX = 224;
-targetY = 280;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+targetRoom = rm_plummet;
+targetX = 64;
+targetY = 336;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

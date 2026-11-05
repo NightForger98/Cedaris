@@ -9,9 +9,9 @@
 function festival_table(){
 	static t = [
 		{key: "seedling", name: "Seedling Fair",    season: 0, day: 13, kind: "shop",
-		 desc: "Mara's cousins come over the hills with seeds from every season, and the village swaps cuttings and gossip."},
+		 desc: "Mara's cousins come over the hills with seeds from every season, and the town swaps cuttings and gossip."},
 		{key: "lantern",  name: "Lantern Night",    season: 1, day: 20, kind: "lanterns",
-		 desc: "At dusk the village floats paper lanterns down the river, one wish each. Light one for luck - and for friends."},
+		 desc: "At dusk the town floats paper lanterns down to the sea, one wish each. Light one for luck - and for friends."},
 		{key: "weighin",  name: "Harvest Weigh-in", season: 2, day: 16, kind: "contest",
 		 desc: "Bring your best crop: the judges weigh it, sniff it, and award prizes to the finest in the valley."},
 		{key: "frost",    name: "Frost Market",     season: 3, day: 25, kind: "shop",
@@ -67,7 +67,7 @@ function festival_light_lantern(_f){
 	global.clock.luck = (global.clock[$ "luck"] ?? 0) + 0.05;
 	var names = variable_struct_get_names(villager_table());
 	for(var i = 0; i < array_length(names); i++) people_add(names[i], 30);
-	return "Your lantern floats away, glowing. You feel lucky - and the whole village smiles at you.";
+	return "Your lantern floats away, glowing. You feel lucky - and the whole town smiles at you.";
 }
 
 /// @description Harvest Weigh-in: your best crop (the most valuable produce in your bag) is judged. Returns a message.

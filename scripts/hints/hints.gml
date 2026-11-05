@@ -25,7 +25,7 @@ function hints_step(){
 	}
 	if(!instance_exists(obj_plyr) || ui_blocking() || (current_time div 250) == (current_time - delta_time / 1000) div 250) return;
 
-	if(room == rm_1) hint("farm_exit", "Welcome to the farm! The path at the top leads north to Hollow Vale and the rest of the valley. Press " + key_name(key_of("map")) + " for the map, " + key_name(key_of("inventory")) + " for your inventory.");
+	if(room == rm_1) hint("farm_exit", "Welcome to the farm! The road at the top leads north to Wing Hill's market and the rest of the valley; the lane west goes to South Beach. Press " + key_name(key_of("map")) + " for the map, " + key_name(key_of("inventory")) + " for your inventory.");
 	var held = inv_held_stack(), id_ = (held == undefined) ? "" : held.id;
 	if(id_ == "c|held|Hoe") hint("hoe", "The hoe: click or press " + key_name(key_of("use")) + " facing the field's soil to till it, then plant seeds in it.");
 	else if(id_ == "c|held|Watering Can") hint("can", "The watering can: water each crop every day. Use it on a pond or river to refill it.");

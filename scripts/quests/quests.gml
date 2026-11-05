@@ -26,7 +26,7 @@ function quest_templates(){
 		{kind: "slay",    who: "rowan",  monster: "slime",     n: [3, 6],   gold: 25,  text: "Slimes keep oozing out of the cave"},
 		{kind: "slay",    who: "rowan",  monster: "goblin",    n: [2, 5],   gold: 40,  text: "Goblins stole my fence posts"},
 		{kind: "slay",    who: "pip",    monster: "bat",       n: [3, 6],   gold: 30,  text: "Bats in the barn - well, the mine"},
-		{kind: "slay",    who: "thorne", monster: "skeleton",  n: [3, 5],   gold: 60,  text: "Skeletons rattling under the village", deepest: 10},
+		{kind: "slay",    who: "thorne", monster: "skeleton",  n: [3, 5],   gold: 60,  text: "Skeletons rattling under Beacon Hill", deepest: 10},
 		{kind: "slay",    who: "tobin",  monster: "troll",     n: [1, 2],   gold: 150, text: "A troll! A real one!", deepest: 15},
 	];
 	return t;

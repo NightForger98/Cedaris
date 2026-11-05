@@ -50,14 +50,18 @@ overnight while they slept, as a prototype:
 - **Fixed on the way (affects main too)**: buildings were scrambled in game because `TS_buildings.yy` said 64
   output columns while the IDE writes `output_tileset.png` 58 wide (ceil(sqrt(tiles))). Now 58, and
   `tools/rooms/output_tileset.js` (run by `build.sh`) writes any missing or mismatched sheet.
-- **Tests**: `new_world` (every room loads, all 46 on time - longest walk 74 min, the clock frozen indoors, the road
-  boost) and `creator_story` pass; the results of the rest are in "Test status" below.
+- **Tests**: all 36 cases pass (`tools/test/suite.sh`, 2026-11-05). New: `new_world` (every room loads, all 70 ways
+  between rooms link both ways, all 46 villagers on time - longest walk 74 min, the clock frozen indoors, the road
+  boost), `creator_story`, `marriage`. The old map's tests were retired (see the commit "Tests for the new world").
 
-**Not done yet** (next, in the plan's order): marriage (FoMT rules: events at 2/4/6/8 hearts, Blue Feather at the
-tool store, 10 hearts + the first house upgrade); house upgrades at Rowan's and farm buildings at Garth's; the
+**Marriage** is in (`scripts/marriage`): courting events at 2/4/6/8 hearts are placeholders built from each
+candidate's own lines - real scenes still to write. House plans from Rowan's are built overnight (upgrade level in
+`global.world.house`), but the farmhouse doesn't change look yet.
+
+**Not done yet**: the farmhouse actually growing with each upgrade, and farm buildings at Garth's; the
 horse, the minecart, the sewers and the cave passage, teleporting; a different routine on shop days off per season
 (most have one day-off routine all year); explosives for Fen; real stock for the bakery, flowers and furniture;
-the old villagers' lines still mention Brindlemoor, the village and Hollow Vale; roads and lanes look the same
+roads and lanes look the same
 (both brown - a cobble tile for roads would make the boost visible); the PixelLab/Meshy house sprites aren't
 placed yet (the buildings are library buildings); the rooms are sparse (one street cross each) and want dressing.
 

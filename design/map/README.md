@@ -1,4 +1,4 @@
-# The new world's blueprint (draft 1, 2026-11-06)
+# The new world's blueprint (draft 2, 2026-11-06: after Beirut's topographic map)
 
 `world_blueprint.png` is the whole outdoor world, **one pixel = one tile** (282 x 232, the world itself 250 x 200 with
 the sea to the west and north). Paint over it in any paint program to change the world, keeping to the colours below;
@@ -13,9 +13,10 @@ Made by `node tools/map/blueprint.js`.
 | 104,172,76 | grass |
 | 40,112,52 | forest (broadleaf) |
 | 30,92,58 | pine wood |
-| 120,150,84 | high ground (the mountain, on top of the cliffs) |
+| 120,150,84 | hills, one step up (on top of a cliff) |
+| 96,124,70 | highland, two steps up |
 | 134,92,60 | cliff face |
-| 150,138,124 / 240,244,248 | bare rock / snow (the peak) |
+| 150,138,124 / 240,244,248 | the summit, three steps up: bare rock / snow (the peak) |
 | 170,168,160 | road (cobbles) |
 | 196,164,106 | lane (dirt path) |
 | 210,200,180 | town square |
@@ -32,3 +33,9 @@ signpost), **North Beach** (Manara's Light, Starsand Pier, Hangar 12 - rocky, ru
 the mine, a road up to the peak), **The Outskirts** (Wing Hill, Dahya with its pine wood, Resolve's Rise - between the
 farm and the town), **Whispering Woods**, **The Countryside** (Saint Thereza, Frere's Fray, Abda's Ascent), **The Farm**,
 and **Bunny Island** (by ferry from Starsand Pier).
+
+Draft 2 follows Beirut's real shape: the town on a low peninsula (sea to the north and west, its north-west corner
+rounded), the port with Starsand's piers, the coast turning north-east past it to meet the mountain (North Beach), the
+long straight West Beach to the south, the land rising east in steps (cliff faces where it steps down to the west or
+south), and the Beirut River coming down from the south-east mountains and running north past the town's east edge into
+the sea. Horsh Beirut's pines are in the Outskirts, south of the town.

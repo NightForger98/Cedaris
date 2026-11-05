@@ -1,4 +1,4 @@
-// The new world's blueprint (2026-11-06): the 25 outdoor rooms merged into big Stardew-style areas, drawn one pixel per
+// The new world's blueprint (2026-11-06, draft 2 after Beirut's topographic map): the 25 outdoor rooms merged into big Stardew-style areas, drawn one pixel per
 // tile in flat colours (design/map/world_blueprint.png - paint over it to change the world), and a labelled 4x preview
 // (design/map/world_blueprint_preview.png).
 //   node tools/map/blueprint.js
@@ -19,7 +19,7 @@
 const C = {
 	deep: [36, 92, 158], sea: [64, 140, 204], shallow: [110, 180, 225], sand: [236, 214, 140], rocky: [176, 162, 136],
 	grass: [104, 172, 76], meadow: [128, 186, 88], forest: [40, 112, 52], pine: [30, 92, 58], cliff: [134, 92, 60],
-	cliffTop: [120, 150, 84], rock: [150, 138, 124], snow: [240, 244, 248], road: [170, 168, 160], lane: [196, 164, 106],
+	cliffTop: [120, 150, 84], highland: [96, 124, 70], rock: [150, 138, 124], snow: [240, 244, 248], road: [170, 168, 160], lane: [196, 164, 106],
 	plaza: [210, 200, 180], field: [138, 104, 62], river: [82, 158, 214], building: [250, 250, 250], pier: [120, 84, 52],
 	cave: [40, 34, 32],
 };
@@ -40,166 +40,176 @@ const hash = (i, s) => { let h = (i * 374761393 + s * 668265263) | 0; h = (h ^ (
 const noise = (t, s, f) => { const x = t * f, i = Math.floor(x), u = x - i, a = hash(i, s), b = hash(i + 1, s), k = u * u * (3 - 2 * u); return a + (b - a) * k; };
 const wob = (t, s, amp) => (noise(t, s, 0.07) - 0.5) * 2 * amp + (noise(t, s + 9, 0.22) - 0.5) * amp * 0.6;
 
-// ---- land, the coasts (world tiles 0..249 x 0..199, plus the margin)
-// West coast: the sea's edge at x = 12 +- (wider and narrower like a real beach); north coast at y = 12 +-; the town's
-// north-west corner (old Well's Head) is a bay
+// ---- land, the coasts (world tiles 0..249 x 0..199, plus the margin), after Beirut's real shape: a low peninsula
+// (the town) with the sea to its north and west and its north-west corner rounded off; past the port the coast turns
+// up to the north-east (North Beach, short, meeting the mountain's cliffs); south of the peninsula the west coast runs
+// long and straight (West Beach)
+const northCoast = x => (x < 128 ? 11 : 11 - (x - 128) * 0.6) + wob(x, 2, 2.5);
+const westCoast = y => (y < 84 ? 7 : y < 104 ? 7 + (y - 84) * 0.75 : 22) + wob(y, 1, (y < 84 ? 2 : 4));
 for(let y = -M; y < 200 + M; y++) for(let x = -M; x < 250 + M; x++){
-	const west = 14 + wob(y, 1, 6), north = 13 + wob(x, 2, 4);
-	const bay = (x < 70 && y < 64) && ((x - 0) ** 2 / 64 ** 2 + (y - 0) ** 2 / 58 ** 2 < 1.0 + wob(x + y, 3, 0.1));
-	const landHere = x >= west && y >= north && !bay;
-	if(landHere) set(x + M, y + M, "grass");
+	const tip = (x + y) < 34 + wob(x - y, 3, 3);                      // the peninsula's rounded north-west corner
+	if(x >= westCoast(y) && y >= Math.max(northCoast(x), -3 + wob(x, 7, 2)) && !tip) set(x + M, y + M, "grass");   // the mountain meets the sea at the top
 }
-// Shallows and beaches: sand (west, and the bay's shore) and rocky shore (north) a band in from the sea
 const isSea = (x, y) => ["deep", "sea", "shallow"].includes(get(x + M, y + M));
 const nearSea = (x, y, r) => { for(let dy = -r; dy <= r; dy++) for(let dx = -r; dx <= r; dx++) if(isSea(x + dx, y + dy)) return true; return false; };
+
+// ---- the land's height, in steps (0 the lowland and the town; 1, 2 the hills and mountain terraces; 3 the summit):
+// rising to the east and south-east as in the topographic map, with the river's valley cut down through it
+const river = [[246, 168], [224, 150], [204, 140], [184, 132], [166, 124], [154, 112], [148, 96], [146, 78], [142, 56], [140, 34], [138, 16], [137, 2]];
+const riverDist = (x, y) => { let best = 1e9; for(let i = 0; i < river.length - 1; i++){
+	const [x1, y1] = river[i], [x2, y2] = river[i + 1], dx = x2 - x1, dy = y2 - y1, t = Math.max(0, Math.min(1, ((x - x1) * dx + (y - y1) * dy) / (dx * dx + dy * dy)));
+	best = Math.min(best, Math.hypot(x - x1 - t * dx, y - y1 - t * dy)); } return best; };
+const Lr = Array.from({length: 200 + 2 * M}, () => Array(250 + M).fill(0));
+const L = new Proxy(Lr, {get: (t, k) => t[Number(k) + M]});      // L[y][x] for y from -M
+for(let y = -M; y < 200 + M; y++) for(let x = 0; x < 250 + M; x++){
+	let h = (x - 150 - wob(y, 30, 12)) / 34 + Math.max(0, y - 130 - wob(x, 31, 10)) / 42 * Math.min(1, Math.max(0, (x - 70) / 80));
+	h += Math.max(0, 1.4 - Math.hypot(x - 232, y - 22) / 34);         // the summit, top right
+	const rd = riverDist(x, y);
+	if(rd < 9) h = Math.min(h, y < 110 ? 0 : 1);                     // the valley floor
+	else if(rd < 16) h = Math.min(h, y < 110 ? 1 : 1.9);
+	Lr[y + M][x] = Math.max(0, Math.min(3, Math.floor(h)));
+}
+const highKind = ["grass", "cliffTop", "highland", "rock"];
+for(let y = -M; y < 200 + M; y++) for(let x = 0; x < 250 + M; x++) if(get(x + M, y + M) === "grass" && L[y][x] > 0) set(x + M, y + M, highKind[L[y][x]]);
+disc(234, 18, 7, 5, "snow", ["rock"]);
+// A cliff face wherever the ground steps down to the west or the south (2 tiles deep: the face you see)
+{
+	const lv = (x, y) => (x < 0 || y < -M || y >= 200 + M || x >= 250 + M) ? -1 : (isSea(x, y) ? -1 : L[y][x]), face = [];
+	for(let y = -M; y < 200 + M; y++) for(let x = 0; x < 250 + M; x++){
+		if(lv(x, y) <= 0) continue;
+		if(lv(x - 1, y) >= 0 && lv(x - 1, y) < lv(x, y)){ face.push([x, y]); face.push([x + 1, y]); }
+		if(lv(x, y + 1) >= 0 && lv(x, y + 1) < lv(x, y)){ face.push([x, y]); face.push([x, y - 1]); }
+	}
+	for(const [x, y] of face) if(["cliffTop", "highland", "rock"].includes(get(x + M, y + M))) set(x + M, y + M, "cliff");
+}
+
+// ---- beaches: the West Beach's wide sand (in and out like a real beach); rocky shore round the peninsula (Raouche,
+// the corniche) and along North Beach
 for(let y = 0; y < 200; y++) for(let x = 0; x < 250; x++){
 	if(get(x + M, y + M) !== "grass") continue;
-	const band = (x < 60) ? 7 + Math.round(wob(y, 4, 4)) : 4 + Math.round(wob(x, 5, 2));
-	if(nearSea(x, y, Math.max(2, band))) set(x + M, y + M, (y < 40 && x > 46) ? "rocky" : "sand");
+	const sandy = y > 92;
+	const band = sandy ? 6 + Math.round(wob(y, 4, 4)) : 3 + Math.round(wob(x + y, 5, 1.5));
+	if(nearSea(x, y, Math.max(2, band))) set(x + M, y + M, sandy ? "sand" : "rocky");
 }
 for(let y = -M; y < 200 + M; y++) for(let x = -M; x < 250 + M; x++){
 	if(!isSea(x, y)) continue;
 	let land = false;
-	for(let dy = -4; dy <= 4 && !land; dy++) for(let dx = -4; dx <= 4; dx++) if(!isSea(x + dx, y + dy) && get(x + dx + M, y + dy + M) !== undefined){ land = true; break; }
-	set(x + M, y + M, land ? "shallow" : (get(x + M, y + M) === "deep" && nearSea(x, y, 0) ? "sea" : "deep"));
+	for(let dy = -4; dy <= 4 && !land; dy++) for(let dx = -4; dx <= 4; dx++) if(!isSea(x + dx, y + dy)){ land = true; break; }
+	if(land) set(x + M, y + M, "shallow");
 }
 for(let y = -M; y < 200 + M; y++) for(let x = -M; x < 250 + M; x++){
 	if(get(x + M, y + M) !== "deep") continue;
-	for(let dy = -9; dy <= 9; dy++) for(let dx = -9; dx <= 9; dx++) if(["shallow"].includes(get(x + dx + M, y + dy + M))){ set(x + M, y + M, "sea"); dy = 99; break; }
+	for(let dy = -9; dy <= 9; dy++) for(let dx = -9; dx <= 9; dx++) if(get(x + dx + M, y + dy + M) === "shallow"){ set(x + M, y + M, "sea"); dy = 99; break; }
 }
 
-// ---- the mountain (top right): high ground from the north coast's east end down to the woods, a peak, the mine
-const ridge = y => 200 + wob(y, 6, 10) - (y < 40 ? (40 - y) * 0.9 : 0);   // its west edge, swinging out over the north
-for(let y = 0; y < 150; y++) for(let x = 0; x < 250 + M; x++){
-	if(x >= ridge(y) && !isSea(x, y)) set(x + M, y + M, "cliffTop");
-}
-for(let y = 150; y < 200 + M; y++) for(let x = 236; x < 250 + M; x++) if(!isSea(x, y)) set(x + M, y + M, "cliffTop");
-disc(232, 22, 16, 14, "rock", ["cliffTop"]);
-for(let y = 0; y < 200; y++) for(let x = 190; x < 250; x++) if(get(x + M, y + M) === "cliffTop" && hash(x * 3, y * 7) < 0.09) set(x + M, y + M, "pine");
-disc(234, 18, 7, 6, "snow", ["rock"]);
-// The cliff face along the high ground's west and south edges
-{
-	const high = (x, y) => ["cliffTop", "rock", "snow", "pine"].includes(get(x + M, y + M)), edge = [];
-	for(let y = 0; y < 200 + M; y++) for(let x = 0; x < 250 + M; x++){
-		if(get(x + M, y + M) !== "cliffTop") continue;
-		if(!high(x - 1, y)) for(let k = 0; k < 3; k++) edge.push([x + k, y]);          // the west face, 3 wide
-		for(let k = 1; k <= 3; k++) if(get(x + M, y + k + M) === "grass"){ edge.push([x, y]); break; }   // the south face
-	}
-	for(const [x, y] of edge) if(get(x + M, y + M) === "cliffTop") set(x + M, y + M, "cliff");
-}
-
-// ---- forests: Whispering Woods (bottom right), the pine wood in the Outskirts (Dahya), woods along the south
-const blob = (cx, cy, rx, ry, k, s) => { for(let y = cy - ry - 6; y <= cy + ry + 6; y++) for(let x = cx - rx - 6; x <= cx + rx + 6; x++){
+// ---- forests: Horsh Beirut's pines south of the town (the Outskirts), Whispering Woods on the slopes east of the river,
+// pines scattered over the mountain, and a thick wood along the world's south and east edges
+const blob = (cx, cy, rx, ry, k, s, on) => { for(let y = cy - ry - 6; y <= cy + ry + 6; y++) for(let x = cx - rx - 6; x <= cx + rx + 6; x++){
 	const a = Math.atan2(y - cy, x - cx), r = 1 + wob(a * 20 + 50, s, 0.18);
-	if(((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= r * r && ["grass"].includes(get(x + M, y + M))) set(x + M, y + M, k);
+	if(((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= r * r && (on || ["grass"]).includes(get(x + M, y + M))) set(x + M, y + M, k);
 } };
-blob(222, 172, 26, 26, "forest", 11);
-blob(225, 130, 20, 16, "forest", 12);
-blob(128, 141, 20, 12, "pine", 13);        // Horsh Beirut, the pine wood
-blob(70, 196, 22, 5, "forest", 14);
-blob(150, 197, 30, 4, "forest", 15);
-
+blob(92, 122, 15, 9, "pine", 13);
+blob(192, 104, 26, 18, "forest", 11, ["grass", "cliffTop", "highland"]);
+for(let y = 0; y < 200; y++) for(let x = 150; x < 250; x++) if(["cliffTop", "highland"].includes(get(x + M, y + M)) && hash(x * 3, y * 7) < 0.08) set(x + M, y + M, "pine");
 for(let y = 0; y < 200 + M; y++) for(let x = 0; x < 250 + M; x++){
-	const southEdge = y > 197 + wob(x, 17, 3), eastEdge = x > 247 + wob(y, 18, 3);
-	if((southEdge || eastEdge) && ["grass", "sand"].includes(get(x + M, y + M))) set(x + M, y + M, "forest");
+	const southEdge = y > 196 + wob(x, 17, 3), eastEdge = x > 246 + wob(y, 18, 3);
+	if((southEdge || eastEdge) && ["grass", "sand", "cliffTop", "highland"].includes(get(x + M, y + M))) set(x + M, y + M, "forest");
 }
 
-// ---- the river: from the mountain's spring, down the woods' edge, west between the Outskirts and the farm, to the sea
-const river = [[214, 70], [207, 92], [202, 118], [196, 150], [178, 158], [150, 157], [120, 160], [96, 158], [70, 161], [44, 163], [20, 166], [0, 167]];
+// ---- the river (Nahr Beirut): down from the south-east mountains, along the valley, north past the town's east edge
+// into the sea east of the port
 for(let i = 0; i < river.length - 1; i++){
 	const [x1, y1] = river[i], [x2, y2] = river[i + 1], n = Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
 	for(let t = 0; t <= n; t++){
-		const x = x1 + (x2 - x1) * t / n, y = y1 + (y2 - y1) * t / n + wob(x * 2 + t, 16, 1.5), w = 1.5 + i * 0.12;
+		const x = x1 + (x2 - x1) * t / n + wob(y1 + t, 16, 1.5), y = y1 + (y2 - y1) * t / n, w = 1 + (i / river.length) * 1.5;
 		for(let dy = -w; dy <= w; dy++) for(let dx = -w; dx <= w; dx++) if(!isSea(Math.round(x + dx), Math.round(y + dy))) set(x + dx + M, y + dy + M, "river");
 	}
 }
-disc(214, 68, 4, 3, "river");                                     // the spring's pool
+disc(246, 168, 3, 3, "river");
 
-// ---- roads (grey, the town's cobbles and the main roads) and lanes (dirt)
+// ---- roads (grey cobbles) and lanes (dirt)
 const line = (pts, k, w, under) => { for(let i = 0; i < pts.length - 1; i++){
 	const [x1, y1] = pts[i], [x2, y2] = pts[i + 1], n = Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1), 1);
 	for(let t = 0; t <= n; t++){ const x = x1 + (x2 - x1) * t / n, y = y1 + (y2 - y1) * t / n;
 		for(let dy = -w; dy <= w; dy++) for(let dx = -w; dx <= w; dx++){ const cur = get(Math.round(x + dx) + M, Math.round(y + dy) + M);
 			if(cur === "river") set(x + dx + M, y + dy + M, "pier");            // a bridge
 			else if(!["deep", "sea", "shallow"].includes(cur) && (!under || under.includes(cur))) set(x + dx + M, y + dy + M, k); } } } };
-// The town: a grid of streets with a square in the middle (old Downtown), the corniche along the north
-line([[56, 52], [196, 52]], "road", 1); line([[50, 78], [196, 78]], "road", 1); line([[50, 104], [190, 104]], "road", 1);
-line([[78, 30], [78, 118]], "road", 1); line([[112, 44], [112, 120]], "road", 1); line([[148, 44], [148, 120]], "road", 1); line([[184, 52], [184, 118]], "road", 1);
-line([[54, 46], [56, 52]], "road", 1);                             // up to the Riviera on the bay
-rect(100, 68, 124, 88, "plaza");                                  // the town square
-// North Beach's corniche, along the top of the land, running into the cliffs
-line([[52, 26], [100, 25], [150, 27], [178, 30]], "road", 1);
-line([[112, 44], [112, 26]], "road", 1); line([[148, 44], [148, 27]], "road", 1);
-// The West Beach's coast road, and the lanes down to the sand
-line([[40, 52], [34, 80], [32, 110], [34, 140], [36, 175], [34, 196]], "lane", 1);
-line([[50, 78], [34, 80]], "lane", 1); line([[50, 104], [32, 106]], "lane", 1);
-// Out of town to the east: the mine road up the mountain to the mine, and on up to the peak
-line([[196, 52], [206, 56], [214, 50], [222, 44], [226, 34], [232, 26]], "lane", 1, ["grass", "cliffTop", "cliff", "rock", "lane", "road"]);
-line([[184, 104], [204, 100]], "lane", 1, ["grass", "cliffTop", "cliff", "lane", "road"]);   // up to Victory Hill
-// The Outskirts: the road south from the town to the farm, a ring round the pine wood, the lane east to the countryside
-line([[112, 120], [112, 140], [100, 150], [78, 160], [74, 172]], "road", 1);
-line([[78, 118], [70, 132], [74, 150]], "lane", 1);
-line([[148, 120], [152, 140], [160, 150]], "lane", 1);
-line([[74, 172], [110, 176], [150, 178], [190, 180]], "lane", 1);
-line([[160, 150], [176, 170], [190, 180], [204, 184]], "lane", 1);   // into Whispering Woods
-line([[48, 182], [74, 176]], "lane", 1);                            // the farm to the West Beach
+const lowland = ["grass", "rocky", "sand", "road", "lane", "pine"];
+// The town: the corniche round the peninsula, avenues out from the square by the port (Downtown), cross streets
+line([[34, 16], [70, 15], [120, 16], [134, 18]], "road", 1);                          // the corniche, north
+line([[13, 40], [12, 60], [14, 80], [24, 100]], "road", 1);                          // the corniche, west
+line([[22, 26], [34, 16]], "road", 1);
+line([[16, 36], [60, 36], [130, 36]], "road", 1); line([[14, 58], [60, 58], [134, 58]], "road", 1); line([[16, 80], [70, 82], [136, 80]], "road", 1);
+line([[40, 18], [38, 92]], "road", 1); line([[64, 16], [62, 96]], "road", 1); line([[100, 16], [104, 96]], "road", 1); line([[128, 20], [130, 90]], "road", 1);
+line([[88, 36], [112, 70], [126, 96]], "road", 1);                                   // a diagonal avenue, as Beirut has
+rect(78, 24, 96, 34, "plaza");                                                      // the square, by the port
+// Out of town: south through the Outskirts to the farm; down the West Beach; east over the river and up the mountain
+line([[62, 96], [64, 120], [70, 140], [72, 156]], "road", 1);
+line([[104, 96], [112, 118], [120, 140], [124, 156]], "lane", 1);
+line([[24, 100], [30, 130], [32, 160], [34, 196]], "lane", 1);
+line([[72, 156], [100, 158], [124, 156], [150, 160], [178, 164]], "lane", 1);         // the countryside lane
+line([[130, 58], [146, 58], [158, 56], [170, 52], [178, 54]], "lane", 1, lowland.concat(["cliffTop", "cliff", "highland"]));   // to the mine
+line([[178, 54], [190, 46], [198, 38], [210, 34], [220, 28], [230, 22]], "lane", 1, lowland.concat(["cliffTop", "cliff", "highland", "rock", "pine"]));  // up to the peak
+line([[136, 80], [150, 80], [160, 78], [170, 80]], "lane", 1, lowland.concat(["cliffTop", "cliff"]));   // to Victory Hill
+line([[150, 80], [164, 96], [180, 104], [190, 112]], "lane", 1, lowland.concat(["cliffTop", "cliff", "forest"]));  // into Whispering Woods
+line([[134, 18], [146, 10], [158, 4]], "lane", 1);                                   // over the river mouth to North Beach
 
-// ---- the farm (old rm_1's place): a field and a pond
-rect(58, 176, 96, 196, "grass", ["grass", "forest"]);
-rect(76, 184, 92, 194, "field");
-disc(64, 190, 4, 3, "river");
-
-// ---- the countryside's fields and vineyard
-rect(116, 182, 134, 192, "field"); rect(156, 182, 170, 190, "field");
-
-// ---- piers
+// ---- the port (Starsand's piers) and the West Beach's piers; Pigeon Rocks offshore (the sea arch)
 const pier = (x, y, len, dx, dy) => { for(let k = 0; k < len; k++) for(let w = 0; w <= 1; w++) set(x + dx * k + (dy ? w : 0) + M, y + dy * k + (dx ? w : 0) + M, "pier"); };
-pier(112, 22, 14, 0, -1);             // Starsand's stone pier (north)
-pier(18, 112, 12, -1, 0);             // Pigeon Rocks
-pier(20, 170, 14, -1, 0);             // South Beach's fishing pier
+pier(84, 11, 9, 0, -1); pier(96, 11, 9, 0, -1); pier(108, 11, 9, 0, -1); pier(84, 3, 26, 1, 0);
+pier(22, 112, 10, -1, 0); pier(26, 170, 12, -1, 0);
+disc(2, 64, 3, 2, "rock");
 
-// ---- the mine, in the mountain's cliff face
-disc(212, 50, 2, 1.5, "cave");
+// ---- the farm (south-west lowland, near the beach) and the countryside's fields
+rect(56, 166, 94, 192, "grass", ["grass", "forest", "pine", "sand"]);
+rect(70, 174, 92, 190, "field");
+disc(60, 186, 4, 3, "river");
+rect(104, 170, 120, 180, "field"); rect(136, 180, 150, 188, "field");
 
-// ---- Bunny Island, out in the northern sea, and the ferry's route from Starsand
-for(let y = -28; y < -6; y++) for(let x = 96; x < 136; x++){
-	const a = Math.atan2(y + 17, x - 116), r = 1 + wob(a * 20, 21, 0.15);
-	if(((x - 116) / 17) ** 2 + ((y + 17) / 9) ** 2 <= r * r) set(x + M, y + M, "grass");
+// ---- the mine, in a cliff face on the mountain
+disc(178, 51, 2, 1.5, "cave");
+
+// ---- Bunny Island, out in the northern sea, and the ferry from Starsand's port
+for(let y = -28; y < -6; y++) for(let x = 50; x < 90; x++){
+	const a = Math.atan2(y + 17, x - 70), r = 1 + wob(a * 20, 21, 0.15);
+	if(((x - 70) / 17) ** 2 + ((y + 17) / 9) ** 2 <= r * r) set(x + M, y + M, "grass");
 }
-for(let y = -28; y < -6; y++) for(let x = 96; x < 136; x++) if(get(x + M, y + M) === "grass" && nearSea(x, y, 2)) set(x + M, y + M, "sand");
-disc(112, -16, 6, 3, "forest", ["grass"]);
-pier(116, -9, 4, 0, 1);
+for(let y = -28; y < -6; y++) for(let x = 50; x < 90; x++) if(get(x + M, y + M) === "grass" && nearSea(x, y, 2)) set(x + M, y + M, "sand");
+disc(66, -16, 6, 3, "forest", ["grass"]);
+pier(70, -9, 4, 0, 1);
 
 // ---- buildings: [x, y, w, h] in tiles (footprints, roughly to scale), by area
 const B = [];
 const b = (x, y, w, h, name) => B.push({x, y, w, h, name});
-// Beirut, the town
-b(50, 40, 9, 5, "Riviera hotel"); b(62, 36, 6, 4, "Glassworks"); b(56, 30, 5, 4, "Fairglass");
-b(60, 44, 6, 5, "Goldcrest"); b(84, 44, 7, 5, "Tavern"); b(96, 44, 8, 6, "Bank"); b(118, 44, 6, 5, "Tools");
-b(154, 44, 7, 5, "Smithy"); b(164, 44, 6, 5, "Whitlow"); b(124, 58, 6, 5, "Guild hall");
-b(60, 82, 6, 4, "Bakery"); b(68, 82, 6, 4, "Flowers"); b(84, 82, 7, 4, "Furniture");
-b(126, 82, 8, 5, "Hospital"); b(136, 82, 8, 5, "Library"); b(128, 94, 8, 5, "Museum");
-b(154, 82, 6, 4, "Quill"); b(162, 82, 8, 5, "Meadowlark"); b(88, 96, 6, 4, "Cafe");
-// North Beach
-b(60, 16, 3, 7, "Lighthouse"); b(96, 18, 6, 4, "Fish market"); b(124, 18, 6, 4, "Ferry"); b(156, 18, 8, 5, "Hangar 12");
-b(166, 30, 6, 4, "Tinker"); b(158, 32, 5, 4, "Brassbolt");
+// Beirut, the town (districts: Well's Head in the north-west corner, Red Street, Downtown round the square by the port,
+// Grace Tower, Verdun Street, Uptown, Oven's Window)
+b(24, 22, 9, 5, "Riviera hotel"); b(26, 29, 6, 4, "Glassworks"); b(18, 30, 5, 4, "Fairglass");
+b(44, 40, 6, 5, "Goldcrest"); b(68, 26, 7, 5, "Tavern"); b(70, 38, 8, 6, "Bank"); b(98, 26, 6, 5, "Tools"); b(98, 38, 6, 5, "Guild hall");
+b(108, 40, 7, 5, "Smithy"); b(118, 40, 6, 5, "Whitlow");
+b(22, 62, 6, 4, "Bakery"); b(30, 62, 6, 4, "Flowers"); b(44, 62, 7, 4, "Furniture"); b(50, 48, 5, 4, "Cafe");
+b(68, 62, 8, 5, "Hospital"); b(78, 62, 8, 5, "Library"); b(72, 72, 8, 5, "Museum");
+b(108, 62, 6, 4, "Quill"); b(116, 62, 8, 5, "Meadowlark");
+// North Beach (the lighthouse on the peninsula's corner, the port, Hangar 12 past the river mouth)
+b(12, 30, 3, 7, "Lighthouse"); b(56, 18, 6, 4, "Fish market"); b(112, 18, 6, 4, "Ferry");
+b(150, 0, 8, 5, "Hangar 12"); b(160, -6, 6, 4, "Tinker"); b(144, 8, 5, 4, "Brassbolt");
 // West Beach
-b(26, 58, 6, 4, "Olive press"); b(36, 60, 5, 4, "Saba"); b(24, 96, 5, 4, "Gullwater"); b(22, 130, 6, 4, "Beach bar");
-b(18, 140, 3, 4, "Lifeguard"); b(40, 128, 4, 3, "Shack"); b(26, 176, 7, 4, "Boatyard"); b(38, 184, 6, 4, "Saltwhistle");
-// The Mountain
-b(222, 64, 5, 7, "Witch tower"); b(206, 40, 5, 4, "Ironvein"); b(212, 96, 4, 6, "Windmill"); b(218, 104, 7, 5, "Oakhart"); b(226, 98, 7, 4, "Mill");
-// The Outskirts
-b(84, 124, 6, 4, "Kassar"); b(94, 128, 6, 4, "Merchant"); b(132, 124, 6, 4, "Larkspun"); b(140, 126, 6, 4, "Outfitter");
-b(148, 132, 6, 4, "Tawil"); b(166, 124, 6, 5, "Silverbough"); b(174, 132, 6, 4, "Apothecary");
+b(16, 66, 5, 4, "Gullwater"); b(30, 100, 6, 4, "Beach bar"); b(26, 108, 3, 4, "Lifeguard"); b(38, 112, 4, 3, "Shack");
+b(32, 128, 6, 4, "Olive press"); b(40, 134, 5, 4, "Saba"); b(30, 164, 7, 4, "Boatyard"); b(40, 174, 6, 4, "Saltwhistle");
+// The Mountain (Beacon Hill's mine, Victory Hill's mill above the river, the witch's tower near the top by the sea)
+b(170, 44, 5, 4, "Ironvein"); b(160, 72, 4, 6, "Windmill"); b(168, 76, 7, 5, "Oakhart"); b(176, 72, 7, 4, "Mill");
+b(204, 4, 5, 7, "Witch tower");
+// The Outskirts (Wing Hill, Dahya by the pine wood, Resolve's Rise)
+b(46, 104, 6, 4, "Kassar"); b(54, 108, 6, 4, "Merchant"); b(96, 104, 6, 4, "Larkspun"); b(104, 106, 6, 4, "Outfitter");
+b(108, 128, 6, 4, "Tawil"); b(124, 112, 6, 5, "Silverbough"); b(128, 124, 6, 4, "Apothecary");
 // Whispering Woods
-b(214, 160, 5, 4, "Ranger");
+b(194, 108, 5, 4, "Ranger");
 // The farm
-b(66, 177, 5, 4, "Farmhouse"); b(84, 177, 7, 5, "Barn");
-// The Countryside
-b(110, 174, 6, 4, "Night farm"); b(120, 176, 7, 4, "Seeds"); b(146, 172, 7, 6, "Monastery"); b(156, 174, 6, 4, "Stables");
-b(164, 176, 6, 4, "Hayward"); b(172, 172, 5, 4, "Frere"); b(184, 168, 6, 6, "Church"); b(192, 172, 5, 4, "Ward");
+b(60, 168, 5, 4, "Farmhouse"); b(84, 166, 7, 5, "Barn");
+// The Countryside (Saint Thereza, Frere's Fray, Abda's Ascent on the rising ground)
+b(102, 162, 6, 4, "Night farm"); b(112, 164, 7, 4, "Seeds"); b(134, 164, 7, 6, "Monastery"); b(144, 168, 6, 4, "Stables");
+b(152, 174, 6, 4, "Hayward"); b(142, 176, 5, 4, "Frere"); b(166, 160, 6, 6, "Church"); b(174, 166, 5, 4, "Ward");
 // Bunny Island
-b(120, -20, 4, 3, "Burrow");
+b(74, -20, 4, 3, "Burrow");
 for(const k of B) rect(k.x, k.y, k.x + k.w - 1, k.y + k.h - 1, "building");
 
 // ---- the blueprint: one pixel a tile
@@ -219,7 +229,7 @@ for(let y = 0; y < H; y++) for(let x = 0; x < W; x++){
 	if(k === "building") c = C.plaza;
 	for(let dy = 0; dy < S; dy++) for(let dx = 0; dx < S; dx++){
 		let cc = c;
-		if(k === "grass" || k === "meadow" || k === "cliffTop") cc = shade(c, 1 + (hash(x * 7 + dx, y * 13 + dy) - 0.5) * 0.08);
+		if(k === "grass" || k === "meadow" || k === "cliffTop" || k === "highland") cc = shade(c, 1 + (hash(x * 7 + dx, y * 13 + dy) - 0.5) * 0.08);
 		if(k === "deep" || k === "sea") cc = shade(c, ((x * 3 + y * 5 + dx) % 23 === 0 && dy === 1) ? 1.25 : 1);
 		if(k === "sand") cc = shade(c, (hash(x * S + dx, y * S + dy) < 0.06) ? 0.9 : 1);
 		put(x * S + dx, y * S + dy, cc);
@@ -288,16 +298,16 @@ const text = (str, x, y, sc, col) => {
 const at = (x, y) => [(x + M) * S, (y + M) * S];
 const area = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 3, [255, 236, 150]); };
 const dist = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 2, [255, 255, 255]); };
-area("Beirut", 112, 75); area("North Beach", 60, -6); area("West Beach", 18, 150); area("The Mountain", 222, 82);
-area("The Outskirts", 112, 146); area("Whispering Woods", 210, 186); area("Countryside", 150, 194); area("The Farm", 77, 170);
-area("Bunny Island", 116, -27);
-dist("Well's Head", 30, 30); dist("Red Street", 64, 60); dist("Downtown", 112, 64); dist("Grace Tower", 166, 60);
-dist("Verdun Street", 70, 92); dist("Uptown", 130, 110); dist("Oven's Window", 166, 92);
-dist("Manara's Light", 64, 8); dist("Starsand Pier", 118, 8); dist("Hangar 12", 162, 10);
-dist("Olive Bay", 22, 66); dist("Pigeon Rocks", 22, 104); dist("White Sand", 22, 120); dist("South Beach", 22, 188);
-dist("Plummet's Point", 228, 4); dist("Beacon Hill", 222, 54); dist("Victory Hill", 222, 114);
-dist("Wing Hill", 86, 134); dist("Dahya", 128, 136); dist("Resolve's Rise", 172, 142);
-dist("Saint Thereza", 122, 168); dist("Frere's Fray", 160, 166); dist("Abda", 192, 162);
-dist("Mine", 212, 46); dist("Peak", 234, 12); dist("Ferry", 128, -4); dist("Riviera", 54, 26);
+area("Beirut", 87, 46); area("North Beach", 40, 2); area("West Beach", 14, 146); area("The Mountain", 205, 64);
+area("The Outskirts", 84, 145); area("Whispering Woods", 196, 128); area("Countryside", 140, 190); area("The Farm", 76, 196);
+area("Bunny Island", 70, -27);
+dist("Well's Head", 30, 10); dist("Red Street", 40, 50); dist("Downtown", 87, 20); dist("Grace Tower", 122, 50);
+dist("Verdun Street", 40, 70); dist("Uptown", 76, 80); dist("Oven's Window", 116, 70);
+dist("Manara's Light", 12, 40); dist("Starsand Pier", 96, -2); dist("Hangar 12", 170, 4);
+dist("Pigeon Rocks", 8, 56); dist("White Sand", 34, 118); dist("Olive Bay", 36, 140); dist("South Beach", 36, 180);
+dist("Plummet's Point", 210, -10); dist("Beacon Hill", 176, 38); dist("Victory Hill", 170, 84);
+dist("Wing Hill", 58, 98); dist("Dahya", 100, 112); dist("Resolve's Rise", 128, 132);
+dist("Saint Thereza", 108, 152); dist("Frere's Fray", 144, 184); dist("Abda", 172, 154);
+dist("Mine", 178, 56); dist("Peak", 234, 8); dist("Ferry", 60, -6); dist("Riviera", 28, 18); dist("Beirut River", 156, 136);
 writePng(path.join(out, "world_blueprint_preview.png"), P);
 console.log("world_blueprint.png " + TW + "x" + TH + " (1 px = 1 tile), preview " + P.w + "x" + P.h);

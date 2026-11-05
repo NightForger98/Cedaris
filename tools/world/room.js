@@ -175,6 +175,9 @@ function spec(id){
 		const dx = (bx + d[0]) * 32 + 16, dy = (top + d[1]) * 32 + 16;
 		things.push({is: b.is, at: [bx, top]});
 		take(bx, top, w, h, 1);
+		// A door drawn on art that has none (tools/rooms/tiles.js: doorArt)
+		const art = T.things[b.is].doorArt;
+		if(art) instances.push({obj: art.obj, x: bx * 32 + art.at[0], y: top * 32 + art.at[1]});
 		const inside = INTERIORS.doorPoint(b.room);
 		instances.push({obj: "obj_transition", x: dx, y: dy, sx: 2, sy: 1,
 			code: `targetRoom = ${b.room};\ntargetX = ${inside[0]};\ntargetY = ${inside[1]};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`});

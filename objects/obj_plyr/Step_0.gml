@@ -197,14 +197,25 @@ y += moveY;
 
 //objects
 var inst = instance_place(x,y,obj_transition);
-// Skip transitions that were never given a target room
+// A door or road out takes you through when you walk into it: stepping onto it from any side, or walking on in its
+// direction (PlayerFacingBefore; diagonals count, and -1 means any way) while you stand on it. Standing still never
+// does, and a door you arrive on only works once you walk on through it or step off and back, so you don't bounce
+// straight back. Transitions never given a target room are skipped.
+var wantX = in_right - in_left, wantY = in_down - in_up, into = false;
+if(inst != noone && inst.targetRoom != -1 && (wantX != 0 || wantY != 0)){
+	var fb = inst.PlayerFacingBefore;
+	var pushing = fb == -1 || (fb == dir.up && wantY < 0) || (fb == dir.down && wantY > 0)
+	           || (fb == dir.left && wantX < 0) || (fb == dir.right && wantX > 0);
+	into = pushing || (doorPrev != undefined && inst != doorPrev);
+}
+doorPrev = inst;
 // Homes and shops lock at night and out of hours (door_lock_reason)
-var locked = (inst != noone && inst.targetRoom != -1) ? door_lock_reason(room_get_name(inst.targetRoom)) : "";
-if(locked != "" && facing == inst.PlayerFacingBefore && game.hudTime <= 0){
+var locked = into ? door_lock_reason(room_get_name(inst.targetRoom)) : "";
+if(locked != "" && game.hudTime <= 0){
 	farm_message(locked);
 	hint("locked", "Homes and shops keep hours. Talk to a shopkeeper and press T to hear theirs.");
 }
-if (inst != noone and inst.targetRoom != -1 and facing == inst.PlayerFacingBefore and locked == "" and !busy){
+if (into and locked == "" and !busy){
 	
 	with(game){
 		spawnRoom= inst.targetRoom;

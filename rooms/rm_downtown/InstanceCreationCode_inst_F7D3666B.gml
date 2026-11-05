@@ -1,5 +1,5 @@
-targetRoom = rm_uptown;
-targetX = 880;
-targetY = 72;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+targetRoom = rm_gracetower;
+targetX = 64;
+targetY = 592;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

@@ -907,3 +907,10 @@ function autotest_world_links(){
 	}
 	return (s == "") ? "all linked (" + string(n) + " ways)" : s;
 }
+
+/// @description Test: the doors drawn on buildings whose art has none (obj_door_art) in this room.
+function autotest_door_art(){
+	var s = string(instance_number(obj_door_art)) + " door art";
+	with(obj_door_art) s += " | " + string(x) + "," + string(y) + " depth " + string(depth) + (visible ? " visible " : " hidden ") + sprite_get_name(sprite_index);
+	return s;
+}

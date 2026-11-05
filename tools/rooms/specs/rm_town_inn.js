@@ -4,7 +4,7 @@
 const {interior} = require("../interior.js");
 module.exports = interior({
 	w: 29, h: 14, door: 10, wall: "paper", floor: "parquet",
-	exit: {room: "rm_downtown", x: 784, y: 660},
+	exit: {room: "rm_downtown", x: 848, y: 660},
 	furniture: [
 		// Behind the bar: shelves on the wall
 		{is: "shelf_dishes", at: [1, 2]}, {is: "shelf_books", at: [2, 2]}, {is: "cupboard", at: [3, 2]},

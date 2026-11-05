@@ -147,6 +147,7 @@
   },
   "name":"NewHarvest",
   "resources":[
+    {"id":{"name":"spr_door_brick","path":"sprites/spr_door_brick/spr_door_brick.yy",},},
     {"id":{"name":"marriage","path":"scripts/marriage/marriage.yy",},},
     {"id":{"name":"world_rooms","path":"scripts/world_rooms/world_rooms.yy",},},
     {"id":{"name":"rm_church","path":"rooms/rm_church/rm_church.yy",},},
@@ -254,6 +255,7 @@
     {"id":{"name":"obj_dialogue","path":"objects/obj_dialogue/obj_dialogue.yy",},},
     {"id":{"name":"obj_farm_soil","path":"objects/obj_farm_soil/obj_farm_soil.yy",},},
     {"id":{"name":"obj_festival_decor","path":"objects/obj_festival_decor/obj_festival_decor.yy",},},
+    {"id":{"name":"obj_door_art","path":"objects/obj_door_art/obj_door_art.yy",},},
     {"id":{"name":"obj_fishing","path":"objects/obj_fishing/obj_fishing.yy",},},
     {"id":{"name":"obj_furnace","path":"objects/obj_furnace/obj_furnace.yy",},},
     {"id":{"name":"obj_inventory","path":"objects/obj_inventory/obj_inventory.yy",},},

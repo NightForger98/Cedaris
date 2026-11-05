@@ -1,0 +1,39 @@
+# Doors: the tavern and the guild (the brick hall, whose art has no door) get one drawn (obj_door_art), and a door
+# takes you through when you walk into it from any side - straight or diagonally - but not back out the moment you arrive
+start story
+wait 60
+call autotest_date 0 2
+time 12
+room rm_downtown 940 660
+wait 40
+call autotest_door_art
+expect 1 door art | 832,576 depth 1100 visible spr_door_brick
+shot 01_tavern_door
+keydown up
+keydown left
+wait 70
+keyup left
+keyup up
+wait 60
+call autotest_room_name
+expect rm_town_inn
+# Arriving inside, you stand by the way out without going back through it
+wait 30
+call autotest_room_name
+expect rm_town_inn
+pos 352 380
+wait 5
+keydown down
+wait 120
+keyup down
+wait 60
+call autotest_room_name
+expect rm_downtown
+call autotest_where
+expectnot inside a solid
+room rm_starsand
+wait 40
+call autotest_door_art
+expect 1 door art
+shot 02_guild_door
+quit

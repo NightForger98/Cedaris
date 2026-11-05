@@ -93,4 +93,18 @@ for(const [name, def] of Object.entries(library)){
 	things[name] = def;
 }
 
+// Buildings whose pack art shows no door: a door sprite drawn on them (obj_door_art, placed by tools/world/room.js),
+// in the building's own pixels, and the way in moved under it. The brick hall's only free stretch of wall is in
+// column 6, between the windows (art/doors/door_brick.png is the brick market's door).
+const doorArt = {
+	brick_hall: {door: [6, 8], art: "obj_door_art", at: [192, 224]},
+};
+for(const [name, d] of Object.entries(doorArt)){
+	const def = things[name], [w] = def.src.slice(2), row = d.door[1];
+	def.door = d.door;
+	def.doorArt = {obj: d.art, at: d.at};
+	def.solid = def.solid.filter(s => s[1] !== row || s[3] !== 1)
+		.concat([[0, row, d.door[0], 1], [d.door[0] + 1, row, w - d.door[0] - 1, 1]].filter(s => s[2] > 0));
+}
+
 module.exports = {terrains, legend, things};

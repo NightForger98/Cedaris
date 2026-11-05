@@ -41,9 +41,11 @@ const B = {
 	brick_wide:     {from: "preview-1_5", box: [580, 300, 742, 466], door: [662, 450], foot: 3},
 	brick_market:   {from: "preview-1_5", box: [210, 414, 455, 628], door: [357, 610], foot: 3},
 	clapboard:      {from: "preview-3_2", box: [390, 134, 650, 364], door: [520, 355], foot: 3},
+	// brick_bay has no door and no wall to draw one on (its bay window fills the front): not used in the world
 	brick_bay:      {from: "preview-4", box: [65, 68, 320, 290], door: [192, 285], foot: 3, clear: [[0, 196, 56, 224]],
 	                 add: [[COL, 0, 704, 32, 64, 176, 232]]},
-	brick_hall:     {from: "preview-4", box: [352, 22, 642, 300], door: [497, 290], foot: 3,
+	// brick_hall has no door either: tools/rooms/tiles.js (doorArt) draws one in column 6, the gap between the windows
+	brick_hall:     {from: "preview-4", box: [352, 22, 642, 300], door: [560, 290], foot: 3,
 	                 add: [[COL, 0, 704, 32, 64, 465, 232], [COL, 0, 704, 32, 64, 497, 232]]},
 	clock_tower:    {from: "preview-4", box: [65, 278, 130, 586], door: [97, 565], foot: 2, erase: [[90, 250, 140, 300]], clear: [[64, 0, 96, 32]]},
 	brick_arch:     {from: "preview-4", box: [352, 374, 578, 746], door: [465, 712], foot: 4,

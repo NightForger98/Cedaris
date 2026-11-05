@@ -50,6 +50,17 @@ overnight while they slept, as a prototype:
 - **Fixed on the way (affects main too)**: buildings were scrambled in game because `TS_buildings.yy` said 64
   output columns while the IDE writes `output_tileset.png` 58 wide (ceil(sqrt(tiles))). Now 58, and
   `tools/rooms/output_tileset.js` (run by `build.sh`) writes any missing or mismatched sheet.
+- **Doors** (2026-11-06): a door or road out (`obj_transition`) takes you through when you walk into it from any
+  side, straight or diagonal, or walk on in its `PlayerFacingBefore` direction while on it (`-1`: any way); standing
+  still never does, and the door you arrive on only works once you walk through or step off and back (`doorPrev` in
+  `obj_plyr`). The brick hall (tavern, guild) has no door in its art: `tools/rooms/tiles.js` (`doorArt`) moves its
+  way in to column 6 and `room.js` places `obj_door_art` (`spr_door_brick`, the brick market's door, depth 1100)
+  there. The brick bay has no wall for a door, so the Goldcrest home and the library use brick_gable / brick_market.
+- **Two folders**: `D:\GameMakerProjects\HarvestValley-HOMEPC` is on `main`; `HarvestValley-WorldRebuild` beside it
+  is a git worktree on `world-rebuild`. The user's test rooms (`testmapindoor1`, `roomtest2`) are in both, listed
+  last in the room order and never committed. In the branch folder an uncommitted spec,
+  `tools/rooms/specs/testmapindoor1.js`, builds the test room as a workshop with every station; build it on its own
+  and keep its lines out of committed `room_layout` / `room_walk`.
 - **Tests**: all 36 cases pass (`tools/test/suite.sh`, 2026-11-05). New: `new_world` (every room loads, all 70 ways
   between rooms link both ways, all 46 villagers on time - longest walk 74 min, the clock frozen indoors, the road
   boost), `creator_story`, `marriage`. The old map's tests were retired (see the commit "Tests for the new world").

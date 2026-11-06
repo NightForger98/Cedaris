@@ -56,7 +56,7 @@ const yy = `{
 fs.mkdirSync(path.join(root, "tilesets", ts), {recursive: true});
 fs.writeFileSync(path.join(root, "tilesets", ts, ts + ".yy"), yy);
 
-const yypPath = path.join(root, "NewHarvest.yyp");
+const yypPath = path.join(root, "CedarAndSea.yyp");
 let yyp = fs.readFileSync(yypPath, "utf8");
 const nl = yyp.includes("\r\n") ? "\r\n" : "\n";
 const entry = `    {"id":{"name":"${ts}","path":"tilesets/${ts}/${ts}.yy",},},`;

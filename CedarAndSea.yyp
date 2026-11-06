@@ -1,6 +1,6 @@
 {
   "$GMProject":"v1",
-  "%Name":"NewHarvest",
+  "%Name":"CedarAndSea",
   "AudioGroups":[
     {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
@@ -145,7 +145,7 @@
   "MetaData":{
     "IDEVersion":"2026.0.0.16",
   },
-  "name":"NewHarvest",
+  "name":"CedarAndSea",
   "resources":[
     {"id":{"name":"lpc_pal_body_light","path":"sprites/lpc_pal_body_light/lpc_pal_body_light.yy",},},
     {"id":{"name":"lpc_pal_body_amber","path":"sprites/lpc_pal_body_amber/lpc_pal_body_amber.yy",},},

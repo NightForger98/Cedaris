@@ -104,7 +104,7 @@ fs.writeFileSync(path.join(dir, "world_rooms.gml"), gml);
 const yy = path.join(dir, "world_rooms.yy");
 if(!fs.existsSync(yy)){
 	fs.writeFileSync(yy, `{\n  "$GMScript":"v1",\n  "%Name":"world_rooms",\n  "isCompatibility":false,\n  "isDnD":false,\n  "name":"world_rooms",\n  "parent":{\n    "name":"Scripts",\n    "path":"folders/Scripts.yy",\n  },\n  "resourceType":"GMScript",\n  "resourceVersion":"2.0",\n}`);
-	const yypPath = path.join(ROOT, "NewHarvest.yyp");
+	const yypPath = path.join(ROOT, "CedarAndSea.yyp");
 	let yyp = fs.readFileSync(yypPath, "utf8");
 	const nl = yyp.includes("\r\n") ? "\r\n" : "\n";
 	const entry = '    {"id":{"name":"world_rooms","path":"scripts/world_rooms/world_rooms.yy",},},';

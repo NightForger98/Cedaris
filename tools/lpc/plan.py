@@ -1,4 +1,4 @@
-"""Map LPC generator items onto Harvest Valley creator slots and list the art files needed.
+"""Map LPC generator items onto Cedar & Sea creator slots and list the art files needed.
 
 usage: python -I plan.py <lpc repo dir> <tree.txt> <out dir>
 writes catalog.json (items, layers, sprites) and files.txt (sparse-checkout paths)

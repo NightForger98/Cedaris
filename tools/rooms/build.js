@@ -338,9 +338,9 @@ boxH = ${gr.h * CELL};`});
 	console.log(`${roomName}: ${W}x${H} cells, ${layers.list.length} tile layers, ${cols.length} collision boxes, ${insts.length} instances`);
 }
 
-// Add a new room to NewHarvest.yyp: its resource entry and its place in the room order (after the others)
+// Add a new room to CedarAndSea.yyp: its resource entry and its place in the room order (after the others)
 function registerRoom(name){
-	const yypPath = path.join(root, "NewHarvest.yyp");
+	const yypPath = path.join(root, "CedarAndSea.yyp");
 	let yyp = fs.readFileSync(yypPath, "utf8");
 	const nl = yyp.includes("\r\n") ? "\r\n" : "\n";
 	const ref = `{"name":"${name}","path":"rooms/${name}/${name}.yy",}`;
@@ -395,7 +395,7 @@ function layout_area(_room, _key){
 	const yy = path.join(dir, "room_layout.yy");
 	if(!fs.existsSync(yy)){
 		fs.writeFileSync(yy, `{\n  "$GMScript":"v1",\n  "%Name":"room_layout",\n  "isCompatibility":false,\n  "isDnD":false,\n  "name":"room_layout",\n  "parent":{\n    "name":"Scripts",\n    "path":"folders/Scripts.yy",\n  },\n  "resourceType":"GMScript",\n  "resourceVersion":"2.0",\n}`);
-		const yypPath = path.join(root, "NewHarvest.yyp");
+		const yypPath = path.join(root, "CedarAndSea.yyp");
 		let yyp = fs.readFileSync(yypPath, "utf8");
 		const nl = yyp.includes("\r\n") ? "\r\n" : "\n";
 		const entry = '    {"id":{"name":"room_layout","path":"scripts/room_layout/room_layout.yy",},},';

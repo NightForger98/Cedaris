@@ -19,7 +19,7 @@ if(isPause){
 switch(screen){
 
 case "main":
-	ui_text(cx, 140, "Harvest Valley", 2.6, c.accent);
+	ui_text(cx, 140, "Cedar & Sea", 2.6, c.accent);
 	ui_text(cx, 210, "a farming tale", 0.8, c.dim);
 	var hasSave = (latestSlot != -1);
 	var labels = hasSave ? ["Continue", "New Game", "Load Game", "Options", "Credits", "Exit"]
@@ -169,7 +169,7 @@ case "controls":
 
 case "credits":
 	var cr = lpc_credits();
-	var lines = [["Harvest Valley", 2, c.accent], ["A game by NightForger98", 0.8, c_white], ["", 0.6, c_white],
+	var lines = [["Cedar & Sea", 2, c.accent], ["A game by NightForger98", 0.8, c_white], ["", 0.6, c_white],
 	             ["Character art", 1.1, c.accent],
 	             ["Liberated Pixel Cup artists, via the Universal LPC Spritesheet Character Generator", 0.6, c.dim]];
 	for(var i = 0; i < array_length(cr.authors); i++) array_push(lines, [cr.authors[i], 0.65, c_white]);

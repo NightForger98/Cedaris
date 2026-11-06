@@ -3,7 +3,7 @@
 //   node tools/sprite_import.js <png> <spr_name> [folder]
 //
 // Copies the image into sprites/<spr_name>/, writes the .yy (from spr_tile_terrain's as a template, with fresh ids)
-// and adds it to NewHarvest.yyp, in folders/Sprites/<folder>.yy (default "Monsters"; created if missing).
+// and adds it to CedarAndSea.yyp, in folders/Sprites/<folder>.yy (default "Monsters"; created if missing).
 // Running it again for the same name replaces the image.
 const fs = require("fs");
 const path = require("path");
@@ -40,7 +40,7 @@ const yy = tpl
 fs.writeFileSync(path.join(dir, name + ".yy"), yy);
 
 // Register the sprite (and its folder) in the project
-const yypPath = path.join(root, "NewHarvest.yyp");
+const yypPath = path.join(root, "CedarAndSea.yyp");
 let yyp = fs.readFileSync(yypPath, "utf8");
 const nl = yyp.includes("\r\n") ? "\r\n" : "\n";
 if(!yyp.includes('"folderPath":"folders/Sprites/' + folder + '.yy"')){

@@ -107,7 +107,7 @@ ${body}	};
 	const yy = path.join(dir, "room_walk.yy");
 	if(!fs.existsSync(yy)){
 		fs.writeFileSync(yy, `{\n  "$GMScript":"v1",\n  "%Name":"room_walk",\n  "isCompatibility":false,\n  "isDnD":false,\n  "name":"room_walk",\n  "parent":{\n    "name":"Scripts",\n    "path":"folders/Scripts.yy",\n  },\n  "resourceType":"GMScript",\n  "resourceVersion":"2.0",\n}`);
-		const yypPath = path.join(root, "NewHarvest.yyp");
+		const yypPath = path.join(root, "CedarAndSea.yyp");
 		let yyp = fs.readFileSync(yypPath, "utf8");
 		const nl = yyp.includes("\r\n") ? "\r\n" : "\n";
 		const entry = '    {"id":{"name":"room_walk","path":"scripts/room_walk/room_walk.yy",},},';

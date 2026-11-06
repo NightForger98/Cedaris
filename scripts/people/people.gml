@@ -265,7 +265,7 @@ function villager_table(){
 		        loves: ["x|salmon", "x|seabass", "f|grilled_perch"], likes: ["x|", "f|"], dislikes: ["p|potato"], hates: ["m|ember_core", "m|coal"],
 		        lines: [["Pigeon Rocks. Two rocks, a thousand pigeons.", "Dad says I've salt in my veins.", "Mind the nets."],
 		                ["I can out-swim anyone in this town.", "Ever seen the rocks at sunset? Pink as coral.", "Dad's getting old. I worry."],
-		                ["Come swimming with me sometime.", "I named a gull after you. He's very handsome. Or pretty.", "You're the best catch in Harvest Valley."]],
+		                ["Come swimming with me sometime.", "I named a gull after you. He's very handsome. Or pretty.", "You're the best catch on the whole coast."]],
 		        rewards: [["x|sardine", 4], ["d|cloth|sky", 1], ["x|salmon", 2], ["d|cloth|navy", 1], ["x|moonfin", 1]]},
 		wynn:   {name: "Wynn Quill", title: "Edwin's sister", race: "Elf", body: "teen", seed: 7010, kid: true,
 		        loves: ["m|feather", "m|gem", "f|corn_fritters"], likes: ["m|", "f|"], dislikes: ["p|potato"], hates: ["m|bone", "m|coal"],

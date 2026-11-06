@@ -132,7 +132,7 @@ ${buildings.map(b => `\t\t\t{room: "${b.room}", rect: [${b.rect.join(", ")}]},`)
 	const yy = path.join(dir, "world_map.yy");
 	if(!fs.existsSync(yy)){
 		fs.writeFileSync(yy, `{\n  "$GMScript":"v1",\n  "%Name":"world_map",\n  "isCompatibility":false,\n  "isDnD":false,\n  "name":"world_map",\n  "parent":{\n    "name":"Scripts",\n    "path":"folders/Scripts.yy",\n  },\n  "resourceType":"GMScript",\n  "resourceVersion":"2.0",\n}`);
-		const yypPath = path.join(root, "NewHarvest.yyp");
+		const yypPath = path.join(root, "CedarAndSea.yyp");
 		let yyp = fs.readFileSync(yypPath, "utf8");
 		const nl = yyp.includes("\r\n") ? "\r\n" : "\n";
 		const entry = '    {"id":{"name":"world_map","path":"scripts/world_map/world_map.yy",},},';

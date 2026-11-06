@@ -47,7 +47,7 @@ module.exports = function(all){
 		.replace(/"out_columns":\d+/, '"out_columns":' + Math.ceil(Math.sqrt(COLS * (sheet.h / T))))   // as the IDE lays out output_tileset.png
 		.replace(/"tile_count":\d+/, '"tile_count":' + COLS * (sheet.h / T));
 	fs.writeFileSync(path.join(dir, "TS_buildings.yy"), yy);
-	const yypPath = path.join(root, "NewHarvest.yyp");
+	const yypPath = path.join(root, "CedarAndSea.yyp");
 	let yyp = fs.readFileSync(yypPath, "utf8");
 	const nl = yyp.includes("\r\n") ? "\r\n" : "\n";
 	const entry = '    {"id":{"name":"TS_buildings","path":"tilesets/TS_buildings/TS_buildings.yy",},},';

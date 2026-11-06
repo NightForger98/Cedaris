@@ -1,4 +1,4 @@
-// Write design/PixelLab_Asset_Brief.docx: every asset still needed for Harvest Valley, with the reference image to give
+// Write design/PixelLab_Asset_Brief.docx: every asset still needed for Cedar & Sea, with the reference image to give
 // PixelLab and the prompt to paste, so it can be made on any PixelLab account and sent back.
 //   node tools/docs/pixellab_brief.js
 const fs = require("fs");
@@ -136,7 +136,7 @@ function assetTable(it){
 }
 
 const children = [
-	new Paragraph({heading: HeadingLevel.TITLE, children: [new TextRun("Harvest Valley - PixelLab Asset Brief")]}),
+	new Paragraph({heading: HeadingLevel.TITLE, children: [new TextRun("Cedar & Sea - PixelLab Asset Brief")]}),
 	p("Every building and prop the new world still needs, with the image to give PixelLab as a style reference and the prompt to paste. Make them on any PixelLab account, name each file as shown, and send them back: I clean them (background, trimming), import them, place them and credit them."),
 	new Paragraph({heading: HeadingLevel.HEADING_1, children: [new TextRun("How to make each one")]}),
 	bullet("Tool: Create map object (the one that made the houses so far)."),
@@ -155,8 +155,8 @@ for(const sec of SECTIONS){
 }
 
 const doc = new Document({
-	creator: "Claude for the Harvest Valley team",
-	title: "Harvest Valley - PixelLab Asset Brief",
+	creator: "Claude for the Cedar & Sea team",
+	title: "Cedar & Sea - PixelLab Asset Brief",
 	styles: {
 		default: {document: {run: {font: "Arial", size: 21}}},
 		paragraphStyles: [

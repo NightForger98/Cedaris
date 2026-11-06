@@ -10,7 +10,7 @@
 set -u
 cd "$(dirname "$0")/../.."
 CASE="${1:?usage: tools/test/autotest.sh <case.txt>}"
-SAVE_DIR="$LOCALAPPDATA/NewHarvest"
+SAVE_DIR="$LOCALAPPDATA/CedarAndSea"
 mkdir -p "$SAVE_DIR" build/autotest
 rm -rf "$SAVE_DIR/autotest" build/autotest/*
 cp "$CASE" "$SAVE_DIR/autotest.txt"

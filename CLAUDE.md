@@ -1,16 +1,16 @@
-# Harvest Valley (GameMaker LTS 2026)
+# Cedar & Sea (GameMaker LTS 2026)
 
 This is the project's only README and handoff file. It has three parts: **README** (what the game is and how to run
 it), **Handoff** (where work stands and what's next) and **Reference** (everything needed to work on it).
 
 ## README
 
-**Harvest Valley** is a Stardew-like farming RPG. You inherit your grandmother's farm in a valley: grow crops, keep
+**Cedar & Sea** (formerly Harvest Valley; renamed 2026-11-06) is a Stardew-like farming RPG set on a coast after Beirut. You inherit your grandmother's farm in a valley: grow crops, keep
 animals, mine and fight down a generated mine, learn magic, fish, cook, craft and dye clothes, and befriend the people
 of the village, the town of Brindlemoor, the coast and the vale, who live their own days.
 
-- **Project**: `NewHarvest.yyp`. Repo: github.com/NightForger98/HarvestValley (branch `main`).
-- **Run it**: open `NewHarvest.yyp` in GameMaker LTS 2026, or `./build.sh run` from Git Bash (see Reference).
+- **Project**: `CedarAndSea.yyp`. Repo: github.com/NightForger98/Cedar-and-Sea (branch `main`), started from HarvestValley's `world-rebuild` branch with its history (the old repo, github.com/NightForger98/HarvestValley, is kept as it was). Saves live in `%LOCALAPPDATA%/CedarAndSea`.
+- **Run it**: open `CedarAndSea.yyp` in GameMaker LTS 2026, or `./build.sh run` from Git Bash (see Reference).
 - **Controls** (defaults; rebind them in Options > Controls): arrows move (Shift runs, Ctrl walks); left click or Space uses the held tool (hold to charge it);
   1-9, 0 pick the hotbar slot; E talks / uses (in a dialogue: G gives what you hold, T trades or tells you the shop's
   hours); I inventory; M world map; F casts with a staff, Q changes spell; Esc pauses; Insert toggles debug mode.
@@ -260,7 +260,7 @@ shows them; check with the user, then discard them before committing.
   - Simulated key presses don't reach `keyboard_check_pressed`, so keys a test needs go through `input_pressed()`;
     held keys (keydown / keyup, walking) go through `input_held()`, so they work even when the window lacks focus.
   - Test runs never write real saves (only a "test" slot). Autosave must never overwrite another game's save slot.
-  - The user's settings may be fullscreen (`%LOCALAPPDATA%/NewHarvest/settings.ini`) - back it up and restore it if
+  - The user's settings may be fullscreen (`%LOCALAPPDATA%/CedarAndSea/settings.ini`) - back it up and restore it if
     you switch to windowed for tests.
   - A new game starts on Monday at 6am: set `time` (and `call autotest_date`) so shops are open when a test needs them.
   - A runtime error shows a dialog and the test just times out with no message: wrap the suspect call in
@@ -380,7 +380,7 @@ Every room but the mine and the forest is built from a spec in `tools/rooms/spec
 the things placed on it. One command writes the room file, so a layout change is a text edit and a rebuild:
 `node tools/rooms/build.js <room>` (or several names, or `all`). Edit the spec, never the built `.yy` - room-editor
 edits are overwritten by the next build. A spec for a room that doesn't exist yet creates it and adds it to
-`NewHarvest.yyp`. It writes:
+`CedarAndSea.yyp`. It writes:
 
 - `rooms/<room>/<room>.yy`: tile layers, merged `obj_col_box` collision boxes (plus a wall around the room),
   `obj_water_zone`s over water, and the spec's instances. Exits (`obj_transition`) go on the hidden Collisions layer.

@@ -55,6 +55,12 @@ travel rules) still holds.
   before building (a game still running holds `output/.../CedarAndSea.win`). Never stop a running suite with
   TaskStop alone: its bash children keep running and collide with later runs - kill `suite.sh` / `autotest.sh` /
   `build.sh` / `Runner` processes too.
+- **Real roads** (2026-11-06): in the town (blueprint.js TOWN_BOX) the roads are Beirut's real ones from OpenStreetMap,
+  warped onto the map through landmark anchors (`tools/map/osm_roads.js` -> `design/map/osm_beirut.json`; credited, ODbL);
+  no side streets in the middle of town (the user found them purposeless), dead-end lanes pruned, ramps left out. The
+  user's edits: the road south from Wing Hill to the Hippodrome replaced by one round the Outskirts (`outskirts_road`),
+  the coast past the port (Plummet's Point) turned to sea. Town houses stand only where their door faces a side lane;
+  big buildings choose their ground first; a tall one (the lighthouse) may stand with its top over the road behind.
 - **Known leftovers**: some Phoenix Bay decor finds no room (the old ferry dock prop, an obelisk, a stall, a barn);
   two landmark points (Pigeon Rocks, Victory Hill) can't be reached from a door; Beirut has wide plain lawns between
   districts - room for more town (PixelLab tilesets for terrain need a Wang corner-tile path in `build.js`).

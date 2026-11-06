@@ -1,1 +1,2 @@
-sprite_index = spr_house_silo;
+text = "Pigeon Rocks";
+side = "here";

@@ -1,1 +1,1 @@
-sprite_index = spr_prop_farm_bee_shed;
+sprite_index = spr_prop_tram_stop;

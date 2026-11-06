@@ -1,1 +1,1 @@
-sprite_index = spr_house_olive_press;
+sprite_index = spr_prop_lifeguard_hut;

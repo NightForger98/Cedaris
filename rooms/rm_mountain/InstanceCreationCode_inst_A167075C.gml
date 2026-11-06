@@ -1,2 +1,2 @@
-kind = "cable";
-stop = "the Mountain top";
+text = "Whispering Woods";
+side = "s";

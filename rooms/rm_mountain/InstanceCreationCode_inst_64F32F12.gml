@@ -1,2 +1,2 @@
-text = "Beacon Hill";
-side = "here";
+text = "Beirut";
+side = "w";

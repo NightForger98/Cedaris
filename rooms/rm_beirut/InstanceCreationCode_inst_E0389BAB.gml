@@ -1,1 +1,2 @@
-sprite_index = spr_prop_gemmayzeh_bar;
+kind = "tram";
+stop = "Verdun Street";

@@ -1,1 +1,5 @@
-sprite_index = spr_prop_town_hallhouse2;
+targetRoom = rm_mountain;
+targetX = 80;
+targetY = 2736;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

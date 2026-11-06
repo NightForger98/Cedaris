@@ -1,5 +1,5 @@
-targetRoom = rm_witch_tower;
-targetX = 224;
-targetY = 280;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+targetRoom = rm_woods;
+targetX = 240;
+targetY = 80;
+PlayerFacingBefore = dir.down;
+PlayerFacingAfter = dir.down;

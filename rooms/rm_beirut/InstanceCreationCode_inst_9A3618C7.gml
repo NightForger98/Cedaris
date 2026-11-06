@@ -1,1 +1,2 @@
-sprite_index = spr_prop_town_cafe2;
+text = "The Outskirts";
+side = "s";

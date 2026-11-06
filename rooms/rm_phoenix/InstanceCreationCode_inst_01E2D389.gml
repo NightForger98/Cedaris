@@ -1,5 +1,2 @@
-targetRoom = rm_tinker;
-targetX = 256;
-targetY = 312;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+kind = "cable";
+stop = "Hangar 12";

@@ -1,1 +1,2 @@
-sprite_index = spr_prop_roadside_shrine;
+text = "Uptown";
+side = "here";

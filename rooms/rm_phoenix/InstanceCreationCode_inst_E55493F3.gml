@@ -1,2 +1,2 @@
-kind = "cable";
-stop = "Hangar 12";
+text = "Hangar 12";
+side = "here";

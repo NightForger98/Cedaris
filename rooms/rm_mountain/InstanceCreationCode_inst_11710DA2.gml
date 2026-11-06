@@ -1,1 +1,2 @@
-sprite_index = spr_house_windmill;
+text = "Beacon Hill";
+side = "here";

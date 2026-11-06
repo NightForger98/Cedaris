@@ -1,1 +1,5 @@
-sprite_index = spr_prop_alt_ward;
+targetRoom = rm_beach_hut;
+targetX = 224;
+targetY = 280;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

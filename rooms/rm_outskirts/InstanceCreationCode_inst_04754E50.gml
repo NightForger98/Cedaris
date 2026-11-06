@@ -1,1 +1,1 @@
-sprite_index = spr_house_home_tawil;
+sprite_index = spr_prop_swing;

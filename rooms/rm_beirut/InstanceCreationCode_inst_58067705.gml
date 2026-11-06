@@ -1,1 +1,2 @@
-sprite_index = spr_prop_sea_arch;
+text = "Phoenix Bay";
+side = "n";

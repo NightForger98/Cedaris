@@ -1,1 +1,5 @@
-sprite_index = spr_prop_alt_ward;
+targetRoom = rm_home_saltwhistle;
+targetX = 224;
+targetY = 280;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

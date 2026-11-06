@@ -1,1 +1,2 @@
-sprite_index = spr_prop_botanical;
+text = "Manara's Light";
+side = "here";

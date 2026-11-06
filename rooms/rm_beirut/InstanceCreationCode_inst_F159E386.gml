@@ -1,1 +1,2 @@
-sprite_index = spr_prop_alt_kassar;
+text = "The Mountain";
+side = "e";

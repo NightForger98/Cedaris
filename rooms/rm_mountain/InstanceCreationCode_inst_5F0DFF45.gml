@@ -1,1 +1,2 @@
-sprite_index = spr_house_cottage;
+text = "Plummet's Point";
+side = "here";

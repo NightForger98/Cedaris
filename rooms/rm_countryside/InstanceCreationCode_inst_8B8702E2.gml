@@ -1,1 +1,1 @@
-sprite_index = spr_prop_barn_stone;
+sprite_index = spr_house_home_night;

@@ -1,2 +1,0 @@
-text = "Downtown";
-side = "here";

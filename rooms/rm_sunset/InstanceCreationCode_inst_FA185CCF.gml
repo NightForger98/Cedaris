@@ -1,1 +1,5 @@
-sprite_index = spr_prop_turtle_nests;
+targetRoom = rm_boatyard;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

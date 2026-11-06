@@ -1,2 +1,2 @@
-text = "The Outskirts";
+text = "Whispering Woods";
 side = "n";

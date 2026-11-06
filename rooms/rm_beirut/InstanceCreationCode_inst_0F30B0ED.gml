@@ -1,1 +1,5 @@
-sprite_index = spr_house_lighthouse;
+targetRoom = rm_valley_ranch;
+targetX = 288;
+targetY = 344;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

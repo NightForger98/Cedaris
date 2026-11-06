@@ -10,7 +10,7 @@ wait 30
 call autotest_to_point station_tram_1 0 0
 wait 5
 call autotest_transit
-expect tram Red Street idle
+expect tram Verdun Street idle
 key e
 wait 5
 call autotest_transit
@@ -26,8 +26,6 @@ wait 5
 call autotest_transit
 expect menu
 shot 02_tram_menu
-key down
-wait 3
 key enter
 wait 90
 call autotest_room_name

@@ -71,7 +71,10 @@ const PLACEHOLDER_ART = {"Biel hall": "prop_exhibition_hall", "Silos": "prop_por
 // The cable car and the tram: a station (obj_transit) in front of each one's art; you ride once its project is done
 // (scripts/transit). Each takes the name of the old district it stands in, or its area's.
 const STATION_OF = {"Cable car": "cable", "Cable car top": "cable", "Tram stop": "tram"};
-const STATIONS = [];   // {kind, name, room, x, y}, filled as the rooms are built
+const STATIONS = [];
+// Named places on the blueprint (its labels, tools/map/blueprint.js), for a stop whose district already has one
+const PLACES = {"Zaitunay Bay": [52, 4], "Martyrs' Square": [89, 27], "Gemmayzeh": [112, 27], "Sanayeh": [42, 56], "Cardo": [88, 38],
+	"Museum": [104, 78], "Hippodrome": [72, 128], "Stadium": [48, 108], "Sursock": [128, 42], "Corniche": [14, 70]};   // {kind, name, room, x, y}, filled as the rooms are built
 const districtAt = (wx, wy, area) => { for(const [o, d] of Object.entries(OLDR)){ const [x1, y1, x2, y2] = d.rect;
 	if(wx >= x1 && wx <= x2 && wy >= y1 && wy <= y2 && ROOMS[o] && ROOMS[o].name) return ROOMS[o].name; }
 	// in none (the new shore): the nearest one in this area
@@ -117,6 +120,7 @@ function buildAll(){
 	STATIONS.length = 0;
 	for(const id of ids) rooms[id] = buildRoom(id, frames[id], exits);
 	// Ways through, now that every room exists: a strip each side of each crossing, arriving on the other side
+	SOLID = {rooms, frames, cells: {}};
 	for(const id of ids) addWays(id, rooms, frames);
 	return {rooms, exits, frames, stations: STATIONS};
 }
@@ -157,13 +161,24 @@ function buildRoom(id, fr, exits){
 
 	// Buildings, landmarks, ruins and placeholders on their blueprint footprints
 	const here = LAYOUT.buildings.filter(b => owner(b.x + Math.floor(b.w / 2), b.y + b.h - 1) === id);
-	const placeAt = (w, h, fx, fy, fw, fh, ok, needFront) => {
+	// the biggest buildings choose their ground first (a tall lighthouse needs more room than a cottage beside it)
+	const bigness = b => BUILDING[b.name] && keyInfo[BUILDING[b.name]] ? size(keyInfo[BUILDING[b.name]].is).reduce((p, q) => p * q, 1) : 0;
+	here.sort((a, b) => bigness(b) - bigness(a));
+	const placeAt = (w, h, fx, fy, fw, fh, ok, needFront, footRows) => {
 		// The thing's foot centred on the footprint's foot, slid to the nearest clear spot
 		const want = [Math.round(fx + fw / 2 - w / 2), fy + fh - h];
-		for(let d = 0; d <= 14; d++) for(let dy = -d; dy <= d; dy++) for(let dx = -d; dx <= d; dx++){
+		for(let d = 0; d <= 24; d++) for(let dy = -d; dy <= d; dy++) for(let dx = -d; dx <= d; dx++){
 			if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
 			const c = want[0] + dx, r = want[1] + dy;
-			if(!free(c, r, w, h, ok)) continue;
+			// footRows: only the foot on clear ground, the rest (a tall tower) may stand over a road behind it
+			if(footRows){
+				if(!free(c, r + h - footRows, w, footRows, ok)) continue;
+				let up = true;   // (the tower may rise over the next area's ground: only not over water, cliffs or other things)
+				for(let y = r; y < r + h - footRows && up; y++) for(let x = c; x < c + w && up; x++)
+					if(x < 1 || y < 0 || x >= W - 1 || ![".", ",", ":", "_"].includes(at(x, y)) || taken.has(x + "," + y)) up = false;
+				if(!up) continue;
+			}
+			else if(!free(c, r, w, h, ok)) continue;
 			if(needFront && !OPEN.includes(at(c + needFront[0], r + h)) ) continue;
 			return [c, r];
 		}
@@ -175,7 +190,8 @@ function buildRoom(id, fr, exits){
 			const key = BUILDING[b.name], info = keyInfo[key];
 			if(!info){ console.log(`  ${id}: no building ${key}`); continue; }
 			const is = info.is, [w, h] = size(is), d = doorOf(is);
-			const spot = placeAt(w, h, fx, fy, b.w, b.h, [".", ","], d) || placeAt(w, h, fx, fy, b.w, b.h, [".", ",", ":"], d);
+			const spot = placeAt(w, h, fx, fy, b.w, b.h, [".", ","], d) || placeAt(w, h, fx, fy, b.w, b.h, [".", ",", ":"], d)
+				|| (h > 6 ? placeAt(w, h, fx, fy, b.w, b.h, [".", ","], d, 4) : null);
 			if(!spot){ console.log(`  ${id}: no room for ${b.name}`); continue; }
 			const [c, r] = spot;
 			things.push({is, at: [c, r]});
@@ -193,7 +209,7 @@ function buildRoom(id, fr, exits){
 			  if(reach > 0) for(let rr = r + h; rr < reach; rr++) grid[rr][cc] = ","; }
 		} else if(THING[b.name]){
 			const is = THING[b.name], [w, h] = size(is);
-			const spot = placeAt(w, h, fx, fy, b.w, b.h, [".", ",", "_"]);
+			const spot = placeAt(w, h, fx, fy, b.w, b.h, [".", ",", "_"]) || placeAt(w, h, fx, fy, b.w, b.h, [".", ",", "_"], null, Math.min(2, h));
 			if(!spot){ console.log(`  ${id}: no room for ${b.name}`); continue; }
 			things.push({is, at: spot});
 			take(spot[0], spot[1], w, h);
@@ -208,7 +224,7 @@ function buildRoom(id, fr, exits){
 		} else if(PLACEHOLDER[b.name]){
 			const art = PLACEHOLDER_ART[b.name];
 			if(art && T.things[art]){
-				const [w, h] = size(art), at2 = placeAt(w, h, fx, fy, b.w, b.h, [".", ",", "_"]);
+				const [w, h] = size(art), at2 = placeAt(w, h, fx, fy, b.w, b.h, [".", ",", "_"]) || placeAt(w, h, fx, fy, b.w, b.h, [".", ",", "_"], null, Math.min(2, h));
 				if(at2){
 					things.push({is: art, at: at2});
 					// a cell clear around it, and for a station three rows clear in front (where you stand to ride)
@@ -219,10 +235,10 @@ function buildRoom(id, fr, exits){
 						const area = Object.keys(ROOM_OF).find(n => ROOM_OF[n] === id);
 						let name = districtAt(ox + at2[0] + Math.floor(w / 2), oy + at2[1] + h, area);
 						if(kind === "cable") name = (b.name === "Cable car top") ? "the Mountain top" : name;
-						if(STATIONS.some(t => t.kind === kind && t.name === name)){   // taken: the nearest landmark on the blueprint instead
+						if(STATIONS.some(t => t.kind === kind && t.name === name)){   // taken: the nearest of Beirut's named places instead
 							let bd = 1e9;
-							for(const o of LAYOUT.buildings) if(o.name !== b.name && !/stop|Cable/.test(o.name)){
-								const dd = Math.hypot(o.x + o.w / 2 - b.x, o.y + o.h / 2 - b.y); if(dd < bd){ bd = dd; name = o.name.replace(/ club$/, ""); } }
+							for(const [pn, [px, py]] of Object.entries(PLACES)) if(!STATIONS.some(t => t.name === pn)){
+								const dd = Math.hypot(px - b.x, py - b.y); if(dd < bd){ bd = dd; name = pn; } }
 						}
 						STATIONS.push({kind, name, room: id, x: sx, y: sy + 24});
 						instances.push({obj: "obj_transit", x: sx, y: sy, code: `kind = "${kind}";
@@ -301,7 +317,7 @@ side = "here";`});
 	  const RURAL = ["rm_outskirts", "rm_countryside", "rm_sunset"].includes(id), POOL = RURAL ? ALT_HOMES.filter(k => T.things[k]) : FILL;
 	  if((KIND[id] === "town" || RURAL) && POOL.length){
 		const FILL = POOL;
-		const fr = rng(seed + 57), want = Math.round(W * H / (RURAL ? 700 : 150)), road = ch => ch === ":" || ch === ",";
+		const fr = rng(seed + 57), want = Math.round(W * H / (RURAL ? 900 : 350)), road = ch => ch === ":" || ch === ",";
 		let n = 0;
 		// every cell in a shuffled order, each trying the houses in a shuffled order, until the town has enough
 		const cells = [];
@@ -313,10 +329,18 @@ side = "here";`});
 			for(const is of order){
 				const [w, h] = size(is), mid = c + Math.floor(w / 2);
 				if(c + w >= W - 2 || r + h >= H - 3) continue;
-				// on a street: one within four cells of it (any side), and open ground in front of its door
-				let near = false;
-				for(let y = r - 4; y <= r + h + 4 && !near; y++) for(let x = c - 4; x <= c + w + 3 && !near; x++) if(road(at(x, y))) near = true;
-				if(!near || ![".", ":", ","].includes(at(mid, r + h)) || !free(c - 1, r - 1, w + 2, h + 1, ["."])) continue;
+				// facing a street: its door looks onto a side lane (in town; out of town a road or a lane) at most two
+				// cells of grass away - houses and workshops along the side lanes, which go somewhere (tools/map/blueprint.js)
+				const street = ch => ch === "," || (RURAL && ch === ":");
+				let front = null;   // [x, y] of the street cell nearest below the house (under its width)
+				for(let k2 = 0; k2 < 3 && !front; k2++) for(let x = c; x < c + w && !front; x++) if(street(at(x, r + h + k2))) front = [x, r + h + k2];
+				if(!front || !free(c - 1, r, w + 2, h, ["."])) continue;   // a cell clear each side (its back may meet the next street)
+				let pathOk = true;   // the path from the door: down to the street's row, then along to it, all on grass
+				for(let y = r + h; y < front[1] && pathOk; y++) if(at(mid, y) !== "." || taken.has(mid + "," + y)) pathOk = false;
+				for(let x = Math.min(mid, front[0]); x <= Math.max(mid, front[0]) && pathOk; x++){ const ch = at(x, front[1]); if(!street(ch) && (ch !== "." || taken.has(x + "," + front[1]))) pathOk = false; }
+				if(!pathOk) continue;
+				for(let y = r + h; y < front[1]; y++) grid[y][mid] = ",";
+				for(let x = Math.min(mid, front[0]); x <= Math.max(mid, front[0]); x++) if(at(x, front[1]) === ".") grid[front[1]][x] = ",";
 				let plain = true;
 				for(let y = r; y < r + h && plain; y++) for(let x = c; x < c + w && plain; x++) if(bk(x, y) !== ".") plain = false;
 				if(!plain) continue;
@@ -503,9 +527,23 @@ side = "${side}";`}); }
 // jetty, and the jetty's end back (for now; a boat ride later)
 // Where to arrive in a room: the nearest cell (world tiles) of its own open ground to the one wanted, at least one cell
 // clear of anything blocking around it
+// The cells (world tiles) where something solid stands in a built room: its things' solid parts
+let SOLID = null;
+function solidCells(id){
+	if(!SOLID || !SOLID.rooms[id]) return new Set();
+	if(SOLID.cells[id]) return SOLID.cells[id];
+	const set = new Set(), fr = SOLID.frames[id];
+	for(const t of SOLID.rooms[id].things || []){
+		if(!t.at) continue;
+		const def = t.is ? T.things[t.is] : null, parts = t.solid || (def && def.solid) || [];
+		for(const [sx, sy, sw, sh] of parts) for(let y = 0; y < sh; y++) for(let x = 0; x < sw; x++) set.add((fr.ox + t.at[0] + sx + x) + "," + (fr.oy + t.at[1] + sy + y));
+	}
+	return (SOLID.cells[id] = set);
+}
 function arriveAt(id, x, y){
+	const solid = solidCells(id);
 	const ok = (cx, cy) => { for(let dy = -1; dy <= 1; dy++) for(let dx = -1; dx <= 1; dx++)
-		if(owner(cx + dx, cy + dy) !== id || !OPEN.includes(CH[kindAt(cx + dx, cy + dy)])) return false; return true; };
+		if(owner(cx + dx, cy + dy) !== id || !OPEN.includes(CH[kindAt(cx + dx, cy + dy)]) || solid.has((cx + dx) + "," + (cy + dy))) return false; return true; };
 	for(let d = 0; d < 12; d++) for(let dy = -d; dy <= d; dy++) for(let dx = -d; dx <= d; dx++)
 		if(Math.max(Math.abs(dx), Math.abs(dy)) === d && ok(x + dx, y + dy)) return [x + dx, y + dy];
 	return [x, y];

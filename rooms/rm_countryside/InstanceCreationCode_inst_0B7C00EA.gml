@@ -1,2 +1,2 @@
-text = "Abda's Ascent";
-side = "here";
+text = "The Outskirts";
+side = "n";

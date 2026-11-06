@@ -1,1 +1,1 @@
-sprite_index = spr_house_lodge;
+sprite_index = spr_prop_lamp;

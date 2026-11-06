@@ -1,1 +1,5 @@
-sprite_index = spr_prop_alt_ward;
+targetRoom = rm_church;
+targetX = 288;
+targetY = 408;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

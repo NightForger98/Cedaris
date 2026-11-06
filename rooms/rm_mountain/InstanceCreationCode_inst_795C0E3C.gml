@@ -1,5 +1,5 @@
-targetRoom = rm_village_rowan;
-targetX = 256;
-targetY = 312;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+targetRoom = rm_beirut;
+targetX = 4304;
+targetY = 2000;
+PlayerFacingBefore = dir.left;
+PlayerFacingAfter = dir.left;

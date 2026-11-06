@@ -1,1 +1,1 @@
-sprite_index = spr_prop_stables_b;
+sprite_index = spr_prop_barn_stone;

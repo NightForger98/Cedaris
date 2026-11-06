@@ -1,1 +1,1 @@
-sprite_index = spr_prop_port_silos;
+sprite_index = spr_prop_old_hangar;

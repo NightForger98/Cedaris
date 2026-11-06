@@ -1,1 +1,5 @@
-sprite_index = spr_house_market_small;
+targetRoom = rm_lighthouse;
+targetX = 160;
+targetY = 280;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

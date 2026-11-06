@@ -1,5 +1,5 @@
-targetRoom = rm_village_store;
-targetX = 288;
-targetY = 344;
+targetRoom = rm_home_ward;
+targetX = 224;
+targetY = 280;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

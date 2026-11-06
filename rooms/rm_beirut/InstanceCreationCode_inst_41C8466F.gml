@@ -1,1 +1,2 @@
-sprite_index = spr_house_brewery;
+text = "Verdun Street";
+side = "here";

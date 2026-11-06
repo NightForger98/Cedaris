@@ -1,1 +1,1 @@
-sprite_index = spr_prop_alt_night;
+sprite_index = spr_prop_stables_b;

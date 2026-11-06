@@ -1,1 +1,1 @@
-sprite_index = spr_house_mill;
+if(project_done("bridge")) instance_destroy();

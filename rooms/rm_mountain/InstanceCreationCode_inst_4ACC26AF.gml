@@ -1,1 +1,2 @@
-sprite_index = spr_prop_bourj_market;
+kind = "cable";
+stop = "the Mountain top";

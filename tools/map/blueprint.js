@@ -48,7 +48,9 @@ const northCoast = x => (x < 128 ? 11 : 11 - (x - 128) * 0.6) + wob(x, 2, 2.5);
 const westCoast = y => (y < 84 ? 7 : y < 104 ? 7 + (y - 84) * 0.75 : 22) + wob(y, 1, (y < 84 ? 2 : 4));
 for(let y = -M; y < 200 + M; y++) for(let x = -M; x < 250 + M; x++){
 	const tip = (x + y) < 34 + wob(x - y, 3, 3);                      // the peninsula's rounded north-west corner
-	if(x >= westCoast(y) && y >= Math.max(northCoast(x), -3 + wob(x, 7, 2)) && !tip) set(x + M, y + M, "grass");   // the mountain meets the sea at the top
+	// the mountain meets the sea at the top; past the port (x 172 on) the shore pulls back to y 0, open sea above it
+	const cap = -3 + Math.max(0, Math.min(1, (x - 172) / 8)) * 3 + wob(x, 7, x >= 172 ? 1.2 : 2);
+	if(x >= westCoast(y) && y >= Math.max(northCoast(x), cap) && !tip) set(x + M, y + M, "grass");
 }
 const isSea = (x, y) => ["deep", "sea", "shallow"].includes(get(x + M, y + M));
 const nearSea = (x, y, r) => { for(let dy = -r; dy <= r; dy++) for(let dx = -r; dx <= r; dx++) if(isSea(x + dx, y + dy)) return true; return false; };
@@ -148,7 +150,9 @@ const ROADS = {
 	mazraa:         [[11, 62], [50, 62], [80, 64], [110, 64]],                                // Corniche el-Mazraa / Salam
 	damascus_road:  [[90, 34], [100, 46], [110, 64], [114, 84], [112, 100], [118, 120], [132, 140], [150, 152], [170, 158]],   // south to Baabda (Abda)
 	bechara_khoury: [[80, 42], [80, 64], [78, 86], [72, 100]],
-	airport_road:   [[72, 100], [66, 122], [62, 146], [66, 162]],                             // on to the farm (where the airport would be)
+	// Round the Outskirts (the user's line, 2026-11-06): from Wing Hill down the west side, then east along the south
+	// above Saint Thereza to Damascus Road
+	outskirts_road: [[62, 101], [60, 114], [59, 128], [61, 138], [68, 144], [84, 145], [100, 146], [118, 150], [136, 150], [150, 152]],   // (above the farm, which ends the Outskirts at y 147)
 	south_boulevard:[[22, 96], [50, 98], [72, 100], [100, 104], [112, 100]],                  // Jnah to Tayouneh
 	// Streets
 	verdun:         [[40, 32], [40, 62], [44, 90]],
@@ -166,13 +170,36 @@ const LANES = {
 	mountain_road:  [[150, 46], [164, 52], [178, 54], [190, 46], [200, 38], [212, 32], [222, 26], [230, 22]],   // Mansourieh, the mine, the peak
 	victory_hill:   [[146, 80], [156, 80], [166, 80]],
 	woods:          [[156, 80], [166, 96], [182, 104], [192, 110]],
-	countryside:    [[66, 162], [100, 158], [124, 156], [150, 158]],
 	farm_to_beach:  [[34, 170], [56, 170]],
 	up_from_bourj:  [[146, 18], [158, 24], [172, 34], [182, 44], [190, 46]],                 // Bourj Hammoud up toward Mansourieh, to the mine road
 	into_the_woods: [[170, 158], [184, 152], [196, 144], [206, 136]],                        // Abda over the river into Whispering Woods
 };
-for(const [name, pts] of Object.entries(ROADS)) line(pts, "road", STREETS.includes(name) ? 0.5 : 1, hills);
-for(const [name, pts] of Object.entries(LANES)) line(pts, "lane", 0.5, hills);
+// In the town (TOWN_BOX) the roads are Beirut's real ones (OpenStreetMap, warped onto this map by tools/map/osm_roads.js):
+// main roads 2-3 tiles wide, the streets between them 1 - the real city's blocks. Outside it, the roads drawn above.
+const TOWN_BOX = [6, -4, 140, 104];
+const inTown = (x, y) => x >= TOWN_BOX[0] && y >= TOWN_BOX[1] && x <= TOWN_BOX[2] && y <= TOWN_BOX[3];
+const OSM = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "design", "map", "osm_beirut.json"), "utf8"));
+const lineWhere = (pts, k, w, under, keep) => { for(let i = 0; i < pts.length - 1; i++){
+	const [x1, y1] = pts[i], [x2, y2] = pts[i + 1], n = Math.max(Math.ceil(Math.abs(x2 - x1)), Math.ceil(Math.abs(y2 - y1)), 1);
+	let px = null, py = null;
+	for(let t = 0; t <= n; t++){ const x = x1 + (x2 - x1) * t / n, y = y1 + (y2 - y1) * t / n;
+		// a diagonal step gets the cell beside it too, so the line is joined side to side (walkable, and not a "dead end")
+		const steps = [[x, y]];
+		if(px !== null && Math.round(x) !== px && Math.round(y) !== py) steps.push([Math.round(x), py]);
+		px = Math.round(x); py = Math.round(y);
+		for(const [sx, sy] of steps) for(let dy = -w; dy <= w; dy++) for(let dx = -w; dx <= w; dx++){
+			const X = Math.round(sx + dx), Y = Math.round(sy + dy);
+			if(!keep(X, Y)) continue;
+			const cur = get(X + M, Y + M);
+			if(cur === "river") set(X + M, Y + M, "pier");
+			else if(!["deep", "sea", "shallow"].includes(cur) && (!under || under.includes(cur))) set(X + M, Y + M, k); } } } };
+for(const [name, pts] of Object.entries(ROADS)) lineWhere(pts, "road", STREETS.includes(name) ? 0.5 : 1, hills, (x, y) => !inTown(x, y));
+for(const [name, pts] of Object.entries(LANES)) lineWhere(pts, "lane", 0.5, hills, (x, y) => !inTown(x, y));
+// the real side streets, but none in the middle of town round Uptown and the Museum (the user: "excessive while
+// serving no real purpose"); there the main roads alone, and lanes only to the buildings that need them (below)
+const SIDE_STREETS = (x, y) => inTown(x, y) && !(x >= 66 && x <= 132 && y >= 62 && y <= 104);
+for(const r of OSM.roads.filter(r => r.k === "lane")) lineWhere(r.pts, "lane", 0.5, hills, SIDE_STREETS);   // 2 tiles wide: a 1-tile street on a slant draws as a ragged line
+for(const r of OSM.roads.filter(r => r.k === "road")) lineWhere(r.pts, "road", r.w, hills.filter(k => k !== "plaza").concat(["lane"]), inTown);
 rect(82, 22, 96, 32, "plaza");                     // Martyrs' Square, downtown by the port
 disc(102, 104, 3, 3, "plaza");                     // the Tayouneh roundabout, by the Horsh pines
 disc(110, 64, 2, 2, "plaza");                      // the Museum crossing
@@ -253,7 +280,7 @@ b(68, 4, 9, 5, "Biel hall"); b(168, -12, 4, 5, "Silos"); b(58, 18, 5, 3, "Marina
 b(142, 20, 7, 4, "Bourj Hammoud market"); b(46, 114, 7, 6, "Stadium");
 b(108, 62, 6, 4, "Quill"); b(116, 62, 8, 5, "Meadowlark");
 // Phoenix Bay (the lighthouse on the peninsula's corner, the port, Hangar 12 past the river mouth)
-b(12, 30, 3, 7, "Lighthouse"); b(56, 18, 6, 4, "Fish market"); b(112, 18, 6, 4, "Ferry");
+b(12, 30, 3, 7, "Lighthouse"); b(38, 17, 6, 4, "Fish market"); b(112, 18, 6, 4, "Ferry");
 b(150, 0, 8, 5, "Hangar 12"); b(162, 2, 6, 4, "Tinker"); b(144, 8, 5, 4, "Brassbolt");
 // Sunset Coast
 b(16, 66, 5, 4, "Gullwater"); b(30, 100, 6, 4, "Beach bar"); b(26, 108, 3, 4, "Lifeguard"); b(38, 112, 4, 3, "Shack");
@@ -275,7 +302,7 @@ b(152, 174, 6, 4, "Hayward"); b(142, 176, 5, 4, "Frere"); b(166, 160, 6, 6, "Chu
 b(74, -20, 4, 3, "Burrow");
 // Beirut's history and art: the Roman Baths and the Cardo's columns downtown (the Wardens' ruins story, and a dig site for
 // the Museum), the Sursock gallery, Gemmayzeh's bars, the old Mar Mikhael station; the temple ruins at Beit Mery
-b(60, 44, 7, 5, "Roman Baths", "ruin"); b(82, 35, 12, 2, "Cardo", "ruin"); b(120, 44, 7, 5, "Sursock gallery");
+b(60, 44, 7, 5, "Roman Baths", "ruin"); b(82, 35, 12, 2, "Cardo", "ruin"); b(114, 58, 8, 6, "Sursock gallery");
 b(104, 29, 5, 3, "Bar"); b(112, 29, 5, 3, "Bar"); b(120, 22, 7, 4, "Old station"); b(196, 38, 7, 5, "Temple ruins", "ruin");
 // The cable car's stations, and the tram's stops
 b(162, 10, 4, 3, "Cable car"); b(226, 14, 4, 3, "Cable car top");
@@ -289,13 +316,55 @@ const fits = (x, y, w, h) => { for(let yy = y - 1; yy <= y + h; yy++) for(let xx
 	return true; };
 for(const k of B){
 	let best = null;
-	for(let d = 0; d <= 10 && !best; d++) for(let dy = -d; dy <= d && !best; dy++) for(let dx = -d; dx <= d; dx++){
+	for(let d = 0; d <= 18 && !best; d++) for(let dy = -d; dy <= d && !best; dy++) for(let dx = -d; dx <= d; dx++){
 		if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
 		if(fits(k.x + dx, k.y + dy, k.w, k.h)){ best = [dx, dy]; break; }
 	}
-	if(!best){ console.log("no room for " + k.name); best = [0, 0]; }
+	// none with a tile clear round it: right up against the road, then
+	const tight = (x, y, w, h) => { for(let yy = y; yy < y + h; yy++) for(let xx = x; xx < x + w; xx++) if(!open.includes(get(xx + M, yy + M))) return false; return true; };
+	for(let d = 0; d <= 18 && !best; d++) for(let dy = -d; dy <= d && !best; dy++) for(let dx = -d; dx <= d; dx++){
+		if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
+		if(tight(k.x + dx, k.y + dy, k.w, k.h)){ best = [dx, dy]; break; }
+	}
+	// none at all: left where it was, but not drawn over the roads (the room builder finds it a spot of its own)
+	if(!best){ console.log("no room for " + k.name + " (not drawn; the room builder places it)"); continue; }
 	k.x += best[0]; k.y += best[1];
 	rect(k.x, k.y, k.x + k.w - 1, k.y + k.h - 1, k.kind);
+}
+
+// ---- side lanes that serve something (the user, 2026-11-06: "we don't want side roads leading nowhere"): a lane from
+// each building's door down to the nearest road if it's close and none is; then, in town, dead ends are cut back
+// until every lane runs between roads or ends at a building, and lanes that touch no road go
+{ const ROADISH = ["road", "plaza", "pier"], WALK = ["lane", "road", "plaza", "pier"];
+  for(const k of B.filter(k => k.kind === "building")){
+	const dx = Math.round(k.x + k.w / 2), y0 = k.y + k.h;
+	if([0, 1].some(d => WALK.includes(get(dx + M, y0 + d + M)))) continue;
+	let reach = -1;
+	for(let y = y0; y <= y0 + 10; y++){ const g2 = get(dx + M, y + M); if(WALK.includes(g2)){ reach = y; break; } if(!open.includes(g2)) break; }
+	if(reach > 0) for(let y = y0; y < reach; y++) set(dx + M, y + M, "lane");
+  }
+  const N4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  const nextToBuilding = (x, y) => [[0, 0], ...N4, [1, 1], [-1, 1], [1, -1], [-1, -1]].some(([a, b]) => ["building", "ruin"].includes(get(x + a + M, y + b + M)));
+  for(let pass = 0; pass < 200; pass++){
+	let cut = 0;
+	for(let y = TOWN_BOX[1]; y <= TOWN_BOX[3]; y++) for(let x = TOWN_BOX[0]; x <= TOWN_BOX[2]; x++){
+		if(get(x + M, y + M) !== "lane" || nextToBuilding(x, y)) continue;
+		const n = N4.filter(([a, b]) => WALK.includes(get(x + a + M, y + b + M))).length;
+		if(n <= 1){ set(x + M, y + M, "grass"); cut++; }
+	}
+	if(!cut) break;
+  }
+  // lane clusters that never meet a road
+  const seen = new Set();
+  for(let y = TOWN_BOX[1]; y <= TOWN_BOX[3]; y++) for(let x = TOWN_BOX[0]; x <= TOWN_BOX[2]; x++){
+	if(get(x + M, y + M) !== "lane" || seen.has(x + "," + y)) continue;
+	const part = [], st = [[x, y]]; let roadSeen = false; seen.add(x + "," + y);
+	while(st.length){ const [a, b] = st.pop(); part.push([a, b]);
+		for(const [p, q] of N4){ const g2 = get(a + p + M, b + q + M), key = (a + p) + "," + (b + q);
+			if(ROADISH.includes(g2)) roadSeen = true;
+			if(g2 === "lane" && !seen.has(key)){ seen.add(key); st.push([a + p, b + q]); } } }
+	if(!roadSeen) for(const [a, b] of part) set(a + M, b + M, "grass");
+  }
 }
 
 // ---- the blueprint: one pixel a tile
@@ -417,7 +486,7 @@ dist("Well's Head", 30, 10); dist("Red Street", 40, 50); dist("Downtown", 87, 20
 dist("Verdun Street", 40, 70); dist("Uptown", 76, 80); dist("Oven's Window", 116, 70);
 dist("Manara's Light", 12, 40); dist("Starsand Pier (Biel)", 104, -6); dist("Port", 157, -20); dist("Zaitunay Bay", 52, 4); dist("Hangar 12", 170, 4);
 dist("Pigeon Rocks", 8, 56); dist("White Sand", 34, 118); dist("Olive Bay", 36, 140); dist("South Beach", 36, 180);
-dist("Plummet's Point", 210, -10); dist("Beacon Hill", 176, 38); dist("Victory Hill", 170, 84);
+dist("Plummet's Point", 206, 14); dist("Beacon Hill", 176, 38); dist("Victory Hill", 170, 84);
 dist("Wing Hill", 58, 98); dist("Dahya", 100, 112); dist("Resolve's Rise", 128, 132);
 dist("Saint Thereza", 108, 152); dist("Frere's Fray", 144, 184); dist("Abda", 172, 154);
 dist("Mine", 178, 56); dist("Peak", 234, 8); dist("Ferry", 46, -12); dist("Riviera", 28, 18); dist("Beirut River", 156, 136);

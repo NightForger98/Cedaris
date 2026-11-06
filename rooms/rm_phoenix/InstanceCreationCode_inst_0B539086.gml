@@ -1,1 +1,1 @@
-sprite_index = spr_house_tinker_workshop;
+sprite_index = spr_prop_cable_car_station;

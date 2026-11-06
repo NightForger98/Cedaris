@@ -1,1 +1,2 @@
-sprite_index = spr_prop_town_shop2;
+text = "The Mountain";
+side = "e";

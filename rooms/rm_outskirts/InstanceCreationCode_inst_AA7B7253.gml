@@ -1,2 +1,2 @@
-text = "The Farm";
+text = "The Countryside";
 side = "s";

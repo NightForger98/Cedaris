@@ -1,1 +1,5 @@
-sprite_index = spr_house_small_house;
+targetRoom = rm_home_gullwater;
+targetX = 224;
+targetY = 280;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

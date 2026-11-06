@@ -1,1 +1,5 @@
-sprite_index = spr_prop_farm_coop_3;
+targetRoom = rm_phoenix;
+targetX = 304;
+targetY = 1072;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

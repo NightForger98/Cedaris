@@ -1,1 +1,2 @@
-sprite_index = spr_prop_old_station;
+kind = "tram";
+stop = "Cardo";

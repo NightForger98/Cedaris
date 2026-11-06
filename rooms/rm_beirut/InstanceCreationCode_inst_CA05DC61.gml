@@ -1,1 +1,5 @@
-sprite_index = spr_prop_keeper_garden;
+targetRoom = rm_phoenix;
+targetX = 976;
+targetY = 1040;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

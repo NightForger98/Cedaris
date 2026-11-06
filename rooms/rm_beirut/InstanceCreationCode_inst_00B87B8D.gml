@@ -1,1 +1,2 @@
-sprite_index = spr_prop_town_hallhouse;
+text = "Sunset Coast";
+side = "s";

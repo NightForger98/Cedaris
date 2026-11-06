@@ -1,1 +1,2 @@
-sprite_index = spr_prop_alt_family_house;
+text = "The Mountain";
+side = "e";

@@ -1,1 +1,5 @@
-sprite_index = spr_house_barn_ranch;
+targetRoom = rm_glassworks;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

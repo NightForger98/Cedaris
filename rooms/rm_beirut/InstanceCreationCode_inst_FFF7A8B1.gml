@@ -1,1 +1,2 @@
-sprite_index = spr_prop_cliff_lookout;
+text = "Phoenix Bay";
+side = "n";

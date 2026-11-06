@@ -1,0 +1,216 @@
+{
+ "note": "World tiles as in world_layout.json; each area is one room. size: its bounding box.",
+ "areas": [
+  {
+   "name": "Bunny Island",
+   "rects": [
+    [
+     46,
+     -30,
+     94,
+     -4
+    ]
+   ],
+   "size": [
+    49,
+    27
+   ],
+   "tiles": 1323,
+   "old": []
+  },
+  {
+   "name": "North Beach",
+   "rects": [
+    [
+     14,
+     -20,
+     128,
+     15
+    ],
+    [
+     128,
+     -20,
+     180,
+     18
+    ]
+   ],
+   "size": [
+    167,
+    39
+   ],
+   "tiles": 5338,
+   "old": [
+    "rm_manara (its lighthouse stays in town)",
+    "rm_starsand",
+    "rm_hangar"
+   ]
+  },
+  {
+   "name": "Beirut",
+   "rects": [
+    [
+     0,
+     16,
+     136,
+     95
+    ]
+   ],
+   "size": [
+    137,
+    80
+   ],
+   "tiles": 10933,
+   "old": [
+    "rm_wellshead",
+    "rm_redstreet",
+    "rm_downtown",
+    "rm_gracetower",
+    "rm_verdun",
+    "rm_uptown",
+    "rm_ovenswindow",
+    "rm_manara",
+    "rm_pigeonrocks"
+   ]
+  },
+  {
+   "name": "The Mountain",
+   "rects": [
+    [
+     180,
+     -24,
+     250,
+     17
+    ],
+    [
+     137,
+     18,
+     250,
+     85
+    ],
+    [
+     137,
+     86,
+     152,
+     95
+    ]
+   ],
+   "size": [
+    114,
+    120
+   ],
+   "tiles": 10812,
+   "old": [
+    "rm_plummet",
+    "rm_beaconhill",
+    "rm_victoryhill"
+   ]
+  },
+  {
+   "name": "West Beach",
+   "rects": [
+    [
+     0,
+     96,
+     44,
+     199
+    ]
+   ],
+   "size": [
+    45,
+    104
+   ],
+   "tiles": 4680,
+   "old": [
+    "rm_whitesand",
+    "rm_olivebay",
+    "rm_southbeach"
+   ]
+  },
+  {
+   "name": "The Outskirts",
+   "rects": [
+    [
+     45,
+     96,
+     152,
+     147
+    ]
+   ],
+   "size": [
+    108,
+    52
+   ],
+   "tiles": 5616,
+   "old": [
+    "rm_winghill",
+    "rm_dahya",
+    "rm_resolve"
+   ]
+  },
+  {
+   "name": "Whispering Woods",
+   "rects": [
+    [
+     153,
+     86,
+     250,
+     145
+    ],
+    [
+     201,
+     146,
+     250,
+     199
+    ]
+   ],
+   "size": [
+    98,
+    114
+   ],
+   "tiles": 8580,
+   "old": [
+    "rm_yarzeh"
+   ]
+  },
+  {
+   "name": "The Farm",
+   "rects": [
+    [
+     45,
+     148,
+     99,
+     199
+    ]
+   ],
+   "size": [
+    55,
+    52
+   ],
+   "tiles": 2860,
+   "old": [
+    "rm_1"
+   ]
+  },
+  {
+   "name": "The Countryside",
+   "rects": [
+    [
+     100,
+     148,
+     200,
+     199
+    ]
+   ],
+   "size": [
+    101,
+    52
+   ],
+   "tiles": 5252,
+   "old": [
+    "rm_sthereza",
+    "rm_frere",
+    "rm_abda"
+   ]
+  }
+ ]
+}

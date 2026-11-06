@@ -1,4 +1,4 @@
-# The new world's blueprint (draft 3, 2026-11-06: Beirut's topography, roads and landmarks)
+# The new world's blueprint (draft 4, 2026-11-06: Beirut's topography, roads, landmarks and history)
 
 `world_blueprint.png` is the whole outdoor world, **one pixel = one tile** (282 x 232, the world itself 250 x 200 with
 the sea to the west and north). Paint over it in any paint program to change the world, keeping to the colours below;
@@ -26,6 +26,9 @@ Made by `node tools/map/blueprint.js`.
 | 120,84,52 | pier or bridge |
 | 250,250,250 | a building's footprint |
 | 40,34,32 | a cave mouth (the mine) |
+| 92,78,64 | rails (the tram along the Corniche and Damascus Road; the old coast railway) |
+| 190,178,150 | ruins (the Roman Baths, the Cardo, the temple at Beit Mery) |
+| 214,204,184 | stairs (the Saint Nicholas Stairs) |
 
 Areas (the old rooms they replace): **Beirut** (Well's Head with the Riviera hotel on the bay in its north-west corner,
 Red Street, Downtown, Grace Tower, Verdun Street, Uptown, Oven's Window - each a district with its old name on a
@@ -56,3 +59,17 @@ National Museum at the Museum crossing; Sanayeh Garden; the Bourj Hammoud market
 - `old_rooms.json` and `old_rooms_on_new.png`: where each of the 25 old rooms' ground lies on the new map, so their
   named spots and the villagers' routes (tools/rooms/specs, scripts/room_layout, scripts/schedules) can be moved over.
 - `old_world_map.png`: the game's world map as it is now (the old 25 rooms).
+
+Draft 4 adds, from what Beirut has and what makes a game map work:
+- **Ways through** (`areas_proposal.png`, red rings; `areas.json` "ways"): every place a road, lane, bridge, rail,
+  square or beach crosses from one new room into the next. Paths must match the map - exactly these, nowhere else.
+  Room edges follow cliffs, the river, the sea or forest, with the way through at a road.
+- **Unlockable links**: the ferry to Bunny Island; a **cable car** (like Jounieh-Harissa's) from the coast by Hangar 12
+  up to the peak, a town project; Beirut's **old tram** (it ran until the 1960s) restored along the Corniche and down
+  Damascus Road to Baabda, a town project giving fast travel between its stops.
+- **History and art**: the **Roman Baths** and the **Cardo**'s columns downtown (the Wardens' ruins story, and a dig site
+  whose finds go to the Museum), the **temple ruins at Beit Mery** on the mountain, the **Saint Nicholas Stairs** (the
+  stairs of art, for an art festival), **Gemmayzeh**'s street of bars east of downtown, the **Sursock** gallery, and the
+  **old Mar Mikhael station** on a disused coast railway (our Railroad).
+- Landmarks to see from every room: the lighthouse, the port's silos, Biel's breakwater, the peak, the witch's tower,
+  the cable car.

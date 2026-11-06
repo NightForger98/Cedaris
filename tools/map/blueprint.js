@@ -21,7 +21,7 @@ const C = {
 	grass: [104, 172, 76], meadow: [128, 186, 88], forest: [40, 112, 52], pine: [30, 92, 58], cliff: [134, 92, 60],   // meadow: parks, lawns
 	cliffTop: [120, 150, 84], highland: [96, 124, 70], rock: [150, 138, 124], snow: [240, 244, 248], road: [170, 168, 160], lane: [196, 164, 106],
 	plaza: [210, 200, 180], field: [138, 104, 62], river: [82, 158, 214], building: [250, 250, 250], pier: [120, 84, 52],
-	cave: [40, 34, 32],
+	cave: [40, 34, 32], rail: [92, 78, 64], ruin: [190, 178, 150], stairs: [214, 204, 184],
 };
 const fs = require("fs");
 const path = require("path");
@@ -168,6 +168,8 @@ const LANES = {
 	woods:          [[156, 80], [166, 96], [182, 104], [192, 110]],
 	countryside:    [[66, 162], [100, 158], [124, 156], [150, 158]],
 	farm_to_beach:  [[34, 170], [56, 170]],
+	up_from_bourj:  [[146, 18], [158, 24], [172, 34], [182, 44], [190, 46]],                 // Bourj Hammoud up toward Mansourieh, to the mine road
+	into_the_woods: [[170, 158], [184, 152], [196, 144], [206, 136]],                        // Abda over the river into Whispering Woods
 };
 for(const [name, pts] of Object.entries(ROADS)) line(pts, "road", STREETS.includes(name) ? 0.5 : 1, hills);
 for(const [name, pts] of Object.entries(LANES)) line(pts, "lane", 0.5, hills);
@@ -204,6 +206,21 @@ rect(46, 46, 54, 52, "meadow"); for(const [x, y] of [[47, 47], [52, 48], [49, 51
 pier(22, 112, 10, -1, 0); pier(26, 170, 12, -1, 0);
 disc(2, 64, 3, 2, "rock");
 
+// ---- rails: Beirut's old tram (it ran until the 1960s; restoring a line is a town project: fast travel along the
+// Corniche and down Damascus Road), and the old coast railway past the old Mar Mikhael station toward the port
+const TRAM = [[14, 80], [11, 62], [11, 44], [14, 28], [24, 18], [40, 15], [70, 14], [86, 15], [90, 34], [100, 46], [110, 64],
+	[114, 84], [112, 100], [118, 120], [132, 140], [150, 152], [170, 158]];
+const RAILWAY = [[96, 19], [126, 18], [134, 20], [148, 12], [162, 6], [176, -2]];
+line(TRAM, "rail", 0, hills.concat(["road", "plaza"]));
+line(RAILWAY, "rail", 0, hills.concat(["road", "plaza"]));
+// The cable car (like Jounieh-Harissa's): from the coast by Hangar 12 up to the peak - overhead, so only its two
+// stations are on the ground (buildings below); its line is in world_layout.json and drawn on the preview
+const CABLE = [[166, 9], [228, 16]];
+// Gemmayzeh's street east of downtown (the evening district), and the Saint Nicholas Stairs (the stairs of art) up into
+// Achrafieh
+line([[96, 36], [122, 34]], "road", 0.5, hills);
+rect(116, 52, 117, 60, "stairs");
+
 // ---- the farm (south-west lowland, near the beach) and the countryside's fields
 rect(56, 166, 94, 192, "grass", ["grass", "forest", "pine", "sand"]);
 rect(70, 174, 92, 190, "field");
@@ -224,7 +241,7 @@ pier(70, -9, 4, 0, 1);
 
 // ---- buildings: [x, y, w, h] in tiles (footprints, roughly to scale), by area
 const B = [];
-const b = (x, y, w, h, name) => B.push({x, y, w, h, name});
+const b = (x, y, w, h, name, kind) => B.push({x, y, w, h, name, kind: kind || "building"});
 // Beirut, the town (districts: Well's Head in the north-west corner, Red Street, Downtown round the square by the port,
 // Grace Tower, Verdun Street, Uptown, Oven's Window)
 b(24, 22, 9, 5, "Riviera hotel"); b(26, 29, 6, 4, "Glassworks"); b(18, 30, 5, 4, "Fairglass");
@@ -256,12 +273,19 @@ b(102, 162, 6, 4, "Night farm"); b(112, 164, 7, 4, "Seeds"); b(134, 164, 7, 6, "
 b(152, 174, 6, 4, "Hayward"); b(142, 176, 5, 4, "Frere"); b(166, 160, 6, 6, "Church"); b(174, 166, 5, 4, "Ward");
 // Bunny Island
 b(74, -20, 4, 3, "Burrow");
+// Beirut's history and art: the Roman Baths and the Cardo's columns downtown (the Wardens' ruins story, and a dig site for
+// the Museum), the Sursock gallery, Gemmayzeh's bars, the old Mar Mikhael station; the temple ruins at Beit Mery
+b(60, 44, 7, 5, "Roman Baths", "ruin"); b(82, 35, 12, 2, "Cardo", "ruin"); b(120, 44, 7, 5, "Sursock gallery");
+b(104, 29, 5, 3, "Bar"); b(112, 29, 5, 3, "Bar"); b(120, 22, 7, 4, "Old station"); b(196, 38, 7, 5, "Temple ruins", "ruin");
+// The cable car's stations, and the tram's stops
+b(162, 10, 4, 3, "Cable car"); b(226, 14, 4, 3, "Cable car top");
+for(const [x, y] of [[16, 58], [58, 18], [92, 40], [114, 70], [106, 98], [160, 150]]) b(x, y, 3, 2, "Tram stop");
 // Each building where it's put, or slid to the nearest clear spot (on open ground, a tile clear of roads, rivers and other
 // buildings), so the roads can be redrawn without moving every building by hand
 const open = ["grass", "rocky", "sand", "cliffTop", "highland", "pine", "forest", "plaza", "meadow"];
 const fits = (x, y, w, h) => { for(let yy = y - 1; yy <= y + h; yy++) for(let xx = x - 1; xx <= x + w; xx++){
 	const k = get(xx + M, yy + M), inside = xx >= x && yy >= y && xx < x + w && yy < y + h;
-	if(k === "building" || (inside && !open.includes(k)) || (!inside && ["river", "deep", "sea", "shallow"].includes(k))) return false; }
+	if(k === "building" || k === "ruin" || (inside && !open.includes(k)) || (!inside && ["river", "deep", "sea", "shallow"].includes(k))) return false; }
 	return true; };
 for(const k of B){
 	let best = null;
@@ -271,7 +295,7 @@ for(const k of B){
 	}
 	if(!best){ console.log("no room for " + k.name); best = [0, 0]; }
 	k.x += best[0]; k.y += best[1];
-	rect(k.x, k.y, k.x + k.w - 1, k.y + k.h - 1, "building");
+	rect(k.x, k.y, k.x + k.w - 1, k.y + k.h - 1, k.kind);
 }
 
 // ---- the blueprint: one pixel a tile
@@ -288,7 +312,7 @@ const put = (x, y, c, a = 1) => { if(x < 0 || y < 0 || x >= P.w || y >= P.h) ret
 const shade = (c, f) => c.map(v => Math.max(0, Math.min(255, Math.round(v * f))));
 for(let y = 0; y < H; y++) for(let x = 0; x < W; x++){
 	const k = g[y][x]; let c = C[k];
-	if(k === "building") c = C.plaza;
+	if(k === "building" || k === "ruin") c = C.plaza;
 	for(let dy = 0; dy < S; dy++) for(let dx = 0; dx < S; dx++){
 		let cc = c;
 		if(k === "grass" || k === "meadow" || k === "cliffTop" || k === "highland") cc = shade(c, 1 + (hash(x * 7 + dx, y * 13 + dy) - 0.5) * 0.08);
@@ -314,9 +338,25 @@ for(let y = 0; y < H; y++) for(let x = 0; x < W; x++){
 	if(g[y][x] === "cliff") for(let dy = 0; dy < S; dy++) for(let dx = 0; dx < S; dx++) if((dy + x) % 3 === 0) put(x * S + dx, y * S + dy, shade(C.cliff, 0.7));
 	if(g[y][x] === "rock" && hash(x, y) < 0.3) put(x * S + 1, y * S + 1, shade(C.rock, 0.75));
 }
-// buildings: a roof (colour by name) over a pale wall, with a dark outline
+// rails: dark sleepers across a light bed; stairs: steps
+for(let y = 0; y < H; y++) for(let x = 0; x < W; x++){
+	if(g[y][x] === "rail") for(let dy = 0; dy < S; dy++) for(let dx = 0; dx < S; dx++) put(x * S + dx, y * S + dy, (dx === 0 || dx === S - 1 || dy === 0 || dy === S - 1) ? [70, 58, 48] : [150, 138, 120]);
+	if(g[y][x] === "stairs") for(let dy = 0; dy < S; dy++) for(let dx = 0; dx < S; dx++) put(x * S + dx, y * S + dy, dy === S - 1 ? [150, 140, 125] : C.stairs);
+}
+// the cable car: a dotted cable between its stations, with two cabins on it
+{ const [[ax, ay], [bx, by]] = CABLE, n = Math.hypot(bx - ax, by - ay) * S;
+  for(let t = 0; t <= n; t++){ const x = Math.round((ax + M) * S + (bx - ax) * S * t / n), y = Math.round((ay + M) * S + (by - ay) * S * t / n);
+	if(t % 6 < 4) put(x, y, [40, 40, 48]); }
+  for(const f of [0.3, 0.7]){ const x = Math.round((ax + M + (bx - ax) * f) * S), y = Math.round((ay + M + (by - ay) * f) * S);
+	for(let dy = 1; dy <= 6; dy++) for(let dx = -3; dx <= 3; dx++) put(x + dx, y + dy, dy === 1 || dx === -3 || dx === 3 || dy === 6 ? [40, 30, 30] : [200, 60, 50]); } }
+// buildings: a roof (colour by name) over a pale wall, with a dark outline; ruins: broken stone with column stumps
 const roofs = [[178, 72, 56], [70, 96, 150], [96, 120, 72], [150, 110, 60], [110, 70, 110], [190, 150, 70]];
-for(const k of B){
+for(const k of B.filter(k => k.kind === "ruin")){
+	const x1 = (k.x + M) * S, y1 = (k.y + M) * S, x2 = (k.x + k.w + M) * S - 1, y2 = (k.y + k.h + M) * S - 1;
+	for(let y = y1; y <= y2; y++) for(let x = x1; x <= x2; x++) put(x, y, hash(x, y) < 0.15 ? [150, 140, 120] : C.ruin);
+	for(let x = x1 + 2; x < x2 - 1; x += 6) for(let y = y1 + 1; y <= y2 - 1; y++) for(let w = 0; w < 3; w++) put(x + w, y, w === 2 ? [140, 130, 112] : [236, 230, 214]);
+}
+for(const k of B.filter(k => k.kind !== "ruin")){
 	const x1 = (k.x + M) * S, y1 = (k.y + M) * S, x2 = (k.x + k.w + M) * S - 1, y2 = (k.y + k.h + M) * S - 1;
 	const roof = roofs[Math.floor(hash(k.name.length * 31, k.x) * roofs.length)], wallTop = y1 + Math.round((y2 - y1) * 0.6);
 	for(let y = y1; y <= y2; y++) for(let x = x1; x <= x2; x++){
@@ -364,11 +404,15 @@ writePng(path.join(out, "world_blueprint_plain.png"), P);   // the 4x picture be
 const at = (x, y) => [(x + M) * S, (y + M) * S];
 const area = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 3, [255, 236, 150]); };
 const dist = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 2, [255, 255, 255]); };
-area("Beirut", 87, 46); area("North Beach", 30, -2); area("West Beach", 14, 146); area("The Mountain", 205, 64);
+area("Beirut", 100, 88); area("North Beach", 30, -2); area("West Beach", 14, 146); area("The Mountain", 205, 64);
 area("The Outskirts", 84, 145); area("Whispering Woods", 196, 128); area("Countryside", 140, 190); area("The Farm", 76, 196);
 area("Bunny Island", 70, -27);
-dist("Hippodrome", 72, 128); dist("Stadium", 48, 108); dist("Museum", 104, 78); dist("Sanayeh", 50, 44);
-dist("Bourj Hammoud", 148, 14);
+dist("Hippodrome", 72, 128); dist("Stadium", 48, 108); dist("Museum", 104, 78); dist("Sanayeh", 42, 56);
+dist("Bourj Hammoud", 144, 13);
+const near = (name, dy, label) => { const k = B.find(q => q.name === name); if(k) dist(label || name, k.x + k.w / 2, k.y + k.h + dy); };
+dist("Roman Baths", 64, 40); dist("Cardo", 88, 38); dist("Sursock", 128, 42); dist("Old station", 142, 32);
+near("Temple ruins", 1); dist("Cable car", 188, 20); dist("Cable car", 212, 10);
+dist("St Nicholas Stairs", 117, 62); dist("Gemmayzeh", 112, 27); dist("Tram", 6, 66);
 dist("Well's Head", 30, 10); dist("Red Street", 40, 50); dist("Downtown", 87, 20); dist("Grace Tower", 122, 50);
 dist("Verdun Street", 40, 70); dist("Uptown", 76, 80); dist("Oven's Window", 116, 70);
 dist("Manara's Light", 12, 40); dist("Starsand Pier (Biel)", 104, -6); dist("Port", 157, -20); dist("Zaitunay Bay", 52, 4); dist("Hangar 12", 170, 4);
@@ -384,5 +428,6 @@ console.log("world_blueprint.png " + TW + "x" + TH + " (1 px = 1 tile), preview 
 // name (points in world tiles) and every building's footprint where it ended up
 fs.writeFileSync(path.join(out, "world_layout.json"), JSON.stringify({
 	note: "World tiles: x 0-249 east, y 0-199 south (the blueprint image adds a 30-tile margin to the west and north). Roads are 3 tiles wide, streets and lanes 2.",
-	roads: ROADS, streets: STREETS, lanes: LANES, buildings: B.map(k => ({name: k.name, x: k.x, y: k.y, w: k.w, h: k.h})),
+	roads: ROADS, streets: STREETS, lanes: LANES, tram: TRAM, railway: RAILWAY, cable_car: CABLE,
+	buildings: B.map(k => ({name: k.name, kind: k.kind, x: k.x, y: k.y, w: k.w, h: k.h})),
 }, null, 1));

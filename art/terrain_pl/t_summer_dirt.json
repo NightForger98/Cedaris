@@ -1,0 +1,202 @@
+{
+ "name": "t_summer_dirt",
+ "tile": 32,
+ "terrain_types": [
+  "lower",
+  "upper"
+ ],
+ "tiles": [
+  {
+   "k": 0,
+   "name": "wang_13",
+   "corners": {
+    "NW": "upper",
+    "NE": "upper",
+    "SW": "lower",
+    "SE": "upper"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 1,
+   "name": "wang_10",
+   "corners": {
+    "NW": "upper",
+    "NE": "lower",
+    "SW": "upper",
+    "SE": "lower"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 2,
+   "name": "wang_4",
+   "corners": {
+    "NW": "lower",
+    "NE": "upper",
+    "SW": "lower",
+    "SE": "lower"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 3,
+   "name": "wang_12",
+   "corners": {
+    "NW": "upper",
+    "NE": "upper",
+    "SW": "lower",
+    "SE": "lower"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 4,
+   "name": "wang_6",
+   "corners": {
+    "NW": "lower",
+    "NE": "upper",
+    "SW": "upper",
+    "SE": "lower"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 5,
+   "name": "wang_8",
+   "corners": {
+    "NW": "upper",
+    "NE": "lower",
+    "SW": "lower",
+    "SE": "lower"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 6,
+   "name": "wang_0",
+   "corners": {
+    "NW": "lower",
+    "NE": "lower",
+    "SW": "lower",
+    "SE": "lower"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 7,
+   "name": "wang_1",
+   "corners": {
+    "NW": "lower",
+    "NE": "lower",
+    "SW": "lower",
+    "SE": "upper"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 8,
+   "name": "wang_11",
+   "corners": {
+    "NW": "upper",
+    "NE": "lower",
+    "SW": "upper",
+    "SE": "upper"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 9,
+   "name": "wang_3",
+   "corners": {
+    "NW": "lower",
+    "NE": "lower",
+    "SW": "upper",
+    "SE": "upper"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 10,
+   "name": "wang_2",
+   "corners": {
+    "NW": "lower",
+    "NE": "lower",
+    "SW": "upper",
+    "SE": "lower"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 11,
+   "name": "wang_5",
+   "corners": {
+    "NW": "lower",
+    "NE": "upper",
+    "SW": "lower",
+    "SE": "upper"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 12,
+   "name": "wang_15",
+   "corners": {
+    "NW": "upper",
+    "NE": "upper",
+    "SW": "upper",
+    "SE": "upper"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 13,
+   "name": "wang_14",
+   "corners": {
+    "NW": "upper",
+    "NE": "upper",
+    "SW": "upper",
+    "SE": "lower"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 14,
+   "name": "wang_9",
+   "corners": {
+    "NW": "upper",
+    "NE": "lower",
+    "SW": "lower",
+    "SE": "upper"
+   },
+   "w": 32,
+   "h": 32
+  },
+  {
+   "k": 15,
+   "name": "wang_7",
+   "corners": {
+    "NW": "lower",
+    "NE": "upper",
+    "SW": "upper",
+    "SE": "upper"
+   },
+   "w": 32,
+   "h": 32
+  }
+ ]
+}

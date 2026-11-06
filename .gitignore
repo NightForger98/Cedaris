@@ -8,3 +8,7 @@
 
 # GameMaker writes this when it saves a tileset; the builder makes the real one
 tilesets/*/output_tileset.png
+
+# PixelLab API key (never commit it)
+tools/map/pl_key.txt
+pl_key.txt

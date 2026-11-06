@@ -177,8 +177,14 @@ disc(110, 64, 2, 2, "plaza");                      // the Museum crossing
 
 // ---- the port (Starsand's piers) and the West Beach's piers; Pigeon Rocks offshore (the sea arch)
 const pier = (x, y, len, dx, dy) => { for(let k = 0; k < len; k++) for(let w = 0; w <= 1; w++) set(x + dx * k + (dy ? w : 0) + M, y + dy * k + (dx ? w : 0) + M, "pier"); };
-// The port: its basins and breakwater (east of Biel)
-pier(90, 11, 9, 0, -1); pier(102, 11, 9, 0, -1); pier(114, 11, 9, 0, -1); pier(90, 2, 30, 1, 0);
+// Starsand Pier, east of Biel (where Beirut's port basins are): quays built out into the sea with basins between them,
+// and Biel's long stone breakwater angling out to the north-east
+for(const qx of [88, 100, 112]) rect(qx, 1, qx + 6, 12, "plaza");
+for(let k = 0; k <= 34; k++) for(let w = 0; w <= 1; w++) set(84 + k + w + M, -1 - Math.round(k * 0.45) + M, "pier");
+// The port, moved up the coast above Hangar 12: land built out into the sea, three basins, a breakwater, the silos
+rect(140, -13, 174, -3, "plaza");
+for(const bx of [146, 154, 162]) rect(bx, -13, bx + 4, -7, "shallow");
+for(let x = 138; x <= 176; x++) set(x + M, -15 + M, "pier");
 // Biel: land built out into the sea north of downtown, a big hall on it, a stone pier along its north edge (Starsand Pier)
 rect(64, 1, 82, 12, "plaza");
 for(let x = 64; x <= 82; x++){ set(x + M, 0 + M, "pier"); set(x + M, -1 + M, "pier"); }
@@ -226,12 +232,12 @@ b(44, 40, 6, 5, "Goldcrest"); b(68, 26, 7, 5, "Tavern"); b(70, 38, 8, 6, "Bank")
 b(108, 40, 7, 5, "Smithy"); b(118, 40, 6, 5, "Whitlow");
 b(22, 62, 6, 4, "Bakery"); b(30, 62, 6, 4, "Flowers"); b(44, 62, 7, 4, "Furniture"); b(50, 48, 5, 4, "Cafe");
 b(68, 66, 8, 5, "Hospital"); b(78, 66, 8, 5, "Library"); b(113, 66, 8, 5, "Museum");
-b(68, 4, 9, 5, "Biel hall"); b(122, 20, 5, 6, "Silos"); b(58, 18, 5, 3, "Marina club");
+b(68, 4, 9, 5, "Biel hall"); b(168, -12, 4, 5, "Silos"); b(58, 18, 5, 3, "Marina club");
 b(142, 20, 7, 4, "Bourj Hammoud market"); b(46, 114, 7, 6, "Stadium");
 b(108, 62, 6, 4, "Quill"); b(116, 62, 8, 5, "Meadowlark");
 // North Beach (the lighthouse on the peninsula's corner, the port, Hangar 12 past the river mouth)
 b(12, 30, 3, 7, "Lighthouse"); b(56, 18, 6, 4, "Fish market"); b(112, 18, 6, 4, "Ferry");
-b(150, 0, 8, 5, "Hangar 12"); b(160, -6, 6, 4, "Tinker"); b(144, 8, 5, 4, "Brassbolt");
+b(150, 0, 8, 5, "Hangar 12"); b(162, 2, 6, 4, "Tinker"); b(144, 8, 5, 4, "Brassbolt");
 // West Beach
 b(16, 66, 5, 4, "Gullwater"); b(30, 100, 6, 4, "Beach bar"); b(26, 108, 3, 4, "Lifeguard"); b(38, 112, 4, 3, "Shack");
 b(32, 128, 6, 4, "Olive press"); b(40, 134, 5, 4, "Saba"); b(30, 164, 7, 4, "Boatyard"); b(40, 174, 6, 4, "Saltwhistle");
@@ -361,7 +367,7 @@ dist("Hippodrome", 72, 128); dist("Stadium", 48, 108); dist("Museum", 104, 78); 
 dist("Bourj Hammoud", 148, 14);
 dist("Well's Head", 30, 10); dist("Red Street", 40, 50); dist("Downtown", 87, 20); dist("Grace Tower", 122, 50);
 dist("Verdun Street", 40, 70); dist("Uptown", 76, 80); dist("Oven's Window", 116, 70);
-dist("Manara's Light", 12, 40); dist("Starsand Pier (Biel)", 74, -6); dist("Port", 118, -2); dist("Zaitunay Bay", 52, 4); dist("Hangar 12", 170, 4);
+dist("Manara's Light", 12, 40); dist("Starsand Pier (Biel)", 104, -6); dist("Port", 157, -20); dist("Zaitunay Bay", 52, 4); dist("Hangar 12", 170, 4);
 dist("Pigeon Rocks", 8, 56); dist("White Sand", 34, 118); dist("Olive Bay", 36, 140); dist("South Beach", 36, 180);
 dist("Plummet's Point", 210, -10); dist("Beacon Hill", 176, 38); dist("Victory Hill", 170, 84);
 dist("Wing Hill", 58, 98); dist("Dahya", 100, 112); dist("Resolve's Rise", 128, 132);

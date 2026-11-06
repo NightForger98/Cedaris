@@ -59,7 +59,12 @@ travel rules) still holds.
   two landmark points (Pigeon Rocks, Victory Hill) can't be reached from a door; Beirut has wide plain lawns between
   districts - room for more town (PixelLab tilesets for terrain need a Wang corner-tile path in `build.js`).
 - **Always run**: R toggles it (`always_run`, saved in settings.ini; test `always_run`).
-- **Not done yet**: the per-room camera, the cable car and tram as travel, the interior kit.
+- **Cable car and tram** (`scripts/transit`, `obj_transit`): the builder puts a stop in front of each one's art
+  (`STATION_OF`, named for the district it stands in) and lists them in `world_transit()`. Idle until their town
+  projects are done (board, Projects page 2: "cablecar" - Garrick, "tram" - Ottilie); then E rides: the cable car
+  Hangar 12 <-> the Mountain top (50 gold), the tram from a menu of its 6 stops (20 gold); free mode rides free.
+  Test `transit`. The board shows 4 projects a page.
+- **Not done yet**: the per-room camera, the interior kit.
 
 ### The new world (world-rebuild)
 

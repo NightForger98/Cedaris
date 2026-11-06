@@ -1,1 +1,1 @@
-sprite_index = spr_house_tavern_inn;
+sprite_index = spr_house_town_hall;

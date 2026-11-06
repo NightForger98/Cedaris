@@ -1,2 +1,2 @@
-text = "Beacon Hill";
+text = "Plummet's Point";
 side = "here";

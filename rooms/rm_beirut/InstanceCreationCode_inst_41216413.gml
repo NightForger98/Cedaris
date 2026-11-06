@@ -1,2 +1,2 @@
-text = "The Outskirts";
+text = "Sunset Coast";
 side = "s";

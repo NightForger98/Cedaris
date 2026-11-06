@@ -1024,3 +1024,14 @@ function autotest_gait(){
 	with(obj_plyr) return (moveX == 0 && moveY == 0) ? "standing" : (sprinting ? "running" : "walking");
 	return "no player";
 }
+
+/// @description Test: the nearest cable car or tram stop - its kind and name, whether it runs, its menu and what it
+/// last said.
+function autotest_transit(){
+	var s = instance_nearest(obj_plyr.x, obj_plyr.y, obj_transit);
+	if(s == noone) return "none";
+	with(s) return kind + " " + stop + (transit_runs(kind) ? " runs" : " idle") + (menuOpen ? " menu" : "") + " msg:" + message;
+}
+
+/// @description Test: how much gold you have.
+function autotest_gold(){ return string(global.inv.gold); }

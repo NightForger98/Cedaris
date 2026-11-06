@@ -68,6 +68,17 @@ const PLACEHOLDER_ART = {"Biel hall": "prop_exhibition_hall", "Silos": "prop_por
 	"Bourj Hammoud market": "prop_bourj_market", "Stadium": "prop_stadium", "Sursock gallery": "prop_sursock_gallery",
 	"Bar": "prop_gemmayzeh_bar", "Old station": "prop_old_station", "Cable car": "prop_cable_car_station",
 	"Cable car top": "prop_cable_car_station", "Tram stop": "prop_tram_stop", "Burrow": "prop_bunny_burrow"};
+// The cable car and the tram: a station (obj_transit) in front of each one's art; you ride once its project is done
+// (scripts/transit). Each takes the name of the old district it stands in, or its area's.
+const STATION_OF = {"Cable car": "cable", "Cable car top": "cable", "Tram stop": "tram"};
+const STATIONS = [];   // {kind, name, room, x, y}, filled as the rooms are built
+const districtAt = (wx, wy, area) => { for(const [o, d] of Object.entries(OLDR)){ const [x1, y1, x2, y2] = d.rect;
+	if(wx >= x1 && wx <= x2 && wy >= y1 && wy <= y2 && ROOMS[o] && ROOMS[o].name) return ROOMS[o].name; }
+	// in none (the new shore): the nearest one in this area
+	let best = area, bd = 1e9;
+	for(const [o, d] of Object.entries(OLDR)){ if(!ROOMS[o] || !ROOMS[o].name || ROOM_OF[area] !== ALIAS[o]) continue; const [x1, y1, x2, y2] = d.rect;
+		const dd = Math.hypot(Math.max(x1 - wx, 0, wx - x2), Math.max(y1 - wy, 0, wy - y2)); if(dd < bd){ bd = dd; best = ROOMS[o].name; } }
+	return best; };
 const BROKEN_BRIDGE = {room: "rm_mountain", at: [146, 80], size: [2, 2]};   // world tiles: a river footbridge
 const RUINS = {
 	house: {w: 8, h: 4, parts: [["ruin_wall_brick", 0, 0], ["ruin_wall_stone", 4, 0], ["ruin_rubble", 1, 3], ["ruin_rubble", 5, 3], ["ruin_stump", 3, 2]]},
@@ -100,10 +111,11 @@ function buildAll(){
 	const frames = {};
 	for(const id of ids) frames[id] = frameOf(id);
 	const rooms = {}, exits = {};
+	STATIONS.length = 0;
 	for(const id of ids) rooms[id] = buildRoom(id, frames[id], exits);
 	// Ways through, now that every room exists: a strip each side of each crossing, arriving on the other side
 	for(const id of ids) addWays(id, rooms, frames);
-	return {rooms, exits, frames};
+	return {rooms, exits, frames, stations: STATIONS};
 }
 
 function buildRoom(id, fr, exits){
@@ -196,8 +208,24 @@ function buildRoom(id, fr, exits){
 				const [w, h] = size(art), at2 = placeAt(w, h, fx, fy, b.w, b.h, [".", ",", "_"]);
 				if(at2){
 					things.push({is: art, at: at2});
-					take(at2[0], at2[1], w, h);
+					// a cell clear around it, and for a station three rows clear in front (where you stand to ride)
+					take(at2[0] - 1, at2[1] - 1, w + 2, h + (STATION_OF[b.name] ? 4 : 2));
 					points["lm_" + b.name.toLowerCase().replace(/[^a-z]+/g, "_")] = [(at2[0] + Math.floor(w / 2)) * 32 + 16, (at2[1] + h) * 32 + 24];
+					if(STATION_OF[b.name]){
+						const kind = STATION_OF[b.name], sx = (at2[0] + Math.floor(w / 2)) * 32 + 16, sy = (at2[1] + h) * 32 + 20;
+						const area = Object.keys(ROOM_OF).find(n => ROOM_OF[n] === id);
+						let name = districtAt(ox + at2[0] + Math.floor(w / 2), oy + at2[1] + h, area);
+						if(kind === "cable") name = (b.name === "Cable car top") ? "the Mountain top" : name;
+						if(STATIONS.some(t => t.kind === kind && t.name === name)){   // taken: the nearest landmark on the blueprint instead
+							let bd = 1e9;
+							for(const o of LAYOUT.buildings) if(o.name !== b.name && !/stop|Cable/.test(o.name)){
+								const dd = Math.hypot(o.x + o.w / 2 - b.x, o.y + o.h / 2 - b.y); if(dd < bd){ bd = dd; name = o.name.replace(/ club$/, ""); } }
+						}
+						STATIONS.push({kind, name, room: id, x: sx, y: sy + 24});
+						instances.push({obj: "obj_transit", x: sx, y: sy, code: `kind = "${kind}";
+stop = "${name.replace(/"/g, "")}";`});
+						points["station_" + kind + "_" + STATIONS.filter(t => t.kind === kind).length] = [sx, sy + 24];
+					}
 					continue;
 				}
 				console.log(`  ${id}: no room for ${b.name}'s art, a placeholder instead`);

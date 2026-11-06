@@ -94,6 +94,14 @@ ${Object.entries(roads).map(([k, v]) => `\t\t${k}: {w: ${v.w}, grid: "${v.grid}"
 	return i < string_length(r.grid) && string_char_at(r.grid, i + 1) == "1";
 }
 
+/// @description The cable car's and the tram's stations (scripts/transit): kind, stop name, room and where you arrive.
+function world_transit(){
+	static t = [
+${B.stations.map(t => `		{kind: "${t.kind}", name: ${q(t.name)}, room: "${t.room}", x: ${t.x}, y: ${t.y}},`).join("\n")}
+	];
+	return t;
+}
+
 /// @description Resource spawn areas of the generated rooms (resource_areas in scripts/gathering appends these).
 function world_resource_areas(){
 	return [

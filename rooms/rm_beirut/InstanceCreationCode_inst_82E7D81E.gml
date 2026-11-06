@@ -1,2 +1,2 @@
-text = "Uptown";
+text = "Grace Tower";
 side = "here";

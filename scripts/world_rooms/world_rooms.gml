@@ -51,11 +51,24 @@ function world_is_road(_name, _cx, _cy){
 	return i < string_length(r.grid) && string_char_at(r.grid, i + 1) == "1";
 }
 
+/// @description The cable car's and the tram's stations (scripts/transit): kind, stop name, room and where you arrive.
+function world_transit(){
+	static t = [
+		{kind: "cable", name: "Hangar 12", room: "rm_phoenix", x: 5168, y: 1068},
+		{kind: "tram", name: "Red Street", room: "rm_beirut", x: 688, y: 1324},
+		{kind: "tram", name: "Well's Head", room: "rm_beirut", x: 1552, y: 172},
+		{kind: "tram", name: "Downtown", room: "rm_beirut", x: 3184, y: 812},
+		{kind: "tram", name: "Oven's Window", room: "rm_beirut", x: 3696, y: 1964},
+		{kind: "cable", name: "the Mountain top", room: "rm_mountain", x: 2736, y: 1196},
+		{kind: "tram", name: "Dahya", room: "rm_outskirts", x: 2000, y: 172},
+		{kind: "tram", name: "Frere's Fray", room: "rm_countryside", x: 1904, y: 172},
+	];
+	return t;
+}
+
 /// @description Resource spawn areas of the generated rooms (resource_areas in scripts/gathering appends these).
 function world_resource_areas(){
 	return [
-		{room: "rm_bunny", cells: layout_cells("rm_bunny", "a0_1"), max: 5, perDay: 1, start: 4,
-		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
 		{room: "rm_bunny", cells: layout_cells("rm_bunny", "a1_1"), max: 2, perDay: 1, start: 1,
 		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
 		{room: "rm_phoenix", cells: layout_cells("rm_phoenix", "a2_10"), max: 2, perDay: 1, start: 1,
@@ -84,8 +97,6 @@ function world_resource_areas(){
 		 kinds: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]]},
 		{room: "rm_mountain", cells: layout_cells("rm_mountain", "a2_6"), max: 5, perDay: 1, start: 4,
 		 kinds: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]]},
-		{room: "rm_mountain", cells: layout_cells("rm_mountain", "a3_0"), max: 5, perDay: 1, start: 4,
-		 kinds: [["oak", 20], ["pine", 20], ["bush", 12], ["weeds", 8], ["stone", 6], ["forage_herb", 12], ["forage_mushroom", 14], ["forage_toadstool", 8]]},
 		{room: "rm_mountain", cells: layout_cells("rm_mountain", "a3_1"), max: 5, perDay: 1, start: 4,
 		 kinds: [["oak", 20], ["pine", 20], ["bush", 12], ["weeds", 8], ["stone", 6], ["forage_herb", 12], ["forage_mushroom", 14], ["forage_toadstool", 8]]},
 		{room: "rm_mountain", cells: layout_cells("rm_mountain", "a3_2"), max: 5, perDay: 1, start: 4,

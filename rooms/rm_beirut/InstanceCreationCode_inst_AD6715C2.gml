@@ -1,1 +1,1 @@
-sprite_index = spr_prop_town_villa2;
+sprite_index = spr_prop_town_cafe;

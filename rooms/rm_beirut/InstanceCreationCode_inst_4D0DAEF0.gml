@@ -1,1 +1,1 @@
-sprite_index = spr_house_hospital;
+sprite_index = spr_house_library;

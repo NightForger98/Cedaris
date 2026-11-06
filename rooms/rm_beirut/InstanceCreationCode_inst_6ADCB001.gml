@@ -1,2 +1,2 @@
-text = "The Mountain";
-side = "e";
+text = "Phoenix Bay";
+side = "n";

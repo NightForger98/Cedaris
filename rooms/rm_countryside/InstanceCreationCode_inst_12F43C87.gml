@@ -1,2 +1,2 @@
-text = "Frere's Fray";
+text = "Saint Thereza";
 side = "here";

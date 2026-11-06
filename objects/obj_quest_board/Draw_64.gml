@@ -84,8 +84,14 @@ if(page == "festival"){
 	}
 } else {
 	// Projects: each with its story, a progress bar, and what it still needs (Give hands in what you have)
-	var t = project_table();
-	for(var i = 0; i < array_length(t); i++){
+	var t = project_table(), per = 4, pages = ceil(array_length(t) / per);
+	projPage = clamp(projPage, 0, pages - 1);
+	if(pages > 1){
+		ui_text((x1 + x2) / 2, y2 - 90, "Page " + string(projPage + 1) + " of " + string(pages), 0.45, c.dim);
+		if(ui_button(x1 + 24, y2 - 110, x1 + 164, y2 - 72, "Back", projPage > 0, 0.45)) projPage--;
+		if(ui_button(x2 - 164, y2 - 110, x2 - 24, y2 - 72, "More", projPage < pages - 1, 0.45)) projPage++;
+	}
+	for(var i = projPage * per; i < min(array_length(t), (projPage + 1) * per); i++){
 		var d = t[i], p = project_state(d.key);
 		var locked = (d.key == "shrine" && !project_done("bridge"));
 		ui_text(x1 + 24, ry + 10, locked ? "???" : d.name + "  (" + villager_def(d.who).name + ")", 0.6, p.done ? make_colour_rgb(150, 230, 120) : c_white, fa_left);

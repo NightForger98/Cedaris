@@ -1,5 +1,5 @@
-targetRoom = rm_hotel;
-targetX = 320;
-targetY = 344;
+targetRoom = rm_home_fairglass;
+targetX = 224;
+targetY = 280;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

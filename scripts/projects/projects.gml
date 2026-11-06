@@ -8,8 +8,8 @@
 function project_table(){
 	static t = [
 		{key: "bridge", name: "Mend the Beach Bridge", who: "thorne",
-		 desc: "The footbridge over the river on the beach at Plummet's Point fell in years ago. Mend it and the beach path from Hangar 12 opens.",
-		 need: [["wood", 60], ["stone", 40], ["iron", 5]], reward: "The beach path to Plummet's Point is open"},
+		 desc: "The footbridge over the river up on the Mountain fell in years ago. Mend it and the path across opens again.",
+		 need: [["wood", 60], ["stone", 40], ["iron", 5]], reward: "The footbridge on the Mountain is mended"},
 		{key: "well", name: "Raise the Old Well", who: "elda",
 		 desc: "The village well is dry and choked with rubble. A working well means water piped to your field.",
 		 need: [["stone", 50], ["copper", 10], ["frost_crystal", 1]], reward: "Sprinklers can be made at the crafting table"},
@@ -20,6 +20,12 @@ function project_table(){
 		{key: "shrine", name: "Light the Forest Shrine", who: "elda",
 		 desc: "Deep in Whispering Woods stands a shrine the pixies once loved. Bring it light and treasures, and they'll return.",
 		 need: [["moonsilk", 2], ["gem", 5], ["frost_crystal", 1], ["ember_core", 1]], reward: "Pixies visit your farm at night and bless your crops"},
+		{key: "cablecar", name: "Restore the Cable Car", who: "garrick",
+		 desc: "The cable car from Hangar 12 up the Mountain has hung still for years. New cable, new gears, a sound cabin.",
+		 need: [["iron", 30], ["copper", 25], ["wood", 80], ["stone", 40]], reward: "The cable car runs between Hangar 12 and the Mountain top (50 gold a ride)"},
+		{key: "tram", name: "Bring Back the Tram", who: "ottilie",
+		 desc: "Beirut's old tram lines are buried under the roads. Ottilie has drawn up a tram that runs again - if the town finds the metal.",
+		 need: [["iron", 40], ["copper", 15], ["wood", 100], ["stone", 80]], reward: "The tram runs between its six stops (20 gold a ride)"},
 	];
 	return t;
 }

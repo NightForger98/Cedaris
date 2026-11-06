@@ -49,7 +49,7 @@ function villager_table(){
 		thorne:{name: "Thorne", title: "the Lumberjack", race: "Orc", body: "male", seed: 2202,
 		        loves: ["m|wood", "m|iron", "f|hash_browns", "f|fiery_chilli"], likes: ["m|stone", "m|copper", "f|"], dislikes: ["p|tomato", "f|tomato_salad"], hates: ["m|silk", "m|feather"],
 		        lines: [["Measure twice. Cut once. Shout if you miss.", "Good oak is getting hard to find.", "Mind your feet, there's nails everywhere."],
-		                ["You've got calluses. I respect that.", "The footbridge on Plummet's beach wants mending. Need wood. Lots of it.", "Orcs don't smile. This is my smile."],
+		                ["You've got calluses. I respect that.", "The footbridge over the river on the Mountain wants mending. Need wood. Lots of it.", "Orcs don't smile. This is my smile."],
 		                ["You and me, we build things that last.", "I carved this for you. It's a duck. Or a dog. It's art.", "If the town ever needs a hero, I'm voting you."]],
 		        rewards: [["m|wood", 50], ["m|stone", 30], ["d|cloth|charcoal", 1], ["m|iron", 5], ["m|dragon_scale", 1]]},
 		hesta: {name: "Aunt Hesta", title: "", race: "Human", body: "female", seed: 3101,
@@ -697,5 +697,5 @@ function dialogue_open(){ return instance_exists(obj_dialogue); }
 /// monsters hold still, and Esc / I belong to the window.
 function ui_blocking(){
 	return instance_exists(obj_inventory) || dialogue_open() || mine_menu_open() || instance_exists(obj_fishing) || instance_exists(obj_world_map)
-	       || (instance_exists(obj_quest_board) && obj_quest_board.open);
+	       || (instance_exists(obj_quest_board) && obj_quest_board.open) || transit_menu_open();
 }

@@ -1,1 +1,1 @@
-sprite_index = spr_prop_gemmayzeh_bar;
+sprite_index = spr_prop_old_station;

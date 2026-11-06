@@ -1,1 +1,1 @@
-sprite_index = spr_house_lighthouse;
+sprite_index = spr_prop_fish_market;

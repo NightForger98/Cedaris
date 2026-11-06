@@ -1,2 +1,2 @@
-text = "Abda's Ascent";
+text = "Frere's Fray";
 side = "here";

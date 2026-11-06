@@ -1,1 +1,1 @@
-sprite_index = spr_prop_exhibition_hall;
+sprite_index = spr_prop_old_hangar;

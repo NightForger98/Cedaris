@@ -1,0 +1,56 @@
+# The cable car and the tram (scripts/transit): idle until their town projects are done, then E rides - the cable car
+# from Hangar 12 straight up to the Mountain top, the tram from a menu of its other stops - for a fare
+start story
+wait 60
+call autotest_date 0 2
+time 11
+gold 500
+room rm_beirut
+wait 30
+call autotest_to_point station_tram_1 0 0
+wait 5
+call autotest_transit
+expect tram Red Street idle
+key e
+wait 5
+call autotest_transit
+expect msg:No tram
+shot 01_tram_idle
+call autotest_project_finish tram
+expect 1
+call autotest_project_finish cablecar
+expect 1
+wait 30
+key e
+wait 5
+call autotest_transit
+expect menu
+shot 02_tram_menu
+key down
+wait 3
+key enter
+wait 90
+call autotest_room_name
+expect rm_beirut
+call autotest_transit
+expect tram Downtown runs
+call autotest_gold
+expect 480
+# the cable car: Hangar 12 up to the top
+room rm_phoenix
+wait 30
+call autotest_to_point station_cable_1 0 0
+wait 5
+call autotest_transit
+expect cable Hangar 12 runs
+shot 03_cable_bottom
+key e
+wait 90
+call autotest_room_name
+expect rm_mountain
+call autotest_transit
+expect cable the Mountain top
+call autotest_gold
+expect 430
+shot 04_cable_top
+quit

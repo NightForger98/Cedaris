@@ -4,4 +4,5 @@ near = false;
 open = false;
 message = "";
 messageTime = 0;
+projPage = 0;   // the Projects page shows 4 at a time
 page = "requests"; // or "projects" (village projects, see the projects script)

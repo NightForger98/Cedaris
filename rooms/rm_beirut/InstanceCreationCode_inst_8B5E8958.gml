@@ -1,1 +1,1 @@
-sprite_index = spr_house_small_house;
+sprite_index = spr_prop_sursock_gallery;

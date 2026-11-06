@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_house_home_ward",
   "bboxMode":0,
-  "bbox_bottom":156,
+  "bbox_bottom":158,
   "bbox_left":0,
-  "bbox_right":127,
+  "bbox_right":179,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"b502df33-39f0-4f8c-ae1c-091b38eca6ff","name":"b502df33-39f0-4f8c-ae1c-091b38eca6ff","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"093a65f8-d547-4b70-836f-7e31f7c53ef2","name":"093a65f8-d547-4b70-836f-7e31f7c53ef2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":157,
+  "height":159,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"d7f9e83f-c028-46b9-abab-ad4aed446d8f","blendMode":0,"displayName":"default","isLocked":false,"name":"d7f9e83f-c028-46b9-abab-ad4aed446d8f","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"823875bc-d193-48c1-ace9-43dadae0dafa","blendMode":0,"displayName":"default","isLocked":false,"name":"823875bc-d193-48c1-ace9-43dadae0dafa","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_home_ward",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"b502df33-39f0-4f8c-ae1c-091b38eca6ff","path":"sprites/spr_house_home_ward/spr_house_home_ward.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"a6826ac3-d562-42c4-a856-d1da8e7d3cb2","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"093a65f8-d547-4b70-836f-7e31f7c53ef2","path":"sprites/spr_house_home_ward/spr_house_home_ward.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"f6e0536c-ed5e-421f-827e-44325bd79c20","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":128,
+  "width":180,
 }

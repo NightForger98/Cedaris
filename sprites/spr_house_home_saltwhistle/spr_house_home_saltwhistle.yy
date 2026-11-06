@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_house_home_saltwhistle",
   "bboxMode":0,
-  "bbox_bottom":109,
+  "bbox_bottom":155,
   "bbox_left":0,
-  "bbox_right":224,
+  "bbox_right":208,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"bfb1500e-97b2-4591-a1d0-380da59e135a","name":"bfb1500e-97b2-4591-a1d0-380da59e135a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8dbfccfa-49a6-4c0c-b17d-3c15a96a55b5","name":"8dbfccfa-49a6-4c0c-b17d-3c15a96a55b5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":110,
+  "height":156,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"e6be3d71-42d3-4e78-a271-fb90308e0be8","blendMode":0,"displayName":"default","isLocked":false,"name":"e6be3d71-42d3-4e78-a271-fb90308e0be8","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"59f66b68-60c7-423d-9c07-4c50bdaf9bb2","blendMode":0,"displayName":"default","isLocked":false,"name":"59f66b68-60c7-423d-9c07-4c50bdaf9bb2","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_home_saltwhistle",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"bfb1500e-97b2-4591-a1d0-380da59e135a","path":"sprites/spr_house_home_saltwhistle/spr_house_home_saltwhistle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"32f47ddc-4eff-4aca-888d-c70dc1108035","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"8dbfccfa-49a6-4c0c-b17d-3c15a96a55b5","path":"sprites/spr_house_home_saltwhistle/spr_house_home_saltwhistle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"1de4f133-6b56-4075-bef3-dbc0a21091da","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":225,
+  "width":209,
 }

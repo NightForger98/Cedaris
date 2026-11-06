@@ -45,14 +45,14 @@ module.exports = {
 		{is: "scarecrow", at: [46, 25]}, {is: "hay_cart", at: [35, 19]},
 
 		// The barn and its silo, an open shed beside them
-		{is: "barn", at: [61, 2]}, {is: "silo", at: [57, 7]}, {is: "shed", at: [50, 1]},
+		// (the barn, silo, shed and coop are obj_buildings in instances: they grow with their upgrades)
 		// The coop and the granary, and the pasture between them and the woods (fenced along the bottom)
-		{is: "coop", at: [60, 19]}, {is: "granary", at: [70, 19]},
+		{is: "prop_farm_granary", at: [70, 24]},
 		{is: "picket", at: [60, 32]}, {is: "picket", at: [63, 32]}, {is: "picket", at: [66, 32]}, {is: "picket", at: [69, 32]},
 		{is: "picket", at: [72, 32]}, {is: "hay_bale", at: [74, 28]}, {is: "bucket", at: [69, 29]},
 
 		// The windmill and the beehive shed, in the north-west
-		{is: "windmill", at: [3, 1]}, {is: "bee_shed", at: [11, 2]}, {is: "outhouse", at: [16, 3]},
+		{is: "windmill", at: [3, 1]}, {is: "prop_farm_bee_shed", at: [12, 4]}, {is: "prop_farm_outhouse", at: [16, 3]},
 
 		// The pond
 		{is: "cattails", at: [3, 25]}, {is: "cattails", at: [14, 27]},
@@ -84,6 +84,12 @@ module.exports = {
 		// two rows of cells under it, but the door's.
 		{obj: "obj_building", x: 0, y: 544,
 		 code: "var _l = clamp(house_level(), 0, 3);\nsprite_index = [spr_house_farmhouse_1, spr_house_farmhouse_2, spr_house_farmhouse_3, spr_house_farmhouse_4][_l];\nx = 816 - [78, 78, 96, 62][_l];\nvar _c1 = floor(x / 32), _c2 = floor((x + sprite_get_width(sprite_index) - 8) / 32);\nfor(var _c = _c1; _c <= _c2; _c++) if(_c != 25){ var _b = instance_create_depth(_c * 32 + 16, 512, 0, obj_col_box); _b.image_xscale = 2; _b.image_yscale = 4; _b.visible = false; }"},
+		// The barn, coop, shed and silo (PixelLab, scripts/farm_buildings): each at its stage (Rowan sells the next),
+		// standing on the middle of its old foot
+		{obj: "obj_building", x: 0, y: 0, code: "farm_building_setup(\"barn\", 2160, 448);"},
+		{obj: "obj_building", x: 0, y: 0, code: "farm_building_setup(\"coop\", 2048, 832);"},
+		{obj: "obj_building", x: 0, y: 0, code: "farm_building_setup(\"shed\", 1696, 192);"},
+		{obj: "obj_building", x: 0, y: 0, code: "farm_building_setup(\"silo\", 1856, 416);"},
 		// The farmhouse door
 		{obj: "obj_transition", x: 816, y: 528, sx: 2, sy: 1,
 		 code: "targetRoom = rm_12;\ntargetX = 160;\ntargetY = 472;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},

@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_house_home_tawil",
   "bboxMode":0,
-  "bbox_bottom":130,
+  "bbox_bottom":173,
   "bbox_left":0,
-  "bbox_right":193,
+  "bbox_right":188,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"d0c31825-1546-4627-8740-afee599f30dc","name":"d0c31825-1546-4627-8740-afee599f30dc","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"30612675-d19c-421c-bb85-a1ffe6e078cf","name":"30612675-d19c-421c-bb85-a1ffe6e078cf","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":131,
+  "height":174,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"73465212-461b-4bd8-8bad-b209919cfa27","blendMode":0,"displayName":"default","isLocked":false,"name":"73465212-461b-4bd8-8bad-b209919cfa27","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"14bfa348-a668-41d1-a6e7-f447dc47455b","blendMode":0,"displayName":"default","isLocked":false,"name":"14bfa348-a668-41d1-a6e7-f447dc47455b","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_home_tawil",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"d0c31825-1546-4627-8740-afee599f30dc","path":"sprites/spr_house_home_tawil/spr_house_home_tawil.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"a593701d-914b-44c5-8792-1b84446dff7e","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"30612675-d19c-421c-bb85-a1ffe6e078cf","path":"sprites/spr_house_home_tawil/spr_house_home_tawil.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"3a74e677-321a-4b13-92b4-8ed50d1e9b3b","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":194,
+  "width":189,
 }

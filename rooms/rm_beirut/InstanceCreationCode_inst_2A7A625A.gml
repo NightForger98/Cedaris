@@ -1,2 +1,5 @@
-kind = "tram";
-stop = "Downtown";
+targetRoom = rm_furniture;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

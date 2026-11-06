@@ -133,6 +133,8 @@ function shop_furniture_stock(){
 	var out = shop_list([["m|wood", 0], ["m|stone", 0]]);
 	static prices = [10000, 50000, 100000];
 	if(house_level() < 3 && inv_count("m|house_plans") == 0) array_push(out, {id: "m|house_plans", price: prices[house_level()]});
+	out = array_concat(out, farm_building_stock());   // the farm buildings' next stages (scripts/farm_buildings)
+	out = array_concat(out, furniture_catalogue());   // the furniture catalogue (scripts/furniture)
 	return out;
 }
 

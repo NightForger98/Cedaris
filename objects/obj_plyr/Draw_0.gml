@@ -47,3 +47,4 @@ else if(act != undefined){
 // a child has no run art, so keeps the walk
 else if(sprinting && facing != -1 && look.body != "child") character_draw(look, (max(1, floor(x_frame)) - 1) mod 8, y_frame + 17, xx, yy, 1);
 else character_draw(look, floor(x_frame), y_frame, xx, yy, 1);
+furniture_draw_preview();   // the held piece of furniture: where it would go

@@ -1,2 +1,2 @@
-text = "Phoenix Bay";
-side = "n";
+text = "Uptown";
+side = "here";

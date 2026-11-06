@@ -1,1 +1,1 @@
-sprite_index = spr_house_cottage;
+sprite_index = spr_prop_bourj_market;

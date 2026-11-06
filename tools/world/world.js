@@ -30,7 +30,7 @@ const ROOMS = {
 		decor: [{is: "obelisk"}, {is: "stall_stripe"}]},
 	rm_hangar: {name: "Hangar 12", buildings: [{key: "tinker", is: "house_tinker_workshop", room: "rm_tinker"},
 			{key: "brassbolt", is: "house_home_brassbolt", room: "rm_home_brassbolt"}], w: 52, h: 38, sea: "t", kind: "town", links: {l: "lane", r: "beach", b: "road"}, landmarks: [{is: "prop_old_hangar", q: "se"}],
-		decor: [{is: "barn"}, {is: "shed"}, {is: "wagon"}, {is: "stall_cart"}], pier: "t"},
+		decor: [{is: "shed"}, {is: "wagon"}, {is: "stall_cart"}], pier: "t"},
 	// Split diagonally by a cliff: the witch's tower on the high ground to the south-east, reached over the cliff tops
 	// from Beacon Hill's ladder; the beach and lowland to the north-west, reached along the beach from Hangar 12 over
 	// the river by a footbridge (the Beach Bridge project mends it)
@@ -61,8 +61,8 @@ const ROOMS = {
 	rm_uptown: {name: "Uptown", w: 56, h: 38, kind: "town", links: {t: "road", l: "road", r: "road", b: "road"}, landmarks: [{is: "prop_museum", q: "se"}, {is: "prop_botanical", q: "sw"}],
 		buildings: [{key: "hospital", is: "house_hospital", room: "rm_hospital"}, {key: "library", is: "house_library", room: "rm_library"}]},
 	rm_ovenswindow: {name: "Oven's Window", w: 60, h: 40, kind: "rural", links: {t: "road", l: "road", r: "lane", b: "lane"}, landmarks: [{is: "house_silo", q: "ne"}],
-		buildings: [{key: "quill", is: "house_home_quill", room: "rm_town_home_nw"}, {key: "meadowlark", is: "house_ranch_barn", room: "rm_valley_ranch"}],
-		decor: [{is: "barn"}, {is: "coop"}, {is: "hay_roll"}]},
+		buildings: [{key: "quill", is: "house_home_quill", room: "rm_town_home_nw"}, {key: "meadowlark", is: "house_barn_ranch", room: "rm_valley_ranch"}],
+		decor: [{is: "prop_farm_coop_3"}, {is: "hay_roll"}]},   // Meadowlark Farm: a deluxe barn (their home) and coop
 	rm_victoryhill: {name: "Victory Hill", cliffEast: true, w: 54, h: 40, river: true, kind: "rural", links: {l: "lane", t: "lane", b: "lane"}, landmarks: [{is: "house_windmill", q: "ne"}, {is: "prop_overlook", q: "se"}],
 		buildings: [{key: "oakhart", is: "house_oakhart_farmhouse", room: "rm_village_rowan"}, {key: "mill", is: "house_mill", room: "rm_valley_carpentry"}],
 		decor: [{is: "hay_roll"}, {is: "wagon"}]},
@@ -86,10 +86,11 @@ const ROOMS = {
 	rm_1: {name: "Player Farm", farm: true, links: {t: "road", l: "lane"}},
 	rm_sthereza: {name: "Saint Thereza", w: 60, h: 40, kind: "rural", links: {t: "road", r: "road"}, landmarks: [{is: "prop_grapevine", q: "nw"}],
 		buildings: [{key: "nighthome", is: "house_home_night", room: "rm_village_hesta"}, {key: "seeds", is: "house_market", room: "rm_village_store"}],
-		decor: [{is: "barn"}, {is: "coop"}, {is: "bee_shed"}, {is: "silo"}]},
+		decor: [{is: "prop_barn_stone"}, {is: "prop_farm_coop_3"}, {is: "prop_farm_bee_shed"}, {is: "prop_farm_silo_3"}]},   // the Night farm, fully built
 	rm_frere: {name: "Frere's Fray", w: 46, h: 36, kind: "rural", links: {t: "road", l: "road", r: "road"}, landmarks: [{is: "prop_monastery", q: "ne"}],
 		buildings: [{key: "frere", is: "house_home_frere", room: "rm_village_elda"},
-			{key: "stables", is: "house_stables", room: "rm_stables"}, {key: "hayward", is: "house_home_hayward", room: "rm_home_hayward"}]},
+			{key: "stables", is: "house_stables", room: "rm_stables"}, {key: "hayward", is: "house_home_hayward", room: "rm_home_hayward"}],
+		decor: [{is: "prop_stables_b"}]},   // a second stable beside the first
 	rm_abda: {name: "Abda's Ascent", w: 54, h: 50, river: "spring", kind: "rural", links: {l: "road", t: "trees"}, landmarks: [{is: "prop_gravestones", q: "se"}, {ruin: "house", q: "ne"}],
 		buildings: [{key: "church", is: "house_church", room: "rm_church"}, {key: "ward", is: "house_home_ward", room: "rm_home_ward"}]},
 };

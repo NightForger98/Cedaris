@@ -1,1 +1,1 @@
-sprite_index = spr_house_witch_tower;
+sprite_index = spr_house_mill;

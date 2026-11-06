@@ -1,2 +1,2 @@
-text = "Plummet's Point";
-side = "here";
+kind = "cable";
+stop = "the Mountain top";

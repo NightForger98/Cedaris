@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_house_home_night",
   "bboxMode":0,
-  "bbox_bottom":134,
+  "bbox_bottom":132,
   "bbox_left":0,
-  "bbox_right":263,
+  "bbox_right":158,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"aec580ff-3557-4175-bf68-6c4126b13365","name":"aec580ff-3557-4175-bf68-6c4126b13365","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ac05c990-59f7-4d40-b461-a6a26a228662","name":"ac05c990-59f7-4d40-b461-a6a26a228662","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":135,
+  "height":133,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"470dfe32-d864-4b31-9df8-9e9fb734a103","blendMode":0,"displayName":"default","isLocked":false,"name":"470dfe32-d864-4b31-9df8-9e9fb734a103","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"478021b2-272e-4629-ad8b-5ec1e315b56c","blendMode":0,"displayName":"default","isLocked":false,"name":"478021b2-272e-4629-ad8b-5ec1e315b56c","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_home_night",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"aec580ff-3557-4175-bf68-6c4126b13365","path":"sprites/spr_house_home_night/spr_house_home_night.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"9360cca8-d64c-4dc9-8995-5b0960a9baad","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"ac05c990-59f7-4d40-b461-a6a26a228662","path":"sprites/spr_house_home_night/spr_house_home_night.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"2c76a824-4851-42d0-a34e-332c4e19c7eb","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":264,
+  "width":159,
 }

@@ -1,1 +1,2 @@
-if(project_done("bridge")) instance_destroy();
+text = "Victory Hill";
+side = "here";

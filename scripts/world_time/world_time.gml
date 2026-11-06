@@ -133,7 +133,8 @@ function day_advance(_passedOut){
 	resources_new_day(); // stumps regrow, rocks and weeds come back
 	var paid = shipping_payout();
 	var wed = marriage_new_day();   // house plans built overnight, the wedding
-	global.world.morningNote = wed;
+	var built = farm_buildings_new_day();   // barn, coop, shed and silo plans built overnight
+	global.world.morningNote = wed + ((wed != "" && built != "") ? " " : "") + built;
 
 	// You: passing out costs gold and leaves you half rested
 	var lost = 0;

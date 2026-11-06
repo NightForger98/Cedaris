@@ -8,6 +8,7 @@
 ///   "k|<spell>"                spell scroll (see magic)
 ///   "w|<forage>"               something wild from the woods (see forest)
 ///   "o|<kind>"                 something you place, like a sprinkler (see placeables)
+///   "u|<kind>"                 furniture for your farmhouse (see furniture)
 ///   "x|<fish>"                 a fish (see fishing)
 ///   "n|<animal>", "a|<product>"  a crate of livestock, eggs and milk (see animals)
 /// A stack is {id, count, pal} - pal is an optional palette name giving clothing its own colour.
@@ -53,6 +54,10 @@ function item_materials(){
 		// Marriage (scripts/marriage): the proposal token, and the plans for the next farmhouse upgrade (built overnight)
 		{key: "blue_feather", name: "Blue Feather", tier: 0, shape: "feather", colour: make_colour_rgb(80, 140, 235), price: 1000, stats: {}, desc: "A token of love. Give it to the one you want to marry."},
 		{key: "house_plans", name: "House Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(230, 220, 190), price: 1000, stats: {}, desc: "Rowan's plans for your farmhouse. Her crew builds it overnight."},
+		{key: "barn_plans", name: "Barn Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(220, 160, 150), price: 1000, stats: {}, desc: "Rowan's plans for a bigger barn (room for more cows and sheep). Her crew builds it overnight."},
+		{key: "coop_plans", name: "Coop Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(235, 210, 150), price: 1000, stats: {}, desc: "Rowan's plans for a bigger coop (room for more chickens). Her crew builds it overnight."},
+		{key: "shed_plans", name: "Shed Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(200, 190, 170), price: 1000, stats: {}, desc: "Rowan's plans for a bigger shed. Her crew builds it overnight."},
+		{key: "silo_plans", name: "Silo Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(190, 195, 205), price: 1000, stats: {}, desc: "Rowan's plans for more silos. Her crew builds them overnight."},
 		// The new families' workshops (2026-11-06): olive oil, glass, rope, gears, horse things
 		{key: "olive_oil", name: "Olive Oil",  tier: 0, shape: "orb",   colour: make_colour_rgb(190, 180, 60),  price: 40,  stats: {}, desc: "Pressed at the Saba olive press in Olive Bay."},
 		{key: "glass",     name: "Glass",      tier: 0, shape: "gem",   colour: make_colour_rgb(190, 230, 240), price: 20,  stats: {}, desc: "Clear glass from the Fairglass glassworks."},
@@ -171,6 +176,13 @@ function item_def(_id){
 			if(fd != undefined){
 				d = {id: _id, type: "fish", fish: p[1], name: fd.name, max: 99, price: fd.sell * 2, tier: (fd.hard >= 0.5) ? 1 : 0, stats: {},
 				     desc: (fd[$ "junk"] ?? false) ? "Someone lost this a long time ago." : "Sell it, cook it, or hold it and use it to eat it raw (+" + string(fd.energy) + " energy)."};
+			}
+			break;
+		case "u":
+			var fu = furniture_def(p[1]);
+			if(fu != undefined){
+				d = {id: _id, type: "furniture", kind: p[1], name: fu.name, max: 9, price: fu.price, tier: 1, stats: {},
+				     desc: "Furniture for your farmhouse. Hold it there and use it to place it (a preview shows where); use an empty hand on it to pick it up."};
 			}
 			break;
 		case "o":
@@ -512,6 +524,9 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			break;
 		case "placeable":
 			placeable_draw(d.kind, cx, cy + _size * 0.2, _size / 30);
+			break;
+		case "furniture":
+			furniture_draw_icon(d.kind, cx, cy, _size);
 			break;
 		case "fish":
 			fish_draw_icon(d.fish, cx, cy, _size * 0.36);

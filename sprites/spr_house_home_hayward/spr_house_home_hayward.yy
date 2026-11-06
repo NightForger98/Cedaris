@@ -4,7 +4,7 @@
   "bboxMode":0,
   "bbox_bottom":129,
   "bbox_left":0,
-  "bbox_right":209,
+  "bbox_right":226,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"7ced1aa1-e6bb-4ebd-936e-be3053354055","name":"7ced1aa1-e6bb-4ebd-936e-be3053354055","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"487cedd0-0c50-4170-9f63-88cf7c54bbee","name":"487cedd0-0c50-4170-9f63-88cf7c54bbee","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":130,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"55b797dc-9ef6-4a9a-8d5c-87e4d5e9bee3","blendMode":0,"displayName":"default","isLocked":false,"name":"55b797dc-9ef6-4a9a-8d5c-87e4d5e9bee3","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"89f6498e-e8ce-4452-becb-95c7684a1f41","blendMode":0,"displayName":"default","isLocked":false,"name":"89f6498e-e8ce-4452-becb-95c7684a1f41","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_home_hayward",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"7ced1aa1-e6bb-4ebd-936e-be3053354055","path":"sprites/spr_house_home_hayward/spr_house_home_hayward.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"4f79b6b8-fed2-406f-b39d-28bea379c895","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"487cedd0-0c50-4170-9f63-88cf7c54bbee","path":"sprites/spr_house_home_hayward/spr_house_home_hayward.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"ddbef9ba-9ec1-444c-859a-626c4de6ebf3","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":210,
+  "width":227,
 }

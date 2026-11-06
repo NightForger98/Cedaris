@@ -64,11 +64,14 @@ function trim(im){
 // rows), the ground it stood on (cutBottom rows), grass tufts left at its foot (green pixels in the last grassRows),
 // stray pixels of the key colour a hand-stitched original was put together on (key).
 const FIX = {
+	// farm buildings and stables (2026-11-06): drawn on transparency or flat grey; stray ground cleaned
+	farm_bee_shed: {grassRows: 8}, farm_granary: {grassRows: 8}, farm_shed_1: {grassRows: 6}, farm_coop_2: {grassRows: 6}, stables: {cutBottom: 56}, barn_ranch: {}, barn_stone: {},
+	// the remakes with depth (wings, cross-gabled roofs; 2026-11-06; the flat ones in art/ai_houses/flat_old)
+	cottage: {tol: 20}, home_kassar: {tol: 120}, home_saba: {}, home_tawil: {grassRows: 10}, family_house: {grassRows: 10},
 	brewery: {cutTop: 27},
 	lighthouse: {cutBottom: 13, grassRows: 8},
 	fisherman_hut: {key: [255, 0, 255]},	// stitched by hand on magenta, see the README
-	home_hayward: {},	// a speckled background: only the loose specks (dropped below) need clearing
-	home_ward: {tol: 90}, cafe_terrace: {tol: 90},	// speckled backgrounds
+	cafe_terrace: {tol: 90},	// speckled backgrounds
 	prop_sea_arch: {holes: true},
 	marina_club: {tol: 20}, tram_stop: {tol: 20}, bunny_burrow: {tol: 20}, cable_car_station: {grassRows: 6},	// on black: a low tolerance keeps the dark outline
 	town_hallhouse: {tol: 20}, town_hallhouse2: {tol: 20}, town_hallhouse3: {tol: 20}, town_apartments: {tol: 20}, town_yellowhouse: {tol: 20},
@@ -77,7 +80,7 @@ const FIX = {
 	port_silos: {tol: 60}, bourj_market: {tol: 60},	// speckled backgrounds	// the sky seen through the arch
 	windmill: {cutBottom: 24, grassRows: 34},	// a patch of grass and a path round its foot
 	oakhart_farmhouse: {},	// a faint signature in a corner (dropped as specks)
-	home_larkspun: {cutBottom: 25}, rangers_cabin: {cutBottom: 26}, home_frere: {grassRows: 6},	// a path drawn down from the door
+	rangers_cabin: {cutBottom: 26}, home_frere: {grassRows: 6},	// a path drawn down from the door
 };
 
 function clearRows(im, y0, y1){

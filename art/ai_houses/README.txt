@@ -204,3 +204,21 @@ them where the blueprint has those places, and a labelled box only where one fin
 - town_shop, town_shop2, town_cafe, town_cafe2, town_bakery, town_bakery2: the shopfront and cafe retried (plus a
   bakery) with "A long low wide building ... its roof ridge running left to right" and a red tile roof - front-on this
   time (scratchpad jobs_town2.json, 9 tries, 6 kept). On black (tol 20).
+
+Sixth batch, 2026-11-06: depth. The user found the houses "one dimensional" (one block, one roof) and asked for the
+depth of a modular kit reference - a cross-gabled roof, a front gable, east and/or west wings. Remade with the prompt
+"The building has depth, not one flat block: a cross-gabled roof - a main ridge left to right, a front gable wing
+projecting toward the camera in the middle with the front door, and a lower wing set back on the left / right / both
+... so the front wall steps in and out and the roof has several slopes and valleys", each house's own materials, the old
+art as color_image, 3 tries each (many came out isometric; the front-on one kept): home_saba, home_saltwhistle,
+home_hayward, home_larkspun, home_quill, home_ward, home_tawil, home_kassar, home_night, cottage, family_house. The flat
+ones are in flat_old/ (small_house: all three tries isometric, kept as it was). Door x positions re-measured
+(tools/rooms/sprite_buildings.js DOORS).
+- stables (the horse now stands inside an open stall wing, not a head on the wall) and stables_b (a variation: grey
+  planks on fieldstone, a white horse, the stall on the left) - the old one in flat_old/
+- farm buildings in three stages (scripts/farm_buildings; Stardew's Barn / Big Barn / Deluxe Barn and so on):
+  farm_barn_1-3, farm_coop_1-3, farm_shed_1-3 (the wording "Flat straight-on front elevation: only the front wall is
+  visible ... no side walls, no corner" finally got the small ones front-on), farm_silo_1-3; and farm_bee_shed,
+  farm_granary, farm_outhouse in place of the farm's LPC ones
+- barn_ranch (Meadowlark Farm's home, in place of the Meshy ranch barn) and barn_stone (the Night farm): fully built barns
+- furniture (art/furniture; scripts/furniture): 20 pieces, 2 tries each, drawn on transparency (under 200 px), trimmed

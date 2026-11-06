@@ -1,1 +1,1 @@
-sprite_index = spr_house_town_hall;
+sprite_index = spr_house_home_fairglass;

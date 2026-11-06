@@ -1,0 +1,59 @@
+# Furniture, the Stardew way (scripts/furniture): Rowan's catalogue sells it; held in the farmhouse it shows a preview
+# and Use places it in front of you; rugs lie flat (other pieces can stand on them); the pickaxe or an empty hand picks
+# a piece back up; it stays where you put it
+start story
+wait 60
+room rm_12 304 300
+wait 20
+call autotest_furniture
+expect 20 in the catalogue
+pos 420 200
+give u|rug_red
+equip u|rug_red
+face n
+wait 5
+use
+wait 10
+call autotest_furniture
+expect rug_red@
+# an armchair on the rug
+give u|armchair
+equip u|armchair
+face n
+wait 5
+shot 01_preview
+use
+wait 10
+call autotest_furniture
+expect armchair@
+pos 304 300
+give u|bookcase
+equip u|bookcase
+face w
+wait 5
+use
+wait 10
+call autotest_furniture
+expect bookcase@
+shot 02_placed
+# the armchair stands in front of you: the pickaxe picks it up
+pos 420 200
+give c|held|Pickaxe
+equip c|held|Pickaxe
+face n
+wait 5
+use
+wait 30
+call autotest_furniture
+expectnot armchair@
+call inv_count u|armchair
+expect 1
+# still there after going out and back in
+room rm_1
+wait 30
+room rm_12 304 300
+wait 20
+call autotest_furniture
+expect bookcase@
+expect rug_red@
+quit

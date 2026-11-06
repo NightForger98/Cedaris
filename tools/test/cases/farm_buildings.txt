@@ -1,0 +1,59 @@
+# The farm's buildings grow in three stages, the Stardew way (scripts/farm_buildings): Rowan sells the plans, her
+# crew builds overnight; the coop holds 4, 8, then 12 chickens (the barn the same for cows and sheep)
+start story
+wait 60
+call autotest_date 0 2
+time 10
+room rm_1 1950 620
+wait 30
+call farm_building_name barn
+expect Barn
+shot 01_stage1
+# plans in the bag: built overnight
+give m|barn_plans
+give m|coop_plans
+call autotest_next_day
+expect Big Barn
+expect Big Coop
+call farm_building_name barn
+expect Big Barn
+call autotest_farm_building barn 2
+expect Deluxe Barn
+call autotest_farm_building coop 2
+call autotest_farm_building shed 2
+call autotest_farm_building silo 2
+room rm_1 1950 620
+wait 30
+shot 02_stage3
+call autotest_farm_building coop 0
+call autotest_farm_building barn 1
+call autotest_farm_building shed 1
+call autotest_farm_building silo 1
+room rm_1 1950 620
+wait 30
+shot 03_stage2
+# a small coop holds 4 chickens
+call autotest_farm_building coop 0
+room rm_1 1600 700
+wait 20
+give n|chicken 5
+equip n|chicken
+use
+wait 15
+equip n|chicken
+use
+wait 15
+equip n|chicken
+use
+wait 15
+equip n|chicken
+use
+wait 15
+equip n|chicken
+use
+wait 15
+call autotest_hud
+expect full
+call farm_animal_count chicken
+expect 4
+quit

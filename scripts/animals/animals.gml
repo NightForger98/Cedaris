@@ -54,8 +54,12 @@ function animal_stock(){
 function animal_release(_stack){
 	if(room != rm_1){ farm_message("Let it out on your farm"); return false; }
 	var list = animals_list();
-	if(array_length(list) >= ANIMALS_MAX){ farm_message("The meadow's full (" + string(ANIMALS_MAX) + " animals)"); return false; }
 	var kind = string_split(_stack.id, "|")[1];
+	// the barn holds cows and sheep, the coop chickens (more as they grow: scripts/farm_buildings)
+	if(farm_animal_count(kind) >= farm_animal_room(kind)){
+		farm_message("Your " + string_lower(farm_building_name((kind == "chicken") ? "coop" : "barn")) + " is full (" + string(farm_animal_room(kind)) + "); Rowan can build a bigger one");
+		return false;
+	}
 	static names = ["Daisy", "Clover", "Pepper", "Maple", "Biscuit", "Hazel", "Juniper", "Turnip", "Bramble", "Poppy", "Nutmeg", "Willow"];
 	var a = {kind: kind, name: names[irandom(array_length(names) - 1)], love: 0, petted: -1, days: 0, ready: false};
 	array_push(list, a);

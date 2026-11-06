@@ -1,2 +1,2 @@
-text = "Whispering Woods";
-side = "n";
+text = "Frere's Fray";
+side = "here";

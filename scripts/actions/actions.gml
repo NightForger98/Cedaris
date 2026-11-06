@@ -95,6 +95,7 @@ function action_hit(_user, _item, _dir, _level = 0){
 		case "Pickaxe":
 			// A placed sprinkler in front comes back up; otherwise the pickaxe hits like any tool
 			if(placeable_pick_up(cell[0], cell[1])) break;
+			if(furniture_pick_up()) break;
 		default:
 			// Monsters first (a weapon or tool hits what's in its arc, a bow fires), then trees, rocks and weeds
 			combat_player_hit(_user, _item, _dir);

@@ -1035,3 +1035,27 @@ function autotest_transit(){
 
 /// @description Test: how much gold you have.
 function autotest_gold(){ return string(global.inv.gold); }
+
+/// @description Test: this room's furniture (kind@gx,gy each), and how many pieces Rowan's catalogue has.
+function autotest_furniture(){
+	var p = furniture_list(room_get_name(room)), s = string(array_length(furniture_catalogue())) + " in the catalogue:";
+	for(var i = 0; i < array_length(p); i++) s += " " + p[i].kind + "@" + string(p[i].gx) + "," + string(p[i].gy);
+	return s;
+}
+
+/// @description Test: where the held piece of furniture would go, and what's in the way (the first blocked cell).
+function autotest_furniture_target(){
+	var held = inv_held_stack();
+	if(held == undefined) return "nothing held";
+	var kind = string_split(held.id, "|")[1], t = furniture_target(kind), sz = furniture_size(kind);
+	var s = kind + " size " + string(sz[0]) + "x" + string(sz[1]) + " at " + string(t[0]) + "," + string(t[1]) + " plyr " + string(floor(obj_plyr.x)) + "," + string(floor(obj_plyr.y)) + " yf " + string(obj_plyr.y_frame);
+	for(var c = t[0]; c < t[0] + sz[0]; c++) for(var r = t[1] - sz[1] + 1; r <= t[1]; r++){
+		var cx = c * 32 + 16, cy = r * 32 + 16;
+		if(collision_rectangle(cx - 12, cy - 12, cx + 12, cy + 12, obj_col_box, false, true) != noone) return s + " - wall at " + string(c) + "," + string(r);
+		if(collision_rectangle(cx - 20, cy - 20, cx + 20, cy + 20, obj_transition, false, true) != noone) return s + " - door at " + string(c) + "," + string(r);
+	}
+	return s + (furniture_fits(kind, t[0], t[1]) ? " - fits" : " - blocked");
+}
+
+/// @description Test: the message showing on the HUD now.
+function autotest_hud(){ return game.hudMessage; }

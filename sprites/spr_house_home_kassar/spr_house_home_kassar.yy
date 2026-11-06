@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_house_home_kassar",
   "bboxMode":0,
-  "bbox_bottom":161,
+  "bbox_bottom":171,
   "bbox_left":0,
-  "bbox_right":181,
+  "bbox_right":170,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"0ed850f4-b5a8-481a-b6f9-49bf4fb5b147","name":"0ed850f4-b5a8-481a-b6f9-49bf4fb5b147","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8d558441-a072-4688-93c9-88b79e204d15","name":"8d558441-a072-4688-93c9-88b79e204d15","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":162,
+  "height":172,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"8597db11-3b2c-4ddd-b15d-ef570814307d","blendMode":0,"displayName":"default","isLocked":false,"name":"8597db11-3b2c-4ddd-b15d-ef570814307d","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"0a2788ab-a641-4f08-99f4-d9e95f37094a","blendMode":0,"displayName":"default","isLocked":false,"name":"0a2788ab-a641-4f08-99f4-d9e95f37094a","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_home_kassar",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"0ed850f4-b5a8-481a-b6f9-49bf4fb5b147","path":"sprites/spr_house_home_kassar/spr_house_home_kassar.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"c45660cc-41f1-40d1-98b2-378154e65cda","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"8d558441-a072-4688-93c9-88b79e204d15","path":"sprites/spr_house_home_kassar/spr_house_home_kassar.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"f5a0fc2d-6c8e-4982-8cfe-b9fadda10602","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":182,
+  "width":171,
 }

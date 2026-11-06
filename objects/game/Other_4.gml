@@ -14,7 +14,7 @@ if(game_is_playing_room()){
 	// The mine builds its floor (and puts you at the entrance); elsewhere trees, rocks and weeds from the world store,
 	// plus any that are due to spawn
 	if(room == rm_mine) mine_room_start();
-	else { global.mineWalls = -1; resources_room_start(); placeables_room_start(); animals_room_start(); festival_room_start(); woods_room_start(); }
+	else { global.mineWalls = -1; resources_room_start(); placeables_room_start(); furniture_room_start(); animals_room_start(); festival_room_start(); woods_room_start(); }
 	villagers_update(); // whoever's here at this hour
 	signposts_place();  // a sign by each way to another place
 }

@@ -1,5 +1,4 @@
-targetRoom = rm_phoenix;
-targetX = 4304;
-targetY = 1168;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+label = "Broken bridge";
+boxW = 128;
+boxH = 128;
+if(project_done("bridge")) instance_destroy();

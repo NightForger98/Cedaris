@@ -1,2 +1,2 @@
-text = "The Outskirts";
-side = "n";
+kind = "tram";
+stop = "Frere's Fray";

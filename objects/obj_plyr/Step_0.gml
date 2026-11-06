@@ -79,6 +79,7 @@ if(!busy && input_pressed(key_of("cast")) && look.parts.held.item != -1){
 	}
 	if(cast.why != "") farm_message(cast.why);
 }
+furniture_mouse_track();
 var planting = instance_exists(crops) && crops.planting;
 if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(key_of("use")))){
 	var faceDir = clamp(y_frame - 8, 0, 3);
@@ -101,6 +102,8 @@ if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(k
 	if(heldType == "scroll"){ spell_learn(held); exit; }
 	if(heldType == "forage"){ forage_eat(held); exit; }
 	if(heldType == "placeable"){ placeable_place(held, cell[0], cell[1]); exit; }
+	if(heldType == "furniture"){ furniture_place(held); exit; }
+	if(held == undefined && furniture_pick_up()) exit;   // an empty hand on a piece of furniture picks it up
 	if(heldType == "fish"){ fish_eat(held); exit; }
 	if(heldType == "crate"){ animal_release(held); exit; }
 	if(heldType == "animalproduct"){ animal_product_eat(held); exit; }

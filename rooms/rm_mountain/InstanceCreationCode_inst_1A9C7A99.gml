@@ -1,1 +1,1 @@
-sprite_index = spr_prop_overlook;
+sprite_index = spr_prop_bourj_market;

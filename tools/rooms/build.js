@@ -374,12 +374,23 @@ ${body}	};
 /// @description A named spot in a room ("rm_1", "cave"): [x, y] in room pixels.
 function layout_point(_room, _key){
 	var r = room_layout()[$ _room];
+	if(r == undefined){
+		// an old room's name (before the merge): its spot is "<old room>__<spot>" in the room it's part of now
+		var nr = room_layout()[$ world_alias(_room)];
+		if(nr == undefined) return undefined;
+		return nr.points[$ _room + "__" + _key] ?? nr.points[$ _key];
+	}
 	return r.points[$ _key];
 }
 
 /// @description A named area in a room, in cells [c1, r1, c2, r2].
 function layout_cells(_room, _key){
 	var r = room_layout()[$ _room];
+	if(r == undefined){
+		var nr = room_layout()[$ world_alias(_room)];
+		if(nr == undefined) return undefined;
+		return nr.areas[$ _room + "__" + _key] ?? nr.areas[$ _key];
+	}
 	return r.areas[$ _key];
 }
 

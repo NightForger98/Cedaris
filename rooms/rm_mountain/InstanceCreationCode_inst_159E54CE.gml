@@ -1,5 +1,1 @@
-targetRoom = rm_phoenix;
-targetX = 4304;
-targetY = 1168;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+sprite_index = spr_prop_miners_camp;

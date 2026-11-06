@@ -1,5 +1,5 @@
-targetRoom = rm_plummet;
-targetX = 1520;
-targetY = 1428;
+targetRoom = rm_mountain;
+targetX = 2320;
+targetY = 1076;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

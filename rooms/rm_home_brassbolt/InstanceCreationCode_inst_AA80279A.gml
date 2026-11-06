@@ -1,5 +1,5 @@
-targetRoom = rm_hangar;
-targetX = 368;
-targetY = 852;
+targetRoom = rm_phoenix;
+targetX = 4464;
+targetY = 1236;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

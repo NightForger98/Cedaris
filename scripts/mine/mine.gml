@@ -304,8 +304,8 @@ function mine_goto(_floor){
 /// @description Climb out at the cave mouth, under the cliff on Beacon Hill.
 function mine_leave(){
 	with(game){
-		spawnRoom = rm_beaconhill;
-		var p = layout_point("rm_beaconhill", "cave");
+		spawnRoom = rm_mountain;   // (Beacon Hill's cave, on the Mountain)
+		var p = layout_point("rm_mountain", "cave");
 		spawnX = p[0]; spawnY = p[1];
 		spawnPlayerFacing = dir.down;
 		restartRoom = false;

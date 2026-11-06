@@ -13,7 +13,7 @@ call door_lock_reason rm_village_smithy
 call door_lock_reason rm_town_home_e
 call door_lock_reason rm_yarzeh
 call door_lock_reason rm_1
-# Walk from the farm north up the road to Wing Hill (the market)
+# Walk from the farm north up the road to the Outskirts (Wing Hill and the market)
 room rm_1 1296 120
 face up
 keydown up
@@ -21,7 +21,7 @@ wait 80
 keyup up
 wait 30
 call autotest_room_name
-expect rm_winghill
+expect rm_outskirts
 call door_lock_reason rm_12
-shot 01_winghill_early
+shot 01_outskirts_early
 quit

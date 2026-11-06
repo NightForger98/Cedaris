@@ -1,1 +1,1 @@
-sprite_index = spr_prop_fish_market;
+sprite_index = spr_house_tinker_workshop;

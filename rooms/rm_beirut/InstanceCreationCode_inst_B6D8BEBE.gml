@@ -1,3 +1,1 @@
-label = "Old station";
-boxW = 224;
-boxH = 128;
+sprite_index = spr_prop_old_station;

@@ -1,5 +1,5 @@
-targetRoom = rm_victoryhill;
-targetX = 1008;
-targetY = 660;
+targetRoom = rm_mountain;
+targetX = 1264;
+targetY = 3092;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

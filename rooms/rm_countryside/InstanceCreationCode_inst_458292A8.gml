@@ -1,5 +1,5 @@
-targetRoom = rm_woods;
-targetX = 1264;
-targetY = 1904;
+targetRoom = rm_village_elda;
+targetX = 256;
+targetY = 312;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

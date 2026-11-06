@@ -1,5 +1,5 @@
-targetRoom = rm_gracetower;
-targetX = 784;
-targetY = 340;
+targetRoom = rm_beirut;
+targetX = 3920;
+targetY = 1140;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

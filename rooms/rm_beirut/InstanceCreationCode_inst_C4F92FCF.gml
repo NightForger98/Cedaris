@@ -1,3 +1,1 @@
-label = "Marina club";
-boxW = 160;
-boxH = 96;
+sprite_index = spr_prop_marina_club;

@@ -5,6 +5,7 @@
 /// (not on it), on the side of the room the exit is on.
 function signposts_place(){
 	if(!room_is_outdoors()) return;
+	if(instance_exists(obj_signpost)) return;   // the room was built with its signs (Cedar & Sea's areas: tools/world2)
 	var made = [];
 	with(obj_transition){
 		if(targetRoom == -1 || !room_is_outdoors(targetRoom)) continue;

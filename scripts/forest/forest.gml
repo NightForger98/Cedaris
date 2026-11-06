@@ -5,7 +5,7 @@
 
 /// @description Room start in Whispering Woods: at night, pixies and moths flit about its clearings.
 function woods_room_start(){
-	if(room != rm_yarzeh) return;
+	if(room != rm_woods) return;
 	if(global.clock.minutes < 1200 && global.clock.minutes >= DAY_START) return;
 	var spots = [], names = ["nw", "ne", "sw", "se"];
 	for(var i = 0; i < 4; i++){

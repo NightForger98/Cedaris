@@ -9,6 +9,7 @@ module.exports = function(room){
 	const p = NEW[room];
 	const [outdoor, b] = Object.entries(ROOMS).map(([id, R]) => [id, (R.buildings || []).find(x => x.room === room)]).find(([, x]) => x) || [];
 	if(!outdoor) throw new Error(room + " isn't behind any door in tools/world/world.js");
-	const out = require("./room.js").spec(outdoor).exits[b.key];
-	return interior(Object.assign({}, p, {exit: {room: outdoor, x: out[0], y: out[1]}}));
+	// (Cedar & Sea: the door is in one of the blueprint's rooms now - tools/world2)
+	const [room2, x, y] = require("../world2/areas_build.js").exits()[b.key];
+	return interior(Object.assign({}, p, {exit: {room: room2, x, y}}));
 };

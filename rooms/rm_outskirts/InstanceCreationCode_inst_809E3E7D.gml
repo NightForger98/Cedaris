@@ -1,3 +1,1 @@
-label = "Tram stop";
-boxW = 96;
-boxH = 64;
+sprite_index = spr_house_home_larkspun;

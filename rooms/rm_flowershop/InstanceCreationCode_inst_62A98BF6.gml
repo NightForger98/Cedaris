@@ -1,5 +1,5 @@
-targetRoom = rm_verdun;
-targetX = 1168;
-targetY = 372;
+targetRoom = rm_beirut;
+targetX = 880;
+targetY = 1844;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

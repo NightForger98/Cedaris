@@ -1,5 +1,5 @@
-targetRoom = rm_olivebay;
-targetX = 784;
-targetY = 244;
+targetRoom = rm_sunset;
+targetX = 1104;
+targetY = 1172;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

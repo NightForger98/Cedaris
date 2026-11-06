@@ -1,5 +1,5 @@
-targetRoom = rm_town_apothecary;
-targetX = 256;
-targetY = 344;
+targetRoom = rm_home_kassar;
+targetX = 224;
+targetY = 280;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

@@ -15,6 +15,10 @@ mkdir -p "$SAVE_DIR" build/autotest
 rm -rf "$SAVE_DIR/autotest" build/autotest/*
 cp "$CASE" "$SAVE_DIR/autotest.txt"
 
+# A game still closing from the last case holds the output file the build writes: wait for it (then stop it)
+for i in $(seq 1 20); do tasklist 2>/dev/null | grep -qi "^Runner.exe" || break; sleep 1; done
+taskkill //F //IM Runner.exe >/dev/null 2>&1; sleep 1
+
 # Igor's Run returns when the game closes; stop it if a test hangs
 timeout "${AUTOTEST_TIMEOUT:-300}" ./build.sh run
 STATUS=$?

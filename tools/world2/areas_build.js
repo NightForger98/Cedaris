@@ -63,6 +63,11 @@ const THING = {"Museum": "prop_museum", "Cafe": "prop_cafe_terrace", "Fish marke
 const PLACEHOLDER = {"Biel hall": "Biel hall", "Silos": "Silos", "Marina club": "Marina club", "Bourj Hammoud market": "Bourj Hammoud market",
 	"Stadium": "Stadium", "Sursock gallery": "Sursock gallery", "Bar": "Bar", "Old station": "Old station", "Cable car": "Cable car",
 	"Cable car top": "Cable car", "Tram stop": "Tram stop", "Burrow": "Bunny burrow"};
+// The placeholders' PixelLab art (spr_prop_*, 2026-11-06); a box with a label only where the art finds no room
+const PLACEHOLDER_ART = {"Biel hall": "prop_exhibition_hall", "Silos": "prop_port_silos", "Marina club": "prop_marina_club",
+	"Bourj Hammoud market": "prop_bourj_market", "Stadium": "prop_stadium", "Sursock gallery": "prop_sursock_gallery",
+	"Bar": "prop_gemmayzeh_bar", "Old station": "prop_old_station", "Cable car": "prop_cable_car_station",
+	"Cable car top": "prop_cable_car_station", "Tram stop": "prop_tram_stop", "Burrow": "prop_bunny_burrow"};
 const RUINS = {
 	house: {w: 8, h: 4, parts: [["ruin_wall_brick", 0, 0], ["ruin_wall_stone", 4, 0], ["ruin_rubble", 1, 3], ["ruin_rubble", 5, 3], ["ruin_stump", 3, 2]]},
 	temple: {w: 8, h: 5, parts: [["ruin_pillar", 0, 0], ["ruin_ivy", 2, 1], ["ruin_head", 3, 1], ["ruin_columns", 6, 1], ["ruin_rubble", 1, 4], ["ruin_stump", 5, 3]]},
@@ -77,7 +82,7 @@ const doorOf = is => { const b = T.things[is]; return b.door || [Math.floor(b.sr
 function rng(seed){ let s = seed * 9301 + 49297; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
 
 // Blueprint tile -> map character (the builder's legend: tools/rooms/tiles.js)
-const CH = {".": ".", m: ".", F: ".", P: ".", "1": ".", "2": ".", "4": ".", B: ".", u: ".", "3": ",", ":": ":", q: ":", z: ":", t: ":",
+const CH = {".": ".", m: ".", F: ".", P: ".", "1": ".", "2": ".", "4": ".", B: ".", u: ".", "3": ".", ":": ":", q: ":", z: ":", t: ":",
 	",": ",", r: ",", _: "_", D: "~", S: "~", s: "~", "~": "~", p: "b", "=": ",", C: "X", c: "X"};
 const OPEN = [".", ",", ":", "_", "b"];   // walkable map characters
 
@@ -185,6 +190,17 @@ function buildRoom(id, fr, exits){
 			take(spot[0], spot[1], ru.w, ru.h);
 			points["lm_" + b.name.toLowerCase().replace(/[^a-z]+/g, "_")] = [(spot[0] + 4) * 32, (spot[1] + ru.h) * 32 + 24];
 		} else if(PLACEHOLDER[b.name]){
+			const art = PLACEHOLDER_ART[b.name];
+			if(art && T.things[art]){
+				const [w, h] = size(art), at2 = placeAt(w, h, fx, fy, b.w, b.h, [".", ",", "_"]);
+				if(at2){
+					things.push({is: art, at: at2});
+					take(at2[0], at2[1], w, h);
+					points["lm_" + b.name.toLowerCase().replace(/[^a-z]+/g, "_")] = [(at2[0] + Math.floor(w / 2)) * 32 + 16, (at2[1] + h) * 32 + 24];
+					continue;
+				}
+				console.log(`  ${id}: no room for ${b.name}'s art, a placeholder instead`);
+			}
 			const spot = placeAt(b.w, b.h, fx, fy, b.w, b.h, [".", ",", ":", "_"]);
 			if(!spot) continue;
 			things.push({placeholder: PLACEHOLDER[b.name], src: [0, 0, b.w, b.h], solid: [[0, Math.max(0, b.h - 2), b.w, Math.min(b.h, 2)]], at: spot});
@@ -223,14 +239,35 @@ function buildRoom(id, fr, exits){
 		}
 	}
 
-	// Rocks on the rocky shore
+	// A board with each old district's name where its old room's ground now lies, by the nearest road
+	for(const o of oldsHere){
+		const name = (ROOMS[o] || {}).name;
+		if(!name) continue;
+		const [x1, y1, x2, y2] = OLDR[o].rect, cx = Math.round((x1 + x2) / 2) - ox, cy = Math.round((y1 + y2) / 2) - oy;
+		const road = (c, r) => [":", ","].includes(at(c, r));
+		let spot = null;
+		for(let d = 0; d <= 30 && !spot; d++) for(let dy = -d; dy <= d && !spot; dy++) for(let dx = -d; dx <= d && !spot; dx++){
+			if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
+			const c = cx + dx, rw = cy + dy;
+			if(c < 1 || rw < 1 || c >= W - 1 || rw >= H - 1 || !own(c, rw) || at(c, rw) !== "." || taken.has(c + "," + rw)) continue;
+			if(road(c, rw + 1) || road(c, rw - 1) || road(c + 1, rw) || road(c - 1, rw)) spot = [c, rw];
+		}
+		if(!spot) continue;
+		taken.add(spot[0] + "," + spot[1]);
+		instances.push({obj: "obj_signpost", x: spot[0] * 32 + 16, y: spot[1] * 32 + 28, code: `text = "${name.replace(/"/g, "")}";
+side = "here";`});
+		points[o + "__sign"] = [spot[0] * 32 + 16, spot[1] * 32 + 56];
+	}
+
+	// Rocks on the rocky shore and the mountain's bare top
 	{ const sr = rng(seed + 31), kinds = ["rock_grey_big", "rock_grey", "pebbles_grey", "pebbles_grey2", "rock_grey_tall", "pebbles_brown"];
-	  for(let k = 0; k < W * H / 60; k++){
+	  const rocky = (x, y) => ["r", "3", "4"].includes(bk(x, y));
+	  for(let k = 0; k < W * H / 30; k++){
 		const is = kinds[Math.floor(sr() * kinds.length)];
 		if(!T.things[is]) continue;
 		const [w, h] = size(is), c = 1 + Math.floor(sr() * (W - 2 - w)), r = 1 + Math.floor(sr() * (H - 2 - h));
 		let ok = true;
-		for(let y = r - 1; y <= r + h && ok; y++) for(let x = c - 1; x <= c + w && ok; x++) if(bk(x, y) !== "r" || taken.has(x + "," + y) || !own(x, y)) ok = false;
+		for(let y = r - 1; y <= r + h && ok; y++) for(let x = c - 1; x <= c + w && ok; x++) if(!rocky(x, y) || taken.has(x + "," + y) || !own(x, y)) ok = false;
 		if(ok){ things.push({is, at: [c, r]}); take(c, r, w, h); }
 	} }
 
@@ -238,8 +275,8 @@ function buildRoom(id, fr, exits){
 	const maskOf = test => grid.map((row, r) => row.map((ch, c) => (ch === "." && own(c, r) && test(bk(c, r))) ? "." : "x").join(""));
 	const count = test => { let n = 0; for(let r = 0; r < H; r++) for(let c = 0; c < W; c++) if(own(c, r) && test(bk(c, r)) && at(c, r) === ".") n++; return n; };
 	const nP = count(k => k === "P"), nF = count(k => k === "F"), nOpen = count(k => k === "." || k === "1" || k === "2");
-	if(nP) things.push(...woods(maskOf(k => k === "P"), [0, 0, W - 1, H - 1], Math.round(nP / 7), seed + 1, [["pine", 10], ["sapling", 1]], taken, true));
-	if(nF) things.push(...woods(maskOf(k => k === "F"), [0, 0, W - 1, H - 1], Math.round(nF / 8), seed + 2, undefined, taken, true));
+	if(nP) things.push(...woods(maskOf(k => k === "P"), [0, 0, W - 1, H - 1], Math.round(nP / 5), seed + 1, [["pine", 10], ["sapling", 1]], taken, true));
+	if(nF) things.push(...woods(maskOf(k => k === "F"), [0, 0, W - 1, H - 1], Math.round(nF / 5), seed + 2, undefined, taken, true));
 	if(nOpen) things.push(...woods(maskOf(k => k === "." || k === "1" || k === "2"), [0, 0, W - 1, H - 1],
 		Math.round(nOpen * ({town: 0.002, rural: 0.008, wild: 0.02, deep: 0.03}[KIND[id]] || 0.006)), seed + 3, undefined, taken, false));
 
@@ -272,6 +309,11 @@ function buildRoom(id, fr, exits){
 		let sp;
 		try{ sp = Old.spec(o); } catch(e){ continue; }
 		const g = Old.geom(o), [x1, y1, x2, y2] = OLDR[o].rect;
+		for(const [k, a] of Object.entries(sp.areas || {})){
+			const cell = (cc, rr) => [Math.round(x1 + cc / g.W * (x2 - x1)) - ox, Math.round(y1 + rr / g.H * (y2 - y1)) - oy];
+			const [c1, r1] = cell(a[0], a[1]), [c2, r2] = cell(a[2], a[3]);
+			areas[o + "__" + k] = [Math.max(1, Math.min(c1, c2)), Math.max(1, Math.min(r1, r2)), Math.min(W - 2, Math.max(c1, c2)), Math.min(H - 2, Math.max(r1, r2))];
+		}
 		for(const [k, p] of Object.entries(sp.points)){
 			if(points[o + "__" + k]) continue;
 			if(k.endsWith("_front") && points[k]){ points[o + "__" + k] = points[k]; continue; }
@@ -346,7 +388,8 @@ function addWays(id, rooms, frames){
 			[tx, ty] = FARM_ARRIVE[side]; target = "rm_1";
 		} else {
 			const ofr = frames[other];
-			tx = (mx + dx * 3 - ofr.ox) * 32 + 16; ty = (my + dy * 3 - ofr.oy) * 32 + 16; target = other;
+			const [ax, ay] = arriveAt(other, mx + dx * 3, my + dy * 3);
+			tx = (ax - ofr.ox) * 32 + 16; ty = (ay - ofr.oy) * 32 + 16; target = other;
 		}
 		const face = dx === 1 ? "right" : dx === -1 ? "left" : dy === 1 ? "down" : "up";
 		const pw = (cx2 - cx1 + 1), ph = (cy2 - cy1 + 1);
@@ -354,6 +397,11 @@ function addWays(id, rooms, frames){
 			code: `targetRoom = ${target};\ntargetX = ${tx};\ntargetY = ${ty};\nPlayerFacingBefore = dir.${face};\nPlayerFacingAfter = dir.${face};`});
 		S.points["way_" + other.replace(/^rm_/, "") + "_" + (S.points["way_" + other.replace(/^rm_/, "")] ? mx : "")] = [(mx - fr.ox - dx * 2) * 32 + 16, (my - fr.oy - dy * 2) * 32 + 16];
 		if(!S.points["way_" + other.replace(/^rm_/, "")]) S.points["way_" + other.replace(/^rm_/, "")] = [(mx - fr.ox - dx * 2) * 32 + 16, (my - fr.oy - dy * 2) * 32 + 16];
+		// a signpost beside the way, a little back from it, naming where it leads
+		{ const side = dx === 1 ? "e" : dx === -1 ? "w" : dy === 1 ? "s" : "n";
+		  const sc = mx - fr.ox - dx * 2 + (dy !== 0 ? Math.ceil(pw / 2) + 1 : 0), sr = my - fr.oy - dy * 2 + (dx !== 0 ? -Math.ceil(ph / 2) - 1 : 0);
+		  S.instances.push({obj: "obj_signpost", x: sc * 32 + 16, y: sr * 32 + 28, code: `text = "${otherName}";
+side = "${side}";`}); }
 		// no wall where you cross
 		for(const c of along) gaps.add((c.x + c.dx - fr.ox) + "," + (c.y + c.dy - fr.oy));
 	}
@@ -371,6 +419,16 @@ function addWays(id, rooms, frames){
 
 // The ferry to Bunny Island: stepping onto the end of Starsand's breakwater (Phoenix Bay) takes you to the island's
 // jetty, and the jetty's end back (for now; a boat ride later)
+// Where to arrive in a room: the nearest cell (world tiles) of its own open ground to the one wanted, at least one cell
+// clear of anything blocking around it
+function arriveAt(id, x, y){
+	const ok = (cx, cy) => { for(let dy = -1; dy <= 1; dy++) for(let dx = -1; dx <= 1; dx++)
+		if(owner(cx + dx, cy + dy) !== id || !OPEN.includes(CH[kindAt(cx + dx, cy + dy)])) return false; return true; };
+	for(let d = 0; d < 12; d++) for(let dy = -d; dy <= d; dy++) for(let dx = -d; dx <= d; dx++)
+		if(Math.max(Math.abs(dx), Math.abs(dy)) === d && ok(x + dx, y + dy)) return [x + dx, y + dy];
+	return [x, y];
+}
+
 function addFerry(B){
 	const P = B.rooms.rm_phoenix, I = B.rooms.rm_bunny, fp = B.frames.rm_phoenix, fi = B.frames.rm_bunny;
 	if(!P || !I) return;
@@ -384,18 +442,19 @@ function addFerry(B){
 	}
 	if(!be || !je) return;
 	const px = (c, f) => (c - f) * 32 + 16;
+	const pa = arriveAt("rm_phoenix", be[0] - 2, be[1] + 2), ia = arriveAt("rm_bunny", je[0], je[1] - 2);
 	P.instances.push({obj: "obj_transition", x: px(be[0], fp.ox), y: px(be[1], fp.oy), sx: 2, sy: 2,
-		code: `targetRoom = rm_bunny;\ntargetX = ${px(je[0], fi.ox)};\ntargetY = ${px(je[1] - 2, fi.oy)};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`});
+		code: `targetRoom = rm_bunny;\ntargetX = ${px(ia[0], fi.ox)};\ntargetY = ${px(ia[1], fi.oy)};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`});
 	I.instances.push({obj: "obj_transition", x: px(je[0], fi.ox), y: px(je[1], fi.oy), sx: 2, sy: 2,
-		code: `targetRoom = rm_phoenix;\ntargetX = ${px(be[0] - 2, fp.ox)};\ntargetY = ${px(be[1] + 2, fp.oy)};\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;`});
-	P.points.ferry = [px(be[0] - 2, fp.ox), px(be[1] + 2, fp.oy)];
-	I.points.ferry = [px(je[0], fi.ox), px(je[1] - 2, fi.oy)];
+		code: `targetRoom = rm_phoenix;\ntargetX = ${px(pa[0], fp.ox)};\ntargetY = ${px(pa[1], fp.oy)};\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;`});
+	P.points.ferry = [px(pa[0], fp.ox), px(pa[1], fp.oy)];
+	I.points.ferry = [px(ia[0], fi.ox), px(ia[1], fi.oy)];
 }
 
 function all(){ if(!BUILT){ BUILT = buildAll(); addFerry(BUILT); } return BUILT; }
 module.exports = {
 	spec: id => { const s = all().rooms[id]; if(!s) throw new Error("no new room " + id); return s; },
-	all, ROOM_OF, ALIAS, KIND, WATER,
+	all, ROOM_OF, ALIAS, KIND, WATER, owner,
 	exits: () => all().exits,
 	farmArrive: side => {
 		// where the farm's side leads: the crossing in that area nearest the farm, arriving two cells in

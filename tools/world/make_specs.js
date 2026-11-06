@@ -25,8 +25,7 @@ const write = (name, body) => {
 	const file = path.join(SPECS, name + ".js");
 	fs.writeFileSync(file, body);
 };
-for(const id of GRID.flat()){
-	if(ROOMS[id].farm) continue;
+for(const id of []){   // (the old outdoor rooms - replaced by tools/world2's)
 	write(id, `// ${ROOMS[id].name} (${id}): generated from the world data - edit tools/world/world.js, not this file.\n` +
 		`// Build with: node tools/rooms/build.js ${id}\nmodule.exports = require("../../world/room.js").spec("${id}");\n`);
 }
@@ -39,11 +38,11 @@ for(const id of Object.keys(NEW)){
 for(const [r, [outdoor, key]] of Object.entries(REUSED)){
 	const file = path.join(SPECS, r + ".js");
 	let s = fs.readFileSync(file, "utf8");
-	const out = room.spec(outdoor).exits[key];
-	if(!out) throw new Error(`${outdoor} has no building ${key}`);
+	const ex = require("../world2/areas_build.js").exits()[key];
+	if(!ex) throw new Error(`no door for ${key} in the new world`);
 	const re = /exit: \{room: "\w+", x: \d+, y: \d+\}/;
 	if(!re.test(s)) throw new Error(`${r}: no exit to re-point`);
-	s = s.replace(re, `exit: {room: "${outdoor}", x: ${out[0]}, y: ${out[1]}}`);
+	s = s.replace(re, `exit: {room: "${ex[0]}", x: ${ex[1]}, y: ${ex[2]}}`);
 	fs.writeFileSync(file, s);
 }
-console.log(`specs: ${GRID.flat().length - 1} outdoor, ${Object.keys(NEW).length} new interiors, ${Object.keys(REUSED).length} re-pointed`);
+console.log(`specs: ${Object.keys(NEW).length} new interiors, ${Object.keys(REUSED).length} re-pointed`);

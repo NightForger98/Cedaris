@@ -1,3 +1,1 @@
-label = "Sursock gallery";
-boxW = 224;
-boxH = 160;
+sprite_index = spr_prop_sursock_gallery;

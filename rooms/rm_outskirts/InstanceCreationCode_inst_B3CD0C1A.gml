@@ -1,1 +1,1 @@
-sprite_index = spr_prop_swing;
+sprite_index = spr_house_weaver;

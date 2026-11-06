@@ -1,29 +1,31 @@
-# A signpost by every way from one outdoor place to another (wayfinding), none indoors
+# A signpost by every way from one outdoor place to another (wayfinding), none indoors. Cedar & Sea's areas are built
+# with theirs (tools/world2/areas_build.js): "To <area>" by each way through, and a board with each old district's name
+# where it now lies; the farm still gets its signs from its exits (signposts_place)
 start story
 wait 60
 time 10
 call autotest_signs
-expect Wing Hill@n
-expect South Beach@w
+expect The Outskirts@n
+expect Sunset Coast@w
 pos 1296 140
 face n
 wait 10
 shot 01_farm_road
-room rm_downtown 1008 688
+room rm_beirut
 wait 10
 call autotest_signs
-expect Starsand Pier@n
-expect Red Street@w
-expect Grace Tower@e
-expect Uptown@s
-shot 02_downtown
-room rm_victoryhill 400 720
+expect Downtown@here
+expect Red Street@here
+expect Phoenix Bay@n
+expect The Outskirts@s
+call autotest_to_point rm_downtown__sign 0 0
+wait 10
+shot 02_downtown_board
+room rm_mountain
 wait 10
 call autotest_signs
-expect Oven's Window@w
-expect Beacon Hill@n
+expect Victory Hill@here
 expect Whispering Woods@s
-shot 03_victory_bridge
 room rm_12 160 400
 wait 10
 call autotest_signs

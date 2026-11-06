@@ -16,14 +16,27 @@ const T = require("./tiles.js");
 
 const SCALE = 0.25;        // map pixels per room pixel
 const GAP = 64;            // room pixels between neighbouring rooms
-const {GRID} = require("../world/world.js");
-const OUTDOORS = GRID.flat();
+// Cedar & Sea: the outdoor rooms are the blueprint's (tools/world2), each where it lies in the world; the farm keeps
+// its own room, drawn at the blueprint's farm
+const W2 = require("../world2/areas_build.js");
+const OUTDOORS = ["rm_1", ...Object.keys(W2.all().rooms)];
+const FARM_AT = [45, 148];   // the farm's top-left in world tiles (design/map/areas.json, The Farm)
 
 const spec = n => require(path.join(__dirname, "specs", n + ".js"));
 const size = n => { const r = readYy(`rooms/${n}/${n}.yy`); return [r.roomSettings.Width, r.roomSettings.Height]; };
 
-// Place the outdoor rooms on the grid
+// Place the outdoor rooms where they lie in the world (room pixels: world tiles x 32)
 function layout(){
+	const pos = {};
+	for(const n of OUTDOORS){
+		if(n === "rm_1"){ pos[n] = [FARM_AT[0] * 32, FARM_AT[1] * 32]; continue; }
+		const f = W2.all().frames[n];
+		pos[n] = [f.ox * 32, f.oy * 32];
+	}
+	return pos;
+}
+// (the old 5 x 5 grid layout, before the merge)
+function layoutGrid(GRID){
 	const cols = GRID[0].map((_, c) => Math.max(...GRID.map(row => size(row[c])[0])));
 	const rows = GRID.map(row => Math.max(...row.map(n => size(n)[1])));
 	const pos = {};
@@ -70,9 +83,24 @@ function build(){
 
 	const rooms = {};
 	for(const [n, p] of Object.entries(pos)){
-		const img = shrink(renderRoom(n, {instances: false}));
+		const full = renderRoom(n, {instances: false});
+		if(n !== "rm_1"){
+			const f = W2.all().frames[n];
+			for(let y = 0; y < full.h; y++) for(let x = 0; x < full.w; x++){
+				if(W2.owner(f.ox + Math.floor(x / 32), f.oy + Math.floor(y / 32)) !== n) full.px[(y * full.w + x) * 4 + 3] = 0;
+			}
+		}
+		const img = shrink(full);
 		const [mx, my] = at(p);
-		blit(map, img, 0, 0, img.w, img.h, mx, my);
+		for(let y = 0; y < img.h; y++) for(let x = 0; x < img.w; x++){
+			const s = (y * img.w + x) * 4;
+			if(img.px[s + 3] < 128) continue;
+			const tx = mx + x, ty = my + y;
+			if(tx < 0 || ty < 0 || tx >= map.w || ty >= map.h) continue;
+			const d = (ty * map.w + tx) * 4;
+			for(let c = 0; c < 3; c++) map.px[d + c] = img.px[s + c];
+			map.px[d + 3] = 255;
+		}
 		rooms[n] = [mx, my, img.w, img.h];
 	}
 
@@ -100,8 +128,8 @@ function build(){
 	// Rooms reached from inside another (upstairs) map to the same door
 	for(const b of Object.keys(inside)) for(const [, , c] of roomWalk(b, spec(b)).doors) if(!inside[c] && !OUTDOORS.includes(c)) inside[c] = inside[b];
 	// The mine's cave, under the cliff on Beacon Hill
-	const cave = spec("rm_beaconhill").points.cave;
-	inside.rm_mine = at([pos.rm_beaconhill[0] + cave[0], pos.rm_beaconhill[1] + cave[1]]);
+	const cave = spec("rm_mountain").points.cave;   // (Beacon Hill's cave, on the Mountain)
+	inside.rm_mine = at([pos.rm_mountain[0] + cave[0], pos.rm_mountain[1] + cave[1]]);
 
 	fs.mkdirSync(path.join(root, "build"), {recursive: true});
 	const png = path.join(root, "build", "world_map.png");

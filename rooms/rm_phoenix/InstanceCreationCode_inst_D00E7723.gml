@@ -1,3 +1,1 @@
-label = "Cable car";
-boxW = 128;
-boxH = 96;
+sprite_index = spr_prop_old_hangar;

@@ -7,10 +7,12 @@
 //
 // Map: . grass  , dirt  = field soil  ~ water. See tools/rooms/tiles.js for the rest.
 const W = 77, H = 40;
-// The ways out to Wing Hill and South Beach: where you arrive there comes from the world data
-const world = require("../../world/room.js");
+// The ways out to the Outskirts (north) and the Sunset Coast (west): where you arrive there comes from the new world
+// (tools/world2: farmArrive)
+const world2 = require("../../world2/areas_build.js");
 const way = (x, y, sx, sy, to, side, face) => {
-	const [tx, ty] = world.arrive(to, side);
+	const [room2, tx, ty] = world2.farmArrive(side === "b" ? "t" : "l");
+	to = room2;
 	return {obj: "obj_transition", x, y, sx, sy,
 		code: `targetRoom = ${to};\ntargetX = ${tx};\ntargetY = ${ty};\nPlayerFacingBefore = dir.${face};\nPlayerFacingAfter = dir.${face};`};
 };

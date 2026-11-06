@@ -5,7 +5,7 @@ start story
 wait 60
 call autotest_date 0 2
 time 12
-room rm_downtown
+room rm_beirut
 wait 40
 # Start down and to the right of the tavern's door, then walk up and left into it
 call autotest_to_point tavern_front 80 0
@@ -35,23 +35,17 @@ wait 120
 keyup down
 wait 60
 call autotest_room_name
-expect rm_downtown
+expect rm_beirut
 call autotest_where
 expectnot inside a solid
-# Behind a house you're hidden by it (it sorts by its foot): stand north of the tavern
-room rm_starsand
-wait 40
+# The merged town (Cedar & Sea): the old districts' buildings are all in Beirut now
 call autotest_buildings
 expect house_guild_hall
-shot 02_guild
-room rm_uptown
-wait 40
-call autotest_buildings
 expect house_hospital
 expect house_library
 expect prop_museum
-shot 03_uptown
-room rm_plummet
+shot 02_beirut
+room rm_mountain
 wait 40
 call autotest_buildings
 expect house_witch_tower

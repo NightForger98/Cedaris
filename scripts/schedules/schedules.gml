@@ -107,7 +107,7 @@ function villager_routine(_key){
 /// @description The room a villager lives in ("rm_village_store").
 function villager_home_room(_key){
 	var h = villager_routine(_key).home;
-	return string_copy(h, 1, string_pos(".", h) - 1);
+	return world_alias(string_copy(h, 1, string_pos(".", h) - 1));
 }
 
 /// @description A place as {room, x, y}: "room.point", "home", or already a struct.
@@ -117,7 +117,7 @@ function sched_place(_key, _place){
 	var dot = string_pos(".", _place);
 	var rm = string_copy(_place, 1, dot - 1);
 	var p = layout_point(rm, string_delete(_place, 1, dot));
-	return {room: rm, x: p[0], y: p[1]};
+	return {room: world_alias(rm), x: p[0], y: p[1]};
 }
 
 /// @description Today's stops for a villager: [[hour, place, "work"?], ...], starting at home.
@@ -154,7 +154,7 @@ function villager_stops(_key){
 		for(var i = 1; i < array_length(stops); i++){
 			var pl = stops[i][1];
 			if(stops[i][0] < 17 || is_struct(pl) || pl == "home" || array_length(stops[i]) > 2) continue;
-			if(array_get_index(outside, string_copy(pl, 1, string_pos(".", pl) - 1)) != -1) stops[i] = [stops[i][0], "home"];
+			if(array_get_index(outside, world_alias(string_copy(pl, 1, string_pos(".", pl) - 1))) != -1) stops[i] = [stops[i][0], "home"];
 		}
 	}
 	// Rain: anything outdoors becomes staying in (home), unless they're the kind to go out in it anyway
@@ -163,7 +163,7 @@ function villager_stops(_key){
 		for(var i = 1; i < array_length(stops); i++){
 			var pl = stops[i][1];
 			if(is_struct(pl) || pl == "home") continue;
-			if(array_get_index(outdoors, string_copy(pl, 1, string_pos(".", pl) - 1)) != -1) stops[i] = [stops[i][0], "home"];
+			if(array_get_index(outdoors, world_alias(string_copy(pl, 1, string_pos(".", pl) - 1))) != -1) stops[i] = [stops[i][0], "home"];
 		}
 	}
 	return stops;

@@ -186,3 +186,14 @@ flat grey background", a PixelLab building of the same kind as color_image, 3 tr
   family of builders, Victory Hill; carpentry - a faint signature in a corner dropped as specks)
 - the tavern now uses tavern_inn and the smithy blacksmith (PixelLab ones made earlier for them and never placed)
 The Meshy sprites spr_house_barn, spr_house_farmhouse, spr_house_smithy and spr_house_tavern are no longer placed.
+
+Fifth batch, 2026-11-06 (Cedar & Sea): landmarks for the blueprint world's last placeholders, the same settings and
+prompt pattern (the house prompt's front-view wording, "nothing around the building, plain flat grey background"), a
+PixelLab building of a similar kind as color_image, 3 tries each and the best kept (scratchpad jobs_new.js):
+- spr_prop_exhibition_hall (Biel), port_silos (the port), marina_club (Zaitunay Bay), bourj_market (Bourj Hammoud),
+  stadium, sursock_gallery, gemmayzeh_bar (Gemmayzeh's bars), old_station (Mar Mikhael), tram_stop, bunny_burrow
+- cable_car_station: the first three came out isometric; retried with the full wide-building wording (a station house
+  with the cable wheel and a cabin on its cable), its grass tufts cleaned off (grassRows)
+Cleaning: marina_club, tram_stop and bunny_burrow were drawn on black (tol 20 keeps their dark outline); port_silos and
+bourj_market had speckled backgrounds (tol 60). The world builder (tools/world2/areas_build.js, PLACEHOLDER_ART) puts
+them where the blueprint has those places, and a labelled box only where one finds no room.

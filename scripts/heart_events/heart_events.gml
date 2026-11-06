@@ -65,7 +65,7 @@ function heart_events_check(){
 	var here = room_get_name(room), h = global.clock.minutes / 60, t = heart_event_table();
 	for(var i = 0; i < array_length(t); i++){
 		var e = t[i];
-		if(e.room != here || h < e.hours[0] || h >= e.hours[1] || heart_event_seen(e.id) || people_hearts(e.who) < e.hearts) continue;
+		if(world_alias(e.room) != here || h < e.hours[0] || h >= e.hours[1] || heart_event_seen(e.id) || people_hearts(e.who) < e.hearts) continue;
 		var npc = noone;
 		with(obj_villager) if(who == e.who && point_distance(x, y, obj_plyr.x, obj_plyr.y) < 220) npc = id;
 		if(npc == noone) continue;

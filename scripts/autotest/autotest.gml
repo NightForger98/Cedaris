@@ -138,9 +138,13 @@ function autotest_step(){
 				break;
 			case "room":
 				var rm = asset_get_index(a[1]);
+				// An old room's name (before the merge): the room it's part of now, at the old room's middle
+				var oldMid = undefined;
+				if(rm == -1){ rm = asset_get_index(world_alias(a[1])); if(array_length(a) <= 3) oldMid = layout_point(a[1], "mid"); }
 				with(game){
-					spawnRoom = (array_length(a) > 3) ? rm : -1;
+					spawnRoom = (array_length(a) > 3 || oldMid != undefined) ? rm : -1;
 					if(array_length(a) > 3){ spawnX = real(a[2]); spawnY = real(a[3]); spawnPlayerFacing = dir.down; }
+					else if(oldMid != undefined){ spawnX = oldMid[0]; spawnY = oldMid[1]; spawnPlayerFacing = dir.down; }
 				}
 				room_goto(rm);
 				t.wait = 20;

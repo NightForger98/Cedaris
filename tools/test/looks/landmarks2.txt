@@ -1,0 +1,47 @@
+# Look: Cedar & Sea's new landmarks (PixelLab, 2026-11-06) and the district boards, a screenshot each
+start story
+wait 60
+call autotest_toughen
+time 11
+room rm_beirut
+wait 20
+call autotest_to_point rm_downtown__sign 0 40
+wait 15
+shot a_downtown_board
+call autotest_to_point lm_sursock_gallery 0 40
+wait 15
+shot b_sursock
+call autotest_to_point lm_old_station 0 40
+wait 15
+shot c_station
+call autotest_to_point lm_stadium 0 40
+wait 15
+shot d_stadium
+call autotest_to_point lm_bar 0 40
+wait 15
+shot e_bar
+call autotest_to_point lm_bourj_hammoud_market 0 40
+wait 15
+shot f_market
+room rm_phoenix
+wait 20
+call autotest_to_point lm_biel_hall 0 40
+wait 15
+shot g_biel
+call autotest_to_point lm_silos 0 40
+wait 15
+shot h_silos
+call autotest_to_point lm_marina_club 0 40
+wait 15
+shot i_marina
+room rm_mountain
+wait 20
+call autotest_to_point lm_cable_car 0 40
+wait 15
+shot j_cable
+room rm_bunny
+wait 20
+call autotest_to_point lm_burrow 0 40
+wait 15
+shot k_burrow
+quit

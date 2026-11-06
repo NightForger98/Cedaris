@@ -1,5 +1,5 @@
-targetRoom = rm_beirut;
-targetX = 720;
-targetY = 2480;
+targetRoom = rm_home_saltwhistle;
+targetX = 224;
+targetY = 280;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

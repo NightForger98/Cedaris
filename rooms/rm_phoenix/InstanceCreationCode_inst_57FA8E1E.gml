@@ -1,0 +1,2 @@
+text = "Beirut";
+side = "s";

@@ -361,7 +361,7 @@ dist("Hippodrome", 72, 128); dist("Stadium", 48, 108); dist("Museum", 104, 78); 
 dist("Bourj Hammoud", 148, 14);
 dist("Well's Head", 30, 10); dist("Red Street", 40, 50); dist("Downtown", 87, 20); dist("Grace Tower", 122, 50);
 dist("Verdun Street", 40, 70); dist("Uptown", 76, 80); dist("Oven's Window", 116, 70);
-dist("Manara's Light", 12, 40); dist("Starsand Pier (Biel)", 74, -6); dist("Port", 104, -4); dist("Zaitunay Bay", 52, 4); dist("Hangar 12", 170, 4);
+dist("Manara's Light", 12, 40); dist("Starsand Pier (Biel)", 74, -6); dist("Port", 118, -2); dist("Zaitunay Bay", 52, 4); dist("Hangar 12", 170, 4);
 dist("Pigeon Rocks", 8, 56); dist("White Sand", 34, 118); dist("Olive Bay", 36, 140); dist("South Beach", 36, 180);
 dist("Plummet's Point", 210, -10); dist("Beacon Hill", 176, 38); dist("Victory Hill", 170, 84);
 dist("Wing Hill", 58, 98); dist("Dahya", 100, 112); dist("Resolve's Rise", 128, 132);

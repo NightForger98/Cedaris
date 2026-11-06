@@ -65,7 +65,7 @@
    ]
   },
   "rm_manara": {
-   "area": "North Beach",
+   "area": "Phoenix Bay",
    "rect": [
     4,
     28,
@@ -74,7 +74,7 @@
    ]
   },
   "rm_starsand": {
-   "area": "North Beach",
+   "area": "Phoenix Bay",
    "rect": [
     62,
     -18,
@@ -83,7 +83,7 @@
    ]
   },
   "rm_hangar": {
-   "area": "North Beach",
+   "area": "Phoenix Bay",
    "rect": [
     130,
     -16,
@@ -119,7 +119,7 @@
    ]
   },
   "rm_pigeonrocks": {
-   "area": "West Beach",
+   "area": "Sunset Coast",
    "rect": [
     0,
     56,
@@ -128,7 +128,7 @@
    ]
   },
   "rm_whitesand": {
-   "area": "West Beach",
+   "area": "Sunset Coast",
    "rect": [
     18,
     92,
@@ -137,7 +137,7 @@
    ]
   },
   "rm_olivebay": {
-   "area": "West Beach",
+   "area": "Sunset Coast",
    "rect": [
     16,
     122,
@@ -146,7 +146,7 @@
    ]
   },
   "rm_southbeach": {
-   "area": "West Beach",
+   "area": "Sunset Coast",
    "rect": [
     16,
     150,

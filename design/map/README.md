@@ -32,24 +32,24 @@ Made by `node tools/map/blueprint.js`.
 
 Areas (the old rooms they replace): **Beirut** (Well's Head with the Riviera hotel on the bay in its north-west corner,
 Red Street, Downtown, Grace Tower, Verdun Street, Uptown, Oven's Window - each a district with its old name on a
-signpost), **North Beach** (Manara's Light, Starsand Pier, Hangar 12 - rocky, running into the cliffs), **West Beach**
+signpost), **Phoenix Bay** (Manara's Light, Starsand Pier, Hangar 12 - rocky, running into the cliffs), **Sunset Coast**
 (Olive Bay, Pigeon Rocks, White Sand Beach, South Beach), **The Mountain** (Plummet's Point, Beacon Hill, Victory Hill -
 the mine, a road up to the peak), **The Outskirts** (Wing Hill, Dahya with its pine wood, Resolve's Rise - between the
 farm and the town), **Whispering Woods**, **The Countryside** (Saint Thereza, Frere's Fray, Abda's Ascent), **The Farm**,
 and **Bunny Island** (by ferry from Starsand Pier).
 
 Draft 2 follows Beirut's real shape: the town on a low peninsula (sea to the north and west, its north-west corner
-rounded), the port with Starsand's piers, the coast turning north-east past it to meet the mountain (North Beach), the
-long straight West Beach to the south, the land rising east in steps (cliff faces where it steps down to the west or
+rounded), the port with Starsand's piers, the coast turning north-east past it to meet the mountain (Phoenix Bay), the
+long straight Sunset Coast to the south, the land rising east in steps (cliff faces where it steps down to the west or
 south), and the Beirut River coming down from the south-east mountains and running north past the town's east edge into
 the sea. Horsh Beirut's pines are in the Outskirts, south of the town.
 
 Draft 3: the roads follow Beirut's real ones, simplified and widened for the game (main roads 3 tiles, streets 2): the
-Corniche round the coast and on down the West Beach, the port road and the coast highway north-east, Hamra Street (Red
+Corniche round the coast and on down the Sunset Coast, the port road and the coast highway north-east, Hamra Street (Red
 Street), the Ring, the Mazraa boulevard, Damascus Road south to Baabda (Abda), Bechara el-Khoury and the airport road to
 the farm, the Mansourieh road over the river and up the mountain, and smaller streets (Verdun, Achrafieh, Basta, the old
 Saida road to the Tayouneh roundabout). Buildings slide clear of the roads by themselves.
-Landmarks: Zaitunay Bay's marina, Biel (Starsand Pier, the stone pier) and the port with its silos on North Beach; the
+Landmarks: Zaitunay Bay's marina, Biel (Starsand Pier, the stone pier) and the port with its silos on Phoenix Bay; the
 Ain el-Mreisseh fishermen's harbour; the Hippodrome by the Horsh pines; Sports City's stadium at Jnah (Wing Hill); the
 National Museum at the Museum crossing; Sanayeh Garden; the Bourj Hammoud market over the river; palms on the Corniche.
 

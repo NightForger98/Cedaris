@@ -6,8 +6,8 @@
 // Areas (old rooms in brackets):
 //   Beirut, the town   [Well's Head (sea in its north-west corner, the Riviera hotel), Red Street, Downtown, Grace
 //                       Tower, Verdun Street, Uptown, Oven's Window] - districts keep the old names on signposts
-//   North Beach        [Manara's Light, Starsand Pier, Hangar 12] - a rocky shore that runs into the cliffs early
-//   West Beach         [Olive Bay, Pigeon Rocks, White Sand Beach, South Beach] - one long sandy beach
+//   Phoenix Bay        [Manara's Light, Starsand Pier, Hangar 12] - a rocky shore that runs into the cliffs early
+//   Sunset Coast         [Olive Bay, Pigeon Rocks, White Sand Beach, South Beach] - one long sandy beach
 //   The Mountain       [Plummet's Point, Beacon Hill, Victory Hill] - top right: the mine, a road up to the peak
 //   The Outskirts      [Wing Hill, Dahya, Resolve's Rise] - between the farm and the town, the pine wood in the middle
 //   Whispering Woods   [Whispering Woods]
@@ -42,8 +42,8 @@ const wob = (t, s, amp) => (noise(t, s, 0.07) - 0.5) * 2 * amp + (noise(t, s + 9
 
 // ---- land, the coasts (world tiles 0..249 x 0..199, plus the margin), after Beirut's real shape: a low peninsula
 // (the town) with the sea to its north and west and its north-west corner rounded off; past the port the coast turns
-// up to the north-east (North Beach, short, meeting the mountain's cliffs); south of the peninsula the west coast runs
-// long and straight (West Beach)
+// up to the north-east (Phoenix Bay, short, meeting the mountain's cliffs); south of the peninsula the west coast runs
+// long and straight (Sunset Coast)
 const northCoast = x => (x < 128 ? 11 : 11 - (x - 128) * 0.6) + wob(x, 2, 2.5);
 const westCoast = y => (y < 84 ? 7 : y < 104 ? 7 + (y - 84) * 0.75 : 22) + wob(y, 1, (y < 84 ? 2 : 4));
 for(let y = -M; y < 200 + M; y++) for(let x = -M; x < 250 + M; x++){
@@ -83,8 +83,8 @@ disc(234, 18, 7, 5, "snow", ["rock"]);
 	for(const [x, y] of face) if(["cliffTop", "highland", "rock"].includes(get(x + M, y + M))) set(x + M, y + M, "cliff");
 }
 
-// ---- beaches: the West Beach's wide sand (in and out like a real beach); rocky shore round the peninsula (Raouche,
-// the corniche) and along North Beach
+// ---- beaches: the Sunset Coast's wide sand (in and out like a real beach); rocky shore round the peninsula (Raouche,
+// the corniche) and along Phoenix Bay
 for(let y = 0; y < 200; y++) for(let x = 0; x < 250; x++){
 	if(get(x + M, y + M) !== "grass") continue;
 	const sandy = y > 92;
@@ -142,7 +142,7 @@ const ROADS = {
 	// The main roads
 	corniche_north: [[24, 18], [40, 15], [70, 14], [100, 15], [134, 17]],                      // Avenue des Francais, the port's Charles Helou
 	coast_highway:  [[134, 17], [146, 9], [160, 2], [172, -4]],                                // on north-east along the coast, past the river mouth
-	corniche_west:  [[24, 18], [14, 28], [11, 44], [11, 62], [14, 80], [22, 96], [28, 120], [30, 150], [32, 175], [34, 196]],   // the Corniche, then down the West Beach
+	corniche_west:  [[24, 18], [14, 28], [11, 44], [11, 62], [14, 80], [22, 96], [28, 120], [30, 150], [32, 175], [34, 196]],   // the Corniche, then down the Sunset Coast
 	hamra:          [[14, 32], [58, 32]],                                                     // Hamra Street (Red Street)
 	the_ring:       [[58, 32], [70, 42], [104, 42], [124, 40], [140, 42], [150, 46]],          // Fouad Chehab, east over the river
 	mazraa:         [[11, 62], [50, 62], [80, 64], [110, 64]],                                // Corniche el-Mazraa / Salam
@@ -177,7 +177,7 @@ rect(82, 22, 96, 32, "plaza");                     // Martyrs' Square, downtown 
 disc(102, 104, 3, 3, "plaza");                     // the Tayouneh roundabout, by the Horsh pines
 disc(110, 64, 2, 2, "plaza");                      // the Museum crossing
 
-// ---- the port (Starsand's piers) and the West Beach's piers; Pigeon Rocks offshore (the sea arch)
+// ---- the port (Starsand's piers) and the Sunset Coast's piers; Pigeon Rocks offshore (the sea arch)
 const pier = (x, y, len, dx, dy) => { for(let k = 0; k < len; k++) for(let w = 0; w <= 1; w++) set(x + dx * k + (dy ? w : 0) + M, y + dy * k + (dx ? w : 0) + M, "pier"); };
 // Starsand Pier, east of Biel (where Beirut's port basins are): quays built out into the sea with basins between them,
 // and Biel's long stone breakwater angling out to the north-east
@@ -252,10 +252,10 @@ b(68, 66, 8, 5, "Hospital"); b(78, 66, 8, 5, "Library"); b(113, 66, 8, 5, "Museu
 b(68, 4, 9, 5, "Biel hall"); b(168, -12, 4, 5, "Silos"); b(58, 18, 5, 3, "Marina club");
 b(142, 20, 7, 4, "Bourj Hammoud market"); b(46, 114, 7, 6, "Stadium");
 b(108, 62, 6, 4, "Quill"); b(116, 62, 8, 5, "Meadowlark");
-// North Beach (the lighthouse on the peninsula's corner, the port, Hangar 12 past the river mouth)
+// Phoenix Bay (the lighthouse on the peninsula's corner, the port, Hangar 12 past the river mouth)
 b(12, 30, 3, 7, "Lighthouse"); b(56, 18, 6, 4, "Fish market"); b(112, 18, 6, 4, "Ferry");
 b(150, 0, 8, 5, "Hangar 12"); b(162, 2, 6, 4, "Tinker"); b(144, 8, 5, 4, "Brassbolt");
-// West Beach
+// Sunset Coast
 b(16, 66, 5, 4, "Gullwater"); b(30, 100, 6, 4, "Beach bar"); b(26, 108, 3, 4, "Lifeguard"); b(38, 112, 4, 3, "Shack");
 b(32, 128, 6, 4, "Olive press"); b(40, 134, 5, 4, "Saba"); b(30, 164, 7, 4, "Boatyard"); b(40, 174, 6, 4, "Saltwhistle");
 // The Mountain (Beacon Hill's mine, Victory Hill's mill above the river, the witch's tower near the top by the sea)
@@ -404,7 +404,7 @@ writePng(path.join(out, "world_blueprint_plain.png"), P);   // the 4x picture be
 const at = (x, y) => [(x + M) * S, (y + M) * S];
 const area = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 3, [255, 236, 150]); };
 const dist = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 2, [255, 255, 255]); };
-area("Beirut", 100, 88); area("North Beach", 30, -2); area("West Beach", 14, 146); area("The Mountain", 205, 64);
+area("Beirut", 100, 88); area("Phoenix Bay", 30, -2); area("Sunset Coast", 14, 146); area("The Mountain", 205, 64);
 area("The Outskirts", 84, 145); area("Whispering Woods", 196, 128); area("Countryside", 140, 190); area("The Farm", 76, 196);
 area("Bunny Island", 70, -27);
 dist("Hippodrome", 72, 128); dist("Stadium", 48, 108); dist("Museum", 104, 78); dist("Sanayeh", 42, 56);

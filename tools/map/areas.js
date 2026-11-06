@@ -13,10 +13,10 @@ const M = 30, S = 4;
 // Each area as rectangles [x1, y1, x2, y2] in world tiles (inclusive); later areas don't take tiles an earlier one has
 const AREAS = [
 	{name: "Bunny Island", rects: [[46, -30, 94, -9]], old: [], col: [255, 170, 200], label: [70, -24]},   // by ferry only
-	{name: "North Beach", rects: [[14, -20, 128, 15], [128, -20, 180, 18]], old: ["rm_manara (its lighthouse stays in town)", "rm_starsand", "rm_hangar"], col: [120, 210, 255], label: [150, 8]},
+	{name: "Phoenix Bay", rects: [[14, -20, 128, 15], [128, -20, 180, 18]], old: ["rm_manara (its lighthouse stays in town)", "rm_starsand", "rm_hangar"], col: [120, 210, 255], label: [150, 8]},
 	{name: "Beirut", rects: [[0, 16, 136, 95]], old: ["rm_wellshead", "rm_redstreet", "rm_downtown", "rm_gracetower", "rm_verdun", "rm_uptown", "rm_ovenswindow", "rm_manara", "rm_pigeonrocks"], col: [255, 210, 90]},
 	{name: "The Mountain", rects: [[180, -24, 250, 17], [137, 18, 250, 85], [137, 86, 152, 95]], old: ["rm_plummet", "rm_beaconhill", "rm_victoryhill"], col: [200, 150, 110]},
-	{name: "West Beach", rects: [[0, 96, 44, 199]], old: ["rm_whitesand", "rm_olivebay", "rm_southbeach"], col: [255, 236, 150]},
+	{name: "Sunset Coast", rects: [[0, 96, 44, 199]], old: ["rm_whitesand", "rm_olivebay", "rm_southbeach"], col: [255, 236, 150]},
 	{name: "The Outskirts", rects: [[45, 96, 152, 147]], old: ["rm_winghill", "rm_dahya", "rm_resolve"], col: [170, 230, 120]},
 	{name: "Whispering Woods", rects: [[153, 86, 250, 147], [201, 148, 250, 199]], old: ["rm_yarzeh"], col: [90, 200, 120]},
 	{name: "The Farm", rects: [[45, 148, 99, 199]], old: ["rm_1"], col: [230, 160, 90]},
@@ -93,7 +93,7 @@ for(const w of ways){
 writePng(path.join(OUT, "areas_proposal.png"), P);
 fs.writeFileSync(path.join(OUT, "areas.json"), JSON.stringify({note: "World tiles as in world_layout.json; each area is one room. size: its bounding box. ways: where you can walk from one area to the next (a road, lane, bridge, rail, square or beach crossing the border) - exactly these, nowhere else. Room edges should follow cliffs, the river, sea or forest, with the way through at a road.",
 	areas: info, ways: ways.map(w => ({between: [AREAS[w.a].name, AREAS[w.b].name], at: w.at, wide: w.pts.length})),
-	unlocked: [{between: ["North Beach", "Bunny Island"], by: "the ferry from Starsand Pier"}, {between: ["North Beach", "The Mountain"], by: "the cable car (a town project)"}, {along: "the Corniche and Damascus Road", by: "the tram (a town project): fast travel between its stops"}]}, null, 1));
+	unlocked: [{between: ["Phoenix Bay", "Bunny Island"], by: "the ferry from Starsand Pier"}, {between: ["Phoenix Bay", "The Mountain"], by: "the cable car (a town project)"}, {along: "the Corniche and Damascus Road", by: "the tram (a town project): fast travel between its stops"}]}, null, 1));
 console.log(ways.length + " ways through:");
 for(const w of ways) console.log("  " + AREAS[w.a].name + " - " + AREAS[w.b].name + " at " + w.at.join(","));
 for(const a of info) console.log(a.name.padEnd(18), (a.size[0] + "x" + a.size[1]).padEnd(9), "old: " + a.old.join(", "));

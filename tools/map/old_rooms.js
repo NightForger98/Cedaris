@@ -2,7 +2,8 @@
 // each old room's ground now lies, so its named spots and routes can be moved over when the rooms are rebuilt.
 //   node tools/map/old_rooms.js   (after node tools/map/blueprint.js)
 // Writes design/map/old_rooms.json (each old room: its new area and a rectangle in world tiles) and
-// design/map/old_rooms_on_new.png (those rectangles drawn over the new map's preview), and keeps the old game's world
+// design/map/old_rooms_on_new.png (those rectangles drawn over the new map's preview; old_rooms_grid.png the same
+// without any names), and keeps the old game's world
 // map as design/map/old_world_map.png.
 const fs = require("fs");
 const path = require("path");
@@ -41,7 +42,8 @@ fs.writeFileSync(path.join(OUT, "old_rooms.json"), JSON.stringify({
 	note: "Where each old room's ground lies in the new world (world tiles, as in world_layout.json). The old rooms' own roads and named spots are in tools/rooms/specs and scripts/room_layout at commit f012fa7 and before.",
 	rooms: OLD}, null, 1));
 // The rectangles over the preview
-const P = readPng(path.join(OUT, "world_blueprint_preview.png"));
+for(const [src, dst] of [["world_blueprint_preview.png", "old_rooms_on_new.png"], ["world_blueprint_plain.png", "old_rooms_grid.png"]]){
+const P = readPng(path.join(OUT, src));
 const put = (x, y, c) => { if(x < 0 || y < 0 || x >= P.w || y >= P.h) return; const i = (y * P.w + x) * 4; P.px[i] = c[0]; P.px[i + 1] = c[1]; P.px[i + 2] = c[2]; };
 const cols = [[255, 80, 80], [255, 200, 40], [80, 220, 255], [200, 120, 255], [120, 255, 120]];
 Object.values(OLD).forEach((o, i) => {
@@ -49,7 +51,8 @@ Object.values(OLD).forEach((o, i) => {
 	for(let x = x1; x <= x2; x++) for(let t = 0; t < 2; t++){ if((x >> 3) % 2) continue; put(x, y1 + t, c); put(x, y2 - t, c); }
 	for(let y = y1; y <= y2; y++) for(let t = 0; t < 2; t++){ if((y >> 3) % 2) continue; put(x1 + t, y, c); put(x2 - t, y, c); }
 });
-writePng(path.join(OUT, "old_rooms_on_new.png"), P);
+writePng(path.join(OUT, dst), P);
+}
 const old = path.join(ROOT, "build", "world_map.png");
 if(fs.existsSync(old)) fs.copyFileSync(old, path.join(OUT, "old_world_map.png"));
 console.log("old_rooms.json, old_rooms_on_new.png" + (fs.existsSync(old) ? ", old_world_map.png" : ""));

@@ -357,6 +357,7 @@ const text = (str, x, y, sc, col) => {
 		px0 += 6 * sc;
 	}
 };
+writePng(path.join(out, "world_blueprint_plain.png"), P);   // the 4x picture before any names go on
 const at = (x, y) => [(x + M) * S, (y + M) * S];
 const area = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 3, [255, 236, 150]); };
 const dist = (name, x, y) => { const [px, py] = at(x, y); text(name, px, py, 2, [255, 255, 255]); };

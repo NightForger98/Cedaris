@@ -1,1 +1,1 @@
-sprite_index = spr_prop_alt_hayward;
+sprite_index = spr_prop_alt_kassar;

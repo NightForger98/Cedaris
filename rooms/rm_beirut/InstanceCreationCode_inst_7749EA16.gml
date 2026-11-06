@@ -1,1 +1,1 @@
-sprite_index = spr_house_market_small;
+sprite_index = spr_house_town_hall;

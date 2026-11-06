@@ -1,1 +1,1 @@
-sprite_index = spr_house_home_saba;
+sprite_index = spr_house_boatyard;

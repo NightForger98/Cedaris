@@ -197,13 +197,29 @@ const lineWhere = (pts, k, w, under, keep) => { for(let i = 0; i < pts.length - 
 			const cur = get(X + M, Y + M);
 			if(cur === "river") set(X + M, Y + M, "pier");
 			else if(!["deep", "sea", "shallow"].includes(cur) && (!under || under.includes(cur))) set(X + M, Y + M, k); } } } };
-for(const [name, pts] of Object.entries(ROADS)) lineWhere(pts, "road", STREETS.includes(name) ? 0.5 : 1, hills, (x, y) => !inTown(x, y));
-for(const [name, pts] of Object.entries(LANES)) lineWhere(pts, "lane", 0.5, hills, (x, y) => !inTown(x, y));
+// THE MAIN ROADS are the user's, traced from their drawing over the map (tools/map/drawn_roads.js ->
+// design/map/user_roads.json, 2026-11-06): 2 tiles wide, everywhere they drew them. Every other road below either runs
+// alongside one of theirs (and goes) or becomes a side lane, kept only where it reaches a building (after the buildings)
+const USER = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "design", "map", "user_roads.json"), "utf8")).roads;
+const segD = (p, a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+	const t = L ? Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L)) : 0; return Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy); };
+const userGrid = new Set();   // the cells within 3 tiles of a user road
+for(const l of USER) for(let i = 0; i < l.length - 1; i++){ const [x1, y1] = l[i], [x2, y2] = l[i + 1];
+	for(let y = Math.floor(Math.min(y1, y2)) - 3; y <= Math.ceil(Math.max(y1, y2)) + 3; y++) for(let x = Math.floor(Math.min(x1, x2)) - 3; x <= Math.ceil(Math.max(x1, x2)) + 3; x++)
+		if(segD([x, y], l[i], l[i + 1]) <= 3) userGrid.add(x + "," + y); }
+const besideUser = pts => { let n = 0, all = 0; for(let i = 0; i < pts.length - 1; i++){ const k = Math.max(1, Math.ceil(Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1])));
+	for(let t = 0; t < k; t++){ all++; const x = Math.round(pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t / k), y = Math.round(pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t / k); if(userGrid.has(x + "," + y)) n++; } }
+	return all ? n / all : 1; };
+for(const l of USER) lineWhere(l, "road", 0.5, hills.concat(["lane"]), () => true);
+// the other roads that become side lanes (if they reach a building): the drawn-by-hand ones and the real ones in town
+const SIDE_LATER = [];
+for(const [name, pts] of Object.entries(ROADS)) if(besideUser(pts) < 0.5) SIDE_LATER.push(pts);
+for(const [name, pts] of Object.entries(LANES)) lineWhere(pts, "lane", 0.5, hills, (x, y) => !inTown(x, y) && !userGrid.has(x + "," + y));
 // the real side streets, but none in the middle of town round Uptown and the Museum (the user: "excessive while
 // serving no real purpose"); there the main roads alone, and lanes only to the buildings that need them (below)
 const SIDE_STREETS = (x, y) => inTown(x, y) && !(x >= 66 && x <= 132 && y >= 62 && y <= 104);
-for(const r of OSM.roads.filter(r => r.k === "lane")) lineWhere(r.pts, "lane", 0, hills, SIDE_STREETS);   // 1 tile wide (joined side to side on a slant), slimmer than the 2-tile roads
-for(const r of OSM.roads.filter(r => r.k === "road")) lineWhere(r.pts, "road", r.w, hills.filter(k => k !== "plaza").concat(["lane"]), inTown);
+for(const r of OSM.roads.filter(r => r.k === "lane")) if(besideUser(r.pts) < 0.5) lineWhere(r.pts, "lane", 0, hills, SIDE_STREETS);   // 1 tile wide, slimmer than the 2-tile roads
+for(const r of OSM.roads.filter(r => r.k === "road")) if(besideUser(r.pts) < 0.5) SIDE_LATER.push(r.pts.filter(p => inTown(p[0], p[1])));
 rect(82, 22, 96, 32, "plaza");                     // Martyrs' Square, downtown by the port
 disc(102, 104, 3, 3, "plaza");                     // the Tayouneh roundabout, by the Horsh pines
 disc(110, 64, 2, 2, "plaza");                      // the Museum crossing
@@ -307,7 +323,7 @@ b(74, -20, 4, 3, "Burrow");
 // Beirut's history and art: the Roman Baths and the Cardo's columns downtown (the Wardens' ruins story, and a dig site for
 // the Museum), the Sursock gallery, Gemmayzeh's bars, the old Mar Mikhael station; the temple ruins at Beit Mery
 b(60, 44, 7, 5, "Roman Baths", "ruin"); b(82, 35, 12, 2, "Cardo", "ruin"); b(114, 58, 8, 6, "Sursock gallery");
-b(104, 29, 5, 3, "Bar"); b(112, 29, 5, 3, "Bar"); b(120, 22, 7, 4, "Old station"); b(196, 38, 7, 5, "Temple ruins", "ruin");
+b(104, 29, 5, 3, "Bar"); b(112, 29, 5, 3, "Bar"); b(126, 24, 7, 4, "Old station"); b(196, 38, 7, 5, "Temple ruins", "ruin");
 // The cable car's stations, and the tram's stops
 b(162, 10, 4, 3, "Cable car"); b(226, 14, 4, 3, "Cable car top");
 for(const [x, y] of [[16, 58], [58, 18], [92, 40], [114, 70], [106, 98], [160, 150]]) b(x, y, 3, 2, "Tram stop");
@@ -335,6 +351,15 @@ for(const k of B){
 	k.x += best[0]; k.y += best[1];
 	rect(k.x, k.y, k.x + k.w - 1, k.y + k.h - 1, k.kind);
 }
+
+// The other roads, as side lanes (1 tile) where they reach a building or a landmark (within 2 tiles); not over the
+// user's roads or the buildings
+{ const nearB = pts => B.some(k => pts.some(([x, y]) => x >= k.x - 2 && x <= k.x + k.w + 1 && y >= k.y - 2 && y <= k.y + k.h + 1));
+  const dense = pts => { const o = []; for(let i = 0; i < pts.length - 1; i++){ const k = Math.max(1, Math.ceil(Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1])));
+	for(let t = 0; t < k; t++) o.push([pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t / k, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t / k]); } if(pts.length) o.push(pts[pts.length - 1]); return o; };
+  // only near the buildings: a lane is the way from a main road to a door, not another street through town
+  const nearAny = (x, y) => B.some(k => x >= k.x - 5 && x <= k.x + k.w + 4 && y >= k.y - 5 && y <= k.y + k.h + 4);
+  for(const pts of SIDE_LATER) if(pts.length > 1 && nearB(dense(pts))) lineWhere(pts, "lane", 0, hills, (x, y) => nearAny(x, y) && get(x + M, y + M) !== "road"); }
 
 // ---- side lanes that serve something (the user, 2026-11-06: "we don't want side roads leading nowhere"): a lane from
 // each building's door down to the nearest road if it's close and none is; then, in town, dead ends are cut back

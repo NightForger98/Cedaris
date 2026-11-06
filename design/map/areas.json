@@ -242,10 +242,10 @@
     "Beirut"
    ],
    "at": [
-    49,
+    51,
     15
    ],
-   "wide": 15
+   "wide": 10
   },
   {
    "between": [
@@ -253,43 +253,10 @@
     "Beirut"
    ],
    "at": [
-    81,
+    83,
     15
    ],
-   "wide": 2
-  },
-  {
-   "between": [
-    "Phoenix Bay",
-    "Beirut"
-   ],
-   "at": [
-    91,
-    15
-   ],
-   "wide": 9
-  },
-  {
-   "between": [
-    "Phoenix Bay",
-    "Beirut"
-   ],
-   "at": [
-    116,
-    15
-   ],
-   "wide": 6
-  },
-  {
-   "between": [
-    "Phoenix Bay",
-    "Beirut"
-   ],
-   "at": [
-    136,
-    18
-   ],
-   "wide": 2
+   "wide": 11
   },
   {
    "between": [
@@ -297,10 +264,10 @@
     "The Mountain"
    ],
    "at": [
-    139,
+    138,
     18
    ],
-   "wide": 4
+   "wide": 3
   },
   {
    "between": [
@@ -320,18 +287,7 @@
    ],
    "at": [
     136,
-    30
-   ],
-   "wide": 22
-  },
-  {
-   "between": [
-    "Beirut",
-    "The Mountain"
-   ],
-   "at": [
-    136,
-    62
+    20
    ],
    "wide": 3
   },
@@ -342,9 +298,42 @@
    ],
    "at": [
     136,
+    33
+   ],
+   "wide": 1
+  },
+  {
+   "between": [
+    "Beirut",
+    "The Mountain"
+   ],
+   "at": [
+    136,
+    44
+   ],
+   "wide": 2
+  },
+  {
+   "between": [
+    "Beirut",
+    "The Mountain"
+   ],
+   "at": [
+    136,
+    61
+   ],
+   "wide": 2
+  },
+  {
+   "between": [
+    "Beirut",
+    "The Mountain"
+   ],
+   "at": [
+    136,
     77
    ],
-   "wide": 7
+   "wide": 4
   },
   {
    "between": [
@@ -364,7 +353,7 @@
    ],
    "at": [
     136,
-    92
+    90
    ],
    "wide": 3
   },
@@ -385,10 +374,10 @@
     "Sunset Coast"
    ],
    "at": [
-    31,
+    34,
     95
    ],
-   "wide": 4
+   "wide": 2
   },
   {
    "between": [
@@ -407,7 +396,7 @@
     "The Outskirts"
    ],
    "at": [
-    64,
+    63,
     95
    ],
    "wide": 2
@@ -418,10 +407,10 @@
     "The Outskirts"
    ],
    "at": [
-    76,
+    81,
     95
    ],
-   "wide": 4
+   "wide": 5
   },
   {
    "between": [
@@ -440,10 +429,10 @@
     "The Outskirts"
    ],
    "at": [
-    113,
+    107,
     95
    ],
-   "wide": 1
+   "wide": 3
   },
   {
    "between": [
@@ -451,10 +440,10 @@
     "The Outskirts"
    ],
    "at": [
-    125,
+    114,
     95
    ],
-   "wide": 10
+   "wide": 2
   },
   {
    "between": [
@@ -462,10 +451,10 @@
     "The Outskirts"
    ],
    "at": [
-    143,
+    145,
     95
    ],
-   "wide": 3
+   "wide": 2
   },
   {
    "between": [
@@ -474,9 +463,9 @@
    ],
    "at": [
     44,
-    138
+    135
    ],
-   "wide": 16
+   "wide": 4
   },
   {
    "between": [
@@ -484,7 +473,7 @@
     "The Farm"
    ],
    "at": [
-    46,
+    49,
     147
    ],
    "wide": 3
@@ -492,35 +481,13 @@
   {
    "between": [
     "The Outskirts",
-    "The Farm"
-   ],
-   "at": [
-    89,
-    147
-   ],
-   "wide": 2
-  },
-  {
-   "between": [
-    "The Outskirts",
     "The Countryside"
    ],
    "at": [
-    108,
+    129,
     147
    ],
-   "wide": 12
-  },
-  {
-   "between": [
-    "The Outskirts",
-    "The Countryside"
-   ],
-   "at": [
-    144,
-    147
-   ],
-   "wide": 6
+   "wide": 34
   },
   {
    "between": [
@@ -540,9 +507,20 @@
    ],
    "at": [
     44,
-    165
+    164
    ],
-   "wide": 11
+   "wide": 4
+  },
+  {
+   "between": [
+    "Sunset Coast",
+    "The Farm"
+   ],
+   "at": [
+    44,
+    171
+   ],
+   "wide": 2
   }
  ],
  "unlocked": [

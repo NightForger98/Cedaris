@@ -1,5 +1,5 @@
 targetRoom = rm_outskirts;
-targetX = 1968;
-targetY = 660;
+targetX = 2032;
+targetY = 628;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

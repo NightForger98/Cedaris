@@ -64,6 +64,11 @@ travel rules) still holds.
   the coast past the port (Plummet's Point) turned to sea, the shore road down the Sunset Coast replaced by one inland
   (`sunset_road`, `sunset_branch`). Town houses stand only where their door faces a side lane;
   big buildings choose their ground first; a tall one (the lighthouse) may stand with its top over the road behind.
+- **The main roads are the user's drawing** (2026-11-06): they drew them over the in-game map; `tools/map/drawn_roads.js
+  <drawing.png>` traces the strokes (thinned, followed, straightened) into `design/map/user_roads.json`, and blueprint.js
+  draws those as the main roads, 2 tiles wide. Every other road either runs alongside one of them (dropped) or becomes a
+  1-tile side lane near the buildings it reaches. The drawing is kept in `design/map/drawings/`. To change the main
+  roads: draw over a fresh world map (black pen), run drawn_roads.js on it, then the pipeline.
 - **Known leftovers**: some Phoenix Bay decor finds no room (the old ferry dock prop, an obelisk, a stall, a barn);
   two landmark points (Pigeon Rocks, Victory Hill) can't be reached from a door; Beirut has wide plain lawns between
   districts - room for more town (PixelLab tilesets for terrain need a Wang corner-tile path in `build.js`).

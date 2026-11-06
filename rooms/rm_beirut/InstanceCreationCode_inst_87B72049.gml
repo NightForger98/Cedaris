@@ -1,5 +1,2 @@
-targetRoom = rm_phoenix;
-targetX = 2480;
-targetY = 1072;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+text = "Oven's Window";
+side = "here";

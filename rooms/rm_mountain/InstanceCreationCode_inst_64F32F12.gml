@@ -1,5 +1,5 @@
-targetRoom = rm_woods;
-targetX = 240;
-targetY = 80;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+targetRoom = rm_beirut;
+targetX = 4304;
+targetY = 656;
+PlayerFacingBefore = dir.left;
+PlayerFacingAfter = dir.left;

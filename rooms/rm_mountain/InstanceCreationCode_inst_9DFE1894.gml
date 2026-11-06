@@ -1,2 +1,5 @@
-kind = "cable";
-stop = "the Mountain top";
+targetRoom = rm_village_rowan;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

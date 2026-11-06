@@ -1,5 +1,5 @@
 targetRoom = rm_countryside;
-targetX = 2640;
-targetY = 884;
+targetX = 2416;
+targetY = 692;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

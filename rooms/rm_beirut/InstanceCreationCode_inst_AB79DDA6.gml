@@ -1,1 +1,1 @@
-sprite_index = spr_house_family_house;
+sprite_index = spr_house_tool_shop;

@@ -1,2 +1,5 @@
-text = "The Mountain";
-side = "e";
+targetRoom = rm_mountain;
+targetX = 272;
+targetY = 1776;
+PlayerFacingBefore = dir.right;
+PlayerFacingAfter = dir.right;

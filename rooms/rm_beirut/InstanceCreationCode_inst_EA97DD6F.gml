@@ -1,4 +1,4 @@
-targetRoom = rm_town_home_nw;
+targetRoom = rm_guild;
 targetX = 256;
 targetY = 312;
 PlayerFacingBefore = dir.up;

@@ -1,2 +1,2 @@
-text = "Olive Bay";
+text = "White Sand Beach";
 side = "here";

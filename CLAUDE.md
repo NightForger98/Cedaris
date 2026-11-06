@@ -9,7 +9,7 @@ it), **Handoff** (where work stands and what's next) and **Reference** (everythi
 animals, mine and fight down a generated mine, learn magic, fish, cook, craft and dye clothes, and befriend the people
 of the village, the town of Brindlemoor, the coast and the vale, who live their own days.
 
-- **Project**: `CedarAndSea.yyp`. Repo: github.com/NightForger98/Cedar-and-Sea (branch `main`), started from HarvestValley's `world-rebuild` branch with its history (the old repo, github.com/NightForger98/HarvestValley, is kept as it was). Saves live in `%LOCALAPPDATA%/CedarAndSea`.
+- **Project**: `CedarAndSea.yyp`. Repo: github.com/NightForger98/Cedaris (branch `main`), started from HarvestValley's `world-rebuild` branch with its history (the old repo, github.com/NightForger98/HarvestValley, is kept as it was). Saves live in `%LOCALAPPDATA%/CedarAndSea`.
 - **Run it**: open `CedarAndSea.yyp` in GameMaker LTS 2026, or `./build.sh run` from Git Bash (see Reference).
 - **Controls** (defaults; rebind them in Options > Controls): arrows move (Shift runs, Ctrl walks; R toggles always-run, when holding Shift walks); left click or Space uses the held tool (hold to charge it);
   1-9, 0 pick the hotbar slot; E talks / uses (in a dialogue: G gives what you hold, T trades or tells you the shop's

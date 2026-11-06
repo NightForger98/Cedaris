@@ -182,11 +182,11 @@ const pier = (x, y, len, dx, dy) => { for(let k = 0; k < len; k++) for(let w = 0
 // Starsand Pier, east of Biel (where Beirut's port basins are): quays built out into the sea with basins between them,
 // and Biel's long stone breakwater angling out to the north-east
 for(const qx of [88, 100, 112]) rect(qx, 1, qx + 6, 12, "plaza");
-for(let k = 0; k <= 34; k++) for(let w = 0; w <= 1; w++) set(84 + k + w + M, -1 - Math.round(k * 0.45) + M, "pier");
+for(let k = 0; k <= 34; k++){ const y = -1 - Math.round(k * 0.45); for(let w = 0; w <= 1; w++) for(let dy = 0; dy <= 1; dy++) set(82 + k + w + M, y + dy + M, "pier"); }
 // The port, moved up the coast above Hangar 12: land built out into the sea, three basins, a breakwater, the silos
 rect(140, -13, 174, -3, "plaza");
 for(const bx of [146, 154, 162]) rect(bx, -13, bx + 4, -7, "shallow");
-for(let x = 138; x <= 176; x++) set(x + M, -15 + M, "pier");
+for(let x = 138; x <= 176; x++) set(x + M, -14 + M, "pier");
 // Biel: land built out into the sea north of downtown, a big hall on it, a stone pier along its north edge (Starsand Pier)
 rect(64, 1, 82, 12, "plaza");
 for(let x = 64; x <= 82; x++){ set(x + M, 0 + M, "pier"); set(x + M, -1 + M, "pier"); }
@@ -431,3 +431,11 @@ fs.writeFileSync(path.join(out, "world_layout.json"), JSON.stringify({
 	roads: ROADS, streets: STREETS, lanes: LANES, tram: TRAM, railway: RAILWAY, cable_car: CABLE,
 	buildings: B.map(k => ({name: k.name, kind: k.kind, x: k.x, y: k.y, w: k.w, h: k.h})),
 }, null, 1));
+
+// ---- the grid as data, for tools/world2 (the room builder): one character a tile, by kind (KEY), rows from y = -M
+const KEY = {deep: "D", sea: "S", shallow: "s", sand: "_", rocky: "r", grass: ".", meadow: "m", forest: "F", pine: "P",
+	cliff: "C", cliffTop: "1", highland: "2", rock: "3", snow: "4", road: ":", lane: ",", plaza: "q", field: "=",
+	river: "~", building: "B", pier: "p", cave: "c", rail: "t", ruin: "u", stairs: "z"};
+fs.writeFileSync(path.join(out, "world_grid.json"), JSON.stringify({M, key: KEY,
+	note: "rows[y + M][x + M] is world tile (x, y); x from -M (west sea) to 251, y from -M (north sea) to 201",
+	rows: g.slice(0, M + 202).map(r => r.slice(0, M + 252).map(k => KEY[k] || "?").join(""))}));

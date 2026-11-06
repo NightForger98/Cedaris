@@ -1,0 +1,408 @@
+// Cedar & Sea's world: the outdoor rooms built from the blueprint (design/map: world_grid.json, areas.json,
+// world_layout.json, old_rooms.json), as room specs for tools/rooms/build.js.
+//
+//   specs/<room>.js:  module.exports = require("../../world2/areas_build.js").spec("<room>");
+//
+// Each new room is one area of the blueprint (its tiles; the rest of its bounding box is drawn but walled off), cut
+// from the same world, so a way through is a strip on the border with a transition each side, arriving the same world
+// tile on the other side. Buildings stand on their blueprint footprints (slid to clear ground), doors leading to their
+// interiors as before. The old 25 rooms' named spots are carried over as "<old room>__<spot>" (and building fronts
+// under their own names), and ALIAS maps each old room to the new one, so the villagers' schedules ("rm_downtown.mid")
+// keep working (scripts/world_alias). The farm (rm_1) keeps its own spec; its ways out lead here (farmArrive).
+const fs = require("fs");
+const path = require("path");
+const T = require("../rooms/tiles.js");
+const woods = require("../rooms/woods.js");
+const INTERIORS = require("../world/interior_data.js");
+const {ROOMS} = require("../world/world.js");
+
+const MAP = path.join(__dirname, "..", "..", "design", "map");
+const read = f => JSON.parse(fs.readFileSync(path.join(MAP, f), "utf8"));
+const G = read("world_grid.json"), AREAS = read("areas.json"), LAYOUT = read("world_layout.json"), OLDR = read("old_rooms.json").rooms;
+const M = G.M;
+const kindAt = (x, y) => (G.rows[y + M] || "")[x + M] || "D";
+
+const ROOM_OF = {"Bunny Island": "rm_bunny", "Phoenix Bay": "rm_phoenix", "Beirut": "rm_beirut", "The Mountain": "rm_mountain",
+	"Sunset Coast": "rm_sunset", "The Outskirts": "rm_outskirts", "Whispering Woods": "rm_woods", "The Farm": "rm_1",
+	"The Countryside": "rm_countryside"};
+const KIND = {rm_bunny: "rural", rm_phoenix: "town", rm_beirut: "town", rm_mountain: "wild", rm_sunset: "rural",
+	rm_outskirts: "rural", rm_woods: "deep", rm_countryside: "rural"};
+const WATER = {rm_bunny: "sea", rm_phoenix: "sea", rm_beirut: "sea", rm_sunset: "sea", rm_mountain: "river", rm_outskirts: "river",
+	rm_woods: "river", rm_countryside: "river"};
+
+// Which area owns each world tile (the areas' rectangles, earlier ones first), as in tools/map/areas.js
+const OWN = new Map();
+AREAS.areas.forEach((a, i) => { for(const [x1, y1, x2, y2] of a.rects) for(let y = y1; y <= y2; y++) for(let x = x1; x <= x2; x++){
+	const k = x + "," + y; if(!OWN.has(k)) OWN.set(k, ROOM_OF[a.name]); } });
+const owner = (x, y) => OWN.get(x + "," + y);
+
+// The old rooms: each old room's new room (by the area its ground went to), for the alias table
+const ALIAS = {};
+// (by which new room owns most of the old room's ground)
+for(const [old, o] of Object.entries(OLDR)){
+	const [x1, y1, x2, y2] = o.rect, n = {};
+	for(let y = y1; y <= y2; y++) for(let x = x1; x <= x2; x++){ const w = owner(x, y); if(w) n[w] = (n[w] || 0) + 1; }
+	ALIAS[old] = Object.entries(n).sort((p, q) => q[1] - p[1])[0][0];
+}
+ALIAS.rm_1 = "rm_1";
+
+// Blueprint building names -> what stands there: a building of world.js (by key: sprite, interior), a thing, a
+// placeholder until its art is made, or ruins
+const BUILDING = {"Riviera hotel": "hotel", "Glassworks": "glassworks", "Fairglass": "fairglass", "Goldcrest": "goldcrest",
+	"Tavern": "tavern", "Bank": "bank", "Tools": "tools", "Guild hall": "guild", "Smithy": "smithy", "Whitlow": "whitlow",
+	"Bakery": "bakery", "Flowers": "flowers", "Furniture": "furniture", "Hospital": "hospital", "Library": "library",
+	"Quill": "quill", "Meadowlark": "meadowlark", "Lighthouse": "lighthouse", "Tinker": "tinker", "Brassbolt": "brassbolt",
+	"Gullwater": "gullwater", "Shack": "shack", "Olive press": "olivepress", "Saba": "saba", "Boatyard": "boatyard",
+	"Saltwhistle": "saltwhistle", "Ironvein": "ironvein", "Oakhart": "oakhart", "Mill": "mill", "Witch tower": "tower",
+	"Kassar": "kassar", "Larkspun": "larkspun", "Outfitter": "clothes", "Tawil": "tawil", "Silverbough": "silverbough",
+	"Apothecary": "potions", "Night farm": "nighthome", "Seeds": "seeds", "Stables": "stables", "Hayward": "hayward",
+	"Frere": "frere", "Church": "church", "Ward": "ward"};
+const THING = {"Museum": "prop_museum", "Cafe": "prop_cafe_terrace", "Fish market": "prop_fish_market", "Ferry": "prop_ferry_dock",
+	"Hangar 12": "prop_old_hangar", "Beach bar": "prop_beach_bar", "Lifeguard": "prop_lifeguard_hut", "Windmill": "house_windmill",
+	"Merchant": "prop_merchant_cart", "Ranger": "prop_rangers_cabin", "Monastery": "prop_monastery"};
+const PLACEHOLDER = {"Biel hall": "Biel hall", "Silos": "Silos", "Marina club": "Marina club", "Bourj Hammoud market": "Bourj Hammoud market",
+	"Stadium": "Stadium", "Sursock gallery": "Sursock gallery", "Bar": "Bar", "Old station": "Old station", "Cable car": "Cable car",
+	"Cable car top": "Cable car", "Tram stop": "Tram stop", "Burrow": "Bunny burrow"};
+const RUINS = {
+	house: {w: 8, h: 4, parts: [["ruin_wall_brick", 0, 0], ["ruin_wall_stone", 4, 0], ["ruin_rubble", 1, 3], ["ruin_rubble", 5, 3], ["ruin_stump", 3, 2]]},
+	temple: {w: 8, h: 5, parts: [["ruin_pillar", 0, 0], ["ruin_ivy", 2, 1], ["ruin_head", 3, 1], ["ruin_columns", 6, 1], ["ruin_rubble", 1, 4], ["ruin_stump", 5, 3]]},
+};
+const RUIN_OF = {"Roman Baths": "house", "Temple ruins": "temple"};
+const keyInfo = {};   // building key -> {is, room} from world.js
+for(const R of Object.values(ROOMS)) for(const b of R.buildings || []) keyInfo[b.key] = b;
+const placedNames = new Set([...Object.keys(THING).map(n => THING[n])]);
+
+const size = is => { const s = T.things[is].src; return [s[2], s[3]]; };
+const doorOf = is => { const b = T.things[is]; return b.door || [Math.floor(b.src[2] / 2), b.src[3] - 1]; };
+function rng(seed){ let s = seed * 9301 + 49297; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+
+// Blueprint tile -> map character (the builder's legend: tools/rooms/tiles.js)
+const CH = {".": ".", m: ".", F: ".", P: ".", "1": ".", "2": ".", "4": ".", B: ".", u: ".", "3": ",", ":": ":", q: ":", z: ":", t: ":",
+	",": ",", r: ",", _: "_", D: "~", S: "~", s: "~", "~": "~", p: "b", "=": ",", C: "X", c: "X"};
+const OPEN = [".", ",", ":", "_", "b"];   // walkable map characters
+
+let BUILT = null;   // every room, built once: {rooms: {id: spec}, exits: {key: [room, x, y]}, frame: {id: {ox, oy, W, H}}}
+
+function frameOf(id){
+	let x1 = 1e9, y1 = 1e9, x2 = -1e9, y2 = -1e9;
+	for(const [k, r] of OWN) if(r === id){ const [x, y] = k.split(",").map(Number); x1 = Math.min(x1, x); y1 = Math.min(y1, y); x2 = Math.max(x2, x); y2 = Math.max(y2, y); }
+	return {ox: x1, oy: y1, W: x2 - x1 + 1, H: y2 - y1 + 1};
+}
+
+function buildAll(){
+	const ids = Object.values(ROOM_OF).filter(id => id !== "rm_1");
+	const frames = {};
+	for(const id of ids) frames[id] = frameOf(id);
+	const rooms = {}, exits = {};
+	for(const id of ids) rooms[id] = buildRoom(id, frames[id], exits);
+	// Ways through, now that every room exists: a strip each side of each crossing, arriving on the other side
+	for(const id of ids) addWays(id, rooms, frames);
+	return {rooms, exits, frames};
+}
+
+function buildRoom(id, fr, exits){
+	const {ox, oy, W, H} = fr;
+	const seed = [...id].reduce((a, ch) => a * 31 + ch.charCodeAt(0), 7) % 100000;
+	const own = (c, r) => owner(ox + c, oy + r) === id;
+	const bk = (c, r) => kindAt(ox + c, oy + r);
+	const grid = Array.from({length: H}, (_, r) => Array.from({length: W}, (_, c) => CH[bk(c, r)] || "."));
+	const at = (c, r) => (grid[r] || [])[c];
+	const things = [], instances = [], points = {}, areas = {}, areaKinds = {}, taken = new Set();
+	const take = (c, r, w, h) => { for(let y = r; y < r + h; y++) for(let x = c; x < c + w; x++) taken.add(x + "," + y); };
+	const free = (c, r, w, h, ok = ["."], overTaken = false) => { for(let y = r; y < r + h; y++) for(let x = c; x < c + w; x++){
+		if(x < 1 || y < 1 || x >= W - 1 || y >= H - 1 || !own(x, y) || !ok.includes(at(x, y)) || (!overTaken && taken.has(x + "," + y))) return false; } return true; };
+
+	// Cliff faces: the cliff 9-slice (TS_terrain cols 5-7, rows 2-4 the face), by which neighbours are cliff too
+	for(let r = 0; r < H; r++) for(let c = 0; c < W; c++){
+		if(bk(c, r) !== "C") continue;
+		const isC = (cc, rr) => bk(cc, rr) === "C" || bk(cc, rr) === "c";
+		const col = !isC(c - 1, r) ? 5 : !isC(c + 1, r) ? 7 : 6, row = !isC(c, r - 1) ? 2 : !isC(c, r + 1) ? 4 : 3;
+		things.push({src: [col, row, 1, 1], at: [c, r]});
+		taken.add(c + "," + r);
+	}
+	// Piers and bridges: planks over the water
+	for(let r = 0; r < H; r++) for(let c = 0; c < W; c++) if(bk(c, r) === "p"){ things.push({src: [17, 20, 1, 1], at: [c, r]}); taken.add(c + "," + r); }
+	// Roads, water, cliffs are taken (nothing scattered or grown on them)
+	for(let r = 0; r < H; r++) for(let c = 0; c < W; c++) if(at(c, r) !== "." && at(c, r) !== ",") taken.add(c + "," + r);
+
+	// The mine's cave mouth (Beacon Hill's), in the mountain's cliff
+	for(let r = 0; r < H; r++) for(let c = 0; c < W; c++) if(bk(c, r) === "c" && !points.cave){
+		const px = (c + 1) * 32, py = (r + 2) * 32 + 12;
+		instances.push({obj: "obj_mine_door", x: px, y: py});
+		for(let y = r + 1; y <= r + 4; y++) for(let x = c - 1; x <= c + 2; x++) if(own(x, y) && at(x, y) === ".") grid[y][x] = ",";
+		points.cave = [px, py + 28];
+		points.miner = [px - 96, py + 28];
+	}
+
+	// Buildings, landmarks, ruins and placeholders on their blueprint footprints
+	const here = LAYOUT.buildings.filter(b => owner(b.x + Math.floor(b.w / 2), b.y + b.h - 1) === id);
+	const placeAt = (w, h, fx, fy, fw, fh, ok, needFront) => {
+		// The thing's foot centred on the footprint's foot, slid to the nearest clear spot
+		const want = [Math.round(fx + fw / 2 - w / 2), fy + fh - h];
+		for(let d = 0; d <= 14; d++) for(let dy = -d; dy <= d; dy++) for(let dx = -d; dx <= d; dx++){
+			if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
+			const c = want[0] + dx, r = want[1] + dy;
+			if(!free(c, r, w, h, ok)) continue;
+			if(needFront && !OPEN.includes(at(c + needFront[0], r + h)) ) continue;
+			return [c, r];
+		}
+		return null;
+	};
+	for(const b of here){
+		const fx = b.x - ox, fy = b.y - oy;
+		if(BUILDING[b.name]){
+			const key = BUILDING[b.name], info = keyInfo[key];
+			if(!info){ console.log(`  ${id}: no building ${key}`); continue; }
+			const is = info.is, [w, h] = size(is), d = doorOf(is);
+			const spot = placeAt(w, h, fx, fy, b.w, b.h, [".", ","], d) || placeAt(w, h, fx, fy, b.w, b.h, [".", ",", ":"], d);
+			if(!spot){ console.log(`  ${id}: no room for ${b.name}`); continue; }
+			const [c, r] = spot;
+			things.push({is, at: [c, r]});
+			take(c - 1, r, w + 2, h + 1);
+			const art = T.things[is].doorArt;
+			if(art) instances.push({obj: art.obj, x: c * 32 + art.at[0], y: r * 32 + art.at[1]});
+			const dx = (c + d[0]) * 32 + 16, dy = (r + d[1]) * 32 + 16, inside = INTERIORS.doorPoint(info.room);
+			instances.push({obj: "obj_transition", x: dx, y: dy, sx: 2, sy: 1,
+				code: `targetRoom = ${info.room};\ntargetX = ${inside[0]};\ntargetY = ${inside[1]};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`});
+			exits[key] = [id, dx, dy + 36];
+			points[key + "_front"] = [dx, dy + 52];
+			// a bit of dirt path from the door to the nearest road below it, if it's close
+			{ const cc = c + d[0]; let reach = -1;
+			  for(let rr = r + h; rr < Math.min(H, r + h + 7); rr++){ if(at(cc, rr) === ":" || at(cc, rr) === ",") { reach = rr; break; } if(at(cc, rr) !== ".") break; }
+			  if(reach > 0) for(let rr = r + h; rr < reach; rr++) grid[rr][cc] = ","; }
+		} else if(THING[b.name]){
+			const is = THING[b.name], [w, h] = size(is);
+			const spot = placeAt(w, h, fx, fy, b.w, b.h, [".", ",", "_"]);
+			if(!spot){ console.log(`  ${id}: no room for ${b.name}`); continue; }
+			things.push({is, at: spot});
+			take(spot[0], spot[1], w, h);
+			points["lm_" + is.replace(/^(prop|house)_/, "")] = [(spot[0] + Math.floor(w / 2)) * 32 + 16, (spot[1] + h) * 32 + 24];
+		} else if(RUIN_OF[b.name] || b.name === "Cardo"){
+			if(b.name === "Cardo"){ for(let k = 0; k + 2 <= b.w; k += 3) if(free(fx + k, fy - 1, 2, 3, [".", ",", ":"])){ things.push({is: "ruin_columns", at: [fx + k, fy - 1]}); take(fx + k, fy - 1, 2, 3); } continue; }
+			const ru = RUINS[RUIN_OF[b.name]], spot = placeAt(ru.w, ru.h, fx, fy, b.w, b.h, [".", ","]);
+			if(!spot) continue;
+			for(const [p, ddx, ddy] of ru.parts) things.push({is: p, at: [spot[0] + ddx, spot[1] + ddy]});
+			take(spot[0], spot[1], ru.w, ru.h);
+			points["lm_" + b.name.toLowerCase().replace(/[^a-z]+/g, "_")] = [(spot[0] + 4) * 32, (spot[1] + ru.h) * 32 + 24];
+		} else if(PLACEHOLDER[b.name]){
+			const spot = placeAt(b.w, b.h, fx, fy, b.w, b.h, [".", ",", ":", "_"]);
+			if(!spot) continue;
+			things.push({placeholder: PLACEHOLDER[b.name], src: [0, 0, b.w, b.h], solid: [[0, Math.max(0, b.h - 2), b.w, Math.min(b.h, 2)]], at: spot});
+			take(spot[0], spot[1], b.w, b.h);
+		}
+	}
+
+	// The old rooms' landmarks and decor that aren't on the blueprint: near where their old room's ground now lies
+	const oldsHere = Object.entries(OLDR).filter(([o]) => ALIAS[o] === id).map(([o]) => o);
+	for(const o of oldsHere){
+		const R = ROOMS[o] || {}, [x1, y1, x2, y2] = OLDR[o].rect;
+		const cx = Math.round((x1 + x2) / 2) - ox, cy = Math.round((y1 + y2) / 2) - oy, rr = rng(seed + o.length * 13);
+		const items = [...(R.landmarks || []).map(l => ({lm: l})), ...(R.decor || []).map(d => ({is: d.is}))];
+		for(const it of items){
+			const l = it.lm;
+			if(l && l.is && placedNames.has(l.is) && here.some(b => THING[b.name] === l.is)) continue;   // on the blueprint already
+			const ru = l && l.ruin ? RUINS[l.ruin] : null;
+			const is = it.is || (l && l.is);
+			const [w, h] = is ? size(is) : ru ? [ru.w, ru.h] : [l.w || 2, l.h || 3];
+			const qx = l ? ({nw: -1, sw: -1, ne: 1, se: 1}[l.q] || 0) : (rr() < 0.5 ? -1 : 1), qy = l ? ({nw: -1, ne: -1, sw: 1, se: 1}[l.q] || 0) : 1;
+			const want = [cx + qx * Math.round((x2 - x1) / 4), cy + qy * Math.round((y2 - y1) / 4)];
+			let spot = null;
+			// (the sea arch stands in the sea; anything else on open ground, as near its old room's spot as there's room)
+			const sea = is === "prop_sea_arch", okk = sea ? ["~"] : [".", ",", "_"];
+			for(let d = 0; d <= 60 && !spot; d++) for(let dy = -d; dy <= d && !spot; dy++) for(let dx = -d; dx <= d && !spot; dx++){
+				if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
+				if(free(want[0] + dx, want[1] + dy, w, h, okk, sea)) spot = [want[0] + dx, want[1] + dy];
+			}
+			if(!spot){ console.log(`  ${id}: no room for ${o}'s ${is || (l && (l.ruin || l.obj))}`); continue; }
+			if(is) things.push({is, at: spot});
+			else if(ru) for(const [p, ddx, ddy] of ru.parts) things.push({is: p, at: [spot[0] + ddx, spot[1] + ddy]});
+			else if(l.obj) instances.push({obj: l.obj, x: (spot[0] + w / 2) * 32, y: (spot[1] + h) * 32 - 8});
+			take(spot[0] - 1, spot[1] - 1, w + 2, h + 2);
+			if(l) points[o + "__lm_" + l.q] = [(spot[0] + Math.floor(w / 2)) * 32 + 16, (spot[1] + h) * 32 + 24];
+			if(it.is && (it.is === "stall_cart" || it.is.startsWith("stall")) && !points[o + "__stall"]) points[o + "__stall"] = [(spot[0] + 1) * 32 + 16, (spot[1] + h) * 32 + 24];
+		}
+	}
+
+	// Rocks on the rocky shore
+	{ const sr = rng(seed + 31), kinds = ["rock_grey_big", "rock_grey", "pebbles_grey", "pebbles_grey2", "rock_grey_tall", "pebbles_brown"];
+	  for(let k = 0; k < W * H / 60; k++){
+		const is = kinds[Math.floor(sr() * kinds.length)];
+		if(!T.things[is]) continue;
+		const [w, h] = size(is), c = 1 + Math.floor(sr() * (W - 2 - w)), r = 1 + Math.floor(sr() * (H - 2 - h));
+		let ok = true;
+		for(let y = r - 1; y <= r + h && ok; y++) for(let x = c - 1; x <= c + w && ok; x++) if(bk(x, y) !== "r" || taken.has(x + "," + y) || !own(x, y)) ok = false;
+		if(ok){ things.push({is, at: [c, r]}); take(c, r, w, h); }
+	} }
+
+	// Trees: thick in the blueprint's forest and pine wood, a few on open grass and the hills
+	const maskOf = test => grid.map((row, r) => row.map((ch, c) => (ch === "." && own(c, r) && test(bk(c, r))) ? "." : "x").join(""));
+	const count = test => { let n = 0; for(let r = 0; r < H; r++) for(let c = 0; c < W; c++) if(own(c, r) && test(bk(c, r)) && at(c, r) === ".") n++; return n; };
+	const nP = count(k => k === "P"), nF = count(k => k === "F"), nOpen = count(k => k === "." || k === "1" || k === "2");
+	if(nP) things.push(...woods(maskOf(k => k === "P"), [0, 0, W - 1, H - 1], Math.round(nP / 7), seed + 1, [["pine", 10], ["sapling", 1]], taken, true));
+	if(nF) things.push(...woods(maskOf(k => k === "F"), [0, 0, W - 1, H - 1], Math.round(nF / 8), seed + 2, undefined, taken, true));
+	if(nOpen) things.push(...woods(maskOf(k => k === "." || k === "1" || k === "2"), [0, 0, W - 1, H - 1],
+		Math.round(nOpen * ({town: 0.002, rural: 0.008, wild: 0.02, deep: 0.03}[KIND[id]] || 0.006)), seed + 3, undefined, taken, false));
+
+	// Lamps along the town's roads, now and then
+	if(KIND[id] === "town" && T.things.prop_lamp){
+		const lr = rng(seed + 17);
+		for(let r = 2; r < H - 2; r++) for(let c = 2; c < W - 2; c++){
+			if(at(c, r) !== "." || !own(c, r) || taken.has(c + "," + r) || at(c, r - 1) !== ":" || lr() > 0.06) continue;
+			if(!free(c, r - 3 >= 0 ? r : r, 1, 1, ["."])) continue;
+			things.push({is: "prop_lamp", at: [c, r - 3]});
+			taken.add(c + "," + r);
+		}
+	}
+
+	// Walls where the room's own ground ends (the rest of the box is the neighbouring areas, drawn but not walkable):
+	// one row of collision boxes just outside the edge, in runs; the ways through cut gaps in them later (addWays)
+	const edge = [];
+	for(let r = 0; r < H; r++) for(let c = 0; c < W; c++){
+		if(own(c, r)) continue;
+		if([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => own(c + dx, r + dy))) edge.push([c, r]);
+	}
+
+	// The old rooms' named spots, at the same place in the world (the nearest open cell)
+	const Old = require("../world/room.js");
+	const openAt = (c, r) => own(c, r) && OPEN.includes(at(c, r)) && !(taken.has(c + "," + r) && at(c, r) === ".");
+	const snap = (c, r) => { for(let d = 0; d < 20; d++) for(let dy = -d; dy <= d; dy++) for(let dx = -d; dx <= d; dx++){
+		if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
+		if(openAt(c + dx, r + dy)) return [c + dx, r + dy]; } return [c, r]; };
+	for(const o of oldsHere){
+		let sp;
+		try{ sp = Old.spec(o); } catch(e){ continue; }
+		const g = Old.geom(o), [x1, y1, x2, y2] = OLDR[o].rect;
+		for(const [k, p] of Object.entries(sp.points)){
+			if(points[o + "__" + k]) continue;
+			if(k.endsWith("_front") && points[k]){ points[o + "__" + k] = points[k]; continue; }
+			if(k === "cave" && points.cave){ points[o + "__cave"] = points.cave; points[o + "__miner"] = points.miner; continue; }
+			const wx = x1 + (p[0] / 32) / g.W * (x2 - x1), wy = y1 + (p[1] / 32) / g.H * (y2 - y1);
+			const [c, r] = snap(Math.round(wx) - ox, Math.round(wy) - oy);
+			points[o + "__" + k] = [c * 32 + 16, r * 32 + 16];
+		}
+	}
+	// A middle for the room itself
+	{ const [c, r] = snap(Math.floor(W / 2), Math.floor(H / 2)); points.mid = [c * 32 + 16, r * 32 + 16]; }
+
+	// Spawn areas (scripts/gathering): blocks of 16x16 cells that are mostly the room's own open ground, by what's
+	// there (forest -> wild or deep, hills -> cliff, beach -> shore, the rest the room's kind)
+	for(let br = 0; br * 16 < H; br++) for(let bc = 0; bc * 16 < W; bc++){
+		const c1 = bc * 16 + 1, r1 = br * 16 + 1, c2 = Math.min(W - 2, c1 + 13), r2 = Math.min(H - 2, r1 + 13);
+		let n = 0, tot = 0; const tally = {};
+		for(let r = r1; r <= r2; r++) for(let c = c1; c <= c2; c++){ tot++; if(own(c, r) && (at(c, r) === "." || at(c, r) === ",") && !taken.has(c + "," + r)){ n++; const k = bk(c, r); tally[k] = (tally[k] || 0) + 1; } }
+		if(tot === 0 || n / tot < 0.45) continue;
+		const top = Object.entries(tally).sort((a, b) => b[1] - a[1])[0][0];
+		const kind = ["F", "P"].includes(top) ? (KIND[id] === "deep" ? "deep" : "wild") : ["2", "3"].includes(top) ? "cliff" : ["r", "_"].includes(top) ? "shore" : KIND[id] === "deep" ? "deep" : KIND[id];
+		const name = "a" + br + "_" + bc;
+		areas[name] = [c1, r1, c2, r2];
+		areaKinds[name] = kind;
+	}
+
+	const start = points.mid;
+	instances.unshift({obj: "obj_plyr", x: start[0], y: start[1]}, {obj: "camera", x: start[0], y: start[1]});
+	return {
+		seed: seed % 1000, map: grid.map(r => r.join("")), things, instances, points, areas, areaKinds, edge,
+		scatter: [
+			{on: ".", density: KIND[id] === "town" ? 0.02 : 0.04, seed: seed % 97, pieces: [{is: "leaves", weight: 4}, {is: "leaves2", weight: 4}, {is: "mushrooms"}, {is: "sprout", weight: 2}]},
+			{on: "~", density: 0.01, seed: seed % 89, pieces: [{is: "lilypads"}, {is: "lilypads2"}]},
+		],
+	};
+}
+
+// The farm's ways out (rm_1 keeps its own layout): its north road leads to the Outskirts, its west lane to the Sunset
+// Coast, each arriving at that area's crossing with the farm. side: "t" or "l". Returns [room, x, y].
+const FARM_SIDE = {t: "The Outskirts", l: "Sunset Coast"};
+const FARM_ARRIVE = {t: [1296, 72], l: [64, 576]};   // where you arrive on the farm (its own road_t, road_l)
+
+function addWays(id, rooms, frames){
+	const S = rooms[id], fr = frames[id];
+	const myName = Object.keys(ROOM_OF).find(n => ROOM_OF[n] === id);
+	const gaps = new Set();
+	for(const w of AREAS.ways){
+		if(!w.between.includes(myName)) continue;
+		const otherName = w.between[0] === myName ? w.between[1] : w.between[0], other = ROOM_OF[otherName];
+		if(other === "rm_1" && !Object.values(FARM_SIDE).includes(myName)) continue;   // the farm only has two ways out
+		if(other === "rm_bunny" || id === "rm_bunny") continue;   // the island is by ferry (addFerry)
+		// The crossing cells on my side near this way: my walkable cells next to the other area's walkable cells
+		const cells = [];
+		for(let y = w.at[1] - 6; y <= w.at[1] + 6; y++) for(let x = w.at[0] - 6; x <= w.at[0] + 6; x++){
+			if(owner(x, y) !== id) continue;
+			const ch = CH[kindAt(x, y)];
+			if(!OPEN.includes(ch)) continue;
+			for(const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]){
+				if(owner(x + dx, y + dy) !== other || !OPEN.includes(CH[kindAt(x + dx, y + dy)])) continue;
+				cells.push({x, y, dx, dy});
+			}
+		}
+		if(!cells.length) continue;
+		const dx = cells[0].dx, dy = cells[0].dy, along = cells.filter(c => c.dx === dx && c.dy === dy);
+		const xs = along.map(c => c.x), ys = along.map(c => c.y);
+		const cx1 = Math.min(...xs) - fr.ox, cx2 = Math.max(...xs) - fr.ox, cy1 = Math.min(...ys) - fr.oy, cy2 = Math.max(...ys) - fr.oy;
+		// the strip: the crossing cells themselves; arrive two cells into the other area, at the middle of the crossing
+		const mx = Math.round((Math.min(...xs) + Math.max(...xs)) / 2), my = Math.round((Math.min(...ys) + Math.max(...ys)) / 2);
+		let target, tx, ty;
+		if(other === "rm_1"){
+			const side = myName === FARM_SIDE.t ? "t" : "l";
+			[tx, ty] = FARM_ARRIVE[side]; target = "rm_1";
+		} else {
+			const ofr = frames[other];
+			tx = (mx + dx * 3 - ofr.ox) * 32 + 16; ty = (my + dy * 3 - ofr.oy) * 32 + 16; target = other;
+		}
+		const face = dx === 1 ? "right" : dx === -1 ? "left" : dy === 1 ? "down" : "up";
+		const pw = (cx2 - cx1 + 1), ph = (cy2 - cy1 + 1);
+		S.instances.push({obj: "obj_transition", x: (cx1 + pw / 2) * 32, y: (cy1 + ph / 2) * 32, sx: pw * 2, sy: ph * 2,
+			code: `targetRoom = ${target};\ntargetX = ${tx};\ntargetY = ${ty};\nPlayerFacingBefore = dir.${face};\nPlayerFacingAfter = dir.${face};`});
+		S.points["way_" + other.replace(/^rm_/, "") + "_" + (S.points["way_" + other.replace(/^rm_/, "")] ? mx : "")] = [(mx - fr.ox - dx * 2) * 32 + 16, (my - fr.oy - dy * 2) * 32 + 16];
+		if(!S.points["way_" + other.replace(/^rm_/, "")]) S.points["way_" + other.replace(/^rm_/, "")] = [(mx - fr.ox - dx * 2) * 32 + 16, (my - fr.oy - dy * 2) * 32 + 16];
+		// no wall where you cross
+		for(const c of along) gaps.add((c.x + c.dx - fr.ox) + "," + (c.y + c.dy - fr.oy));
+	}
+	// The walls: the edge cells (outside the room's ground) not at a way through, in horizontal runs
+	const wall = S.edge.filter(([c, r]) => !gaps.has(c + "," + r)).sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+	for(let i = 0; i < wall.length;){
+		let j = i;
+		while(j + 1 < wall.length && wall[j + 1][1] === wall[i][1] && wall[j + 1][0] === wall[j][0] + 1) j++;
+		const c1 = wall[i][0], r = wall[i][1], n = j - i + 1;
+		S.instances.push({obj: "obj_col_box", x: (c1 + n / 2) * 32, y: r * 32 + 16, sx: n * 2, sy: 2});
+		i = j + 1;
+	}
+	delete S.edge;
+}
+
+// The ferry to Bunny Island: stepping onto the end of Starsand's breakwater (Phoenix Bay) takes you to the island's
+// jetty, and the jetty's end back (for now; a boat ride later)
+function addFerry(B){
+	const P = B.rooms.rm_phoenix, I = B.rooms.rm_bunny, fp = B.frames.rm_phoenix, fi = B.frames.rm_bunny;
+	if(!P || !I) return;
+	// the breakwater's far end: its pier tile furthest north-east; the jetty's end: Bunny's pier tile furthest south
+	let be = null, je = null;
+	for(const [k] of OWN) {}
+	for(let y = -30; y < 20; y++) for(let x = 60; x < 140; x++){
+		if(kindAt(x, y) !== "p") continue;
+		if(owner(x, y) === "rm_phoenix" && (!be || x - y > be[0] - be[1])) be = [x, y];
+		if(owner(x, y) === "rm_bunny" && (!je || y > je[1])) je = [x, y];
+	}
+	if(!be || !je) return;
+	const px = (c, f) => (c - f) * 32 + 16;
+	P.instances.push({obj: "obj_transition", x: px(be[0], fp.ox), y: px(be[1], fp.oy), sx: 2, sy: 2,
+		code: `targetRoom = rm_bunny;\ntargetX = ${px(je[0], fi.ox)};\ntargetY = ${px(je[1] - 2, fi.oy)};\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;`});
+	I.instances.push({obj: "obj_transition", x: px(je[0], fi.ox), y: px(je[1], fi.oy), sx: 2, sy: 2,
+		code: `targetRoom = rm_phoenix;\ntargetX = ${px(be[0] - 2, fp.ox)};\ntargetY = ${px(be[1] + 2, fp.oy)};\nPlayerFacingBefore = dir.down;\nPlayerFacingAfter = dir.down;`});
+	P.points.ferry = [px(be[0] - 2, fp.ox), px(be[1] + 2, fp.oy)];
+	I.points.ferry = [px(je[0], fi.ox), px(je[1] - 2, fi.oy)];
+}
+
+function all(){ if(!BUILT){ BUILT = buildAll(); addFerry(BUILT); } return BUILT; }
+module.exports = {
+	spec: id => { const s = all().rooms[id]; if(!s) throw new Error("no new room " + id); return s; },
+	all, ROOM_OF, ALIAS, KIND, WATER,
+	exits: () => all().exits,
+	farmArrive: side => {
+		// where the farm's side leads: the crossing in that area nearest the farm, arriving two cells in
+		const B = all(), name = FARM_SIDE[side], id = ROOM_OF[name], fr = B.frames[id];
+		const w = AREAS.ways.find(x => x.between.includes("The Farm") && x.between.includes(name) && (side === "l" || x.at[0] > 80)) ||
+		          AREAS.ways.find(x => x.between.includes("The Farm") && x.between.includes(name));
+		const [x, y] = w.at, ddy = side === "t" ? -3 : 0, ddx = side === "l" ? -3 : 0;
+		return [id, (x + ddx - fr.ox) * 32 + 16, (y + ddy - fr.oy) * 32 + 16];
+	},
+};

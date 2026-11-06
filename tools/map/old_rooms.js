@@ -7,7 +7,6 @@
 const fs = require("fs");
 const path = require("path");
 const {readPng, writePng} = require("../rooms/png.js");
-const {text} = require("./font.js");
 const ROOT = path.join(__dirname, "..", ".."), OUT = path.join(ROOT, "design", "map");
 const M = 30, S = 4;
 // [x1, y1, x2, y2] in world tiles, roughly where the old room's places went
@@ -49,12 +48,6 @@ Object.values(OLD).forEach((o, i) => {
 	const [x1, y1, x2, y2] = o.rect.map((v, k) => (v + M) * S), c = cols[i % cols.length];
 	for(let x = x1; x <= x2; x++) for(let t = 0; t < 2; t++){ if((x >> 3) % 2) continue; put(x, y1 + t, c); put(x, y2 - t, c); }
 	for(let y = y1; y <= y2; y++) for(let t = 0; t < 2; t++){ if((y >> 3) % 2) continue; put(x1 + t, y, c); put(x2 - t, y, c); }
-});
-// Each old room's name in its outline's top-left corner, in its colour
-Object.entries(OLD).forEach(([id, o], i) => {
-	const name = id === "rm_1" ? "farm" : id.replace(/^rm_/, "");
-	const x = (o.rect[0] + M) * S + 6 + name.length * 6, y = (o.rect[1] + M) * S + 6;
-	text(P, name, x, Math.max(2, y), 2, cols[i % cols.length]);
 });
 writePng(path.join(OUT, "old_rooms_on_new.png"), P);
 const old = path.join(ROOT, "build", "world_map.png");

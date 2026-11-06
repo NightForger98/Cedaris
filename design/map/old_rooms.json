@@ -76,8 +76,8 @@
   "rm_starsand": {
    "area": "North Beach",
    "rect": [
-    60,
-    0,
+    62,
+    -18,
     124,
     16
    ]
@@ -86,8 +86,8 @@
    "area": "North Beach",
    "rect": [
     130,
-    -8,
-    172,
+    -16,
+    178,
     18
    ]
   },

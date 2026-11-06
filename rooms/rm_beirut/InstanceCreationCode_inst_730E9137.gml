@@ -1,1 +1,1 @@
-sprite_index = spr_prop_keeper_garden;
+sprite_index = spr_prop_tide_pools;

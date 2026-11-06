@@ -1,2 +1,2 @@
-text = "The Outskirts";
-side = "n";
+text = "Saint Thereza";
+side = "here";

@@ -80,6 +80,9 @@ const districtAt = (wx, wy, area) => { for(const [o, d] of Object.entries(OLDR))
 		const dd = Math.hypot(Math.max(x1 - wx, 0, wx - x2), Math.max(y1 - wy, 0, wy - y2)); if(dd < bd){ bd = dd; best = ROOMS[o].name; } }
 	return best; };
 const BROKEN_BRIDGE = {room: "rm_mountain", at: [146, 80], size: [2, 2]};   // world tiles: a river footbridge
+// The spare homes (no way in): the flat versions kept when the remakes with depth replaced them, and the remakes of
+// Larkspun and Quill (the families kept their old ones) - art/ai_houses/alt_*
+const ALT_HOMES = ["saba", "saltwhistle", "hayward", "ward", "tawil", "kassar", "night", "cottage", "family_house", "larkspun", "quill"].map(n => "prop_alt_" + n);
 const RUINS = {
 	house: {w: 8, h: 4, parts: [["ruin_wall_brick", 0, 0], ["ruin_wall_stone", 4, 0], ["ruin_rubble", 1, 3], ["ruin_rubble", 5, 3], ["ruin_stump", 3, 2]]},
 	temple: {w: 8, h: 5, parts: [["ruin_pillar", 0, 0], ["ruin_ivy", 2, 1], ["ruin_head", 3, 1], ["ruin_columns", 6, 1], ["ruin_rubble", 1, 4], ["ruin_stump", 5, 3]]},
@@ -292,9 +295,13 @@ side = "here";`});
 	// blueprint's plain town ground with a cell clear around it
 	{ const FILL = ["prop_town_hallhouse", "prop_town_hallhouse2", "prop_town_hallhouse3", "prop_town_apartments",
 		"prop_town_yellowhouse", "prop_town_yellowhouse2", "prop_town_villa", "prop_town_villa2",
-		"prop_town_shop", "prop_town_shop2", "prop_town_cafe", "prop_town_cafe2", "prop_town_bakery", "prop_town_bakery2"].filter(k => T.things[k]);
-	  if(KIND[id] === "town" && FILL.length){
-		const fr = rng(seed + 57), want = Math.round(W * H / 150), road = ch => ch === ":" || ch === ",";
+		"prop_town_shop", "prop_town_shop2", "prop_town_cafe", "prop_town_cafe2", "prop_town_bakery", "prop_town_bakery2"].concat(ALT_HOMES).filter(k => T.things[k]);
+	  // and out of town, a home now and then by the roads and lanes (the spare homes: the Outskirts, the Countryside, the
+	  // Sunset Coast felt empty)
+	  const RURAL = ["rm_outskirts", "rm_countryside", "rm_sunset"].includes(id), POOL = RURAL ? ALT_HOMES.filter(k => T.things[k]) : FILL;
+	  if((KIND[id] === "town" || RURAL) && POOL.length){
+		const FILL = POOL;
+		const fr = rng(seed + 57), want = Math.round(W * H / (RURAL ? 700 : 150)), road = ch => ch === ":" || ch === ",";
 		let n = 0;
 		// every cell in a shuffled order, each trying the houses in a shuffled order, until the town has enough
 		const cells = [];

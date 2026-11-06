@@ -1,1 +1,1 @@
-sprite_index = spr_prop_monastery;
+sprite_index = spr_house_church;

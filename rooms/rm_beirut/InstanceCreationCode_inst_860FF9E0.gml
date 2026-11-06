@@ -1,1 +1,1 @@
-sprite_index = spr_prop_sea_arch;
+sprite_index = spr_prop_alt_saba;

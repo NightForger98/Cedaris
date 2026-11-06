@@ -1,1 +1,1 @@
-sprite_index = spr_house_brewery;
+sprite_index = spr_prop_flower_bed;

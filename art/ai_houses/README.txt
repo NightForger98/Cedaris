@@ -222,3 +222,8 @@ ones are in flat_old/ (small_house: all three tries isometric, kept as it was). 
   farm_granary, farm_outhouse in place of the farm's LPC ones
 - barn_ranch (Meadowlark Farm's home, in place of the Meshy ranch barn) and barn_stone (the Night farm): fully built barns
 - furniture (art/furniture; scripts/furniture): 20 pieces, 2 tries each, drawn on transparency (under 200 px), trimmed
+- Later the same day the user kept the old Larkspun and Quill (their remakes became spares) and asked to use the old
+  versions too: the spare homes alt_<name> (art/ai_houses/alt_*, spr_prop_alt_*) - the flat saba, saltwhistle,
+  hayward, ward, tawil, kassar, night, cottage, family_house and the remade larkspun and quill - stand as homes with no
+  way in, among Beirut's street houses and here and there by the roads of the Outskirts, the Countryside and the
+  Sunset Coast (tools/world2/areas_build.js ALT_HOMES). No house in the game was left that isn't PixelLab art.

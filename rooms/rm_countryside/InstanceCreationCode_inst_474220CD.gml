@@ -1,1 +1,1 @@
-sprite_index = spr_house_home_night;
+sprite_index = spr_house_home_hayward;

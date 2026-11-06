@@ -1,1 +1,1 @@
-sprite_index = spr_house_stables;
+sprite_index = spr_house_home_ward;

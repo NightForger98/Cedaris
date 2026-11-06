@@ -1,1 +1,1 @@
-sprite_index = spr_prop_town_cafe2;
+sprite_index = spr_prop_lamp;

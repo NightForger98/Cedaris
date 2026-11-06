@@ -1,1 +1,1 @@
-sprite_index = spr_house_tool_shop;
+sprite_index = spr_house_blacksmith;

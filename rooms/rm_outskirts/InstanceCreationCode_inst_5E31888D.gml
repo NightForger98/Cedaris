@@ -1,2 +1,1 @@
-text = "Resolve's Rise";
-side = "here";
+sprite_index = spr_prop_alt_ward;

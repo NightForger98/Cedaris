@@ -1,2 +1,2 @@
-kind = "tram";
-stop = "Well's Head";
+text = "Downtown";
+side = "here";

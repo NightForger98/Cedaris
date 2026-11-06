@@ -1,5 +1,5 @@
-targetRoom = rm_mountain;
-targetX = 240;
-targetY = 3760;
+targetRoom = rm_home_kassar;
+targetX = 224;
+targetY = 280;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

@@ -1,5 +1,5 @@
-targetRoom = rm_flowershop;
-targetX = 256;
-targetY = 312;
+targetRoom = rm_valley_ranch;
+targetX = 288;
+targetY = 344;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

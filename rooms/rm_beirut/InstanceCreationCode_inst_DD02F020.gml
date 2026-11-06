@@ -1,1 +1,1 @@
-sprite_index = spr_house_library;
+sprite_index = spr_prop_marina_club;

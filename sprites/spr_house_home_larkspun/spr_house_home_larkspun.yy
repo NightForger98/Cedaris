@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_house_home_larkspun",
   "bboxMode":0,
-  "bbox_bottom":133,
+  "bbox_bottom":164,
   "bbox_left":0,
-  "bbox_right":181,
+  "bbox_right":243,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"14f469ea-0301-4658-bd3c-4e8488af16e2","name":"14f469ea-0301-4658-bd3c-4e8488af16e2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"7ea5087d-3688-4453-90ff-a08c6aee650b","name":"7ea5087d-3688-4453-90ff-a08c6aee650b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":134,
+  "height":165,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"363e38c3-d082-4efe-a76d-af42d012dc0a","blendMode":0,"displayName":"default","isLocked":false,"name":"363e38c3-d082-4efe-a76d-af42d012dc0a","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"3c9ee2f8-6fd0-4fe4-a936-93319bdd8a53","blendMode":0,"displayName":"default","isLocked":false,"name":"3c9ee2f8-6fd0-4fe4-a936-93319bdd8a53","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_house_home_larkspun",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"14f469ea-0301-4658-bd3c-4e8488af16e2","path":"sprites/spr_house_home_larkspun/spr_house_home_larkspun.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"cf9f2331-245d-44b6-ba01-09ed4f8ee8d4","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"7ea5087d-3688-4453-90ff-a08c6aee650b","path":"sprites/spr_house_home_larkspun/spr_house_home_larkspun.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"58ccf9c7-dfad-4444-bce1-b89887e5e28a","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":182,
+  "width":244,
 }

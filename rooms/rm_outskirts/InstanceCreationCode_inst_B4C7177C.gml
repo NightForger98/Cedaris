@@ -1,2 +1,1 @@
-text = "Beirut";
-side = "n";
+sprite_index = spr_prop_alt_saltwhistle;

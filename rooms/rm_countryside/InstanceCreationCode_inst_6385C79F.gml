@@ -1,1 +1,1 @@
-sprite_index = spr_prop_gravestones;
+sprite_index = spr_prop_alt_ward;

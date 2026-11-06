@@ -1,1 +1,1 @@
-sprite_index = spr_prop_cafe_terrace;
+sprite_index = spr_house_library;

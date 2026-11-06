@@ -22,7 +22,7 @@ const DOORS = {
 	olive_press: 117, tinker_workshop: 82, boatyard: 112, glassworks: 132, stables: 79, barn_ranch: 124,
 	oakhart_farmhouse: 132,
 	home_saba: 120, home_brassbolt: 120, home_saltwhistle: 82, home_fairglass: 107, home_hayward: 117,
-	home_larkspun: 89, home_silverbough: 114, home_frere: 143, home_quill: 75, home_ward: 91, home_tawil: 113, home_kassar: 86, home_night: 82, farmhouse_1: 78, farmhouse_2: 78, farmhouse_3: 96, farmhouse_4: 62,
+	home_larkspun: 121, alt_saba: 95, alt_saltwhistle: 111, alt_hayward: 104, alt_ward: 63, alt_tawil: 98, alt_kassar: 91, alt_night: 131, alt_cottage: 48, alt_family_house: 97, alt_larkspun: 89, alt_quill: 75, home_silverbough: 114, home_frere: 143, home_quill: 81, home_ward: 91, home_tawil: 113, home_kassar: 86, home_night: 82, farmhouse_1: 78, farmhouse_2: 78, farmhouse_3: 96, farmhouse_4: 62,
 };
 
 // Props drawn as one sprite (spr_prop_<name>, PixelLab): "prop_<name>", centred in a box of whole tiles, standing on
@@ -35,7 +35,8 @@ const PROPS = {bench: 1, lamp: 1, fountain: 2, planter: 1, campfire: 1,
 	town_hallhouse: 2, town_hallhouse2: 2, town_hallhouse3: 2, town_apartments: 2, town_yellowhouse: 2, town_yellowhouse2: 2, town_villa: 2, town_villa2: 2,
 	town_shop: 2, town_shop2: 2, town_cafe: 2, town_cafe2: 2, town_bakery: 2, town_bakery2: 2,
 	farm_barn_1: 2, farm_barn_2: 2, farm_barn_3: 2, farm_coop_1: 2, farm_coop_2: 2, farm_coop_3: 2, farm_shed_1: 2, farm_shed_2: 2, farm_shed_3: 2,
-	farm_silo_1: 1, farm_silo_2: 1, farm_silo_3: 2, farm_bee_shed: 1, farm_granary: 2, farm_outhouse: 1, barn_stone: 2, stables_b: 2};
+	farm_silo_1: 1, farm_silo_2: 1, farm_silo_3: 2, farm_bee_shed: 1, farm_granary: 2, farm_outhouse: 1, barn_stone: 2, stables_b: 2,
+	alt_saba: 2, alt_saltwhistle: 2, alt_hayward: 2, alt_ward: 2, alt_tawil: 2, alt_kassar: 2, alt_night: 2, alt_cottage: 2, alt_family_house: 2, alt_larkspun: 2, alt_quill: 2};
 
 function spriteSize(name){
 	const dir = path.join(root, "sprites", name);

@@ -1,2 +1,1 @@
-kind = "tram";
-stop = "Dahya";
+sprite_index = spr_prop_alt_saltwhistle;

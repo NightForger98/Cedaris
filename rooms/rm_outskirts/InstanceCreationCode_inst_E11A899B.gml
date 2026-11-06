@@ -1,2 +1,2 @@
-text = "The Countryside";
-side = "s";
+text = "Resolve's Rise";
+side = "here";

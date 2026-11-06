@@ -1,1 +1,1 @@
-sprite_index = spr_house_silo;
+sprite_index = spr_prop_cliff_lookout;

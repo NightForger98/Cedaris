@@ -1,1 +1,1 @@
-sprite_index = spr_prop_grapevine;
+sprite_index = spr_prop_farm_silo_3;

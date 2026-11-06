@@ -1,2 +1,2 @@
-text = "Manara's Light";
-side = "here";
+text = "Phoenix Bay";
+side = "n";

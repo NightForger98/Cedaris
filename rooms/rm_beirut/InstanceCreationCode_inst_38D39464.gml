@@ -1,1 +1,1 @@
-sprite_index = spr_prop_town_cafe;
+sprite_index = spr_prop_alt_ward;

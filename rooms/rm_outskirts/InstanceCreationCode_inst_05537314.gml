@@ -1,5 +1,1 @@
-targetRoom = rm_home_tawil;
-targetX = 224;
-targetY = 280;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+sprite_index = spr_prop_tram_stop;

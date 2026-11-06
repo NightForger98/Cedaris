@@ -1,2 +1,1 @@
-text = "The Mountain";
-side = "e";
+sprite_index = spr_prop_lamp;

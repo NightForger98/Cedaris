@@ -1,2 +1,2 @@
-text = "Victory Hill";
-side = "here";
+kind = "cable";
+stop = "the Mountain top";

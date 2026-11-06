@@ -1,2 +1,1 @@
-kind = "tram";
-stop = "Oven's Window";
+sprite_index = spr_prop_town_cafe2;

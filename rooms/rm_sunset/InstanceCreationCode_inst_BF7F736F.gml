@@ -1,1 +1,1 @@
-sprite_index = spr_house_home_saltwhistle;
+sprite_index = spr_house_home_saba;

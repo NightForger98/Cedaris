@@ -331,7 +331,7 @@ side = "here";`});
 				if(c + w >= W - 2 || r + h >= H - 3) continue;
 				// facing a street: its door looks onto a side lane (in town; out of town a road or a lane) at most two
 				// cells of grass away - houses and workshops along the side lanes, which go somewhere (tools/map/blueprint.js)
-				const street = ch => ch === "," || (RURAL && ch === ":");
+				const street = ch => ch === "," || ch === ":";   // a side street, or (now slim) a main road
 				let front = null;   // [x, y] of the street cell nearest below the house (under its width)
 				for(let k2 = 0; k2 < 3 && !front; k2++) for(let x = c; x < c + w && !front; x++) if(street(at(x, r + h + k2))) front = [x, r + h + k2];
 				if(!front || !free(c - 1, r, w + 2, h, ["."])) continue;   // a cell clear each side (its back may meet the next street)

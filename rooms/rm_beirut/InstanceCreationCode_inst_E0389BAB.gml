@@ -1,2 +1,1 @@
-kind = "tram";
-stop = "Verdun Street";
+sprite_index = spr_prop_alt_saltwhistle;

@@ -1,2 +1,1 @@
-text = "Well's Head";
-side = "here";
+sprite_index = spr_prop_town_yellowhouse2;

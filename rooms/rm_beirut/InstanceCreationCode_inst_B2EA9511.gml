@@ -1,2 +1,1 @@
-kind = "tram";
-stop = "Downtown";
+sprite_index = spr_prop_town_apartments;

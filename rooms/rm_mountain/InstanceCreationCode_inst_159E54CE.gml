@@ -1,2 +1,1 @@
-text = "Phoenix Bay";
-side = "n";
+if(project_done("bridge")) instance_destroy();

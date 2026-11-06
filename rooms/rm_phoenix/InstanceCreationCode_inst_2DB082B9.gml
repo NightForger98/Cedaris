@@ -1,2 +1,2 @@
-text = "Beirut";
-side = "s";
+kind = "cable";
+stop = "Hangar 12";

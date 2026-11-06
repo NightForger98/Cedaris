@@ -1,0 +1,2 @@
+kind = "tram";
+stop = "Cardo";

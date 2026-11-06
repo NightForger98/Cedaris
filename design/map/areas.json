@@ -242,21 +242,10 @@
     "Beirut"
    ],
    "at": [
-    50,
+    49,
     15
    ],
-   "wide": 20
-  },
-  {
-   "between": [
-    "Phoenix Bay",
-    "Beirut"
-   ],
-   "at": [
-    65,
-    15
-   ],
-   "wide": 3
+   "wide": 15
   },
   {
    "between": [
@@ -278,7 +267,7 @@
     91,
     15
    ],
-   "wide": 10
+   "wide": 9
   },
   {
    "between": [
@@ -286,7 +275,7 @@
     "Beirut"
    ],
    "at": [
-    117,
+    116,
     15
    ],
    "wide": 6
@@ -297,10 +286,10 @@
     "Beirut"
    ],
    "at": [
-    133,
+    136,
     18
    ],
-   "wide": 8
+   "wide": 2
   },
   {
    "between": [
@@ -331,9 +320,9 @@
    ],
    "at": [
     136,
-    34
+    30
    ],
-   "wide": 30
+   "wide": 22
   },
   {
    "between": [
@@ -342,9 +331,9 @@
    ],
    "at": [
     136,
-    61
+    62
    ],
-   "wide": 5
+   "wide": 3
   },
   {
    "between": [
@@ -353,9 +342,9 @@
    ],
    "at": [
     136,
-    78
+    77
    ],
-   "wide": 12
+   "wide": 7
   },
   {
    "between": [
@@ -375,9 +364,9 @@
    ],
    "at": [
     136,
-    91
+    92
    ],
-   "wide": 6
+   "wide": 3
   },
   {
    "between": [
@@ -396,18 +385,18 @@
     "Sunset Coast"
    ],
    "at": [
-    36,
+    31,
     95
    ],
-   "wide": 10
+   "wide": 4
   },
   {
    "between": [
     "Beirut",
-    "The Outskirts"
+    "Sunset Coast"
    ],
    "at": [
-    52,
+    41,
     95
    ],
    "wide": 2
@@ -421,7 +410,7 @@
     64,
     95
    ],
-   "wide": 4
+   "wide": 2
   },
   {
    "between": [
@@ -451,10 +440,10 @@
     "The Outskirts"
    ],
    "at": [
-    111,
+    113,
     95
    ],
-   "wide": 11
+   "wide": 1
   },
   {
    "between": [
@@ -462,10 +451,10 @@
     "The Outskirts"
    ],
    "at": [
-    128,
+    125,
     95
    ],
-   "wide": 6
+   "wide": 10
   },
   {
    "between": [
@@ -473,10 +462,32 @@
     "The Outskirts"
    ],
    "at": [
-    141,
+    143,
     95
    ],
-   "wide": 5
+   "wide": 3
+  },
+  {
+   "between": [
+    "Sunset Coast",
+    "The Outskirts"
+   ],
+   "at": [
+    44,
+    138
+   ],
+   "wide": 16
+  },
+  {
+   "between": [
+    "The Outskirts",
+    "The Farm"
+   ],
+   "at": [
+    46,
+    147
+   ],
+   "wide": 3
   },
   {
    "between": [
@@ -529,9 +540,9 @@
    ],
    "at": [
     44,
-    171
+    165
    ],
-   "wide": 2
+   "wide": 11
   }
  ],
  "unlocked": [

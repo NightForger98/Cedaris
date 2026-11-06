@@ -144,7 +144,11 @@ const ROADS = {
 	// The main roads
 	corniche_north: [[24, 18], [40, 15], [70, 14], [100, 15], [134, 17]],                      // Avenue des Francais, the port's Charles Helou
 	coast_highway:  [[134, 17], [146, 9], [160, 2], [172, -4]],                                // on north-east along the coast, past the river mouth
-	corniche_west:  [[24, 18], [14, 28], [11, 44], [11, 62], [14, 80], [22, 96], [28, 120], [30, 150], [32, 175], [34, 196]],   // the Corniche, then down the Sunset Coast
+	corniche_west:  [[24, 18], [14, 28], [11, 44], [11, 62], [14, 80], [22, 96]],             // the Corniche, round the peninsula
+	// Down the Sunset Coast a little inland (the user's line, 2026-11-06, in place of the road along the shore): from White
+	// Sand past the beach homes to South Beach, a branch east to the Outskirts road, and back to the shore at the bottom
+	sunset_road:    [[41, 102], [38, 110], [42, 122], [44, 135], [46, 148], [46, 160], [44, 167], [36, 171], [33, 176], [34, 196]],
+	sunset_branch:  [[46, 145], [53, 140], [60, 136]],
 	hamra:          [[14, 32], [58, 32]],                                                     // Hamra Street (Red Street)
 	the_ring:       [[58, 32], [70, 42], [104, 42], [124, 40], [140, 42], [150, 46]],          // Fouad Chehab, east over the river
 	mazraa:         [[11, 62], [50, 62], [80, 64], [110, 64]],                                // Corniche el-Mazraa / Salam
@@ -198,7 +202,7 @@ for(const [name, pts] of Object.entries(LANES)) lineWhere(pts, "lane", 0.5, hill
 // the real side streets, but none in the middle of town round Uptown and the Museum (the user: "excessive while
 // serving no real purpose"); there the main roads alone, and lanes only to the buildings that need them (below)
 const SIDE_STREETS = (x, y) => inTown(x, y) && !(x >= 66 && x <= 132 && y >= 62 && y <= 104);
-for(const r of OSM.roads.filter(r => r.k === "lane")) lineWhere(r.pts, "lane", 0.5, hills, SIDE_STREETS);   // 2 tiles wide: a 1-tile street on a slant draws as a ragged line
+for(const r of OSM.roads.filter(r => r.k === "lane")) lineWhere(r.pts, "lane", 0, hills, SIDE_STREETS);   // 1 tile wide (joined side to side on a slant), slimmer than the 2-tile roads
 for(const r of OSM.roads.filter(r => r.k === "road")) lineWhere(r.pts, "road", r.w, hills.filter(k => k !== "plaza").concat(["lane"]), inTown);
 rect(82, 22, 96, 32, "plaza");                     // Martyrs' Square, downtown by the port
 disc(102, 104, 3, 3, "plaza");                     // the Tayouneh roundabout, by the Horsh pines

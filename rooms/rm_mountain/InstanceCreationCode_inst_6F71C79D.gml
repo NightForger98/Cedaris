@@ -1,1 +1,1 @@
-sprite_index = spr_prop_cable_car_station;
+sprite_index = spr_house_cottage;

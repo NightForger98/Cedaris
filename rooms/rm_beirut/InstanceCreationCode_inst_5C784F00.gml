@@ -1,2 +1,1 @@
-text = "Phoenix Bay";
-side = "e";
+sprite_index = spr_prop_lamp;

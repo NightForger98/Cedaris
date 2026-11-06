@@ -1,2 +1,1 @@
-text = "Sunset Coast";
-side = "s";
+sprite_index = spr_prop_lamp;

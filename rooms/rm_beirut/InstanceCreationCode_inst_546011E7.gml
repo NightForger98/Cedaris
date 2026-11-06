@@ -1,5 +1,1 @@
-targetRoom = rm_mountain;
-targetX = 80;
-targetY = 1872;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+sprite_index = spr_prop_lamp;

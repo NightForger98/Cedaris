@@ -57,9 +57,12 @@ travel rules) still holds.
   `build.sh` / `Runner` processes too.
 - **Real roads** (2026-11-06): in the town (blueprint.js TOWN_BOX) the roads are Beirut's real ones from OpenStreetMap,
   warped onto the map through landmark anchors (`tools/map/osm_roads.js` -> `design/map/osm_beirut.json`; credited, ODbL);
-  no side streets in the middle of town (the user found them purposeless), dead-end lanes pruned, ramps left out. The
+  each street's pieces chained into whole lines by name, straightened, a road beside another kept once (the other
+  carriageway), short and hanging bits dropped, loose ends joined; main roads 2 wide, side streets 1; no side streets in
+  the middle of town (the user found them purposeless), dead-end lanes pruned, ramps left out. The
   user's edits: the road south from Wing Hill to the Hippodrome replaced by one round the Outskirts (`outskirts_road`),
-  the coast past the port (Plummet's Point) turned to sea. Town houses stand only where their door faces a side lane;
+  the coast past the port (Plummet's Point) turned to sea, the shore road down the Sunset Coast replaced by one inland
+  (`sunset_road`, `sunset_branch`). Town houses stand only where their door faces a side lane;
   big buildings choose their ground first; a tall one (the lighthouse) may stand with its top over the road behind.
 - **Known leftovers**: some Phoenix Bay decor finds no room (the old ferry dock prop, an obelisk, a stall, a barn);
   two landmark points (Pigeon Rocks, Victory Hill) can't be reached from a door; Beirut has wide plain lawns between

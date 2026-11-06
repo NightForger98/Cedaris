@@ -1,2 +1,2 @@
-text = "The Mountain";
-side = "n";
+text = "Sunset Coast";
+side = "w";

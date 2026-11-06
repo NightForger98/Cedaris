@@ -1,5 +1,1 @@
-targetRoom = rm_outskirts;
-targetX = 240;
-targetY = 80;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+sprite_index = spr_prop_lamp;

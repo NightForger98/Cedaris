@@ -1059,3 +1059,11 @@ function autotest_furniture_target(){
 
 /// @description Test: the message showing on the HUD now.
 function autotest_hud(){ return game.hudMessage; }
+
+/// @description Test: clear the trees, rocks and weeds within _r pixels of the player (they spawn at random, and one in
+/// the way stops a walking test).
+function autotest_clear_near(_r){
+	var n = 0, r = real(_r);
+	with(obj_resource) if(point_distance(x, y, obj_plyr.x, obj_plyr.y) < r){ instance_destroy(); n++; }
+	return n;
+}

@@ -69,6 +69,13 @@ travel rules) still holds.
   draws those as the main roads, 2 tiles wide. Every other road either runs alongside one of them (dropped) or becomes a
   1-tile side lane near the buildings it reaches. The drawing is kept in `design/map/drawings/`. To change the main
   roads: draw over a fresh world map (black pen), run drawn_roads.js on it, then the pipeline.
+- **PixelLab ground with seasons** (2026-11-06): the outdoor rooms (not the farm) draw their ground from
+  `TS_ground_summer` in a dual grid (`tools/rooms/build.js` groundLayer: a layer one cell larger, half a cell up-left, each
+  tile showing its four cells' terrains; `spec.ground` letters come from `tools/world2/areas_build.js`). The four season
+  tilesets (`tools/map/ground_atlas.js --import`, from art/terrain_pl) share one layout, so `scripts/ground`
+  (`ground_season_apply`, at Room Start) swaps them. Test `ground`. Tile 0 of an atlas is never used (GameMaker's
+  "no tile"). Mixing grass from different PixelLab sets made a patchwork: one set's grass only. PixelLab tilesets
+  cost about 200 generations each.
 - **Known leftovers**: some Phoenix Bay decor finds no room (the old ferry dock prop, an obelisk, a stall, a barn);
   two landmark points (Pigeon Rocks, Victory Hill) can't be reached from a door; Beirut has wide plain lawns between
   districts - room for more town (PixelLab tilesets for terrain need a Wang corner-tile path in `build.js`).

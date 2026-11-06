@@ -352,6 +352,42 @@ side = "here";`});
 		}
 	  } }
 
+	// The wild places' life (2026-11-06; the user found the Outskirts and the cliffs empty): clusters set down on open
+	// ground away from the roads - a cedar grove and terraced slopes on the Mountain, orchards, olive groves, vineyards,
+	// a shepherd's camp and wildflower meadows with hives (PixelLab props, art/props_wild)
+	{ const CL = {
+		rm_mountain:    [["cedars", 3], ["terraces", 2], ["shepherd", 1], ["meadow", 1]],
+		rm_outskirts:   [["orchard", 2], ["olives", 1], ["meadow", 2]],
+		rm_countryside: [["orchard", 1], ["vines", 2], ["shepherd", 1], ["meadow", 1]],
+		rm_sunset:      [["olives", 1]],
+		rm_woods:       [["meadow", 1]],
+	  }[id] || [];
+	  const cr = rng(seed + 71), road = ch => ch === ":" || ch === ",";
+	  const put = (is, c, r) => { if(!T.things[is]) return false; const [w, h] = size(is);
+		if(!free(c, r, w, h, ["."])) return false;
+		for(let y = r; y < r + h; y++) for(let x = c; x < c + w; x++) if(!["." , "m", "1", "2", "F", "P", "3"].includes(bk(x, y))) return false;
+		things.push({is, at: [c, r]}); take(c, r, w, h); return true; };
+	  // an open spot: R cells round it nearly all open grass of this area, no road
+	  const spot = R => { for(let k = 0; k < 400; k++){
+		const c = R + 2 + Math.floor(cr() * (W - 2 * R - 4)), r = R + 2 + Math.floor(cr() * (H - 2 * R - 4));
+		let open = 0, all = 0, bad = false;
+		for(let y = r - R; y <= r + R && !bad; y++) for(let x = c - R; x <= c + R; x++){ all++; const ch = at(x, y);
+			if(road(ch) || ch === "~" || ch === "X") { bad = true; break; } if(ch === "." && own(x, y) && !taken.has(x + "," + y)) open++; }
+		if(!bad && open / all > 0.92) return [c, r]; } return null; };
+	  const RECIPE = {
+		cedars:   ([c, r]) => { let n = 0; for(let k = 0; k < 40 && n < 10; k++){ const a2 = cr() * 6.283, d = Math.sqrt(cr()) * 6;
+			if(put(cr() < 0.6 ? "prop_cedar_tree" : "prop_cedar_young", Math.round(c + Math.cos(a2) * d) - 1, Math.round(r + Math.sin(a2) * d) - 2)) n++; } },
+		terraces: ([c, r]) => { for(let k = -2; k <= 2; k++) put("prop_stone_terrace", c - 2 + (k & 1), r + k * 2); },
+		shepherd: ([c, r]) => { put("prop_shepherd_hut", c - 1, r - 2); for(const [dx, dy] of [[4, 0], [5, 2], [-4, 1]]) put("prop_haystack", c + dx, r + dy); put("prop_beehives", c - 4, r + 3); },
+		orchard:  ([c, r]) => { for(let y = -1; y <= 1; y++) for(let x = -1; x <= 1; x++) put("prop_apple_tree", c + x * 4 - 1, r + y * 4 - 2); },
+		olives:   ([c, r]) => { for(let y = -1; y <= 1; y++) for(let x = -1; x <= 1; x++) put("prop_olive_tree", c + x * 4 - 1, r + y * 4 - 2); },
+		vines:    ([c, r]) => { for(let y = -2; y <= 2; y++) for(let x = -1; x <= 1; x++) put("prop_grapevine", c + x * 3, r + y * 2); },
+		meadow:   ([c, r]) => { put("prop_beehives", c - 1, r); for(let k = 0; k < 9; k++) put("prop_wildflowers", c + Math.round((cr() - 0.5) * 10), r + Math.round((cr() - 0.5) * 8)); },
+	  };
+	  const RAD = {cedars: 7, terraces: 6, shepherd: 6, orchard: 6, olives: 6, vines: 6, meadow: 5};
+	  for(const [kind, count] of CL) for(let n = 0; n < count; n++){ const p = spot(RAD[kind]); if(p) RECIPE[kind](p); }
+	}
+
 	// Rocks on the rocky shore and the mountain's bare top
 	{ const sr = rng(seed + 31), kinds = ["rock_grey_big", "rock_grey", "pebbles_grey", "pebbles_grey2", "rock_grey_tall", "pebbles_brown"];
 	  const rocky = (x, y) => ["r", "3", "4"].includes(bk(x, y));
@@ -448,8 +484,20 @@ if(project_done("bridge")) instance_destroy();`});
 
 	const start = points.mid;
 	instances.unshift({obj: "obj_plyr", x: start[0], y: start[1]}, {obj: "camera", x: start[0], y: start[1]});
+	// The ground in PixelLab terrain (tools/rooms/build.js groundLayer): a letter a cell, from the map and the blueprint
+	const groundOf = (c, r) => { const ch = at(c, r), k = bk(c, r);
+		if(k === "q") return "c";                                   // plazas and quays: concrete
+		if(ch === ":") return "r";                                  // main roads: stone brick
+		if(ch === ",") return ["u", "z", "t"].includes(k) ? "t" : "d";   // lanes dirt; by ruins, stairs and rails a flagstone trail
+		if(ch === "_") return "s";
+		if(ch === "~") return ["D", "S"].includes(k) ? "D" : "w";
+		if(ch === "b") return "w";                                  // under the piers' planks
+		if(ch === "X" || ["3", "r", "C", "c"].includes(k)) return "k";
+		if(k === "4") return "n";
+		return "g"; };
+	const ground = {rows: grid.map((row, r) => row.map((_, c) => groundOf(c, r)).join(""))};
 	return {
-		seed: seed % 1000, map: grid.map(r => r.join("")), things, instances, points, areas, areaKinds, edge,
+		seed: seed % 1000, map: grid.map(r => r.join("")), ground, things, instances, points, areas, areaKinds, edge,
 		scatter: [
 			{on: ".", density: KIND[id] === "town" ? 0.02 : 0.04, seed: seed % 97, pieces: [{is: "leaves", weight: 4}, {is: "leaves2", weight: 4}, {is: "mushrooms"}, {is: "sprout", weight: 2}]},
 			{on: "~", density: 0.01, seed: seed % 89, pieces: [{is: "lilypads"}, {is: "lilypads2"}]},

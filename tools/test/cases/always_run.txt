@@ -3,6 +3,8 @@ start story
 wait 60
 room rm_1 1296 400
 wait 30
+# (weeds and rocks spawn at random: clear the way east)
+call autotest_clear_near 400
 keydown right
 wait 10
 call autotest_gait

@@ -17,6 +17,7 @@ if(game_is_playing_room()){
 	else { global.mineWalls = -1; resources_room_start(); placeables_room_start(); furniture_room_start(); animals_room_start(); festival_room_start(); woods_room_start(); }
 	villagers_update(); // whoever's here at this hour
 	signposts_place();  // a sign by each way to another place
+	ground_season_apply();   // the ground in this season's colours (scripts/ground)
 }
 
 // After sleeping: wake up beside the bed, facing down, then autosave. After being knocked out: no autosave,

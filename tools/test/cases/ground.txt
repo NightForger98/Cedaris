@@ -1,0 +1,39 @@
+# The PixelLab ground (scripts/ground): the outdoor rooms show the season - spring, summer, fall, winter - by swapping
+# their ground tileset as you enter
+start story
+wait 60
+time 11
+season 0
+room rm_beirut
+wait 30
+call autotest_ground
+expect spring
+call autotest_to_point rm_downtown__mid 0 0
+wait 10
+shot 01_spring
+season 2
+room rm_beirut
+wait 30
+call autotest_ground
+expect fall
+call autotest_to_point rm_downtown__mid 0 0
+wait 10
+shot 02_fall
+season 3
+room rm_beirut
+wait 30
+call autotest_ground
+expect winter
+call autotest_to_point rm_downtown__mid 0 0
+wait 10
+shot 03_winter
+season 1
+room rm_mountain
+wait 30
+call autotest_ground
+expect summer
+room rm_12 160 400
+wait 20
+call autotest_ground
+expect none
+quit

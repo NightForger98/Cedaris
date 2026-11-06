@@ -87,6 +87,50 @@ function autotile(def, has, W, H, rand){
 	return out;
 }
 
+// ---------------------------------------------------------------- the PixelLab ground (dual grid)
+
+// spec.ground: a map of terrain letters (one a cell) drawn with the season atlases (tools/map/ground_atlas.js), in
+// place of the LPC terrain. The tiles sit on the corners where four cells meet - a layer one cell wider and taller,
+// half a cell up and left - and each shows those four cells' terrains. A tile holds two terrains; where its corners
+// have three, or a pair with no tiles, the rarest gives way to its neighbour (GIVE) until a real pair is left.
+const GROUND = {g: "grass", d: "dirt", r: "road", s: "sand", t: "trail", c: "concrete", w: "shallow", D: "deep", k: "rock", n: "snow"};
+const GPAIRS = [["grass", "dirt"], ["grass", "road"], ["grass", "sand"], ["grass", "trail"], ["grass", "concrete"],
+	["shallow", "sand"], ["deep", "shallow"], ["grass", "rock"], ["rock", "snow"]];
+const GIVE = {deep: "shallow", shallow: "sand", sand: "grass", dirt: "grass", road: "grass", trail: "grass", concrete: "grass", rock: "grass", snow: "rock"};
+function groundLayer(spec, W, H, rand){
+	const rows = spec.ground.rows, ts = spec.ground.tileset || "TS_ground_summer", cols = tilesetImage(ts).cols;
+	const terr = (x, y) => GROUND[(rows[Math.max(0, Math.min(H - 1, y))] || "")[Math.max(0, Math.min(W - 1, x))]] || "grass";
+	const pairOf = (a, b) => { const i = GPAIRS.findIndex(([l, u]) => (l === a && u === b) || (l === b && u === a)); return i; };
+	const tileAt = (b, key) => (Math.floor(b / 4) * 4 + Math.floor(key / 4)) * cols + (b % 4) * 4 + key % 4;
+	const plain = {};   // terrain -> the blocks where it's whole ([block, key])
+	GPAIRS.forEach(([l, u], b) => { (plain[l] = plain[l] || []).push([b, 0]); (plain[u] = plain[u] || []).push([b, 15]); });
+	const tiles = new Array((W + 1) * (H + 1)).fill(0);
+	let gave = 0;
+	for(let y = 0; y <= H; y++) for(let x = 0; x <= W; x++){
+		let c = [terr(x - 1, y - 1), terr(x, y - 1), terr(x - 1, y), terr(x, y)];
+		for(let guard = 0; guard < 10; guard++){
+			const u = [...new Set(c)];
+			if(u.length === 1 || (u.length === 2 && pairOf(u[0], u[1]) >= 0)) break;
+			const victim = u.sort((a, b) => c.filter(t => t === a).length - c.filter(t => t === b).length)[0];
+			const to = GIVE[victim] || u.find(t => t !== victim);
+			c = c.map(t => t === victim ? to : t); gave++;
+		}
+		const u = [...new Set(c)];
+		let tile;
+		if(u.length === 1){
+			// a whole cell of one terrain (never tile 0, which GameMaker takes for "no tile")
+			if(u[0] === "grass") tile = tileAt(1, 0);   // (one set's grass: the others' differ a shade, a patchwork mixed)
+			else { const pick = plain[u[0]][0]; tile = tileAt(pick[0], pick[1]); }
+			if(!tile) tile = tileAt(1, 0);
+		} else {
+			const b = pairOf(u[0], u[1]), up = GPAIRS[b][1];
+			tile = tileAt(b, c.reduce((v, t, i) => v | (t === up ? 8 >> i : 0), 0));
+		}
+		tiles[y * (W + 1) + x] = tile || EMPTY;
+	}
+	return {role: "ground", tileset: ts, k: 0, name: "Ground", tiles, order: -1, w: W + 1, h: H + 1, x: -16, y: -16, gave};
+}
+
 // ---------------------------------------------------------------- things
 
 // A thing is a stamp (tools/rooms/stamps/<name>.json) or a rectangle of a tileset, with how many of its top rows
@@ -190,14 +234,18 @@ function build(roomName, opts = {}){
 
 	// Ground: the base terrain everywhere, then each terrain over it, in the order of T.terrains
 	// (base: "none" for interiors, whose floors come with their stamps)
-	if(spec.base !== "none"){
+	if(spec.ground){
+		// the PixelLab ground in place of the LPC terrain (the legend still gives walls and water)
+		const gl = groundLayer(spec, W, H, rand);
+		layers.list.push(gl);
+	} else if(spec.base !== "none"){
 		const base = T.terrains[spec.base || "grass"];
 		const g = layers.get("ground", base.tileset, 0, "Ground");
 		const bf = base.fill || [[base.block[0] + 1, base.block[1] + 3]];
 		for(let i = 0; i < W * H; i++){ const [c, r] = bf[Math.floor(rand() * bf.length)]; g.tiles[i] = tileIndex(base.tileset, c, r); }
 	}
 	Object.entries(T.terrains).forEach(([tname, def], ti) => {
-		if(tname === (spec.base || "grass")) return;
+		if(spec.ground || tname === (spec.base || "grass")) return;
 		const has = (x, y) => (cellDef(x, y).terrain || "") === tname || (cellDef(x, y).under || []).includes(tname);
 		let any = false;
 		for(let y = 0; y < H && !any; y++) for(let x = 0; x < W; x++) if(has(x, y)){ any = true; break; }
@@ -304,9 +352,9 @@ boxH = ${gr.h * CELL};`});
 	const tileLayer = l => {
 		const depth = ROLE_DEPTH[l.role] - layers.list.filter(o => o.role === l.role && o.order < l.order).length;
 		const o = layerBase("GMRTileLayer", l.name, depth);
-		o.tiles = {SerialiseHeight: H, SerialiseWidth: W, TileCompressedData: encodeTiles(l.tiles.map(t => t || EMPTY)), TileDataFormat: 1};
+		o.tiles = {SerialiseHeight: l.h || H, SerialiseWidth: l.w || W, TileCompressedData: encodeTiles(l.tiles.map(t => t || EMPTY)), TileDataFormat: 1};
 		o.tilesetId = {name: l.tileset, path: `tilesets/${l.tileset}/${l.tileset}.yy`};
-		o.x = 0; o.y = 0;
+		o.x = l.x || 0; o.y = l.y || 0;
 		return o;
 	};
 	const tl = layers.list.map(tileLayer);

@@ -1,2 +1,1 @@
-text = "Manara's Light";
-side = "here";
+sprite_index = spr_prop_town_hallhouse;

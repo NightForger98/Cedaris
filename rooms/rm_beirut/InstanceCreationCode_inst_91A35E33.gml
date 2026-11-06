@@ -1,2 +1,1 @@
-text = "Red Street";
-side = "here";
+sprite_index = spr_prop_sea_arch;

@@ -1,2 +1,1 @@
-text = "Verdun Street";
-side = "here";
+sprite_index = spr_prop_town_hallhouse2;

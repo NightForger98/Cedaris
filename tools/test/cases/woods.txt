@@ -1,21 +1,15 @@
 # Town projects (the board in Downtown) and Whispering Woods (once Yarzeh Woods; Whisperwood is gone): the Beach Bridge
-# project mends the footbridge on Plummet's Point's beach (the way along the sand from Hangar 12); foraging in the
-# dense wood; the shrine in its clearing; night creatures
+# project mends a footbridge over the river on the Mountain (Cedar & Sea, tools/world2/areas_build.js BROKEN_BRIDGE);
+# foraging in the dense wood; the shrine in its clearing; night creatures
 start story
 wait 60
-# The beach bridge is broken until its project is done: from Hangar 12's beach you can't get across
-room rm_plummet
+# The footbridge is broken until its project is done
+room rm_mountain
 wait 40
 call autotest_buildings
 expect [Broken bridge]
-call autotest_to_point beach_bridge 0 0
+call autotest_to_point broken_bridge 0 0
 wait 5
-keydown left
-wait 60
-keyup left
-wait 30
-call autotest_room_name
-expect rm_plummet
 shot 01_bridge_out
 # The projects page
 room rm_downtown
@@ -36,20 +30,14 @@ call project_give bridge stone
 call project_give bridge iron
 call project_done bridge
 expect 1
-# Mended: along the beach west to Hangar 12
-room rm_plummet
+# Mended: the box and its collision are gone
+room rm_mountain
 wait 40
 call autotest_buildings
 expectnot Broken bridge
-call autotest_to_point beach_bridge 0 0
+call autotest_to_point broken_bridge 0 0
 wait 5
-keydown left
-wait 90
-keyup left
-wait 40
-call autotest_room_name
-expect rm_hangar
-shot 03_hangar_beach
+shot 03_bridge_mended
 # Whispering Woods: thick with trees, forage to pick
 room rm_yarzeh
 wait 40

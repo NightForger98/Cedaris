@@ -1,2 +1,1 @@
-text = "Oven's Window";
-side = "here";
+sprite_index = spr_prop_town_hallhouse;

@@ -1,2 +1,1 @@
-text = "The Outskirts";
-side = "s";
+sprite_index = spr_prop_town_apartments;

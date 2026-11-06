@@ -1,0 +1,5 @@
+targetRoom = rm_flowershop;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

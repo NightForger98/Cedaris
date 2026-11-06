@@ -1,5 +1,1 @@
-targetRoom = rm_phoenix;
-targetX = 976;
-targetY = 1040;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+sprite_index = spr_prop_town_villa2;

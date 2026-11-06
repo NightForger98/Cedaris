@@ -2,12 +2,11 @@
 start story
 wait 60
 gold 1000
-pos 552 168
-face n
-wait 5
-key e
-wait 80
+# in the mine, on open floor (on the farm, fences and trees could stop the shots)
+mine 1
+wait 40
 call autotest_open_floor 80 380 70
+expectnot none
 give c|held|Arming Sword
 give c|held|Spear
 give c|held|Mace

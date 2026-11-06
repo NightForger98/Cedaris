@@ -197,3 +197,7 @@ PixelLab building of a similar kind as color_image, 3 tries each and the best ke
 Cleaning: marina_club, tram_stop and bunny_burrow were drawn on black (tol 20 keeps their dark outline); port_silos and
 bourj_market had speckled backgrounds (tol 60). The world builder (tools/world2/areas_build.js, PLACEHOLDER_ART) puts
 them where the blueprint has those places, and a labelled box only where one finds no room.
+- Town houses (no way in; the builder lines Beirut's streets with them): town_hallhouse, town_hallhouse2,
+  town_hallhouse3 (Lebanese central-hall houses, triple arches), town_apartments, town_yellowhouse, town_yellowhouse2,
+  town_villa, town_villa2 - 6 prompts x 3 tries (scratchpad jobs_town.json), 8 kept; the shopfront and cafe tries all
+  came out isometric and were dropped. All on black (tol 20).

@@ -4,12 +4,11 @@
 start story
 wait 60
 gold 1000
-pos 552 168
-face n
-wait 5
-key e
-wait 80
+# in the mine, on a stretch of floor open for 380 px to the right (on the farm, fences and trees stopped the arrows)
+mine 1
+wait 40
 call autotest_open_floor 120 380 90
+expectnot none
 give c|held|Arming Sword
 give c|held|Mace
 give c|held|Bow

@@ -1,2 +1,1 @@
-text = "Grace Tower";
-side = "here";
+sprite_index = spr_prop_town_villa2;

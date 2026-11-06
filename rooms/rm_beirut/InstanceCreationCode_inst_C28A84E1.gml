@@ -1,5 +1,1 @@
-targetRoom = rm_home_gullwater;
-targetX = 224;
-targetY = 280;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+sprite_index = spr_prop_cliff_lookout;

@@ -71,6 +71,8 @@ const FIX = {
 	home_ward: {tol: 90}, cafe_terrace: {tol: 90},	// speckled backgrounds
 	prop_sea_arch: {holes: true},
 	marina_club: {tol: 20}, tram_stop: {tol: 20}, bunny_burrow: {tol: 20}, cable_car_station: {grassRows: 6},	// on black: a low tolerance keeps the dark outline
+	town_hallhouse: {tol: 20}, town_hallhouse2: {tol: 20}, town_hallhouse3: {tol: 20}, town_apartments: {tol: 20}, town_yellowhouse: {tol: 20},
+	town_yellowhouse2: {tol: 20}, town_villa: {tol: 20}, town_villa2: {tol: 20},	// on black
 	port_silos: {tol: 60}, bourj_market: {tol: 60},	// speckled backgrounds	// the sky seen through the arch
 	windmill: {cutBottom: 24, grassRows: 34},	// a patch of grass and a path round its foot
 	oakhart_farmhouse: {},	// a faint signature in a corner (dropped as specks)

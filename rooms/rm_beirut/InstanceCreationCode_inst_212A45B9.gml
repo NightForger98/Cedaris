@@ -1,5 +1,1 @@
-targetRoom = rm_mountain;
-targetX = 48;
-targetY = 2448;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+sprite_index = spr_prop_town_yellowhouse2;

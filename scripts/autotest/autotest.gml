@@ -812,6 +812,15 @@ function autotest_open_floor(_left, _right, _ud){
 			return string(xx) + "," + string(yy);
 		}
 	}
+	// None (the floors are random): clear one in the middle of the floor - walls and rocks - so the test can go on
+	if(variable_global_exists("mineWalls") && global.mineWalls != -1){
+		var cx = room_width div 2, cy = room_height div 2;
+		for(var px = cx - l - 32; px <= cx + r + 32; px += 16)
+			for(var py = cy - u - 32; py <= cy + u + 32; py += 16) tilemap_set_at_pixel(global.mineWalls, 0, px, py);
+		with(obj_resource) if(x > cx - l - 48 && x < cx + r + 48 && y > cy - u - 48 && y < cy + u + 48) instance_destroy();
+		obj_plyr.x = cx; obj_plyr.y = cy;
+		return "cleared " + string(cx) + "," + string(cy);
+	}
 	return "none";
 }
 
@@ -965,6 +974,8 @@ function autotest_monster_line(_kind, _d1, _d2){
 	with(obj_enemy_shot) instance_destroy();
 	var a = monster_spawn(_kind, obj_plyr.x + real(_d1), obj_plyr.y, 1), b = monster_spawn(_kind, obj_plyr.x + real(_d2), obj_plyr.y, 1);
 	a.hp = 999; a.hpMax = 999; b.hp = 999; b.hpMax = 999;
+	// held still until hit (as if just knocked, with no push left): a slime wandering off the line would dodge the shot
+	with(obj_monster){ hurtT = 100000; kx = 0; ky = 0; }
 	with(obj_monster){ xstart = x; ystart = y; }
 	with(obj_plyr){ y_frame = 11; facing = -1; }
 	return 2;
@@ -996,4 +1007,11 @@ function autotest_knocked_over(_px){
 function autotest_monsters_stunned(){
 	with(obj_monster) if(hurtT > 30) return "stunned";
 	return "not stunned";
+}
+
+/// @description Test: where each monster stands from the player (dx,dy), and its health.
+function autotest_monster_pos(){
+	var s = "";
+	with(obj_monster) if(!dying) s += string(round(x - obj_plyr.x)) + "," + string(round(y - obj_plyr.y)) + " hp" + string(hp) + "; ";
+	return s;
 }

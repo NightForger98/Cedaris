@@ -31,7 +31,8 @@ const PROPS = {bench: 1, lamp: 1, fountain: 2, planter: 1, campfire: 1,
 	museum: 2, monastery: 2, old_hangar: 2, beach_bar: 1, lifeguard_hut: 1, rangers_cabin: 2, fish_market: 1, ferry_dock: 2, cafe_terrace: 1, roadside_shrine: 1, merchant_cart: 1, cliff_lookout: 2, olive_tree: 1, grapevine: 1, gravestones: 1, shipwreck: 1, sea_arch: 2, tide_pools: 0, herb_bed: 1, swing: 1, flower_bed: 1, beach_umbrella: 0,
 	keeper_garden: 1, miners_camp: 1, botanical: 2, overlook: 1, turtle_nests: 0,
 	exhibition_hall: 2, port_silos: 2, marina_club: 2, bourj_market: 2, stadium: 2, sursock_gallery: 2, gemmayzeh_bar: 2, old_station: 2,
-	cable_car_station: 2, tram_stop: 1, bunny_burrow: 2};
+	cable_car_station: 2, tram_stop: 1, bunny_burrow: 2,
+	town_hallhouse: 2, town_hallhouse2: 2, town_hallhouse3: 2, town_apartments: 2, town_yellowhouse: 2, town_yellowhouse2: 2, town_villa: 2, town_villa2: 2};
 
 function spriteSize(name){
 	const dir = path.join(root, "sprites", name);

@@ -14,18 +14,51 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 - **Controls** (defaults; rebind them in Options > Controls): arrows move (Shift runs, Ctrl walks); left click or Space uses the held tool (hold to charge it);
   1-9, 0 pick the hotbar slot; E talks / uses (in a dialogue: G gives what you hold, T trades or tells you the shop's
   hours); I inventory; M world map; F casts with a staff, Q changes spell; Esc pauses; Insert toggles debug mode.
-- **The world** (branch `world-rebuild`, 2026-11-05): 25 outdoor rooms on a 5 x 5 grid laid out like Beirut - the
-  sea along the top and the west, the river and the eastern hills (Beacon Hill's mine, Victory Hill, Yarzeh Woods)
-  in the east, Downtown in the middle, Player Farm (`rm_1`) in the bottom row with Wing Hill's market above it.
-  The rooms are generated from `tools/world/world.js`; who lives where, the shops, roads and travel rules are in
-  `design/world_plan.md`.
+- **The world** (2026-11-06): nine big outdoor areas, Stardew-style, drawn from one blueprint of Beirut's real
+  shape and roads (`design/map/world_blueprint.png`): Beirut (the old town districts merged), Phoenix Bay (the north
+  shore: Zaitunay Bay, Biel, the port, Starsand Pier), Sunset Coast (the west beaches), The Mountain (the mine, Victory
+  Hill, the cable car), The Outskirts (between the farm and town), Whispering Woods, The Countryside, Bunny Island (by
+  ferry) and the farm (`rm_1`). Each old room's name is a district now, with a name board where it lies. Who lives
+  where, the shops and travel rules are still in `design/world_plan.md` (written for the 25 rooms; the names map
+  across, `world_alias`).
 - **Art**: LPC (CC-BY-SA / GPL / OGA-BY), credited in `LPC_CREDITS.csv`, in each pack's credits file in `art/`, and
   in game.
 
 ## Handoff
 
-Last updated 2026-11-05: **the new world prototype** on branch `world-rebuild` (not merged into `main`). See
-"The new world (world-rebuild)" just below; everything after it describes `main` before the rebuild.
+Last updated 2026-11-06: **Cedar & Sea's world** - the 25 rooms merged into nine areas from the blueprint (just
+below). "The new world (world-rebuild)" after it describes the 25-room step it replaced; much of it (people, interiors,
+travel rules) still holds.
+
+### Cedar & Sea's world (2026-11-06)
+
+- **Blueprint**: `tools/map/blueprint.js` draws the whole world at 1 px a tile (`design/map/world_blueprint.png`, a
+  preview with names, `world_layout.json`, `world_grid.json`); `tools/map/areas.js` splits it into areas and the
+  ways through (`design/map/areas.json`, `areas_proposal.png`); `tools/map/old_rooms.js` places the 25 old rooms on
+  it (`old_rooms.json`).
+- **Rooms**: `tools/world2/areas_build.js` builds each area's room spec from the blueprint: terrain, cliffs, piers,
+  the buildings (`BUILDING`: blueprint name -> `world.js` key; door transitions, `<key>_front` points), landmarks
+  (`THING`, and `PLACEHOLDER_ART`: the PixelLab props for the places that were boxes), ruins, the old rooms'
+  landmarks and decor near where their ground lies, rocks, woods, lamps, edge walls, the ways through to the
+  neighbours (`addWays`, with a "To <area>" signpost each), the ferry to Bunny Island (`addFerry`), and a name board
+  for every old district. `ALIAS` maps each old room to the area holding most of its ground; its points and spawn
+  areas are kept as `<old room>__<key>` (so schedules written for the old rooms still work: `world_alias`,
+  `layout_point` falls back to them). `tools/world2/islands.js` checks every area is one walkable piece.
+- **Pipeline** (after changing the blueprint or the builder):
+  `node tools/world/make_specs.js` -> `node tools/rooms/build.js all` -> `node tools/world2/world_gml2.js`
+  (`scripts/world_rooms`: outdoor list, place names, water, `world_alias`, roads, resource areas) ->
+  `node tools/rooms/worldmap.js` (the M map, rooms where they lie) -> `./build.sh`.
+  The specs `tools/rooms/specs/rm_{bunny,phoenix,beirut,...}.js` are one line each (`areas_build.spec(id)`).
+  `tools/world2/remove_old_rooms.js` took out the 24 old outdoor rooms (done once).
+- **Tests**: `autotest`'s `room <old name>` goes to the area holding it, at the old room's middle. Look tests:
+  `tools/test/looks/landmarks2.txt` (the new landmarks and a board). `autotest.sh` now waits for a closing game
+  before building (a game still running holds `output/.../CedarAndSea.win`). Never stop a running suite with
+  TaskStop alone: its bash children keep running and collide with later runs - kill `suite.sh` / `autotest.sh` /
+  `build.sh` / `Runner` processes too.
+- **Known leftovers**: some Phoenix Bay decor finds no room (the old ferry dock prop, an obelisk, a stall, a barn);
+  two landmark points (Pigeon Rocks, Victory Hill) can't be reached from a door; Beirut has wide plain lawns between
+  districts - room for more town (PixelLab tilesets for terrain need a Wang corner-tile path in `build.js`).
+- **Not done yet**: the per-room camera, a walk/run toggle, the cable car and tram as travel, the interior kit.
 
 ### The new world (world-rebuild)
 

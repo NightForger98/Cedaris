@@ -1,2 +1,2 @@
-text = "Whispering Woods";
-side = "s";
+text = "Beirut";
+side = "w";

@@ -68,6 +68,7 @@ const PLACEHOLDER_ART = {"Biel hall": "prop_exhibition_hall", "Silos": "prop_por
 	"Bourj Hammoud market": "prop_bourj_market", "Stadium": "prop_stadium", "Sursock gallery": "prop_sursock_gallery",
 	"Bar": "prop_gemmayzeh_bar", "Old station": "prop_old_station", "Cable car": "prop_cable_car_station",
 	"Cable car top": "prop_cable_car_station", "Tram stop": "prop_tram_stop", "Burrow": "prop_bunny_burrow"};
+const BROKEN_BRIDGE = {room: "rm_mountain", at: [146, 80], size: [2, 2]};   // world tiles: a river footbridge
 const RUINS = {
 	house: {w: 8, h: 4, parts: [["ruin_wall_brick", 0, 0], ["ruin_wall_stone", 4, 0], ["ruin_rubble", 1, 3], ["ruin_rubble", 5, 3], ["ruin_stump", 3, 2]]},
 	temple: {w: 8, h: 5, parts: [["ruin_pillar", 0, 0], ["ruin_ivy", 2, 1], ["ruin_head", 3, 1], ["ruin_columns", 6, 1], ["ruin_rubble", 1, 4], ["ruin_stump", 5, 3]]},
@@ -259,6 +260,38 @@ side = "here";`});
 		points[o + "__sign"] = [spot[0] * 32 + 16, spot[1] * 32 + 56];
 	}
 
+	// The town's houses between the landmarks (PixelLab, 2026-11-06): no way in, each by a street, on the
+	// blueprint's plain town ground with a cell clear around it
+	{ const FILL = ["prop_town_hallhouse", "prop_town_hallhouse2", "prop_town_hallhouse3", "prop_town_apartments",
+		"prop_town_yellowhouse", "prop_town_yellowhouse2", "prop_town_villa", "prop_town_villa2"].filter(k => T.things[k]);
+	  if(KIND[id] === "town" && FILL.length){
+		const fr = rng(seed + 57), want = Math.round(W * H / 150), road = ch => ch === ":" || ch === ",";
+		let n = 0;
+		// every cell in a shuffled order, each trying the houses in a shuffled order, until the town has enough
+		const cells = [];
+		for(let r = 2; r < H - 5; r++) for(let c = 2; c < W - 4; c++) cells.push([c, r]);
+		for(let i = cells.length - 1; i > 0; i--){ const j = Math.floor(fr() * (i + 1)); [cells[i], cells[j]] = [cells[j], cells[i]]; }
+		for(const [c, r] of cells){
+			if(n >= want) break;
+			const order = FILL.slice().sort(() => fr() - 0.5);
+			for(const is of order){
+				const [w, h] = size(is), mid = c + Math.floor(w / 2);
+				if(c + w >= W - 2 || r + h >= H - 3) continue;
+				// on a street: one within four cells of it (any side), and open ground in front of its door
+				let near = false;
+				for(let y = r - 4; y <= r + h + 4 && !near; y++) for(let x = c - 4; x <= c + w + 3 && !near; x++) if(road(at(x, y))) near = true;
+				if(!near || ![".", ":", ","].includes(at(mid, r + h)) || !free(c - 1, r - 1, w + 2, h + 1, ["."])) continue;
+				let plain = true;
+				for(let y = r; y < r + h && plain; y++) for(let x = c; x < c + w && plain; x++) if(bk(x, y) !== ".") plain = false;
+				if(!plain) continue;
+				things.push({is, at: [c, r]});
+				take(c - 1, r - 1, w + 2, h + 1);
+				n++;
+				break;
+			}
+		}
+	  } }
+
 	// Rocks on the rocky shore and the mountain's bare top
 	{ const sr = rng(seed + 31), kinds = ["rock_grey_big", "rock_grey", "pebbles_grey", "pebbles_grey2", "rock_grey_tall", "pebbles_brown"];
 	  const rocky = (x, y) => ["r", "3", "4"].includes(bk(x, y));
@@ -289,6 +322,19 @@ side = "here";`});
 			things.push({is: "prop_lamp", at: [c, r - 3]});
 			taken.add(c + "," + r);
 		}
+	}
+
+	// The Beach Bridge project (the board in Downtown) mends a footbridge over the river on the Mountain: until then a
+	// labelled box and a collision box over it, both gone once it's done (it isn't the only way across)
+	if(id === BROKEN_BRIDGE.room){
+		const [bx, by] = [BROKEN_BRIDGE.at[0] - ox, BROKEN_BRIDGE.at[1] - oy], [bw, bh] = BROKEN_BRIDGE.size;
+		instances.push({obj: "obj_col_box", x: (bx + bw / 2) * 32, y: (by + bh / 2) * 32, sx: bw * 2, sy: bh * 2, code: `if(project_done("bridge")) instance_destroy();`});
+		instances.push({obj: "obj_placeholder", x: (bx - 1) * 32, y: (by + bh + 1) * 32,
+			code: `label = "Broken bridge";
+boxW = ${(bw + 2) * 32};
+boxH = ${(bh + 2) * 32};
+if(project_done("bridge")) instance_destroy();`});
+		points.broken_bridge = [(bx + bw / 2) * 32, (by + bh + 2) * 32 + 16];
 	}
 
 	// Walls where the room's own ground ends (the rest of the box is the neighbouring areas, drawn but not walkable):

@@ -1,5 +1,5 @@
-targetRoom = rm_outskirts;
-targetX = 432;
-targetY = 80;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+targetRoom = rm_hospital;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

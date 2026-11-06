@@ -1,0 +1,29 @@
+# Always run (R, Options > Controls): on, you run without holding Shift, and holding it walks; R again turns it off
+start story
+wait 60
+room rm_1 1296 400
+wait 30
+keydown right
+wait 10
+call autotest_gait
+expect walking
+keyup right
+key r
+wait 5
+call always_run
+expect 1
+keydown right
+wait 10
+call autotest_gait
+expect running
+keydown shift
+wait 5
+call autotest_gait
+expect walking
+keyup shift
+keyup right
+key r
+wait 5
+call always_run
+expect 0
+quit

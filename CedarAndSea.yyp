@@ -147,6 +147,12 @@
   },
   "name":"CedarAndSea",
   "resources":[
+    {"id":{"name":"spr_prop_town_bakery2","path":"sprites/spr_prop_town_bakery2/spr_prop_town_bakery2.yy",},},
+    {"id":{"name":"spr_prop_town_bakery","path":"sprites/spr_prop_town_bakery/spr_prop_town_bakery.yy",},},
+    {"id":{"name":"spr_prop_town_cafe2","path":"sprites/spr_prop_town_cafe2/spr_prop_town_cafe2.yy",},},
+    {"id":{"name":"spr_prop_town_cafe","path":"sprites/spr_prop_town_cafe/spr_prop_town_cafe.yy",},},
+    {"id":{"name":"spr_prop_town_shop2","path":"sprites/spr_prop_town_shop2/spr_prop_town_shop2.yy",},},
+    {"id":{"name":"spr_prop_town_shop","path":"sprites/spr_prop_town_shop/spr_prop_town_shop.yy",},},
     {"id":{"name":"spr_prop_town_villa2","path":"sprites/spr_prop_town_villa2/spr_prop_town_villa2.yy",},},
     {"id":{"name":"spr_prop_town_villa","path":"sprites/spr_prop_town_villa/spr_prop_town_villa.yy",},},
     {"id":{"name":"spr_prop_town_yellowhouse2","path":"sprites/spr_prop_town_yellowhouse2/spr_prop_town_yellowhouse2.yy",},},

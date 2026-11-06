@@ -11,7 +11,7 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 
 - **Project**: `CedarAndSea.yyp`. Repo: github.com/NightForger98/Cedar-and-Sea (branch `main`), started from HarvestValley's `world-rebuild` branch with its history (the old repo, github.com/NightForger98/HarvestValley, is kept as it was). Saves live in `%LOCALAPPDATA%/CedarAndSea`.
 - **Run it**: open `CedarAndSea.yyp` in GameMaker LTS 2026, or `./build.sh run` from Git Bash (see Reference).
-- **Controls** (defaults; rebind them in Options > Controls): arrows move (Shift runs, Ctrl walks); left click or Space uses the held tool (hold to charge it);
+- **Controls** (defaults; rebind them in Options > Controls): arrows move (Shift runs, Ctrl walks; R toggles always-run, when holding Shift walks); left click or Space uses the held tool (hold to charge it);
   1-9, 0 pick the hotbar slot; E talks / uses (in a dialogue: G gives what you hold, T trades or tells you the shop's
   hours); I inventory; M world map; F casts with a staff, Q changes spell; Esc pauses; Insert toggles debug mode.
 - **The world** (2026-11-06): nine big outdoor areas, Stardew-style, drawn from one blueprint of Beirut's real
@@ -58,7 +58,8 @@ travel rules) still holds.
 - **Known leftovers**: some Phoenix Bay decor finds no room (the old ferry dock prop, an obelisk, a stall, a barn);
   two landmark points (Pigeon Rocks, Victory Hill) can't be reached from a door; Beirut has wide plain lawns between
   districts - room for more town (PixelLab tilesets for terrain need a Wang corner-tile path in `build.js`).
-- **Not done yet**: the per-room camera, a walk/run toggle, the cable car and tram as travel, the interior kit.
+- **Always run**: R toggles it (`always_run`, saved in settings.ini; test `always_run`).
+- **Not done yet**: the per-room camera, the cable car and tram as travel, the interior kit.
 
 ### The new world (world-rebuild)
 

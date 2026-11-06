@@ -1015,3 +1015,12 @@ function autotest_monster_pos(){
 	with(obj_monster) if(!dying) s += string(round(x - obj_plyr.x)) + "," + string(round(y - obj_plyr.y)) + " hp" + string(hp) + "; ";
 	return s;
 }
+
+/// @description Test: always run on (1) or off (0), for this test only.
+function autotest_always_run(_on){ global.testAlwaysRun = (real(_on) == 1); return always_run() ? "on" : "off"; }
+
+/// @description Test: whether the player is running or walking (or standing).
+function autotest_gait(){
+	with(obj_plyr) return (moveX == 0 && moveY == 0) ? "standing" : (sprinting ? "running" : "walking");
+	return "no player";
+}

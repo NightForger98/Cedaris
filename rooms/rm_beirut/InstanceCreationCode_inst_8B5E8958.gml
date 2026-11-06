@@ -1,1 +1,1 @@
-sprite_index = spr_house_brewery;
+sprite_index = spr_house_small_house;

@@ -201,3 +201,6 @@ them where the blueprint has those places, and a labelled box only where one fin
   town_hallhouse3 (Lebanese central-hall houses, triple arches), town_apartments, town_yellowhouse, town_yellowhouse2,
   town_villa, town_villa2 - 6 prompts x 3 tries (scratchpad jobs_town.json), 8 kept; the shopfront and cafe tries all
   came out isometric and were dropped. All on black (tol 20).
+- town_shop, town_shop2, town_cafe, town_cafe2, town_bakery, town_bakery2: the shopfront and cafe retried (plus a
+  bakery) with "A long low wide building ... its roof ridge running left to right" and a red tile roof - front-on this
+  time (scratchpad jobs_town2.json, 9 tries, 6 kept). On black (tol 20).

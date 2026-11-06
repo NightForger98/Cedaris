@@ -1,5 +1,5 @@
-targetRoom = rm_phoenix;
-targetX = 304;
-targetY = 1072;
+targetRoom = rm_home_goldcrest;
+targetX = 224;
+targetY = 280;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

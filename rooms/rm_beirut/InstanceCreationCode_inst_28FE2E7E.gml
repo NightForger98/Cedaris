@@ -1,5 +1,5 @@
-targetRoom = rm_sunset;
-targetX = 720;
-targetY = 80;
-PlayerFacingBefore = dir.down;
-PlayerFacingAfter = dir.down;
+targetRoom = rm_flowershop;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

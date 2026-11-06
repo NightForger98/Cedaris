@@ -32,7 +32,8 @@ const PROPS = {bench: 1, lamp: 1, fountain: 2, planter: 1, campfire: 1,
 	keeper_garden: 1, miners_camp: 1, botanical: 2, overlook: 1, turtle_nests: 0,
 	exhibition_hall: 2, port_silos: 2, marina_club: 2, bourj_market: 2, stadium: 2, sursock_gallery: 2, gemmayzeh_bar: 2, old_station: 2,
 	cable_car_station: 2, tram_stop: 1, bunny_burrow: 2,
-	town_hallhouse: 2, town_hallhouse2: 2, town_hallhouse3: 2, town_apartments: 2, town_yellowhouse: 2, town_yellowhouse2: 2, town_villa: 2, town_villa2: 2};
+	town_hallhouse: 2, town_hallhouse2: 2, town_hallhouse3: 2, town_apartments: 2, town_yellowhouse: 2, town_yellowhouse2: 2, town_villa: 2, town_villa2: 2,
+	town_shop: 2, town_shop2: 2, town_cafe: 2, town_cafe2: 2, town_bakery: 2, town_bakery2: 2};
 
 function spriteSize(name){
 	const dir = path.join(root, "sprites", name);

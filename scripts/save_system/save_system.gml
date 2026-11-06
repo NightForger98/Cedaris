@@ -303,6 +303,7 @@ function settings_load(){
 		fullscreen: ini_read_real("display", "fullscreen", 0),
 		showFps:    ini_read_real("display", "show_fps", 0),
 		volume:     ini_read_real("audio", "master", 80),
+		alwaysRun:  ini_read_real("controls", "always_run", 0),   // R toggles it: run without holding Shift (Shift then walks)
 		keys:       {},
 	};
 	// Rebound keys (Options > Controls); anything not in the file keeps its default
@@ -317,6 +318,7 @@ function settings_save(){
 	ini_write_real("display", "fullscreen", global.settings.fullscreen);
 	ini_write_real("display", "show_fps", global.settings.showFps);
 	ini_write_real("audio", "master", global.settings.volume);
+	ini_write_real("controls", "always_run", global.settings[$ "alwaysRun"] ?? 0);
 	var names = variable_struct_get_names(global.settings.keys);
 	for(var i = 0; i < array_length(names); i++) ini_write_real("keys", names[i], global.settings.keys[$ names[i]]);
 	ini_close();
@@ -326,7 +328,7 @@ function settings_save(){
 
 /// @description The actions you can rebind, in the order the Controls screen lists them, with their default keys.
 function keys_default(){
-	static k = {up: vk_up, down: vk_down, left: vk_left, right: vk_right, run: vk_shift, walk: vk_control,
+	static k = {up: vk_up, down: vk_down, left: vk_left, right: vk_right, run: vk_shift, walk: vk_control, autorun: ord("R"),
 	            use: vk_space, interact: ord("E"), inventory: ord("I"), map: ord("M"), cast: ord("F"), spell: ord("Q")};
 	return k;
 }
@@ -334,7 +336,7 @@ function keys_default(){
 /// @description What each action does, for the Controls screen (same order as it lists them).
 function keys_actions(){
 	static a = [["up", "Walk up"], ["down", "Walk down"], ["left", "Walk left"], ["right", "Walk right"],
-	            ["run", "Run (hold)"], ["walk", "Walk slowly (hold)"], ["use", "Use the held tool (or click)"],
+	            ["run", "Run (hold)"], ["walk", "Walk slowly (hold)"], ["autorun", "Always run (on / off)"], ["use", "Use the held tool (or click)"],
 	            ["interact", "Talk / use / open"], ["inventory", "Inventory"], ["map", "World map"],
 	            ["cast", "Cast with a staff"], ["spell", "Change spell"]];
 	return a;
@@ -346,6 +348,20 @@ function key_of(_action){
 	var def = keys_default()[$ _action];
 	if((autotest_running() && !(variable_global_exists("keysInTests") && global.keysInTests)) || !variable_global_exists("settings") || !is_struct(global.settings[$ "keys"])) return def;
 	return global.settings.keys[$ _action] ?? def;
+}
+
+/// @description Always run (on / off): whether you run without holding the run key (then holding it walks). In
+/// tests, only when a test turns it on (autotest_always_run), so your setting can't change them.
+function always_run(){
+	if(autotest_running()) return variable_global_exists("testAlwaysRun") && global.testAlwaysRun;
+	return variable_global_exists("settings") && is_struct(global.settings) && (global.settings[$ "alwaysRun"] ?? 0) == 1;
+}
+
+/// @description Turn always run on or off (the autorun key), saved with the settings, and say so over the player.
+function always_run_toggle(){
+	if(autotest_running()) global.testAlwaysRun = !always_run();
+	else { global.settings.alwaysRun = always_run() ? 0 : 1; settings_save(); }
+	with(obj_plyr) popup(x, y - 60, always_run() ? "Always run: on" : "Always run: off", c_white);
 }
 
 /// @description A key's name for the screen: "E", "Space", "Shift"...

@@ -64,8 +64,6 @@ function world_resource_areas(){
 		 kinds: [["weeds", 45], ["bush", 25], ["stone", 25], ["forage_herb", 5]]},
 		{room: "rm_beirut", cells: layout_cells("rm_beirut", "a1_4"), max: 2, perDay: 1, start: 1,
 		 kinds: [["weeds", 45], ["bush", 25], ["stone", 25], ["forage_herb", 5]]},
-		{room: "rm_beirut", cells: layout_cells("rm_beirut", "a2_6"), max: 2, perDay: 1, start: 1,
-		 kinds: [["weeds", 45], ["bush", 25], ["stone", 25], ["forage_herb", 5]]},
 		{room: "rm_beirut", cells: layout_cells("rm_beirut", "a3_8"), max: 2, perDay: 1, start: 1,
 		 kinds: [["weeds", 45], ["bush", 25], ["stone", 25], ["forage_herb", 5]]},
 		{room: "rm_beirut", cells: layout_cells("rm_beirut", "a4_2"), max: 2, perDay: 1, start: 1,

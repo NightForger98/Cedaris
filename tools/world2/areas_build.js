@@ -263,7 +263,8 @@ side = "here";`});
 	// The town's houses between the landmarks (PixelLab, 2026-11-06): no way in, each by a street, on the
 	// blueprint's plain town ground with a cell clear around it
 	{ const FILL = ["prop_town_hallhouse", "prop_town_hallhouse2", "prop_town_hallhouse3", "prop_town_apartments",
-		"prop_town_yellowhouse", "prop_town_yellowhouse2", "prop_town_villa", "prop_town_villa2"].filter(k => T.things[k]);
+		"prop_town_yellowhouse", "prop_town_yellowhouse2", "prop_town_villa", "prop_town_villa2",
+		"prop_town_shop", "prop_town_shop2", "prop_town_cafe", "prop_town_cafe2", "prop_town_bakery", "prop_town_bakery2"].filter(k => T.things[k]);
 	  if(KIND[id] === "town" && FILL.length){
 		const fr = rng(seed + 57), want = Math.round(W * H / 150), road = ch => ch === ":" || ch === ",";
 		let n = 0;

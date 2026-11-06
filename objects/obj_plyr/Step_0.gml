@@ -130,6 +130,8 @@ var in_up = input_held(key_of("up"));
 var in_down = input_held(key_of("down"));
 var in_walk = input_held(key_of("walk"));
 var in_run = input_held(key_of("run"));
+if(input_pressed(key_of("autorun")) && !ui_blocking()) always_run_toggle();
+if(always_run() && !in_walk) in_run = !in_run;   // always run: holding the run key walks instead
 sprinting = in_run;   // drawn with the run cycle while moving (Draw)
 	//ALTERSPEED
 if(in_walk || in_run){

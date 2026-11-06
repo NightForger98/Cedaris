@@ -1,5 +1,1 @@
-targetRoom = rm_lighthouse;
-targetX = 160;
-targetY = 280;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+sprite_index = spr_prop_lamp;

@@ -1,2 +1,1 @@
-text = "Downtown";
-side = "here";
+sprite_index = spr_prop_lamp;

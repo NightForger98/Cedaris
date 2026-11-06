@@ -1,1 +1,1 @@
-sprite_index = spr_prop_sursock_gallery;
+sprite_index = spr_house_hospital;

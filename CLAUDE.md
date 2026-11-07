@@ -54,8 +54,10 @@ travel rules) still holds.
 - **Room build**: a point no door can reach is moved to the nearest reachable ground (`walk.js` `MOVED`, written into
   `room_layout`), with a note in the build output. Old decor that finds no room is left out quietly; old landmarks
   the blueprint already places anywhere aren't repeated.
-- **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only); clearing the farmhouse's
-  built-in furniture is the user's call.
+- **Farmhouse cleared** for your own furniture: `tools/rooms/clear_stamp.js` writes `stamps/house_*_clear.json` from
+  the captured stamps (furniture tiles dropped; the stairs, hearth, kitchen, bed and windows kept; the upstairs rug
+  stays); `rm_12` / `rm_123` use them, with their walk maps redrawn. The original stamps are kept.
+- **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only).
 
 ### Cedar & Sea's world (2026-11-06)
 

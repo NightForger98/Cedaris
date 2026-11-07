@@ -10,17 +10,17 @@ module.exports = {
 		"###################",
 		"###################",
 		"###################",
-		"...........#.######",   // (the floor above the sofa is open: the way from the stairs to the bed)
-		".......##........##",
-		".......##.........#",
-		"......####..##....#",
-		"......####..##.####",
-		"#.....#.....#.....#",
-		"#.....########....#",
+		"...............####",   // the stairs down (cols 2-3); the nightstands and the bed on the right
+		".................##",
+		"...................",
+		"...................",
+		"...................",
+		"...................",
+		"...................",
 	],
 
 	things: [
-		{stamp: "house_upstairs", crop: [1, 1, 19, 10], at: [0, 0]},
+		{stamp: "house_upstairs_clear", crop: [1, 1, 19, 10], at: [0, 0]},   // furniture cleared (tools/rooms/clear_stamp.js)
 	],
 
 	instances: [

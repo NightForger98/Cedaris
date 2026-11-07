@@ -2,8 +2,8 @@
 // The furnished floor is one stamp (captured from the first version of this room); the map only says where you can
 // walk. Every piece of furniture is under the player and solid over all of its art, so you're never drawn behind
 // a table or a chair - the first version had the furniture layers above the player.
-// Kitchen and dining room in the east, the hearth in the middle nook, stairs up (rm_123) in the north-west, the
-// door out to the farm at the bottom.
+// Cleared of its built-in furniture (2026-11-07, room for yours): the kitchen along the top right, the hearth in the
+// middle nook, stairs up (rm_123) in the north-west, the door out to the farm at the bottom.
 //
 // Map: . floor  # solid
 module.exports = {
@@ -13,23 +13,23 @@ module.exports = {
 		"###################",
 		"###################",
 		"###################",
-		"####.......########",
-		"..........#....####",
-		"####..#####....####",
-		"####..#####..##....",
-		"####..#####..##...#",
-		"##........#.####..#",
-		"##.......##.####..#",
-		"..##.###.##..##...#",
-		"#.##.###.##########",
-		"#.....#..##########",
-		"#..#.....####.#####",
-		"#.............#####",
-		"#...............###",
+		"####........#######",   // the stairs (cols 4-5), the kitchen counters (cols 12-18)
+		"..........#........",
+		"####..#####........",   // the hall's walls; the hearth's chimney at col 9
+		"####..#####........",
+		"####..##.##........",   // the hearth (col 9; obj_kitchen in front of it)
+		"..........#........",
+		"..........#........",
+		"..........#........",
+		"..........#########",
+		"..........#########",
+		"..........#########",
+		"...................",
+		"...................",
 	],
 
 	things: [
-		{stamp: "house_ground", crop: [1, 1, 19, 16], at: [0, 0]},
+		{stamp: "house_ground_clear", crop: [1, 1, 19, 16], at: [0, 0]},   // furniture cleared (tools/rooms/clear_stamp.js)
 	],
 
 	instances: [

@@ -24,6 +24,24 @@ if(facing != -1){
 	if(x_frame >= anim_length) {x_frame = 1}
 }
 
+// The dash's afterimages, fading (scripts/combat_feel)
+for(var i = 0; i < array_length(afterimages); i++){
+	var ai = afterimages[i];
+	character_draw(look, ai.frame, ai.row, round(ai.x - x_offset), round(ai.y - y_offset), 1, undefined, make_colour_rgb(150, 205, 255), ai.a);
+}
+// Dodging: a dash on the run cycle, or a hop back over its shadow
+if(dodgeT > 0){
+	var prog = 1 - dodgeT / dodgeTotal;
+	if(dodgeHop){
+		var hop = round(sin(prog * pi) * 14);
+		draw_set_alpha(0.3); draw_set_colour(c_black);
+		draw_ellipse(x - 10, y - 4, x + 10, y + 2, false);
+		draw_set_alpha(1); draw_set_colour(c_white);
+		character_draw(look, 1, y_frame, xx, yy - hop, 1);
+	} else if(look.body != "child") character_draw(look, floor(prog * 8) mod 8, y_frame + 17, xx, yy, 1);
+	else character_draw(look, 1 + floor(prog * 8) mod 8, y_frame, xx, yy, 1);
+	exit;
+}
 // Blink while invulnerable after a hit
 if(iframes > 0 && (iframes div 4) mod 2 == 0) exit;
 // Dancing (scripts/skills): its steps in turn - a row of the sheet, a hop, a sway
@@ -64,3 +82,14 @@ else if(act != undefined){
 else if(sprinting && facing != -1 && look.body != "child") character_draw(look, (max(1, floor(x_frame)) - 1) mod 8, y_frame + 17, xx, yy, 1);
 else character_draw(look, floor(x_frame), y_frame, xx, yy, 1);
 furniture_draw_preview();   // the held piece of furniture: where it would go
+// On guard (scripts/combat_feel): a shield of light in front, bright while a parry is still possible
+if(blocking){
+	var ga = player_face_angle(), early = (blockT <= parry_window());
+	draw_set_alpha(early ? 0.85 : 0.45);
+	draw_set_colour(early ? make_colour_rgb(255, 240, 150) : make_colour_rgb(150, 200, 255));
+	for(var k = -60; k < 60; k += 10){
+		draw_line_width(x + lengthdir_x(22, ga + k), y - 16 + lengthdir_y(22, ga + k), x + lengthdir_x(22, ga + k + 10), y - 16 + lengthdir_y(22, ga + k + 10), 2);
+	}
+	draw_set_alpha(1);
+	draw_set_colour(c_white);
+}

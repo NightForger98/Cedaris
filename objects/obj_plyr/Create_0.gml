@@ -36,3 +36,22 @@ doorPrev = undefined; // the transition (door, road out) you stood on last step:
 danceT = 0;
 danceKey = "";
 danceStep = 0;
+
+// Combat feel (scripts/combat_feel): guarding, the dodge and its afterimages, the knockback that eases off, a
+// queued swing, the combo and the aim
+blocking = false;
+blockT = 0;          // frames since the guard went up (a parry in the first few)
+parryCrit = false;   // a parry makes the next hit a critical
+dodgeT = 0;
+dodgeTotal = 1;
+dodgeHop = false;
+dodgeVX = 0;
+dodgeVY = 0;
+dodgeCool = 0;
+afterimages = [];
+knX = 0;
+knY = 0;
+bufAttack = 0;       // a swing pressed during the last one, waiting its turn
+comboN = 0;          // 0, 1, 2: the third swing in a row is the finisher
+comboT = 0;          // frames left to keep the combo going
+aimAng = -1;         // the swing's angle (the mouse, with a little help), or -1: where you face

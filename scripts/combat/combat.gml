@@ -164,8 +164,11 @@ function combat_player_hit(_user, _item, _dir, _w = undefined){
 		var heavy = gear_too_heavy(hs);
 		if(heavy != ""){ farm_message(heavy); return false; }
 		w = gear_weapon_stats(w, hs);   // its metal and your Strength (scripts/skills)
+		var cm = combat_combo_mult(_user);   // a combo's finisher (scripts/combat_feel)
+		if(cm > 1 && !(w[$ "ranged"] ?? false)){ w.dmg = [round(w.dmg[0] * cm), round(w.dmg[1] * cm)]; w.knock = (w[$ "knock"] ?? 3) * 2; }
 	}
 	var ang = [90, 180, 270, 0][_dir];
+	if(_user.object_index == obj_plyr && (_user[$ "aimAng"] ?? -1) != -1) ang = _user.aimAng;   // the mouse, with a little help (scripts/combat_feel)
 	if(w[$ "ranged"] ?? false){
 		if((w[$ "returns"] ?? false) && boomerang_out()) return false;   // still flying: catch it first
 		if(w.ammo != "" && !inv_is_free()){
@@ -193,6 +196,7 @@ function combat_player_hit(_user, _item, _dir, _w = undefined){
 /// @description Damage a monster with a weapon: Luck adds to the crit chance, Defence takes some off.
 function monster_damage(_inst, _w, _ang){
 	var crit = random(1) < _w.crit + stat("luck") * 0.005;
+	if(instance_exists(obj_plyr) && obj_plyr.parryCrit){ crit = true; obj_plyr.parryCrit = false; }   // after a parry (scripts/combat_feel)
 	var dmg = irandom_range(_w.dmg[0], _w.dmg[1]) * (crit ? (skill_has("desperado") ? 3 : 2) : 1);
 	dmg = max(1, dmg - _inst.def.def);
 	with(_inst){
@@ -200,10 +204,14 @@ function monster_damage(_inst, _w, _ang){
 		flash = 8;
 		hurtT = (_w[$ "stunTop"] ?? false) ? monster_stun_time(id) : (_w[$ "stun"] ?? 10);   // a top-level charge stuns
 		attacking = false;
+		windT = 0;   // a hit breaks its wind-up
 		kx = lengthdir_x(_w[$ "knock"] ?? 3, _ang);
 		ky = lengthdir_y(_w[$ "knock"] ?? 3, _ang);
 	}
 	popup(_inst.x, _inst.y - 58, (crit ? "Crit! " : "") + string(dmg), crit ? make_colour_rgb(255, 220, 80) : c_white);
+	combat_hitstop(crit ? 5 : 3);   // the hit lands with weight (scripts/combat_feel)
+	if(crit) global.camShake = max(variable_global_exists("camShake") ? global.camShake : 0, 5);
+	sfx(crit ? "crit" : "hit");
 	if((_w[$ "stunTop"] ?? false) && _inst.hp > 0) popup(_inst.x, _inst.y - 72, "Stunned!", make_colour_rgb(255, 230, 120));
 	if(_inst.hp <= 0) monster_kill(_inst);
 }
@@ -233,27 +241,32 @@ function monster_kill(_inst){
 
 // ---------------------------------------------------------------- the player gets hurt
 
-/// @description A monster hits the player: damage less Defence (at least 1), a moment of invulnerability and a
-/// shove away from the hit. At 0 health you're knocked out.
-function player_hurt(_dmg, _fromX, _fromY){
-	if(!instance_exists(obj_plyr) || obj_plyr.iframes > 0 || game.sleeping || game.dying) return;
-	if(random(1) < attr_dodge()){ popup(obj_plyr.x, obj_plyr.y - 62, "Dodged!", make_colour_rgb(160, 220, 255)); obj_plyr.iframes = 20; return; }   // Agility
-	var dmg = max(1, round(_dmg) - stat("defense"));
+/// @description Something hits the player from (_fromX, _fromY) (_src: the monster, if any): a dodge or the moment
+/// after a hit lets it pass; a guard blocks or parries it (scripts/combat_feel); Agility may dodge it; otherwise
+/// damage less Defence (at least 1), a short moment of invulnerability and a shove that eases off. At 0 health
+/// you're knocked out. Returns "hit", "blocked", "parried", "dodged" or "" (it didn't land).
+function player_hurt(_dmg, _fromX, _fromY, _src = noone){
+	if(!instance_exists(obj_plyr) || game.sleeping || game.dying) return "";
+	if(obj_plyr.dodgeT > 0) return "dodged";   // mid-dodge: it passes you by
+	if(obj_plyr.iframes > 0) return "";
+	var g = combat_guard(_dmg, _fromX, _fromY, _src);
+	if(g == "parried") return g;
+	if(g == "blocked") _dmg = global.blockLeft;
+	else if(random(1) < attr_dodge()){ popup(obj_plyr.x, obj_plyr.y - 62, "Dodged!", make_colour_rgb(160, 220, 255)); obj_plyr.iframes = 20; return "dodged"; }   // Agility
+	var dmg = (g == "blocked") ? max(0, round(_dmg) - stat("defense")) : max(1, round(_dmg) - stat("defense"));
 	global.vitals.health = max(0, global.vitals.health - dmg);
-	popup(obj_plyr.x, obj_plyr.y - 62, "-" + string(dmg), make_colour_rgb(240, 80, 70));
+	if(dmg > 0) popup(obj_plyr.x, obj_plyr.y - 62, "-" + string(dmg), make_colour_rgb(240, 80, 70));
 	with(obj_plyr){
-		iframes = 60;
+		iframes = (g == "blocked") ? 20 : 36;
 		// A hit knocks the wind out of a charge
-		if(charge != undefined){ charge = undefined; act = undefined; motion = undefined; }
-		var a = point_direction(_fromX, _fromY, x, y);
-		var solids = collision_solids(false);
-		repeat(12){
-			var nx = x + lengthdir_x(1, a), ny = y + lengthdir_y(1, a);
-			if(!place_meeting(nx, y, solids)) x = nx;
-			if(!place_meeting(x, ny, solids)) y = ny;
-		}
+		if(charge != undefined && g != "blocked"){ charge = undefined; act = undefined; motion = undefined; }
+		var a = point_direction(_fromX, _fromY, x, y), k = (g == "blocked") ? 2.5 : 5;
+		knX = lengthdir_x(k, a);
+		knY = lengthdir_y(k, a);
 	}
+	if(g != "blocked"){ combat_hitstop(3); global.camShake = max(variable_global_exists("camShake") ? global.camShake : 0, 6); sfx("hurt"); }
 	if(global.vitals.health <= 0) player_knocked_out();
+	return (g == "blocked") ? g : "hit";
 }
 
 /// @description Out cold: fade out, then death_penalty and wake beside the bed (see game's Step).

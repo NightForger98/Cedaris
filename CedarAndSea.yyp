@@ -147,6 +147,7 @@
   },
   "name":"CedarAndSea",
   "resources":[
+    {"id":{"name":"combat_feel","path":"scripts/combat_feel/combat_feel.yy",},},
     {"id":{"name":"skills","path":"scripts/skills/skills.yy",},},
     {"id":{"name":"obj_character","path":"objects/obj_character/obj_character.yy",},},
     {"id":{"name":"lpc_pal_metal_mithril","path":"sprites/lpc_pal_metal_mithril/lpc_pal_metal_mithril.yy",},},

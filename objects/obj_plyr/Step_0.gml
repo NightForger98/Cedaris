@@ -3,10 +3,33 @@
 // Stand still while a window is open (inventory, dialogue, notice board, lift); blink for a moment after being hit
 if(iframes > 0) iframes--;
 if(ui_blocking() || game.dying){ moveX = 0; moveY = 0; facing = -1; exit; }
+// A hit's freeze (scripts/combat_feel): everything holds for a few frames
+if(combat_hitstopped()){ global.hitStop--; exit; }
+afterimages_fade();
+// a knock back that eases off
+if(abs(knX) + abs(knY) > 0.3){
+	var ksol = collision_solids(false);
+	if(!place_meeting(x + knX, y, ksol)) x += knX;
+	if(!place_meeting(x, y + knY, ksol)) y += knY;
+	knX *= 0.75; knY *= 0.75;
+} else { knX = 0; knY = 0; }
+if(dodgeCool > 0) dodgeCool--;
+if(bufAttack > 0) bufAttack--;
+if(comboT > 0) comboT--;
+// mid-dodge: nothing else
+if(dodgeT > 0){ dodge_step(); exit; }
 // Dancing (scripts/skills): you stand and dance until it's done
 if(danceT > 0){ danceT--; moveX = 0; moveY = 0; facing = -1; exit; }
 if(input_pressed(key_of("skills")) && !instance_exists(obj_character)){ instance_create_depth(0, 0, -9000, obj_character); exit; }
 if(input_pressed(key_of("dance")) && act == undefined && charge == undefined){ dance_start(); exit; }
+// Dodge (Z): a dash, or a hop back; it cancels a swing, a charge or the guard (scripts/combat_feel)
+if(input_pressed(key_of("dodge")) && dodgeCool <= 0 && castSpell == "" && dodge_start()) exit;
+// Guard (V, or hold the right mouse button): it cancels a swing; a parry if a hit lands just as it goes up
+if(input_held(key_of("block")) || mouse_check_button(mb_right)){
+	if(!blocking){ blockT = 0; if(act != undefined && castSpell == ""){ act = undefined; motion = undefined; aimAng = -1; } charge = undefined; }
+	blocking = true;
+	blockT++;
+} else { blocking = false; blockT = 0; }
 
 // Charging: the swing waits on its wind-up while the button is held, a level every CHARGE_LEVEL_TIME; letting go plays
 // it with that level (see the charging script). You can still walk, slowly, without turning.
@@ -20,6 +43,7 @@ if(charge != undefined){
 		actCharge = charge.level;
 		// A charged spin or big swing plays out its own way (charge_release_motion)
 		motion = charge_release_motion(charge, actDir);
+		if(motion == undefined && comboN == 2){ var fa = (aimAng == -1) ? [90, 180, 270, 0][actDir] : aimAng; motion = {type: "lunge", dx: lengthdir_x(2, fa), dy: lengthdir_y(2, fa), left: 8}; }   // the combo's finisher steps in
 		if(motion != undefined && motion.type == "swing") act.fps *= 0.8;
 		// Weapons are free to swing, but a charged move costs 2 energy a level
 		if(actCharge > 0 && !item_is_tool(charge.item) && world_time_ready()) global.vitals.energy = max(0, global.vitals.energy - 2 * actCharge);
@@ -28,6 +52,7 @@ if(charge != undefined){
 }
 // Using the held item: play the action through, firing its effect once on the hit step
 if(act != undefined && charge == undefined){
+	if(mouse_check_button_pressed(mb_left) || input_pressed(key_of("use"))) bufAttack = 15;   // queued for when this one ends
 	// A spin holds the swing's hit frame while it turns, landing a third of the way round
 	var spinning = (motion != undefined && motion.type == "spin");
 	if(spinning){ motion.t++; actStep = (motion.t >= motion.hitAt) ? act.hit : 0; }
@@ -61,6 +86,8 @@ if(act != undefined && charge == undefined){
 		if(spinning) y_frame = 8 + motion.start; // back facing the way you started
 		act = undefined;
 		motion = undefined;
+		aimAng = -1;
+		comboT = 30;   // half a second to keep the combo going
 	}
 	moveX = 0; moveY = 0;
 	exit;
@@ -85,7 +112,8 @@ if(!busy && input_pressed(key_of("cast")) && look.parts.held.item != -1){
 }
 furniture_mouse_track();
 var planting = instance_exists(crops) && crops.planting;
-if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(key_of("use")))){
+if(!busy && !planting && !blocking && (mouse_check_button_pressed(mb_left) || input_pressed(key_of("use")) || bufAttack > 0)){
+	bufAttack = 0;
 	var faceDir = clamp(y_frame - 8, 0, 3);
 	var cell = instance_exists(crops) ? farm_front_cell(id, faceDir) : [0, 0];
 	var cropHere = instance_exists(crops) ? farm_crop_at(cell[0], cell[1]) : noone;
@@ -130,6 +158,14 @@ if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(k
 		motion = undefined;
 		actCharge = 0;
 		actDir = clamp(y_frame - 8, 0, 3); // walk rows 8-11 are n, w, s, e
+		// A weapon: toward the mouse (8 ways, a little aim help), the third swing in a row a finisher (scripts/combat_feel)
+		if(heldType == "held" && !item_is_tool(item_def(held.id).name)){
+			comboN = (comboT > 0) ? (comboN + 1) mod 3 : 0;
+			aimAng = combat_aim_angle(id);
+			y_frame = combat_row_for_angle(aimAng);
+			actDir = clamp(y_frame - 8, 0, 3);
+			if(comboN == 2) motion = {type: "lunge", dx: lengthdir_x(2, aimAng), dy: lengthdir_y(2, aimAng), left: 8};
+		} else { comboN = 0; aimAng = -1; }
 		// Chargeable: hold on the wind-up until the button's let go
 		var heldName = lpc_catalog().items[look.parts.held.item].name;
 		if(charge_max(heldName) > 0) charge = {item: heldName, t: 0, level: 0, max: charge_max(heldName), flash: 0};
@@ -158,6 +194,7 @@ spd *= inv_speed_multiplier();
 if(world_is_road(room_get_name(room), floor(x / 32), floor(y / 32))) spd *= ROAD_BOOST;
 if(world_time_ready() && vitals_exhausted()) spd *= 0.6; // exhausted: slow
 if(busy) spd *= 0.5; // charging: a slow shuffle, still facing the same way
+if(blocking) spd *= 0.5; // on guard: a careful step
 //RESETVARIABLES
 
 moveY= (in_down - in_up) * spd;

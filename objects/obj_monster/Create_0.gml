@@ -27,3 +27,5 @@ ky = 0;
 dying = false;
 deathT = 0;
 shooting = false;    // this attack is a shot (see monster_shoot)
+windT = 0;           // the wind-up before an attack: it crouches and flashes (scripts/combat_feel)
+windShoot = false;

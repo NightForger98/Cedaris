@@ -1,0 +1,65 @@
+# Combat feel (scripts/combat_feel): a guard blocks hits from in front (and parries one taken just as it goes up),
+# not from behind; a dodge lets hits pass; monsters wind up before they strike; three swings in a row make a combo
+start story
+wait 60
+mine 1
+wait 40
+call autotest_open_floor 120 380 90
+expectnot none
+call autotest_attr strength 10
+give c|held|Arming Sword
+equip c|held|Arming Sword
+face e
+wait 5
+# unguarded: the hit lands
+call autotest_hit_from 40 20
+expect hit
+# the guard just raised, facing the hit: a parry, no damage
+call autotest_guard 1 2
+call autotest_hit_from 40 20
+expect parried
+call autotest_guard 1 100
+call autotest_hit_from 40 20
+expect blocked
+# from behind, the guard doesn't help
+call autotest_hit_from -40 20
+expect hit
+call autotest_guard 0 0
+# a dodge (standing still: a hop back); mid-dodge hits pass
+call autotest_dodge
+expect hop
+call autotest_hit_from 40 20
+expect dodged
+wait 30
+# a slime in reach winds up before it strikes
+call autotest_monster_ahead slime 30
+call autotest_monsters_ready
+wait 4
+call autotest_windup
+expectnot windup 0
+shot 01_windup
+wait 60
+# pictures: the guard held up, and a dash to the right with its afterimages
+call autotest_monster_ahead slime 300
+keydown v
+wait 20
+shot 02_guard
+keyup v
+wait 5
+keydown right
+key z
+wait 6
+shot 03_dash
+keyup right
+wait 30
+# three swings in a row: the third is the finisher
+call autotest_monster_ahead slime 200
+key space
+wait 26
+key space
+wait 26
+key space
+wait 8
+call autotest_combo
+expect combo 2
+quit

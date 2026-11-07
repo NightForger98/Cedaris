@@ -1,6 +1,7 @@
 /// @description Wander until you come close, then chase and attack; stunned and pushed back when hit
 // The world holds still in menus and fades
 if(ui_blocking() || instance_exists(obj_menu) || game.doTransition || game.dying || game.sleeping) exit;
+if(combat_hitstopped()) exit;   // a hit's freeze (scripts/combat_feel)
 if(dying){ if(++deathT > 24) instance_destroy(); exit; }
 if(flash > 0) flash--;
 if(cooldown > 0) cooldown--;
@@ -18,13 +19,36 @@ if(hurtT > 0){
 }
 
 var p = instance_exists(obj_plyr) ? obj_plyr : noone;
+// The wind-up: a moment's warning (a crouch and a flash) before the blow - time to block, parry or dodge
+if(windT > 0){
+	windT--;
+	if(windT == 0){
+		attacking = true;
+		shooting = windShoot;
+		step = 0;
+		hitDone = false;
+		if(look != undefined){
+			// Its weapon's swing, or a bare-handed slash
+			act = character_action_for(look) ?? {name: "slash", custom: false, row: 12, seq: [0, 1, 2, 3, 4, 5], frames: 6, fs: 64, fps: 12, hit: 3};
+			actFrames = act.frames;
+			actHit = act.hit;
+			actFps = act.fps;
+		} else {
+			actFrames = def.frames;
+			actHit = floor(def.frames * 0.6);
+			actFps = 10;
+		}
+	}
+	depth_sort();
+	exit;
+}
 if(attacking){
 	step += actFps / game_get_speed(gamespeed_fps);
 	if(!hitDone && step >= actHit){
 		hitDone = true;
 		// A shot at range, or a blow up close
 		if(shooting && p != noone) monster_shoot(id, p);
-		else if(p != noone && point_distance(x, y, p.x, p.y) <= def.reach + 10) player_hurt(irandom_range(def.dmg[0], def.dmg[1]) * toughness, x, y);
+		else if(p != noone && point_distance(x, y, p.x, p.y) <= def.reach + 10) player_hurt(irandom_range(def.dmg[0], def.dmg[1]) * toughness, x, y, id);
 	}
 	if(step >= actFrames){ attacking = false; cooldown = shooting ? irandom_range(70, 120) : irandom_range(40, 80); }
 	depth_sort();
@@ -57,24 +81,11 @@ if(d < aggro){
 	var rg = def[$ "ranged"];
 	var canShoot = rg != undefined && d > def.reach && d <= rg.range;
 	if((d <= def.reach || canShoot) && cooldown <= 0){
-		attacking = true;
-		shooting = canShoot;
-		if(def[$ "tell"] ?? false) flash = 8;   // a witch flashes as she starts to cast, so you can dodge
-		step = 0;
-		hitDone = false;
+		// first the wind-up (above): 0.3 s, longer for a shot or a boss
+		windT = ((def[$ "boss"] ?? false) ? 26 : 18) + (canShoot ? 6 : 0);
+		windShoot = canShoot;
 		moveX = 0;
 		moveY = 0;
-		if(look != undefined){
-			// Its weapon's swing, or a bare-handed slash
-			act = character_action_for(look) ?? {name: "slash", custom: false, row: 12, seq: [0, 1, 2, 3, 4, 5], frames: 6, fs: 64, fps: 12, hit: 3};
-			actFrames = act.frames;
-			actHit = act.hit;
-			actFps = act.fps;
-		} else {
-			actFrames = def.frames;
-			actHit = floor(def.frames * 0.6);
-			actFps = 10;
-		}
 	} else if((def[$ "kite"] ?? false) && d < rg.range * 0.45){
 		// Too close for a witch's liking: back away
 		moveX = -lengthdir_x(def.speed, a);

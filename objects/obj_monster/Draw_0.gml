@@ -24,15 +24,27 @@ if(lk == "moth"){
 	                     (dirIdx == 1) ? -1 : 1, 1, make_colour_rgb(220, 210, 255), 1);
 	exit;
 }
+// The wind-up (scripts/combat_feel): a crouch, a red flash every few frames, and a "!" over its head
+var crouch = (windT > 0) ? 3 : 0, windFlash = (windT > 0 && (windT div 3) mod 2 == 0);
+if(windT > 0){
+	draw_set_font(fnt_eq);
+	draw_set_halign(fa_center);
+	draw_text_transformed_colour(x, y - 66 * sc, "!", 0.6 * wtx(), 0.6 * wtx(), 0, make_colour_rgb(255, 90, 70), make_colour_rgb(255, 90, 70), make_colour_rgb(255, 90, 70), make_colour_rgb(255, 90, 70), 1);
+	draw_set_halign(fa_left);
+}
 if(look != undefined){
-	var xx = round(x - 32 * sc), yy = round(y - 58 * sc);
+	var xx = round(x - 32 * sc), yy = round(y - 58 * sc) + crouch;
+	if(windFlash){ character_draw(look, 0, 8 + dirIdx, xx, yy, sc, undefined, make_colour_rgb(255, 110, 90)); }
+	else
 	if(attacking && act != undefined) character_draw(look, 0, 0, xx, yy, sc, {act: act, i: floor(step), dir: dirIdx});
 	else character_draw(look, (moveX != 0 || moveY != 0) ? 1 + floor(frame) mod 8 : 0, 8 + dirIdx, xx, yy, sc);
 } else {
 	// [LPC] Monsters sheets: the attack row doubles as the idle loop (its first frames)
 	var f = attacking ? min(floor(step), def.frames - 1) : floor(frame) mod 3;
 	var bob = (def[$ "flies"] ?? false) ? sin(current_time / 150 + x * 0.1) * 3 : 0;
-	draw_sprite_part_ext(def.spr, 0, f * 64, dirIdx * 64, 64, 64, round(x - 32 * sc), round(y - 54 * sc + bob), sc, sc, def[$ "tint"] ?? c_white, 1);
+	if(windFlash) gpu_set_fog(true, make_colour_rgb(255, 110, 90), 0, 1);
+	draw_sprite_part_ext(def.spr, 0, f * 64, dirIdx * 64, 64, 64, round(x - 32 * sc), round(y - 54 * sc + bob) + crouch, sc, sc, def[$ "tint"] ?? c_white, 1);
+	if(windFlash) gpu_set_fog(false, c_white, 0, 1);
 }
 if(hp < hpMax && !dying && !(def[$ "boss"] ?? false)){ // bosses show theirs on the HUD
 	var w = 28, bx = x - w / 2, by = y - 62;

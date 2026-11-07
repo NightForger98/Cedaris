@@ -386,7 +386,7 @@ function character_story_problems(_look){
 /// then _frame and _row are ignored.
 /// _action: {act, i, dir} while acting, plus fx while charging (charge_fx: the tool moved, tilted and glowing, the
 /// face blushing). _sil: a colour to draw the whole look flat in (the cursed outline), or -1.
-function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined, _sil = -1){
+function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined, _sil = -1, _alpha = 1){
 	var cat = lpc_catalog();
 	var parts = _look.parts;
 	var skin = parts.body.pal;
@@ -470,7 +470,7 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 			// Its frame, coloured, onto a surface first (see character_held_surface), then turned with the surface
 			var hs = character_held_surface(e);
 			if(e.pal != -4 && _sil == -1) lorikeet_reset();
-			character_draw_held(hs, e, _x, _y, _scale, fx, 1);
+			character_draw_held(hs, e, _x, _y, _scale, fx, _alpha);
 			// A charging tool glows (drawn again, added on top)
 			if(fx.glow > 0){
 				gpu_set_blendmode(bm_add);
@@ -479,7 +479,7 @@ function character_draw(_look, _frame, _row, _x, _y, _scale, _action = undefined
 			}
 		}
 		else{
-			draw_sprite_part_ext(e.spr, 0, e.sx, e.sy, e.sw, e.sw, e.dx, e.dy, _scale, _scale, c_white, 1);
+			draw_sprite_part_ext(e.spr, 0, e.sx, e.sy, e.sw, e.sw, e.dx, e.dy, _scale, _scale, c_white, _alpha);
 			if(e.pal != -4 && _sil == -1) lorikeet_reset();
 		}
 		// Straining: the head goes red (under the hair, which is drawn after it)

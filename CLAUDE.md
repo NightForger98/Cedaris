@@ -80,7 +80,17 @@ travel rules) still holds.
   recolours. Tools show their upgrade metal in hand (`tool_tier_pal`; `lpc_pal_metal_mithril` was made for it).
   Dances: Ayla teaches at the tavern 18-22:30 (shop "dance", lesson items `v|<dance>`, Agility gates); B dances your
   best (friendship from villagers watching once a day; a festival's dance contest). Test `skills`.
-- **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only); the user's edited villager
+- **Combat feel** (`scripts/combat_feel`, 2026-11-07): guard (V or hold right mouse; `block_power` by weapon class and
+  metal, 2 energy a blocked hit) with a parry in the first `parry_window` frames (Agility widens it: no damage, the
+  monster stunned, your next hit a crit); monsters wind up 0.3 s before striking (`windT`: a crouch, red flashes, a
+  "!"; a hit interrupts it); hit-stop (`global.hitStop`, 3-6 frames) and the existing `global.camShake`; knockback
+  eases off (`knX`/`knY`) and the after-hit invulnerability is 0.6 s; a pressed swing is queued (`bufAttack`); a
+  three-swing combo (the third: x1.5 damage, double knockback, a lunge); weapons aim at the mouse in 8 directions with
+  a little pull toward a monster near the line; guard and dodge cancel a swing; dodge (Z, 4 energy): a dash on the run
+  cycle with afterimages, or a hop back over a shadow (standing still, or heading away from where you face).
+  `player_hurt` now returns "hit"/"blocked"/"parried"/"dodged"/"". `sfx(name)` plays `snd_<name>` once sounds exist
+  (hit, crit, hurt, block, parry, dodge). Test `combat_feel`.
+- **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only); sounds; the user's edited villager
   list (a Word file) is still to come - apply it to `villager_table` / `villager_routines`; their dancer shop may
   replace Ayla's lessons.
 

@@ -1,6 +1,6 @@
 /// @description Fly; stop at walls; hit the first monster it reaches. A boomerang (weapon.returns) flies out to its
 /// range or a wall, then back to its owner, hitting every monster it passes once on the way out and once on the way back.
-if(instance_exists(obj_inventory) || instance_exists(obj_menu)) exit;
+if(instance_exists(obj_inventory) || instance_exists(obj_menu) || combat_hitstopped()) exit;
 var boomer = weapon[$ "returns"] ?? false;
 if(boomer && back){
 	// Home in on the thrower; caught when it reaches them

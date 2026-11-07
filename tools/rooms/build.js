@@ -413,7 +413,8 @@ function writeLayout(){
 		const name = f.replace(/\.js$/, "");
 		delete require.cache[require.resolve(path.join(__dirname, "specs", f))];
 		const s = require(path.join(__dirname, "specs", f));
-		const pts = Object.entries(s.points || {}).map(([k, v]) => `${k}: [${v.join(", ")}]`).join(", ");
+		const moved = require("./walk.js").MOVED[name] || {};
+		const pts = Object.entries(Object.assign({}, s.points || {}, moved)).map(([k, v]) => `${k}: [${v.join(", ")}]`).join(", ");
 		const ars = Object.entries(s.areas || {}).map(([k, v]) => `${k}: [${v.join(", ")}]`).join(", ");
 		body += `\t\t${name}: {points: {${pts}}, areas: {${ars}}},\n`;
 	}
@@ -475,6 +476,6 @@ if(require.main === module){
 	let names = process.argv.slice(2);
 	if(names.length === 0 || names[0] === "all") names = fs.readdirSync(path.join(__dirname, "specs")).filter(f => f.endsWith(".js")).map(f => f.replace(/\.js$/, ""));
 	for(const n of names) build(n);
+	require("./walk.js").writeWalk();   // (first: it moves points nobody could reach)
 	writeLayout();
-	require("./walk.js").writeWalk();
 }

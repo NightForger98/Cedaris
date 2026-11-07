@@ -11,6 +11,7 @@ const {root, readYy} = require("./yy.js");
 const T = require("./tiles.js");
 
 const CELL = 32;
+const MOVED = {};   // {room: {point: [x, y]}}: points moved to reachable ground (build.js writes them to room_layout)
 // Objects that stand in the way though they aren't collision boxes (one cell under their origin)
 const BLOCKERS = ["obj_furnace", "obj_crafting_table", "obj_shipping_bin", "obj_quest_board", "obj_kitchen"];
 
@@ -75,7 +76,18 @@ function checkReach(name, spec, w){
 		const c = near(px, py);
 		if(!c || !seen[c[1] * w.W + c[0]]) console.warn(`  ${name}: ${label} (${px}, ${py}) can't be reached from the door`);
 	};
-	for(const [k, [px, py]] of Object.entries(spec.points || {})) check(k, px, py);
+	// a point that can't be reached moves to the nearest ground that can (the spec's points are shared with
+	// build.js's room_layout, which is written after this)
+	for(const [k, [px, py]] of Object.entries(spec.points || {})){
+		const c = near(px, py);
+		if(c && seen[c[1] * w.W + c[0]]) continue;
+		const cx = Math.floor(px / CELL), cy = Math.floor(py / CELL);
+		let best = null, bd = 1e9;
+		for(let y = Math.max(0, cy - 40); y <= Math.min(w.H - 1, cy + 40); y++) for(let x = Math.max(0, cx - 40); x <= Math.min(w.W - 1, cx + 40); x++)
+			if(seen[y * w.W + x]){ const d = Math.hypot(x - cx, y - cy); if(d < bd){ bd = d; best = [x, y]; } }
+		if(best){ (MOVED[name] = MOVED[name] || {})[k] = [best[0] * CELL + 16, best[1] * CELL + 16]; console.log(`  ${name}: ${k} moved ${bd.toFixed(1)} cells to reachable ground`); }
+		else check(k, px, py);
+	}
 	for(const d of w.doors) check("door to " + d[2], d[0], d[1]);
 }
 
@@ -115,6 +127,6 @@ ${body}	};
 	}
 }
 
-module.exports = {writeWalk, roomWalk};
+module.exports = {writeWalk, roomWalk, MOVED};
 
 if(require.main === module) writeWalk();

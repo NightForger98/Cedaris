@@ -291,7 +291,7 @@ stop = "${name.replace(/"/g, "")}";`});
 		const items = [...(R.landmarks || []).map(l => ({lm: l})), ...(R.decor || []).map(d => ({is: d.is}))];
 		for(const it of items){
 			const l = it.lm;
-			if(l && l.is && placedNames.has(l.is) && here.some(b => THING[b.name] === l.is)) continue;   // on the blueprint already
+			if(l && l.is && placedNames.has(l.is) && LAYOUT.buildings.some(b => THING[b.name] === l.is)) continue;   // on the blueprint already (in any room)
 			const ru = l && l.ruin ? RUINS[l.ruin] : null;
 			const is = it.is || (l && l.is);
 			const [w, h] = is ? size(is) : ru ? [ru.w, ru.h] : [l.w || 2, l.h || 3];
@@ -299,12 +299,12 @@ stop = "${name.replace(/"/g, "")}";`});
 			const want = [cx + qx * Math.round((x2 - x1) / 4), cy + qy * Math.round((y2 - y1) / 4)];
 			let spot = null;
 			// (the sea arch stands in the sea; anything else on open ground, as near its old room's spot as there's room)
-			const sea = is === "prop_sea_arch", okk = sea ? ["~"] : [".", ",", "_"];
+			const sea = is === "prop_sea_arch", okk = sea ? ["~"] : [".", ",", "_", ";"];   // (";": the city's paved squares)
 			for(let d = 0; d <= 60 && !spot; d++) for(let dy = -d; dy <= d && !spot; dy++) for(let dx = -d; dx <= d && !spot; dx++){
 				if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
 				if(free(want[0] + dx, want[1] + dy, w, h, okk, sea)) spot = [want[0] + dx, want[1] + dy];
 			}
-			if(!spot){ console.log(`  ${id}: no room for ${o}'s ${is || (l && (l.ruin || l.obj))}`); continue; }
+			if(!spot){ if(l) console.log(`  ${id}: no room for ${o}'s ${is || l.ruin || l.obj}`); continue; }   // (decor that doesn't fit is left out)
 			if(is) things.push({is, at: spot});
 			else if(ru) for(const [p, ddx, ddy] of ru.parts) things.push({is: p, at: [spot[0] + ddx, spot[1] + ddy]});
 			else if(l.obj) instances.push({obj: l.obj, x: (spot[0] + w / 2) * 32, y: (spot[1] + h) * 32 - 8});
@@ -421,8 +421,10 @@ side = "here";`});
 		// straight runs on the shore's first tile (the path behind stays open): along the north coast a row per column, down the west coast a column per
 		// row, each smoothed to the most common value of its neighbours (so the runs are long), steps joined by posts
 		const land = (c, r) => own(c, r) && [".", ",", ":", "_"].includes(at(c, r));
+		const placed = {};
 		const fence = (c, r, tile) => { if(!own(c, r) || ![".", "_", ","].includes(at(c, r)) || taken.has(c + "," + r)) return;
-			things.push({src: [tile[0], tile[1], 1, 1], tileset: LPCR, at: [c, r], role: "decor", solid: [[0, 0, 1, 1]]}); taken.add(c + "," + r); };
+			const t = {src: [tile[0], tile[1], 1, 1], tileset: LPCR, at: [c, r], role: "decor", solid: [[0, 0, 1, 1]]};
+			things.push(t); placed[c + "," + r] = t; taken.add(c + "," + r); };
 		const mode = (arr, i) => { const w = arr.slice(Math.max(0, i - 3), i + 4).filter(v => v != null), cnt = {};
 			for(const v of w) cnt[v] = (cnt[v] || 0) + 1; return w.length ? +Object.keys(cnt).sort((p, q) => cnt[q] - cnt[p] || p - q)[0] : null; };
 		// north coast: world x 16-44
@@ -439,6 +441,12 @@ side = "here";`});
 		const wS = wCol.map((_, i) => wCol[i] == null ? null : mode(wCol, i));
 		for(let r = 0; r < H; r++){ if(wS[r] == null) continue; fence(wS[r], r, [31, 25]);
 			if(r > 0 && wS[r - 1] != null && wS[r - 1] !== wS[r]) for(let c = Math.min(wS[r - 1], wS[r]) + 1; c < Math.max(wS[r - 1], wS[r]); c++) fence(c, r, [32, 24]); }
+		// where a road (or anything else) breaks a rail run, the run ends in a post, not a rail cut off in mid-air
+		for(const [k, t] of Object.entries(placed)){
+			if(t.src[0] !== 32) continue;
+			const [c, r] = k.split(",").map(Number);
+			if(!placed[(c - 1) + "," + r] || !placed[(c + 1) + "," + r]){ t.src[0] = 31; t.src[1] = 25; }
+		}
 	}
 
 	// Waterfalls where the mountain stream spills over a cliff (the blueprint's falls): the picture's falling column on the

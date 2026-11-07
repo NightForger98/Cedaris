@@ -26,9 +26,36 @@ of the village, the town of Brindlemoor, the coast and the vale, who live their 
 
 ## Handoff
 
-Last updated 2026-11-06: **Cedar & Sea's world** - the 25 rooms merged into nine areas from the blueprint (just
+Last updated 2026-11-07: see "Since 2026-11-07" first, then **Cedar & Sea's world** - the 25 rooms merged into nine areas from the blueprint (just
 below). "The new world (world-rebuild)" after it describes the 25-room step it replaced; much of it (people, interiors,
 travel rules) still holds.
+
+### Since 2026-11-07
+
+- **Ground**: the PixelLab tilesets were replaced by **LPC Revised** (Eliza Wyatt's art, JaidynReiman's compilation,
+  `art/lpc_revised`, credited): `lpcrGround` in `tools/rooms/build.js` draws a Tiled corner wangset
+  (`art/lpc_revised/wang.json`, from `tools/map/lpcr_wang.js`) in a dual grid; `TS_lpcr_<season>` and the dark road
+  `TS_road_<season>` (`tools/map/road_seasons.js`) are swapped by `ground_season_apply`. Water is animated
+  (`tools/map/lpcr_anim.js`). Waterfalls (`obj_waterfall`) where the mountain stream drops; a fence on the north-west shore
+  (runs end in a post where a road crosses).
+- **The city is a straight grid** (`CITY_GRID` in `tools/map/blueprint.js`, from the user's red and black marks); the
+  drawn roads only outside town (`GATES` join them). Way-finding (`cityPlaces` in `areas_build.js`): the square's
+  fountain and benches, street-end landmarks, crossroads signposts naming the nearest shops, parks, gate lamps and
+  "Beirut" boards, district scenes, gold marks on visited buildings and district names on the M map. Villagers visit
+  the city's spots: `rm_beirut.square_a-d`, `cafe_a/b`, `market_a-c`, `park_1-6` (`scripts/schedules`).
+- **Camera** (`objects/camera`): zoom per room (`spec.view`: Beirut 1000x560; Phoenix Bay, Outskirts, Sunset Coast,
+  Mountain 750x420; others 500x280); leads ahead when running/sprinting outdoors; the free camera is debug-only.
+- **Farm** (`scripts/farm_buildings`): barn, coop, shed and silo in three stages; plans from Rowan plus wood and stone
+  (taken overnight, the morning note says what's missing). Shed stages cut crafting materials (`farm_shed_cost`);
+  silo stages keep unpetted animals content and speed up wool. Barn and coop interiors (`rm_barn`, `rm_coop`, hand
+  specs in `tools/rooms/specs`): animals sleep inside 6 pm-7 am, in rain, storms, snow and winter (`animals_indoors`).
+- **Furniture** (`scripts/furniture`): the flip key X mirrors a piece (saved as `flip`); `wall: true` pieces (the
+  painting) hang on a wall cell with floor below.
+- **Room build**: a point no door can reach is moved to the nearest reachable ground (`walk.js` `MOVED`, written into
+  `room_layout`), with a note in the build output. Old decor that finds no room is left out quietly; old landmarks
+  the blueprint already places anywhere aren't repeated.
+- **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only); clearing the farmhouse's
+  built-in furniture is the user's call.
 
 ### Cedar & Sea's world (2026-11-06)
 
@@ -76,16 +103,12 @@ travel rules) still holds.
   (`ground_season_apply`, at Room Start) swaps them. Test `ground`. Tile 0 of an atlas is never used (GameMaker's
   "no tile"). Mixing grass from different PixelLab sets made a patchwork: one set's grass only. PixelLab tilesets
   cost about 200 generations each.
-- **Known leftovers**: some Phoenix Bay decor finds no room (the old ferry dock prop, an obelisk, a stall, a barn);
-  two landmark points (Pigeon Rocks, Victory Hill) can't be reached from a door; Beirut has wide plain lawns between
-  districts - room for more town (PixelLab tilesets for terrain need a Wang corner-tile path in `build.js`).
 - **Always run**: R toggles it (`always_run`, saved in settings.ini; test `always_run`).
 - **Cable car and tram** (`scripts/transit`, `obj_transit`): the builder puts a stop in front of each one's art
   (`STATION_OF`, named for the district it stands in) and lists them in `world_transit()`. Idle until their town
   projects are done (board, Projects page 2: "cablecar" - Garrick, "tram" - Ottilie); then E rides: the cable car
   Hangar 12 <-> the Mountain top (50 gold), the tram from a menu of its 6 stops (20 gold); free mode rides free.
   Test `transit`. The board shows 4 projects a page.
-- **Not done yet**: the per-room camera, the interior kit.
 
 ### The new world (world-rebuild)
 
@@ -201,7 +224,9 @@ yet; interiors weren't changed to match the new outsides.
 - When asked to plan, they want questions first, then implementation.
 - When they say "stop", stop at once.
 - They always choose **Reload** in GameMaker (never Save).
-- End each step with a commit and push to `main`.
+- Commit as you go, but push only when a batch is finished (or when they say so). Never commit `tools/map/pl_key.txt`
+  (the PixelLab key; grep for "pixl_" before committing).
+- They test themselves; run the full suite only when asked.
 
 ### Next steps: waiting on the user
 
@@ -329,6 +354,7 @@ shows them; check with the user, then discard them before committing.
 
 ### GML gotchas hit before
 
+- `static all = ...` inside a function broke Room Start (array_get_index error): `all` is a keyword.
 - `all`, `id`, `score`, `pi`, `floor`, `y`, `power`, `solid` are built-ins (don't use as variable names; `solid` fails
   as "malformed assignment"); `crop` is an enum (in the crops object).
 - `not` is a keyword - even as a struct key it crashes the compiler with "Stack empty", and so does an accessor on a

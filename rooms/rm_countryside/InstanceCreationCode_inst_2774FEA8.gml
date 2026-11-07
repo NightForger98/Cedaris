@@ -1,2 +1,1 @@
-text = "Saint Thereza";
-side = "here";
+sprite_index = spr_prop_grapevine;

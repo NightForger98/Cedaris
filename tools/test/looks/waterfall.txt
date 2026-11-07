@@ -1,0 +1,21 @@
+# Look: the mountain stream's waterfalls (obj_waterfall), summer and frozen in winter
+start story
+wait 60
+call autotest_toughen
+time 11
+season 1
+room rm_mountain
+wait 20
+call autotest_to_point waterfall_1 0 0
+wait 10
+shot wf_summer
+season 3
+room rm_mountain
+wait 20
+call autotest_to_point waterfall_1 0 0
+wait 10
+shot wf_winter
+call autotest_to_point waterfall_2 0 0
+wait 10
+shot wf2_winter
+quit

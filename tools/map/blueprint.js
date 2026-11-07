@@ -129,6 +129,33 @@ for(let i = 0; i < river.length - 1; i++){
 }
 disc(246, 168, 3, 3, "river");
 
+// ---- a mountain stream (2026-11-06): from the snows below the summit west down the terraces into the Beirut River,
+// and with it to the sea. Where it crosses a cliff face the cliff stays and a waterfall spills west over it (FALLS,
+// in world_layout.json; tools/world2/areas_build.js puts obj_waterfall there)
+const STREAM = [[226, 22], [214, 23], [202, 22], [190, 23], [176, 22], [162, 23], [150, 22], [140, 22]];   // (it steps down at each fall)
+const FALLS = [];
+{ // walked west a tile at a time; at a cliff face the water drops DROP rows (the fall's picture: it arrives along the
+  // top from the east and falls down the screen), then runs on west from the splash
+  const DROP = 6, pts = [];
+  for(let i = 0; i < STREAM.length - 1; i++){ const [x1, y1] = STREAM[i], [x2, y2] = STREAM[i + 1];
+	for(let x = x1; x > x2; x--) pts.push([x, y1 + (y2 - y1) * (x1 - x) / (x1 - x2)]); }
+  let off = 0, skipTo = 1e9;
+  for(const [x, yf] of pts){
+	if(x > skipTo) continue;
+	const y = Math.round(yf + wob(x, 41, 1)) + off;
+	if(get(x + M, y + M) === "cliff" || get(x + M, y + 1 + M) === "cliff"){
+		// the lip right where the stream reaches the cliff; the water falls down the column west of it
+		if(!FALLS.some(q => Math.abs(q.x - x) < 6)){ FALLS.push({x: x + 1, y, dir: "left"});
+			// the plunge pool under the splash, joining the stream below
+			for(let yy = y + DROP - 2; yy <= y + DROP + 1; yy++) for(let xx = x - 2; xx <= x + 1; xx++) if(!["deep", "sea", "shallow"].includes(get(xx + M, yy + M))) set(xx + M, yy + M, "river");
+			off += DROP; skipTo = x - 1; }
+		continue;
+	}
+	// a footbridge every 8 tiles (not by a fall), so the stream cuts nothing off
+	const foot = ((x % 8) === 4 || (x % 8) === 5) && !FALLS.some(q => Math.abs(q.x - x) < 3);
+	for(const yy of [y, y + 1]){ const k = get(x + M, yy + M); if(!["deep", "sea", "shallow", "cliff"].includes(k)) set(x + M, yy + M, foot ? "pier" : "river"); }
+  } }
+
 // ---- roads (grey cobbles) and lanes (dirt), after Beirut's real ones, made simpler and wide enough to walk (main roads 3
 // tiles, streets 2). The old rooms' roads and the villagers' routes are kept for reference: design/map/old_rooms.json
 // and old_rooms_on_new.png (see tools/map/old_rooms.js).
@@ -210,14 +237,72 @@ for(const l of USER) for(let i = 0; i < l.length - 1; i++){ const [x1, y1] = l[i
 const besideUser = pts => { let n = 0, all = 0; for(let i = 0; i < pts.length - 1; i++){ const k = Math.max(1, Math.ceil(Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1])));
 	for(let t = 0; t < k; t++){ all++; const x = Math.round(pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t / k), y = Math.round(pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t / k); if(userGrid.has(x + "," + y)) n++; } }
 	return all ? n / all : 1; };
-for(const l of USER) lineWhere(l, "road", 0.5, hills.concat(["lane"]), () => true);
+// In the city (TOWN_BOX) the drawn roads are squared into straight streets (the user, 2026-11-07: "the city roads
+// should be straight", like the old map): each line straightened hard, its points on even tiles, every slanted stretch
+// turned into an L (along the longer way first); outside the city they keep their curves
+const inCity = p => p[0] >= TOWN_BOX[0] && p[0] <= TOWN_BOX[2] && p[1] >= TOWN_BOX[1] && p[1] <= TOWN_BOX[3];
+const dpSimplify = (pts, eps) => { if(pts.length < 3) return pts; let k = -1, dm = 0;
+	for(let i = 1; i < pts.length - 1; i++){ const d = segD(pts[i], pts[0], pts[pts.length - 1]); if(d > dm){ dm = d; k = i; } }
+	return dm <= eps ? [pts[0], pts[pts.length - 1]] : dpSimplify(pts.slice(0, k + 1), eps).slice(0, -1).concat(dpSimplify(pts.slice(k), eps)); };
+const snap2 = v => Math.round(v / 2) * 2;
+const squared = l => {
+	if(!l.some(inCity)) return l;
+	const p = dpSimplify(l, 2.5).map(q => inCity(q) ? [snap2(q[0]), snap2(q[1])] : q), out = [p[0]];
+	for(let i = 1; i < p.length; i++){
+		const [x1, y1] = out[out.length - 1], [x2, y2] = p[i];
+		if(inCity(p[i]) && inCity([x1, y1]) && x1 !== x2 && y1 !== y2) out.push(Math.abs(x2 - x1) >= Math.abs(y2 - y1) ? [x2, y1] : [x1, y2]);
+		out.push([x2, y2]);
+	}
+	return out;
+};
+const USER_DRAWN = USER.map(squared);
+// (the city: the hand-drawn grid of ROADS below, the user's pick, 2026-11-07 - "a grid like this"; their drawn roads
+// outside it)
+for(const l of USER) lineWhere(l, "road", 0.5, hills.concat(["lane"]), (x, y) => !inTown(x, y));
+// The city's grid (the user marked it on the map, 2026-11-07): straight streets, all 2 tiles wide, the verticals
+// reaching past the town's edge to meet the roads outside
+const CITY_GRID = {
+	corniche_north: [[14, 15], [144, 15]],   // along the port
+	hamra:          [[13, 31], [80, 31]],    // Red Street
+	the_ring:       [[40, 40], [146, 40]],   // east over the river
+	mazraa:         [[13, 62], [117, 62]],
+	corniche_west:  [[13, 15], [13, 82]],
+	verdun:         [[40, 31], [40, 62]],
+	tariq_jdideh:   [[51, 62], [51, 106]],
+	bechara_khoury: [[80, 15], [80, 106]],
+	damascus:       [[114, 40], [114, 106]],
+};
+for(const pts of Object.values(CITY_GRID)) lineWhere(pts, "road", 0.5, hills.concat(["lane"]), (x, y) => inTown(x, y) || y <= 108);
+// where a road from outside reaches the town's edge, a straight connector (an L: along, then across) to the nearest
+// city street
+const GATES = [];
+{ const gridSegs = Object.values(CITY_GRID), joined = GATES;
+  const nearestOnGrid = p => { let best = null, bd = 1e9;
+	for(const [[x1, y1], [x2, y2]] of gridSegs){ const q = [Math.max(Math.min(x1, x2), Math.min(Math.max(x1, x2), p[0])), Math.max(Math.min(y1, y2), Math.min(Math.max(y1, y2), p[1]))];
+		const d = Math.hypot(q[0] - p[0], q[1] - p[1]); if(d < bd){ bd = d; best = q; } } return [best, bd]; };
+  for(const l of USER){
+	for(let i = 1; i < l.length; i++){
+		const a2 = l[i - 1], b2 = l[i]; if(inTown(a2[0], a2[1]) === inTown(b2[0], b2[1])) continue;
+		const out = inTown(a2[0], a2[1]) ? b2 : a2, inn = inTown(a2[0], a2[1]) ? a2 : b2;
+		// the crossing: step from out toward in until inside
+		let c = out.slice(); for(let t = 0; t <= 1 && !inTown(c[0], c[1]); t += 0.02) c = [out[0] + (inn[0] - out[0]) * t, out[1] + (inn[1] - out[1]) * t];
+		c = [Math.round(c[0]), Math.round(c[1])];
+		const near = joined.find(j => Math.hypot(j[0] - c[0], j[1] - c[1]) < 7);
+		if(near){ lineWhere([out, c, near], "road", 0.5, hills.concat(["lane"]), () => true); continue; }   // (one connector for crossings close together)
+		joined.push(c);
+		const [g, d] = nearestOnGrid(c);
+		if(!g || d > 30) continue;
+		const pts = Math.abs(g[0] - c[0]) < Math.abs(g[1] - c[1]) ? [out, c, [c[0], g[1]], g] : [out, c, [g[0], c[1]], g];
+		lineWhere(pts, "road", 0.5, hills.concat(["lane"]), () => true);
+	}
+  } }
 // the other roads that become side lanes (if they reach a building): the drawn-by-hand ones and the real ones in town
 const SIDE_LATER = [];
 for(const [name, pts] of Object.entries(ROADS)) if(besideUser(pts) < 0.5) SIDE_LATER.push(pts);
 for(const [name, pts] of Object.entries(LANES)) lineWhere(pts, "lane", 0.5, hills, (x, y) => !inTown(x, y) && !userGrid.has(x + "," + y));
 // the real side streets, but none in the middle of town round Uptown and the Museum (the user: "excessive while
 // serving no real purpose"); there the main roads alone, and lanes only to the buildings that need them (below)
-const SIDE_STREETS = (x, y) => inTown(x, y) && !(x >= 66 && x <= 132 && y >= 62 && y <= 104);
+const SIDE_STREETS = () => false;   // (none: the city is its grid, plus the paths to the doors)
 for(const r of OSM.roads.filter(r => r.k === "lane")) if(besideUser(r.pts) < 0.5) lineWhere(r.pts, "lane", 0, hills, SIDE_STREETS);   // 1 tile wide, slimmer than the 2-tile roads
 for(const r of OSM.roads.filter(r => r.k === "road")) if(besideUser(r.pts) < 0.5) SIDE_LATER.push(r.pts.filter(p => inTown(p[0], p[1])));
 rect(82, 22, 96, 32, "plaza");                     // Martyrs' Square, downtown by the port
@@ -359,7 +444,7 @@ for(const k of B){
 	for(let t = 0; t < k; t++) o.push([pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t / k, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t / k]); } if(pts.length) o.push(pts[pts.length - 1]); return o; };
   // only near the buildings: a lane is the way from a main road to a door, not another street through town
   const nearAny = (x, y) => B.some(k => x >= k.x - 5 && x <= k.x + k.w + 4 && y >= k.y - 5 && y <= k.y + k.h + 4);
-  for(const pts of SIDE_LATER) if(pts.length > 1 && nearB(dense(pts))) lineWhere(pts, "lane", 0, hills, (x, y) => nearAny(x, y) && get(x + M, y + M) !== "road"); }
+  for(const pts of SIDE_LATER) if(pts.length > 1 && nearB(dense(pts))) lineWhere(pts, "lane", 0, hills, (x, y) => !inTown(x, y) && nearAny(x, y) && get(x + M, y + M) !== "road"); }
 
 // ---- side lanes that serve something (the user, 2026-11-06: "we don't want side roads leading nowhere"): a lane from
 // each building's door down to the nearest road if it's close and none is; then, in town, dead ends are cut back
@@ -526,7 +611,7 @@ console.log("world_blueprint.png " + TW + "x" + TH + " (1 px = 1 tile), preview 
 // name (points in world tiles) and every building's footprint where it ended up
 fs.writeFileSync(path.join(out, "world_layout.json"), JSON.stringify({
 	note: "World tiles: x 0-249 east, y 0-199 south (the blueprint image adds a 30-tile margin to the west and north). Roads are 3 tiles wide, streets and lanes 2.",
-	roads: ROADS, streets: STREETS, lanes: LANES, tram: TRAM, railway: RAILWAY, cable_car: CABLE,
+	roads: ROADS, streets: STREETS, lanes: LANES, tram: TRAM, railway: RAILWAY, cable_car: CABLE, stream: STREAM, falls: FALLS, city_grid: CITY_GRID, gates: GATES,
 	buildings: B.map(k => ({name: k.name, kind: k.kind, x: k.x, y: k.y, w: k.w, h: k.h})),
 }, null, 1));
 

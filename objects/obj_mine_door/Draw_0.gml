@@ -11,6 +11,6 @@ draw_set_font(fnt_eq);
 draw_set_halign(fa_center);
 draw_set_valign(fa_bottom);
 var t = inMine ? key_label("interact") + " Lift" : ((mine_lift_top() > 1) ? key_label("interact") + " Take the lift" : key_label("interact") + " Enter the mine");
-draw_text_transformed_colour(x, y - (inMine ? 62 : 18), t, 0.3, 0.3, 0, c_yellow, c_yellow, c_yellow, c_yellow, 1);
+draw_text_transformed_colour(x, y - (inMine ? 62 : 18), t, 0.3 * wtx(), 0.3 * wtx(), 0, c_yellow, c_yellow, c_yellow, c_yellow, 1);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);

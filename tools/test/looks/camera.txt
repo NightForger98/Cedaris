@@ -1,0 +1,16 @@
+# Look: the zoomed-out camera in the big outdoor areas (town 2x, the rest 3x)
+start story
+wait 60
+call autotest_toughen
+time 11
+room rm_beirut
+wait 20
+call autotest_to_point rm_downtown__mid 0 0
+wait 20
+shot cam_beirut
+room rm_outskirts
+wait 20
+call autotest_to_point lm_stadium 0 60
+wait 20
+shot cam_outskirts
+quit

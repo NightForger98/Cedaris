@@ -1,1 +1,1 @@
-sprite_index = spr_prop_lifeguard_hut;
+sprite_index = spr_house_fisherman_hut;

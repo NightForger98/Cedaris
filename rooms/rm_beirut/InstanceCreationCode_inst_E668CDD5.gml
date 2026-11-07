@@ -1,5 +1,5 @@
-targetRoom = rm_phoenix;
-targetX = 304;
-targetY = 1072;
+targetRoom = rm_library;
+targetX = 256;
+targetY = 312;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

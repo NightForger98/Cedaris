@@ -1,2 +1,1 @@
-text = "Sunset Coast";
-side = "w";
+sprite_index = spr_prop_alt_ward;

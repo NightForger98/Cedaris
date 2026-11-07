@@ -1,2 +1,1 @@
-text = "Abda's Ascent";
-side = "here";
+sprite_index = spr_prop_farm_coop_3;

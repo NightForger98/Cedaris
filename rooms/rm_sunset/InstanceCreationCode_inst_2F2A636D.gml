@@ -1,2 +1,5 @@
-text = "Olive Bay";
-side = "here";
+targetRoom = rm_boatyard;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

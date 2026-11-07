@@ -1,31 +1,28 @@
-# Always run (R, Options > Controls): on, you run without holding Shift, and holding it walks; R again turns it off
+# Always run (R, Options > Controls): your pace - running (on, the default) or walking (off); Shift sprints either way
 start story
 wait 60
 room rm_1 1296 400
 wait 30
 # (weeds and rocks spawn at random: clear the way east)
 call autotest_clear_near 400
-keydown right
-wait 10
-call autotest_gait
-expect walking
-keyup right
-key r
-wait 5
 call always_run
 expect 1
 keydown right
 wait 10
 call autotest_gait
-expect running
+expect walking
 keydown shift
 wait 5
 call autotest_gait
-expect walking
+expect running
 keyup shift
 keyup right
 key r
 wait 5
 call always_run
 expect 0
+key r
+wait 5
+call always_run
+expect 1
 quit

@@ -1,5 +1,5 @@
-targetRoom = rm_mountain;
-targetX = 272;
-targetY = 2000;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+targetRoom = rm_town_home_nw;
+targetX = 256;
+targetY = 312;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

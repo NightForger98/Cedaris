@@ -28,7 +28,7 @@ function tileIndex(tileset, c, r){ return r * tilesetImage(tileset).cols + c; }
 
 // Layers are made on demand: a role (where it sits against the player) and a tileset. A placement that would
 // overwrite a tile goes onto the next layer of the same role, so overlapping things stack.
-const ROLE_DEPTH = {above: 600, buildings: 1200, decor: 1300, soil: 1400, terrain: 1500, ground: 1600};
+const ROLE_DEPTH = {above: 600, buildings: 1200, decor: 1300, scatter: 1350, soil: 1400, terrain: 1500, ground: 1600};   // scatter: leaves and sprouts (hidden in winter, scripts/ground)
 
 class Layers {
 	constructor(W, H){ this.W = W; this.H = H; this.list = []; }
@@ -87,49 +87,42 @@ function autotile(def, has, W, H, rand){
 	return out;
 }
 
-// ---------------------------------------------------------------- the PixelLab ground (dual grid)
+// ---------------------------------------------------------------- the outdoor ground (dual grid)
 
-// spec.ground: a map of terrain letters (one a cell) drawn with the season atlases (tools/map/ground_atlas.js), in
-// place of the LPC terrain. The tiles sit on the corners where four cells meet - a layer one cell wider and taller,
-// half a cell up and left - and each shows those four cells' terrains. A tile holds two terrains; where its corners
-// have three, or a pair with no tiles, the rarest gives way to its neighbour (GIVE) until a real pair is left.
-const GROUND = {g: "grass", d: "dirt", r: "road", s: "sand", t: "trail", c: "concrete", w: "shallow", D: "deep", k: "rock", n: "snow"};
-const GPAIRS = [["grass", "dirt"], ["grass", "road"], ["grass", "sand"], ["grass", "trail"], ["grass", "concrete"],
-	["shallow", "sand"], ["deep", "shallow"], ["grass", "rock"], ["rock", "snow"]];
-const GIVE = {deep: "shallow", shallow: "sand", sand: "grass", dirt: "grass", road: "grass", trail: "grass", concrete: "grass", rock: "grass", snow: "rock"};
-function groundLayer(spec, W, H, rand){
-	const rows = spec.ground.rows, ts = spec.ground.tileset || "TS_ground_summer", cols = tilesetImage(ts).cols;
-	const terr = (x, y) => GROUND[(rows[Math.max(0, Math.min(H - 1, y))] || "")[Math.max(0, Math.min(W - 1, x))]] || "grass";
-	const pairOf = (a, b) => { const i = GPAIRS.findIndex(([l, u]) => (l === a && u === b) || (l === b && u === a)); return i; };
-	const tileAt = (b, key) => (Math.floor(b / 4) * 4 + Math.floor(key / 4)) * cols + (b % 4) * 4 + key % 4;
-	const plain = {};   // terrain -> the blocks where it's whole ([block, key])
-	GPAIRS.forEach(([l, u], b) => { (plain[l] = plain[l] || []).push([b, 0]); (plain[u] = plain[u] || []).push([b, 15]); });
+// spec.ground: a map of terrain letters (one a cell). The tiles sit on the corners where four cells meet - a layer one
+// cell wider and taller, half a cell up and left - and each shows those four cells' terrains. (A PixelLab version
+// of this, 2026-11-06, was dropped for the LPC Revised art: its tiles looked like blocks; art/terrain_pl.)
+// The LPC Revised ground (art/lpc_revised, TS_lpcr_<season>): its corner table (tools/map/lpcr_wang.js) gives, for
+// any four corner terrains, the tiles that draw them (a random one of the variants). Letters: g grass, d dirt (lanes and
+// under the roads - the old dark road autotiles over it), s sand, w shallow water, D deep water; rock, snow, trail and
+// concrete fall back to dirt.
+const LPCR_OF = {g: "grass", d: "dirt", r: "dirt", t: "dirt", c: "dirt", k: "dirt", n: "dirt", s: "sand", w: "shallow_water", D: "deep_water"};
+const LPCR_GIVE = {deep_water: "shallow_water", shallow_water: "sand", sand: "grass", dirt: "grass"};
+let LPCR = null;
+function lpcrGround(spec, W, H, rand){
+	if(!LPCR){
+		const t = JSON.parse(fs.readFileSync(path.join(root, "art", "lpc_revised", "wang.json"), "utf8")), by = {};
+		for(const x of t.tiles) if(x.c.every(c => c)) (by[x.c.join(",")] = by[x.c.join(",")] || []).push(x.id);
+		LPCR = by;
+	}
+	const rows = spec.ground.rows;
+	const terr = (x, y) => LPCR_OF[(rows[Math.max(0, Math.min(H - 1, y))] || "")[Math.max(0, Math.min(W - 1, x))]] || "grass";
 	const tiles = new Array((W + 1) * (H + 1)).fill(0);
 	let gave = 0;
 	for(let y = 0; y <= H; y++) for(let x = 0; x <= W; x++){
 		let c = [terr(x - 1, y - 1), terr(x, y - 1), terr(x - 1, y), terr(x, y)];
-		for(let guard = 0; guard < 10; guard++){
-			const u = [...new Set(c)];
-			if(u.length === 1 || (u.length === 2 && pairOf(u[0], u[1]) >= 0)) break;
-			const victim = u.sort((a, b) => c.filter(t => t === a).length - c.filter(t => t === b).length)[0];
-			const to = GIVE[victim] || u.find(t => t !== victim);
-			c = c.map(t => t === victim ? to : t); gave++;
+		for(let g = 0; g < 10 && !LPCR[c.join(",")]; g++){
+			const u = [...new Set(c)], victim = u.sort((a, b) => c.filter(t => t === a).length - c.filter(t => t === b).length)[0];
+			c = c.map(t => t === victim ? (LPCR_GIVE[victim] || "grass") : t); gave++;
 		}
-		const u = [...new Set(c)];
-		let tile;
-		if(u.length === 1){
-			// a whole cell of one terrain (never tile 0, which GameMaker takes for "no tile")
-			if(u[0] === "grass") tile = tileAt(1, 0);   // (one set's grass: the others' differ a shade, a patchwork mixed)
-			else { const pick = plain[u[0]][0]; tile = tileAt(pick[0], pick[1]); }
-			if(!tile) tile = tileAt(1, 0);
-		} else {
-			const b = pairOf(u[0], u[1]), up = GPAIRS[b][1];
-			tile = tileAt(b, c.reduce((v, t, i) => v | (t === up ? 8 >> i : 0), 0));
-		}
-		tiles[y * (W + 1) + x] = tile || EMPTY;
+		const opts = LPCR[c.join(",")] || LPCR["grass,grass,grass,grass"];
+		// mostly the first (plainest) variant, now and then another
+		tiles[y * (W + 1) + x] = (rand() < 0.75 ? opts[0] : opts[Math.floor(rand() * opts.length)]) || EMPTY;
 	}
-	return {role: "ground", tileset: ts, k: 0, name: "Ground", tiles, order: -1, w: W + 1, h: H + 1, x: -16, y: -16, gave};
+	return {role: "ground", tileset: spec.ground.tileset, k: 0, name: "Ground", tiles, order: -1, w: W + 1, h: H + 1, x: -16, y: -16, gave};
 }
+
+function groundLayer(spec, W, H, rand){ return lpcrGround(spec, W, H, rand); }
 
 // ---------------------------------------------------------------- things
 
@@ -245,7 +238,7 @@ function build(roomName, opts = {}){
 		for(let i = 0; i < W * H; i++){ const [c, r] = bf[Math.floor(rand() * bf.length)]; g.tiles[i] = tileIndex(base.tileset, c, r); }
 	}
 	Object.entries(T.terrains).forEach(([tname, def], ti) => {
-		if(spec.ground || tname === (spec.base || "grass")) return;
+		if((spec.ground && !(spec.ground.overlay || []).includes(tname)) || tname === (spec.base || "grass")) return;
 		const has = (x, y) => (cellDef(x, y).terrain || "") === tname || (cellDef(x, y).under || []).includes(tname);
 		let any = false;
 		for(let y = 0; y < H && !any; y++) for(let x = 0; x < W; x++) if(has(x, y)){ any = true; break; }
@@ -310,7 +303,7 @@ boxH = ${gr.h * CELL};`});
 				if(cx >= W || cy >= H || busy[cy * W + cx] || solid[cy * W + cx] || !sc.on.includes(charAt(cx, cy))) free = false;
 			}
 			if(!free) continue;
-			gr.layers.forEach(l => layers.put(def.role || "decor", l.tileset, l.tiles, x, y));
+			gr.layers.forEach(l => layers.put(spec.ground ? "scatter" : (def.role || "decor"), l.tileset, l.tiles, x, y));
 			for(let j = 0; j < gr.h; j++) for(let i = 0; i < gr.w; i++) busy[(y + j) * W + x + i] = 1;
 		}
 	}
@@ -345,8 +338,20 @@ boxH = ${gr.h * CELL};`});
 	room.roomSettings.Width = W * CELL;
 	room.roomSettings.Height = H * CELL;
 	// view: [w, h] of the camera's view (interiors use the farmhouse's closer 375 x 210, so a small room fills the screen)
-	if(spec.view){ room.views[0].wview = spec.view[0]; room.views[0].hview = spec.view[1]; }
+	if(spec.view){ room.views[0].wview = spec.view[0]; room.views[0].hview = spec.view[1]; room.views[0].hborder = Math.round(spec.view[0] / 2); room.views[0].vborder = Math.round(spec.view[1] / 2); }
 	const instLayer = Object.assign(layerBase("GMRInstanceLayer", "Instances", 1000), {instances: insts});
+	// The buildings' pictures on an asset layer, so the room editor shows them (obj_building has no sprite of its own:
+	// its creation code sets it). Only a preview: the game hides this layer (game Room Start); edit the specs, not it.
+	const previews = spriteThings.filter(t => t.obj === "obj_building").map((t, i) => {
+		const m = /sprite_index = ([A-Za-z0-9_]+);/.exec(t.code), spr = m && m[1];
+		if(!spr || !fs.existsSync(path.join(root, "sprites", spr))) return null;
+		const h = require("./png.js").readPng(path.join(root, "sprites", spr, fs.readdirSync(path.join(root, "sprites", spr)).find(f => f.endsWith(".png")))).h;
+		const name = "graphic_" + crypto.createHash("md5").update(roomName + spr + i).digest("hex").slice(0, 8).toUpperCase();
+		return {"$GMRSpriteGraphic": "", "%Name": name, animationSpeed: 1.0, colour: 4294967295, frozen: false, headPosition: 0.0,
+			ignore: false, inheritedItemId: null, inheritItemSettings: false, name, resourceType: "GMRSpriteGraphic", resourceVersion: "2.0",
+			rotation: 0.0, scaleX: 1.0, scaleY: 1.0, spriteId: {name: spr, path: `sprites/${spr}/${spr}.yy`}, x: t.x, y: t.y - h};
+	}).filter(Boolean);
+	const previewLayer = previews.length ? Object.assign(layerBase("GMRAssetLayer", "Buildings_preview", 990), {assets: previews}) : null;
 	const colLayer = Object.assign(layerBase("GMRInstanceLayer", "Collisions", 1050, false), {instances: cols});
 	// Within a role, layers made later draw on top (a sign put on a house goes over its wall)
 	const tileLayer = l => {
@@ -358,7 +363,7 @@ boxH = ${gr.h * CELL};`});
 		return o;
 	};
 	const tl = layers.list.map(tileLayer);
-	const all = [...tl.filter(l => l.depth < 1000), instLayer, colLayer, ...tl.filter(l => l.depth > 1000)].sort((a, b) => a.depth - b.depth);
+	const all = [...tl.filter(l => l.depth < 1000), ...(previewLayer ? [previewLayer] : []), instLayer, colLayer, ...tl.filter(l => l.depth > 1000)].sort((a, b) => a.depth - b.depth);
 	// Tile layer fields in GameMaker's order
 	room.layers = all.map(l => {
 		if(!l.tiles) return l;

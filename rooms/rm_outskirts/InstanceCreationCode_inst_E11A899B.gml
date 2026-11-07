@@ -1,5 +1,1 @@
-targetRoom = rm_beirut;
-targetX = 3088;
-targetY = 2480;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+sprite_index = spr_house_home_larkspun;

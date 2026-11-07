@@ -70,6 +70,7 @@ const PLACEHOLDER_ART = {"Biel hall": "prop_exhibition_hall", "Silos": "prop_por
 	"Cable car top": "prop_cable_car_station", "Tram stop": "prop_tram_stop", "Burrow": "prop_bunny_burrow"};
 // The cable car and the tram: a station (obj_transit) in front of each one's art; you ride once its project is done
 // (scripts/transit). Each takes the name of the old district it stands in, or its area's.
+const BRICK = ["Red Street", "Verdun Street", "Well's Head", "Oven's Window", "Pigeon Rocks", "Manara's Light"];
 const STATION_OF = {"Cable car": "cable", "Cable car top": "cable", "Tram stop": "tram"};
 const STATIONS = [];
 // Named places on the blueprint (its labels, tools/map/blueprint.js), for a stop whose district already has one
@@ -145,8 +146,34 @@ function buildRoom(id, fr, exits){
 		things.push({src: [col, row, 1, 1], at: [c, r]});
 		taken.add(c + "," + r);
 	}
-	// Piers and bridges: planks over the water
-	for(let r = 0; r < H; r++) for(let c = 0; c < W; c++) if(bk(c, r) === "p"){ things.push({src: [17, 20, 1, 1], at: [c, r]}); taken.add(c + "," + r); }
+	// Piers: planks over the sea. Bridges (the planks over a river) are the LPC Revised ones (art/lpc_revised,
+	// TS_lpcr_<season>, the same layout every season): a railed plank bridge where the way crosses north-south, a plank
+	// deck where it crosses east-west, each reaching a tile onto both banks
+	const LPCR = "TS_lpcr_summer";
+	const nearRiver = (c, r) => { for(let dy = -2; dy <= 2; dy++) for(let dx = -2; dx <= 2; dx++) if(bk(c + dx, r + dy) === "~") return true; return false; };
+	const bridgeCell = new Set();
+	for(let r = 0; r < H; r++) for(let c = 0; c < W; c++) if(bk(c, r) === "p"){
+		taken.add(c + "," + r);
+		if(nearRiver(c, r)) bridgeCell.add(c + "," + r); else things.push({src: [17, 20, 1, 1], at: [c, r]});
+	}
+	{ const seen = new Set();
+	  for(const k of bridgeCell){ if(seen.has(k)) continue;
+		const part = [], st = [k]; seen.add(k);
+		while(st.length){ const q = st.pop(); part.push(q); const [c, r] = q.split(",").map(Number);
+			for(let dy = -1; dy <= 1; dy++) for(let dx = -1; dx <= 1; dx++){ const n = (c + dx) + "," + (r + dy); if(bridgeCell.has(n) && !seen.has(n)){ seen.add(n); st.push(n); } } }
+		const xs = part.map(q => +q.split(",")[0]), ys = part.map(q => +q.split(",")[1]);
+		const x1 = Math.min(...xs), x2 = Math.max(...xs), y1 = Math.min(...ys), y2 = Math.max(...ys);
+		if(x2 - x1 >= y2 - y1){
+			// east-west: the plank deck (cols 47-50, rows 3-5: left end, middle again and again, the last two)
+			const L = Math.max(4, x2 - x1 + 3), top = Math.round((y1 + y2) / 2) - 1;
+			for(let i = 0; i < L; i++){ const col = i === 0 ? 47 : (i === L - 1 ? 50 : (i === L - 2 ? 49 : 48));
+				things.push({src: [col, 3, 1, 3], tileset: LPCR, at: [x1 - 1 + i, top], role: "decor"}); }
+		} else {
+			// north-south: the railed bridge (cols 44-46: row 15 its top, 16 again and again, 17 its foot)
+			const L = Math.max(3, y2 - y1 + 3), left = Math.round((x1 + x2) / 2) - 1;
+			for(let j = 0; j < L; j++) things.push({src: [44, j === 0 ? 15 : (j === L - 1 ? 17 : 16), 3, 1], tileset: LPCR, at: [left, y1 - 1 + j], role: "decor"});
+		}
+	  } }
 	// Roads, water, cliffs are taken (nothing scattered or grown on them)
 	for(let r = 0; r < H; r++) for(let c = 0; c < W; c++) if(at(c, r) !== "." && at(c, r) !== ",") taken.add(c + "," + r);
 
@@ -388,6 +415,41 @@ side = "here";`});
 	  for(const [kind, count] of CL) for(let n = 0; n < count; n++){ const p = spot(RAD[kind]); if(p) RECIPE[kind](p); }
 	}
 
+	// A wooden fence along the top-left corner of the land, where it meets the sea (the user, 2026-11-06): the peninsula's
+	// north-west edge, on open ground by the water - rails along the north shore, a post-and-rail run down the west
+	if(ox < 45 && oy < 60){
+		// straight runs on the shore's first tile (the path behind stays open): along the north coast a row per column, down the west coast a column per
+		// row, each smoothed to the most common value of its neighbours (so the runs are long), steps joined by posts
+		const land = (c, r) => own(c, r) && [".", ",", ":", "_"].includes(at(c, r));
+		const fence = (c, r, tile) => { if(!own(c, r) || ![".", "_", ","].includes(at(c, r)) || taken.has(c + "," + r)) return;
+			things.push({src: [tile[0], tile[1], 1, 1], tileset: LPCR, at: [c, r], role: "decor", solid: [[0, 0, 1, 1]]}); taken.add(c + "," + r); };
+		const mode = (arr, i) => { const w = arr.slice(Math.max(0, i - 3), i + 4).filter(v => v != null), cnt = {};
+			for(const v of w) cnt[v] = (cnt[v] || 0) + 1; return w.length ? +Object.keys(cnt).sort((p, q) => cnt[q] - cnt[p] || p - q)[0] : null; };
+		// north coast: world x 16-44
+		const nRow = [];
+		for(let c = 0; c < W; c++){ const wx = ox + c; if(wx < 16 || wx > 44){ nRow.push(null); continue; }
+			let r = 0; while(r < Math.min(H, 30 - oy) && !land(c, r)) r++; nRow.push(r < 30 - oy ? r : null); }
+		const nS = nRow.map((_, i) => nRow[i] == null ? null : mode(nRow, i));
+		for(let c = 0; c < W; c++){ if(nS[c] == null) continue; fence(c, nS[c], [32, 24]);
+			if(c > 0 && nS[c - 1] != null && nS[c - 1] !== nS[c]) for(let r = Math.min(nS[c - 1], nS[c]) + 1; r < Math.max(nS[c - 1], nS[c]); r++) fence(nS[c - 1] < nS[c] ? c : c - 1, r, [31, 25]); }
+		// west coast: world y 26-56
+		const wCol = [];
+		for(let r = 0; r < H; r++){ const wy = oy + r; if(wy < 26 || wy > 56){ wCol.push(null); continue; }
+			let c = 0; while(c < Math.min(W, 30 - ox) && !land(c, r)) c++; wCol.push(c < 30 - ox ? c : null); }
+		const wS = wCol.map((_, i) => wCol[i] == null ? null : mode(wCol, i));
+		for(let r = 0; r < H; r++){ if(wS[r] == null) continue; fence(wS[r], r, [31, 25]);
+			if(r > 0 && wS[r - 1] != null && wS[r - 1] !== wS[r]) for(let c = Math.min(wS[r - 1], wS[r]) + 1; c < Math.max(wS[r - 1], wS[r]); c++) fence(c, r, [32, 24]); }
+	}
+
+	// Waterfalls where the mountain stream spills over a cliff (the blueprint's falls): the picture's falling column on the
+	// lower ground west of the cliff, its lip on the cliff, its splash at the stream's level
+	for(const fl of LAYOUT.falls || []){
+		if(owner(fl.x, fl.y) !== id) continue;
+		const c = fl.x - ox, r = fl.y - oy;
+		instances.push({obj: "obj_waterfall", x: (c - 1) * 32, y: (r - 1) * 32, code: `dir = "${fl.dir}";`});
+		points["waterfall_" + (Object.keys(points).filter(k => k.startsWith("waterfall_")).length + 1)] = [(c + 2) * 32, (r + 4) * 32];
+	}
+
 	// Rocks on the rocky shore and the mountain's bare top
 	{ const sr = rng(seed + 31), kinds = ["rock_grey_big", "rock_grey", "pebbles_grey", "pebbles_grey2", "rock_grey_tall", "pebbles_brown"];
 	  const rocky = (x, y) => ["r", "3", "4"].includes(bk(x, y));
@@ -495,8 +557,30 @@ if(project_done("bridge")) instance_destroy();`});
 		if(ch === "X" || ["3", "r", "C", "c"].includes(k)) return "k";
 		if(k === "4") return "n";
 		return "g"; };
-	const ground = {rows: grid.map((row, r) => row.map((_, c) => groundOf(c, r)).join(""))};
+	// LPC Revised (art/lpc_revised), with the old dark road (TS_terrain "path") over it on the roads
+	const ground = {tileset: "TS_lpcr_summer", overlay: ["path"], rows: grid.map((row, r) => row.map((_, c) => groundOf(c, r)).join(""))};
+	// The city's roads are paved (grey stone slabs from TS_terrain over the dirt; ";" in the map) - the dark brown path
+	// is for the roads outside town. The city: the blueprint's TOWN_BOX in Beirut and Phoenix Bay
+	if(id === "rm_beirut" || id === "rm_phoenix"){
+		for(let r = 0; r < H; r++) for(let c2 = 0; c2 < W; c2++){
+			const wx = ox + c2, wy = oy + r;
+			if(grid[r][c2] !== ":" || wx < 6 || wx > 140 || wy < -4 || wy > 104) continue;
+			grid[r][c2] = ";";
+			// each district its paving (the user, 2026-11-07: "a look for each district"): the square a checkerboard,
+			// the old west and south of town red brick, downtown and the east grey stone slabs
+			const m3 = n => ((n % 3) + 3) % 3, dname = districtAt(wx, wy, "");
+			let src;
+			if(bk(c2, r) === "q" || (wx >= 82 && wx <= 96 && wy >= 22 && wy <= 32)) src = [19 + ((wx + wy) % 2 + 2) % 2, 22];   // (the square, over its tram rails too)
+			else if(BRICK.includes(dname)) src = [22 + m3(wx), 22];
+			else src = [16 + m3(wx), 26 + m3(wy)];
+			things.push({src: [src[0], src[1], 1, 1], at: [c2, r], role: "terrain"});
+		}
+	}
+	cityPlaces(id, {ox, oy, W, H, grid, things, instances, points, taken, free, take, own, at, bk});
 	return {
+		// the camera, in a 1500 x 840 window (the farm and interiors keep their own)
+		// (Beirut 1.5x: 1000 x 560, about 31 x 17 tiles; the areas round it 2x; the far ones 3x)
+		view: id === "rm_beirut" ? [1000, 560] : (["rm_phoenix", "rm_outskirts", "rm_sunset", "rm_mountain"].includes(id) ? [750, 420] : [500, 280]),
 		seed: seed % 1000, map: grid.map(r => r.join("")), ground, things, instances, points, areas, areaKinds, edge,
 		scatter: [
 			{on: ".", density: KIND[id] === "town" ? 0.02 : 0.04, seed: seed % 97, pieces: [{is: "leaves", weight: 4}, {is: "leaves2", weight: 4}, {is: "mushrooms"}, {is: "sprout", weight: 2}]},
@@ -575,6 +659,71 @@ side = "${side}";`}); }
 // jetty, and the jetty's end back (for now; a boat ride later)
 // Where to arrive in a room: the nearest cell (world tiles) of its own open ground to the one wanted, at least one cell
 // clear of anything blocking around it
+// The city's way-finding (the user, 2026-11-07, "the player shouldn't feel lost"): a fountain and benches on the
+// central square, landmarks closing the streets' ends, a signpost at each crossroads naming the nearest shops, lamps and
+// a "Beirut" board at each way into town, and small parks in the big empty blocks
+const SHOPS = {"Tavern": "Tavern", "Bank": "Bank", "Tools": "Tools", "Guild hall": "Guild", "Smithy": "Smithy", "Bakery": "Bakery",
+	"Flowers": "Flowers", "Furniture": "Furniture", "Hospital": "Clinic", "Library": "Library", "Apothecary": "Apothecary",
+	"Outfitter": "Tailor", "Museum": "Museum", "Glassworks": "Glassworks", "Riviera hotel": "Hotel", "Fish market": "Fish market"};
+function cityPlaces(id, R){
+	const {ox, oy, W, H, things, instances, taken, free, take, own, at} = R;
+	const cg = LAYOUT.city_grid || {}, lines = Object.values(cg);
+	const L = (wx, wy) => [wx - ox, wy - oy];
+	const put = (is, c, r, ok = [".", ","], over = false) => { if(!T.things[is]) return false; const [w, h] = size(is); if(!free(c, r, w, h, ok, over)) return false; things.push({is, at: [c, r]}); take(c - 1, r - 1, w + 2, h + 2); return true; };
+	const near = (c, r, is, ok, over) => { for(let d = 0; d <= 3; d++) for(let dy = -d; dy <= d; dy++) for(let dx = -d; dx <= d; dx++) if(Math.max(Math.abs(dx), Math.abs(dy)) === d && put(is, c + dx, r + dy, ok, over)) return true; return false; };
+	const sign = (c, r, text) => { for(let d = 0; d <= 3; d++) for(let dy = -d; dy <= d; dy++) for(let dx = -d; dx <= d; dx++){
+		if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue; const cc = c + dx, rr = r + dy;
+		if(cc < 1 || rr < 1 || cc >= W - 1 || rr >= H - 1 || !own(cc, rr) || at(cc, rr) !== "." || taken.has(cc + "," + rr)) continue;
+		taken.add(cc + "," + rr); instances.push({obj: "obj_signpost", x: cc * 32 + 16, y: rr * 32 + 28, code: `text = "${text}";
+side = "here";`}); return true; } return false; };
+	if(id === "rm_beirut"){
+		// the central square (Martyrs' Square): its fountain in the middle, benches and lamps round it
+		const [sc, sr] = L(89, 27);
+		near(sc - 2, sr - 2, "prop_fountain", [";", ":", ".", ","], true);   // (on the paving, which counts as taken)
+		for(const [dx, dy] of [[-6, -4], [4, -4], [-6, 3], [4, 3]]) near(sc + dx, sr + dy, "prop_bench", [";", ".", ","]);
+		// landmarks closing each street's ends (where a street stops inside town)
+		const ends = [];
+		for(const [[x1, y1], [x2, y2]] of lines) for(const e of [[x1, y1, Math.sign(x1 - x2), Math.sign(y1 - y2)], [x2, y2, Math.sign(x2 - x1), Math.sign(y2 - y1)]]) ends.push(e);
+		const LM = ["statue", "prop_roadside_shrine", "obelisk", "prop_planter", "prop_fountain"];
+		let li = 0;
+		for(const [ex, ey, dx, dy] of ends){
+			if(ex < 8 || ex > 138 || ey < -2 || ey > 102) continue;
+			const onOther = lines.some(([[a1, b1], [a2, b2]]) => !(a1 === ex && b1 === ey) && !(a2 === ex && b2 === ey) && ex >= Math.min(a1, a2) - 1 && ex <= Math.max(a1, a2) + 1 && ey >= Math.min(b1, b2) - 1 && ey <= Math.max(b1, b2) + 1);
+			if(onOther) continue;   // (it ends at another street: a T, not a dead end)
+			const [c, r] = L(ex + dx * 2, ey + dy * 2);
+			if(near(c - 1, r - 1, LM[li % LM.length])) li++;
+		}
+		// a signpost at each crossroads naming the two nearest shops
+		const shops = LAYOUT.buildings.filter(b => SHOPS[b.name]);
+		for(const [[ax1, ay1], [ax2, ay2]] of lines) for(const [[bx1, by1], [bx2, by2]] of lines){
+			if(!(ay1 === ay2 && bx1 === bx2)) continue;   // a horizontal and a vertical
+			const cx = bx1, cy = ay1;
+			if(cx < Math.min(ax1, ax2) || cx > Math.max(ax1, ax2) || cy < Math.min(by1, by2) || cy > Math.max(by1, by2)) continue;
+			const two = shops.map(b => [b, Math.hypot(b.x + b.w / 2 - cx, b.y + b.h / 2 - cy)]).sort((p, q) => p[1] - q[1]).slice(0, 2).map(p => SHOPS[p[0].name]);
+			const [c, r] = L(cx + 2, cy + 2);
+			sign(c, r, two.join(", "));
+		}
+		// small parks in the biggest empty blocks: trees, flower beds, a bench; one with a swing, one with a market stall
+		let parks = 0;
+		for(let k = 0; k < 3000 && parks < 6; k++){
+			const c = 6 + Math.floor((k * 7919) % (W - 12)), r = 6 + Math.floor((k * 104729) % (H - 12));
+			let open = 0; for(let y = r - 4; y <= r + 4; y++) for(let x = c - 5; x <= c + 5; x++) if(own(x, y) && at(x, y) === "." && !taken.has(x + "," + y)) open++;
+			if(open < 95) continue;
+			near(c - 2, r - 1, parks % 3 === 1 ? "prop_swing" : parks % 3 === 2 ? "stall_stripe" : "prop_fountain");
+			near(c - 5, r - 3, "prop_flower_bed"); near(c + 2, r + 2, "prop_flower_bed"); near(c + 3, r - 3, "prop_bench");
+			near(c - 4, r + 2, "oak"); near(c + 4, r - 1, "oak");
+			parks++;
+		}
+	}
+	// at each way into town: a lamp each side and a board with the town's name
+	for(const [gx, gy] of LAYOUT.gates || []){
+		if(owner(gx, gy) !== id) continue;
+		const [c, r] = L(gx, gy), vert = gy >= 100;
+		near(vert ? c - 3 : c, vert ? r : r - 3, "prop_lamp"); near(vert ? c + 2 : c, vert ? r : r + 2, "prop_lamp");
+		sign(vert ? c + 3 : c + 1, vert ? r + 1 : r + 3, "Beirut");
+	}
+}
+
 // The cells (world tiles) where something solid stands in a built room: its things' solid parts
 let SOLID = null;
 function solidCells(id){

@@ -1,2 +1,1 @@
-kind = "tram";
-stop = "Cardo";
+sprite_index = spr_prop_bench;

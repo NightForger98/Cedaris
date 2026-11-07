@@ -1,1 +1,1 @@
-sprite_index = spr_house_home_brassbolt;
+sprite_index = spr_prop_port_silos;

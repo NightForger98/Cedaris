@@ -1,1 +1,5 @@
-art = false; // the bed is in the room's tiles
+targetRoom = rm_12;
+targetX = 160;
+targetY = 180;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.down;

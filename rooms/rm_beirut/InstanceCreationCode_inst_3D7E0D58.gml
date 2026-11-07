@@ -1,1 +1,1 @@
-sprite_index = spr_prop_farm_coop_3;
+sprite_index = spr_house_small_house;

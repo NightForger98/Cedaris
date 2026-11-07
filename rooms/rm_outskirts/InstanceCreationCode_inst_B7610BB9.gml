@@ -1,5 +1,1 @@
-targetRoom = rm_mountain;
-targetX = 240;
-targetY = 3760;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+sprite_index = spr_prop_tram_stop;

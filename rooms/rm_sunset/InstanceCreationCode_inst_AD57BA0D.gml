@@ -1,2 +1,2 @@
-text = "Beirut";
-side = "n";
+text = "White Sand Beach";
+side = "here";

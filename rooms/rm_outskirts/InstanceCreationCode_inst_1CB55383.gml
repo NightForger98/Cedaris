@@ -1,2 +1,1 @@
-text = "The Countryside";
-side = "s";
+sprite_index = spr_prop_alt_kassar;

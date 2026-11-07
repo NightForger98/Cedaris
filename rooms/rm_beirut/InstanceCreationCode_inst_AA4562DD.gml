@@ -1,2 +1,2 @@
-text = "The Outskirts";
-side = "s";
+text = "Oven's Window";
+side = "here";

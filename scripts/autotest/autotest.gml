@@ -1067,3 +1067,21 @@ function autotest_clear_near(_r){
 	with(obj_resource) if(point_distance(x, y, obj_plyr.x, obj_plyr.y) < r){ instance_destroy(); n++; }
 	return n;
 }
+
+/// @description Test: the waterfalls here: dir@x,y each.
+function autotest_waterfalls(){
+	var s = string(instance_number(obj_waterfall)) + ":";
+	with(obj_waterfall) s += " " + dir + "@" + string(x) + "," + string(y) + " d" + string(depth);
+	return s;
+}
+
+/// @description Test: where the player, the camera object and the view are, and whether the player is on screen.
+function autotest_cam(){
+	var c = view_camera[0], vx = camera_get_view_x(c), vy = camera_get_view_y(c), vw = camera_get_view_width(c), vh = camera_get_view_height(c);
+	var p = instance_find(obj_plyr, 0), s = "plyr " + string(floor(p.x)) + "," + string(floor(p.y)) + " n" + string(instance_number(obj_plyr));
+	s += " cam " + string(instance_number(camera));
+	with(camera) s += " " + string(floor(x)) + "," + string(floor(y)) + (move_cam ? " FREE" : "");
+	s += " view " + string(floor(vx)) + "," + string(floor(vy)) + " " + string(vw) + "x" + string(vh);
+	s += (p.x >= vx && p.x <= vx + vw && p.y >= vy && p.y <= vy + vh) ? " onscreen" : " OFFSCREEN";
+	return s;
+}

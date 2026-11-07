@@ -1,2 +1,1 @@
-kind = "tram";
-stop = "Frere's Fray";
+sprite_index = spr_prop_tram_stop;

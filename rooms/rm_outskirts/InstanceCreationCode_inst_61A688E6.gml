@@ -1,2 +1,1 @@
-text = "The Farm";
-side = "s";
+sprite_index = spr_prop_alt_ward;

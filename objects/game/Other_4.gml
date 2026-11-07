@@ -17,6 +17,9 @@ if(game_is_playing_room()){
 	else { global.mineWalls = -1; resources_room_start(); placeables_room_start(); furniture_room_start(); animals_room_start(); festival_room_start(); woods_room_start(); }
 	villagers_update(); // whoever's here at this hour
 	signposts_place();  // a sign by each way to another place
+	if(layer_exists("Buildings_preview")) layer_set_visible("Buildings_preview", false);   // (the editor's view of the buildings; the real ones are obj_building)
+	// the buildings you've been into (the world map marks them)
+	if(!room_is_outdoors() && room != rm_mine && variable_global_exists("world") && is_struct(global.world)){ if(!is_struct(global.world[$ "visited"])) global.world.visited = {}; global.world.visited[$ room_get_name(room)] = true; }
 	ground_season_apply();   // the ground in this season's colours (scripts/ground)
 }
 

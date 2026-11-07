@@ -1,2 +1,1 @@
-text = "Whispering Woods";
-side = "n";
+sprite_index = spr_prop_gravestones;

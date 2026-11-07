@@ -1,5 +1,5 @@
 targetRoom = rm_beirut;
-targetX = 2192;
-targetY = 980;
+targetX = 1968;
+targetY = 500;
 PlayerFacingBefore = dir.down;
 PlayerFacingAfter = dir.down;

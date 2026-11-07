@@ -131,17 +131,16 @@ var in_left = input_held(key_of("left"));   // keys from Options > Controls
 var in_right = input_held(key_of("right"));
 var in_up = input_held(key_of("up"));
 var in_down = input_held(key_of("down"));
+// the debug free camera (C) has the keys: you stand still
+if(instance_exists(camera) && camera.move_cam){ in_left = 0; in_right = 0; in_up = 0; in_down = 0; }
 var in_walk = input_held(key_of("walk"));
 var in_run = input_held(key_of("run"));
 if(input_pressed(key_of("autorun")) && !ui_blocking()) always_run_toggle();
-if(always_run() && !in_walk) in_run = !in_run;   // always run: holding the run key walks instead
 sprinting = in_run;   // drawn with the run cycle while moving (Draw)
-	//ALTERSPEED
-if(in_walk || in_run){
-	spd=abs((in_walk*w_spd)-(in_run*r_spd));
-}else {
-	spd=n_spd;
-}
+// Your pace: running, or walking with always run off (R); Shift sprints, Ctrl walks
+if(in_run) spd = r_spd;
+else if(in_walk || !always_run()) spd = w_spd;
+else spd = n_spd;
 // Equipment Speed stat (feathers and pixie dust help, heavy metal slows you down)
 spd *= inv_speed_multiplier();
 // Roads (cobbles) speed you up, on foot or running (world_is_road: the road cells of the outdoor rooms)

@@ -662,6 +662,179 @@
    16
   ]
  ],
+ "stream": [
+  [
+   226,
+   22
+  ],
+  [
+   214,
+   23
+  ],
+  [
+   202,
+   22
+  ],
+  [
+   190,
+   23
+  ],
+  [
+   176,
+   22
+  ],
+  [
+   162,
+   23
+  ],
+  [
+   150,
+   22
+  ],
+  [
+   140,
+   22
+  ]
+ ],
+ "falls": [
+  {
+   "x": 220,
+   "y": 23,
+   "dir": "left"
+  },
+  {
+   "x": 201,
+   "y": 27,
+   "dir": "left"
+  },
+  {
+   "x": 190,
+   "y": 36,
+   "dir": "left"
+  }
+ ],
+ "city_grid": {
+  "corniche_north": [
+   [
+    14,
+    15
+   ],
+   [
+    144,
+    15
+   ]
+  ],
+  "hamra": [
+   [
+    13,
+    31
+   ],
+   [
+    80,
+    31
+   ]
+  ],
+  "the_ring": [
+   [
+    40,
+    40
+   ],
+   [
+    146,
+    40
+   ]
+  ],
+  "mazraa": [
+   [
+    13,
+    62
+   ],
+   [
+    117,
+    62
+   ]
+  ],
+  "corniche_west": [
+   [
+    13,
+    15
+   ],
+   [
+    13,
+    82
+   ]
+  ],
+  "verdun": [
+   [
+    40,
+    31
+   ],
+   [
+    40,
+    62
+   ]
+  ],
+  "tariq_jdideh": [
+   [
+    51,
+    62
+   ],
+   [
+    51,
+    106
+   ]
+  ],
+  "bechara_khoury": [
+   [
+    80,
+    15
+   ],
+   [
+    80,
+    106
+   ]
+  ],
+  "damascus": [
+   [
+    114,
+    40
+   ],
+   [
+    114,
+    106
+   ]
+  ]
+ },
+ "gates": [
+  [
+   140,
+   16
+  ],
+  [
+   140,
+   43
+  ],
+  [
+   140,
+   79
+  ],
+  [
+   61,
+   104
+  ],
+  [
+   40,
+   104
+  ],
+  [
+   113,
+   104
+  ],
+  [
+   99,
+   104
+  ]
+ ],
  "buildings": [
   {
    "name": "Riviera hotel",
@@ -674,40 +847,40 @@
   {
    "name": "Glassworks",
    "kind": "building",
-   "x": 24,
-   "y": 31,
+   "x": 22,
+   "y": 33,
    "w": 6,
    "h": 4
   },
   {
    "name": "Fairglass",
    "kind": "building",
-   "x": 17,
-   "y": 31,
+   "x": 16,
+   "y": 27,
    "w": 5,
    "h": 4
   },
   {
    "name": "Goldcrest",
    "kind": "building",
-   "x": 44,
-   "y": 40,
+   "x": 42,
+   "y": 42,
    "w": 6,
    "h": 5
   },
   {
    "name": "Tavern",
    "kind": "building",
-   "x": 64,
-   "y": 22,
+   "x": 68,
+   "y": 26,
    "w": 7,
    "h": 5
   },
   {
    "name": "Bank",
    "kind": "building",
-   "x": 68,
-   "y": 36,
+   "x": 66,
+   "y": 34,
    "w": 8,
    "h": 6
   },
@@ -722,48 +895,48 @@
   {
    "name": "Guild hall",
    "kind": "building",
-   "x": 91,
-   "y": 30,
+   "x": 101,
+   "y": 42,
    "w": 6,
    "h": 5
   },
   {
    "name": "Smithy",
    "kind": "building",
-   "x": 110,
-   "y": 40,
+   "x": 116,
+   "y": 42,
    "w": 7,
    "h": 5
   },
   {
    "name": "Whitlow",
    "kind": "building",
-   "x": 118,
-   "y": 42,
+   "x": 124,
+   "y": 34,
    "w": 6,
    "h": 5
   },
   {
    "name": "Bakery",
    "kind": "building",
-   "x": 22,
-   "y": 62,
+   "x": 20,
+   "y": 64,
    "w": 6,
    "h": 4
   },
   {
    "name": "Flowers",
    "kind": "building",
-   "x": 35,
-   "y": 57,
+   "x": 28,
+   "y": 64,
    "w": 6,
    "h": 4
   },
   {
    "name": "Furniture",
    "kind": "building",
-   "x": 44,
-   "y": 62,
+   "x": 42,
+   "y": 64,
    "w": 7,
    "h": 4
   },
@@ -778,24 +951,24 @@
   {
    "name": "Hospital",
    "kind": "building",
-   "x": 70,
-   "y": 65,
+   "x": 68,
+   "y": 66,
    "w": 8,
    "h": 5
   },
   {
    "name": "Library",
    "kind": "building",
-   "x": 79,
-   "y": 65,
+   "x": 82,
+   "y": 64,
    "w": 8,
    "h": 5
   },
   {
    "name": "Museum",
    "kind": "building",
-   "x": 113,
-   "y": 70,
+   "x": 116,
+   "y": 64,
    "w": 8,
    "h": 5
   },
@@ -818,8 +991,8 @@
   {
    "name": "Marina club",
    "kind": "building",
-   "x": 56,
-   "y": 16,
+   "x": 58,
+   "y": 18,
    "w": 5,
    "h": 3
   },
@@ -842,40 +1015,40 @@
   {
    "name": "Quill",
    "kind": "building",
-   "x": 110,
-   "y": 60,
+   "x": 104,
+   "y": 64,
    "w": 6,
    "h": 4
   },
   {
    "name": "Meadowlark",
    "kind": "building",
-   "x": 118,
-   "y": 59,
+   "x": 119,
+   "y": 58,
    "w": 8,
    "h": 5
   },
   {
    "name": "Lighthouse",
    "kind": "building",
-   "x": 20,
-   "y": 23,
+   "x": 15,
+   "y": 33,
    "w": 3,
    "h": 7
   },
   {
    "name": "Fish market",
    "kind": "building",
-   "x": 39,
-   "y": 16,
+   "x": 38,
+   "y": 17,
    "w": 6,
    "h": 4
   },
   {
    "name": "Ferry",
    "kind": "building",
-   "x": 108,
-   "y": 14,
+   "x": 112,
+   "y": 19,
    "w": 6,
    "h": 4
   },
@@ -907,15 +1080,15 @@
    "name": "Gullwater",
    "kind": "building",
    "x": 15,
-   "y": 67,
+   "y": 69,
    "w": 5,
    "h": 4
   },
   {
    "name": "Beach bar",
    "kind": "building",
-   "x": 28,
-   "y": 98,
+   "x": 30,
+   "y": 100,
    "w": 6,
    "h": 4
   },
@@ -1010,8 +1183,8 @@
   {
    "name": "Kassar",
    "kind": "building",
-   "x": 46,
-   "y": 105,
+   "x": 42,
+   "y": 100,
    "w": 6,
    "h": 4
   },
@@ -1026,16 +1199,16 @@
   {
    "name": "Larkspun",
    "kind": "building",
-   "x": 100,
-   "y": 102,
+   "x": 99,
+   "y": 101,
    "w": 6,
    "h": 4
   },
   {
    "name": "Outfitter",
    "kind": "building",
-   "x": 103,
-   "y": 107,
+   "x": 104,
+   "y": 106,
    "w": 6,
    "h": 4
   },
@@ -1170,16 +1343,16 @@
   {
    "name": "Cardo",
    "kind": "ruin",
-   "x": 77,
-   "y": 31,
+   "x": 82,
+   "y": 42,
    "w": 12,
    "h": 2
   },
   {
    "name": "Sursock gallery",
    "kind": "building",
-   "x": 108,
-   "y": 52,
+   "x": 118,
+   "y": 51,
    "w": 8,
    "h": 6
   },
@@ -1194,24 +1367,24 @@
   {
    "name": "Bar",
    "kind": "building",
-   "x": 114,
-   "y": 27,
+   "x": 112,
+   "y": 29,
    "w": 5,
    "h": 3
   },
   {
    "name": "Old station",
    "kind": "building",
-   "x": 120,
-   "y": 27,
+   "x": 126,
+   "y": 24,
    "w": 7,
    "h": 4
   },
   {
    "name": "Temple ruins",
    "kind": "ruin",
-   "x": 192,
-   "y": 34,
+   "x": 199,
+   "y": 42,
    "w": 7,
    "h": 5
   },
@@ -1234,23 +1407,23 @@
   {
    "name": "Tram stop",
    "kind": "building",
-   "x": 17,
-   "y": 57,
+   "x": 16,
+   "y": 58,
    "w": 3,
    "h": 2
   },
   {
    "name": "Tram stop",
    "kind": "building",
-   "x": 58,
-   "y": 21,
+   "x": 54,
+   "y": 16,
    "w": 3,
    "h": 2
   },
   {
    "name": "Tram stop",
    "kind": "building",
-   "x": 95,
+   "x": 90,
    "y": 38,
    "w": 3,
    "h": 2
@@ -1258,15 +1431,15 @@
   {
    "name": "Tram stop",
    "kind": "building",
-   "x": 112,
-   "y": 66,
+   "x": 116,
+   "y": 70,
    "w": 3,
    "h": 2
   },
   {
    "name": "Tram stop",
    "kind": "building",
-   "x": 107,
+   "x": 106,
    "y": 98,
    "w": 3,
    "h": 2

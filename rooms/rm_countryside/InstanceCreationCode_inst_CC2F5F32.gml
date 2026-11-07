@@ -1,2 +1,1 @@
-text = "Frere's Fray";
-side = "here";
+sprite_index = spr_prop_barn_stone;

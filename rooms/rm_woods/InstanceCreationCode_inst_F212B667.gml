@@ -1,2 +1,1 @@
-text = "Whispering Woods";
-side = "here";
+sprite_index = spr_prop_wildflowers;

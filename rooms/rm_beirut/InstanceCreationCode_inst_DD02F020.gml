@@ -1,1 +1,1 @@
-sprite_index = spr_prop_roadside_shrine;
+sprite_index = spr_house_glassworks;

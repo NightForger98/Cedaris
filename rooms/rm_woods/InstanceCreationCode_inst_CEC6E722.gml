@@ -1,2 +1,1 @@
-text = "The Mountain";
-side = "n";
+sprite_index = spr_prop_wildflowers;

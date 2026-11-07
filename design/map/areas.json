@@ -231,10 +231,10 @@
     "Beirut"
    ],
    "at": [
-    20,
+    25,
     15
    ],
-   "wide": 3
+   "wide": 13
   },
   {
    "between": [
@@ -242,32 +242,10 @@
     "Beirut"
    ],
    "at": [
-    51,
+    84,
     15
    ],
-   "wide": 10
-  },
-  {
-   "between": [
-    "Phoenix Bay",
-    "Beirut"
-   ],
-   "at": [
-    83,
-    15
-   ],
-   "wide": 11
-  },
-  {
-   "between": [
-    "Phoenix Bay",
-    "The Mountain"
-   ],
-   "at": [
-    138,
-    18
-   ],
-   "wide": 3
+   "wide": 88
   },
   {
    "between": [
@@ -287,29 +265,7 @@
    ],
    "at": [
     136,
-    20
-   ],
-   "wide": 3
-  },
-  {
-   "between": [
-    "Beirut",
-    "The Mountain"
-   ],
-   "at": [
-    136,
-    33
-   ],
-   "wide": 1
-  },
-  {
-   "between": [
-    "Beirut",
-    "The Mountain"
-   ],
-   "at": [
-    136,
-    44
+    41
    ],
    "wide": 2
   },
@@ -320,20 +276,9 @@
    ],
    "at": [
     136,
-    61
+    80
    ],
    "wide": 2
-  },
-  {
-   "between": [
-    "Beirut",
-    "The Mountain"
-   ],
-   "at": [
-    136,
-    77
-   ],
-   "wide": 4
   },
   {
    "between": [
@@ -343,17 +288,6 @@
    "at": [
     160,
     85
-   ],
-   "wide": 3
-  },
-  {
-   "between": [
-    "Beirut",
-    "The Mountain"
-   ],
-   "at": [
-    136,
-    90
    ],
    "wide": 3
   },
@@ -371,32 +305,10 @@
   {
    "between": [
     "Beirut",
-    "Sunset Coast"
-   ],
-   "at": [
-    34,
-    95
-   ],
-   "wide": 2
-  },
-  {
-   "between": [
-    "Beirut",
-    "Sunset Coast"
-   ],
-   "at": [
-    41,
-    95
-   ],
-   "wide": 2
-  },
-  {
-   "between": [
-    "Beirut",
     "The Outskirts"
    ],
    "at": [
-    63,
+    52,
     95
    ],
    "wide": 2
@@ -410,29 +322,7 @@
     81,
     95
    ],
-   "wide": 5
-  },
-  {
-   "between": [
-    "Beirut",
-    "The Outskirts"
-   ],
-   "at": [
-    96,
-    95
-   ],
-   "wide": 3
-  },
-  {
-   "between": [
-    "Beirut",
-    "The Outskirts"
-   ],
-   "at": [
-    107,
-    95
-   ],
-   "wide": 3
+   "wide": 2
   },
   {
    "between": [
@@ -443,7 +333,7 @@
     114,
     95
    ],
-   "wide": 2
+   "wide": 3
   },
   {
    "between": [
@@ -453,6 +343,17 @@
    "at": [
     145,
     95
+   ],
+   "wide": 2
+  },
+  {
+   "between": [
+    "Sunset Coast",
+    "The Outskirts"
+   ],
+   "at": [
+    44,
+    105
    ],
    "wide": 2
   },

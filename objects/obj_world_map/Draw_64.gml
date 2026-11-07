@@ -22,6 +22,24 @@ for(var i = 0; i < array_length(names); i++){
 	ui_text(tx + 2, ty + 2, save_room_name(names[i]), 0.6, c_black);
 	ui_text(tx, ty, save_room_name(names[i]), 0.6, c_white);
 }
+// The districts (the old places' names), smaller, where they lie
+var dl = world_districts();
+for(var i = 0; i < array_length(dl); i++){
+	var dr = m.rooms[$ dl[i].room];
+	if(dr == undefined) continue;
+	var dx = mx + (dr[0] + dl[i].x * m.scale) * s, dy = my + (dr[1] + dl[i].y * m.scale) * s;
+	ui_text(dx + 1, dy + 1, dl[i].name, 0.4, c_black);
+	ui_text(dx, dy, dl[i].name, 0.4, make_colour_rgb(255, 236, 170));
+}
+// The buildings you've been into: a gold mark on each
+var vis = global.world[$ "visited"] ?? {};
+for(var b = 0; b < array_length(m.buildings); b++){
+	if(!(vis[$ m.buildings[b].room] ?? false)) continue;
+	var vq = m.buildings[b].rect, vx = mx + (vq[0] + vq[2] / 2) * s, vy = my + vq[1] * s;
+	draw_set_colour(c_black); draw_circle(vx, vy, 6, false);
+	draw_set_colour(make_colour_rgb(250, 200, 60)); draw_circle(vx, vy, 4, false);
+}
+draw_set_colour(c_white);
 var cave = m.inside.rm_mine;
 ui_text(mx + cave[0] * s + 2, my + cave[1] * s + 16, "The Mine", 0.45, c_black);   // under the cave, clear of the farm's name
 ui_text(mx + cave[0] * s, my + cave[1] * s + 14, "The Mine", 0.45, make_colour_rgb(255, 220, 150));
@@ -64,6 +82,6 @@ for(var b = 0; b < array_length(m.buildings); b++){
 	break;
 }
 
-ui_text(guiW / 2, my + m.h * s + 30, key_label("map") + " Close     Point at a building to see whose it is", 0.5, c.dim);
+ui_text(guiW / 2, my + m.h * s + 30, key_label("map") + " Close     Point at a building to see whose it is     Gold: places you've been inside", 0.5, c.dim);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);

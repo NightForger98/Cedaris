@@ -36,7 +36,8 @@ const PROPS = {bench: 1, lamp: 1, fountain: 2, planter: 1, campfire: 1,
 	town_shop: 2, town_shop2: 2, town_cafe: 2, town_cafe2: 2, town_bakery: 2, town_bakery2: 2,
 	farm_barn_1: 2, farm_barn_2: 2, farm_barn_3: 2, farm_coop_1: 2, farm_coop_2: 2, farm_coop_3: 2, farm_shed_1: 2, farm_shed_2: 2, farm_shed_3: 2,
 	farm_silo_1: 1, farm_silo_2: 1, farm_silo_3: 2, farm_bee_shed: 1, farm_granary: 2, farm_outhouse: 1, barn_stone: 2, stables_b: 2,
-	alt_saba: 2, alt_saltwhistle: 2, alt_hayward: 2, alt_ward: 2, alt_tawil: 2, alt_kassar: 2, alt_night: 2, alt_cottage: 2, alt_family_house: 2, alt_larkspun: 2, alt_quill: 2};
+	alt_saba: 2, alt_saltwhistle: 2, alt_hayward: 2, alt_ward: 2, alt_tawil: 2, alt_kassar: 2, alt_night: 2, alt_cottage: 2, alt_family_house: 2, alt_larkspun: 2, alt_quill: 2,
+	cedar_tree: 1, cedar_young: 1, apple_tree: 1, shepherd_hut: 2, haystack: 1, beehives: 1, stone_terrace: 1, wildflowers: 0};
 
 function spriteSize(name){
 	const dir = path.join(root, "sprites", name);

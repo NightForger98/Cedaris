@@ -1,2 +1,5 @@
-text = "The Outskirts";
-side = "e";
+targetRoom = rm_beirut;
+targetX = 624;
+targetY = 2480;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

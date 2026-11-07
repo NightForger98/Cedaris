@@ -1,5 +1,5 @@
-targetRoom = rm_mountain;
-targetX = 48;
-targetY = 2704;
-PlayerFacingBefore = dir.right;
-PlayerFacingAfter = dir.right;
+targetRoom = rm_valley_ranch;
+targetX = 288;
+targetY = 344;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

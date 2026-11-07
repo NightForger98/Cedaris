@@ -1,5 +1,1 @@
-targetRoom = rm_woods;
-targetX = 1296;
-targetY = 1904;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+sprite_index = spr_prop_stables_b;

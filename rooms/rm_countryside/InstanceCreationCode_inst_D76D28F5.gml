@@ -1,2 +1,1 @@
-text = "The Outskirts";
-side = "n";
+sprite_index = spr_prop_farm_silo_3;

@@ -22,7 +22,8 @@ const terrains = {
 const legend = {
 	".": {terrain: "grass"},
 	",": {terrain: "dirt"},
-	":": {terrain: "path", under: ["dirt"]},   // dirt under roads too, so a lane runs into a road with no grass seam
+	":": {terrain: "path", under: ["dirt"]},
+	";": {terrain: "dirt"},   // a paved city road: dirt under grey slabs (tools/world2/areas_build.js lays them)   // dirt under roads too, so a lane runs into a road with no grass seam
 	"_": {terrain: "sand"},
 	"~": {terrain: "water", solid: true, water: true},
 	"=": {terrain: "soil"},

@@ -1,1 +1,1 @@
-sprite_index = spr_prop_town_bakery2;
+sprite_index = spr_prop_farm_coop_3;

@@ -1,2 +1,0 @@
-text = "Beirut";
-side = "w";

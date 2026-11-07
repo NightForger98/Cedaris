@@ -1,0 +1,4 @@
+Chimney smoke wisp. 6 frames, 16x24, looping. Anchor: bottom-centre (8,24) on the chimney top. Suggested 8 fps (SpriteCook's own rate).
+Made by: SpriteCook Pixel Engine still (6 credits; its chimney pot cropped off) animated with SpriteCook animate (pixel-engine-v1.1, 20 credits). The wisp sways and billows up, then thins.
+
+Licence: made with SpriteCook (spritecook.ai), free tier. SpriteCook pricing FAQ (checked 2026-11-07): commercial use is included on every plan including Free, and no credit to SpriteCook is required; Terms s.6 (spritecook.ai/terms, effective 2026-10-14) let you use, reproduce and distribute outputs you generate, and leave checking originality/infringement to you. Free-tier generations appear in SpriteCook's public gallery.

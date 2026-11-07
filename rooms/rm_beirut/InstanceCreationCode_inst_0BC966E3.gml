@@ -1,2 +1,2 @@
-text = "Bank, Tavern";
+text = "Tavern, Bank";
 side = "here";

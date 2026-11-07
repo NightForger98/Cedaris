@@ -1,0 +1,2 @@
+Firefly mote. 4 frames, 8x8: dim, medium, bright, medium. Anchor: centre (4,4). Suggested 4-6 fps, ideally drawn additively (bm_add) at night and drifted in code.
+Made locally (procedural, no SpriteCook credits) - an 8x8 glow did not need AI; no licence terms apply beyond the project's own.

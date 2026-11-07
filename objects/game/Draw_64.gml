@@ -9,6 +9,7 @@ if(game_is_playing_room() && world_time_ready() && room_is_outdoors()){
 	}
 }
 
+ambient_draw_glow();   // fireflies' light (scripts/ambient)
 // Pixies glow through the dark (their light is drawn again over the night tint)
 with(obj_monster){
 	if((def[$ "look"] ?? "") != "pixie" || dying) continue;

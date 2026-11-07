@@ -98,6 +98,13 @@ travel rules) still holds.
   edge wall, `addWays`), a wooden fence now stands on each wall cell on land (`borderCells`); and a sprite building's
   or prop's solid cells come from its picture (`artSolid` in `tools/rooms/sprite_buildings.js`: of its bottom rows,
   only cells at least a fifth drawn on; the door cell open), not whole rows.
+- **Life in the world** (`scripts/ambient`, 2026-11-07): SpriteCook animations (`art/anim_spritecook`, imported with
+  `tools/art/import_anims.js` as multi-frame `spr_anim_*`; free-tier output, commercial use allowed): the windmill's
+  tower without sails (`spr_house_windmill`) with `spr_anim_windmill_sails` turning on its hub, campfires flickering,
+  City Hall's flags waving (`ambient_building_draw`, from obj_building's Draw); `obj_ambient` (outdoors) runs birds
+  (seagulls by the sea), butterflies (fine spring and summer days) and fireflies (summer nights; their glow in game's
+  Draw GUI). Chimney smoke (`spr_anim_chimney_smoke`) is imported but not placed yet (each house needs its chimney
+  point). Test `ambient`.
 - **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only); sounds; the user's edited villager
   list (a Word file) is still to come - apply it to `villager_table` / `villager_routines`; their dancer shop may
   replace Ayla's lessons.

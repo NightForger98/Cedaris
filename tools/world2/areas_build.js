@@ -745,6 +745,8 @@ PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;`});
 			R.exits.mayor = [id, dx, dy + 36];
 			points.mayor_front = [dx, dy + 52];
+			// a flag each side of its door, waving (spr_anim_flag, scripts/ambient)
+			for(const fx of [dx - 56, dx + 22]) instances.push({obj: "obj_building", x: fx, y: (r + mh) * 32 + 6, code: "sprite_index = spr_anim_flag;"});
 			sign(c + md[0] + 2, r + mh + 1, "City Hall");
 		  } else console.log("  rm_beirut: no room for the town hall");
 		}

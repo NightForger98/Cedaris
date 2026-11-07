@@ -1,0 +1,4 @@
+Sparrow flying, side view facing right. 4 frames, 18x18: wings up, mid, tucked, mid. Anchor: centre (9,9). Suggested 8-10 fps; flip horizontally to fly left.
+Made by: one SpriteCook Pixel Engine sheet (6 credits); the model drew mostly one wings-up pose, so the loop reuses its frames 0, 3, 4, 3 (sheet order). Weakest of the set.
+
+Licence: made with SpriteCook (spritecook.ai), free tier. SpriteCook pricing FAQ (checked 2026-11-07): commercial use is included on every plan including Free, and no credit to SpriteCook is required; Terms s.6 (spritecook.ai/terms, effective 2026-10-14) let you use, reproduce and distribute outputs you generate, and leave checking originality/infringement to you. Free-tier generations appear in SpriteCook's public gallery.

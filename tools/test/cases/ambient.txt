@@ -1,0 +1,18 @@
+# Life in the world (scripts/ambient): the windmill's sails turn, campfires flicker, City Hall's flags wave; on a fine
+# spring day butterflies flutter about you
+start story
+wait 60
+call autotest_date 0 3
+time 11
+room rm_mountain 790 3330
+wait 40
+shot 01_windmill
+wait 9
+shot 02_windmill_later
+room rm_mountain 1250 2500
+wait 30
+shot 03_campfire
+room rm_beirut 3280 330
+wait 40
+shot 04_city_hall
+quit

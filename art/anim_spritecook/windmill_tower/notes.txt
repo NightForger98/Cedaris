@@ -1,0 +1,5 @@
+Windmill tower without sails. 1 frame, 163x232, same canvas and position as sprites/spr_house_windmill (drop-in replacement; same origin/collision as today).
+Made by: SpriteCook edit of the original windmill (Nano Banana 2 Lite, 8 credits) to paint the tower and roof hidden behind the sails, then merged locally: the original's pixels are kept everywhere outside the sails, the AI fill is used only where the sails were.
+Known: the faint diagonal sail shadows painted on the original tower stay (they don't move with the sails).
+
+Licence: made with SpriteCook (spritecook.ai), free tier. SpriteCook pricing FAQ (checked 2026-11-07): commercial use is included on every plan including Free, and no credit to SpriteCook is required; Terms s.6 (spritecook.ai/terms, effective 2026-10-14) let you use, reproduce and distribute outputs you generate, and leave checking originality/infringement to you. Free-tier generations appear in SpriteCook's public gallery.

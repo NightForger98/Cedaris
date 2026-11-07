@@ -1,0 +1,4 @@
+Butterfly, orange and black, top-down. 4 frames, 20x16: open, half, closed, half. Anchor: centre (10,8). Suggested 10-12 fps.
+Made by: SpriteCook Pixel Engine sheet (6 credits, shared with butterfly_blue); the model drew every frame open, so the flutter is made locally by narrowing the wings about the body.
+
+Licence: made with SpriteCook (spritecook.ai), free tier. SpriteCook pricing FAQ (checked 2026-11-07): commercial use is included on every plan including Free, and no credit to SpriteCook is required; Terms s.6 (spritecook.ai/terms, effective 2026-10-14) let you use, reproduce and distribute outputs you generate, and leave checking originality/infringement to you. Free-tier generations appear in SpriteCook's public gallery.

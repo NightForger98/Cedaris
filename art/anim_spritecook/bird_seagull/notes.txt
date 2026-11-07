@@ -1,0 +1,4 @@
+Seagull flying, seen front-on (face toward the camera; reads as a gull overhead). 4 frames, 32x15: wings up, level, down, level. Anchor: centre (16,7). Suggested 8 fps.
+Made by: a SpriteCook Pixel Engine still (6 credits) with the wings raised; the flap was made locally by hinging each wing at the shoulder (supersampled rotation), so the wing outlines are slightly thinner in the rotated frames.
+
+Licence: made with SpriteCook (spritecook.ai), free tier. SpriteCook pricing FAQ (checked 2026-11-07): commercial use is included on every plan including Free, and no credit to SpriteCook is required; Terms s.6 (spritecook.ai/terms, effective 2026-10-14) let you use, reproduce and distribute outputs you generate, and leave checking originality/infringement to you. Free-tier generations appear in SpriteCook's public gallery.

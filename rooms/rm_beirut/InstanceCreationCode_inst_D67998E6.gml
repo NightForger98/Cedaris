@@ -1,2 +1,1 @@
-text = "City Hall";
-side = "here";
+sprite_index = spr_anim_flag;

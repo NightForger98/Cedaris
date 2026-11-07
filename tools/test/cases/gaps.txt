@@ -45,5 +45,8 @@ call autotest_project_finish bridge
 key m
 wait 10
 shot 03_map_after
+# zoomed in on the city (the wheel and a drag do this in play; shots don't show the map's GUI layer)
+call autotest_map_zoom 3 0.35 0.3
+expect zoom 3
 key m
 quit

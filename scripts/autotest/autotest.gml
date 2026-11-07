@@ -648,6 +648,19 @@ function autotest_day(_key){
 /// @description What the open dialogue says.
 function autotest_dialogue_text(){ return instance_exists(obj_dialogue) ? obj_dialogue.text : "(no dialogue)"; }
 
+/// @description Zoom the open world map (x _z) with the point (_u, _v) - fractions of the map, 0-1 - in the middle,
+/// as the wheel and a drag would.
+function autotest_map_zoom(_z, _u, _v){
+	if(!instance_exists(obj_world_map)) return "no map";
+	with(obj_world_map){
+		var m = world_map();
+		zoom = clamp(real(_z), 1, 6);
+		mapX = clamp(frameX + frameW / 2 - real(_u) * m.w * fitS * zoom, frameX + frameW - m.w * fitS * zoom, frameX);
+		mapY = clamp(frameY + frameH / 2 - real(_v) * m.h * fitS * zoom, frameY + frameH - m.h * fitS * zoom, frameY);
+	}
+	return "zoom " + string(obj_world_map.zoom);
+}
+
 /// @description Point the open world map at a building (the room inside), as the mouse would.
 function autotest_map_hover(_room){
 	if(!instance_exists(obj_world_map)) return "no map";

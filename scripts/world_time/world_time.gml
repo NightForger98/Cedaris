@@ -61,8 +61,8 @@ function night_amount(){
 // ---------------------------------------------------------------- energy and health
 
 /// @description Max energy: 270 (as in Stardew) plus 10 per point of Stamina, and 40 once Hesta's pantry is stocked.
-function vitals_max_energy(){ return 270 + 10 * stat("stamina") + (project_done("pantry") ? 40 : 0); } // + Hesta's pantry
-function vitals_max_health(){ return 100; }
+function vitals_max_energy(){ return 270 + 10 * stat("stamina") + (project_done("pantry") ? 40 : 0) + attr_energy_bonus(); } // + Hesta's pantry, Vitality
+function vitals_max_health(){ return 100 + attr_health_bonus(); }   // Vitality, Combat (scripts/skills)
 
 function vitals_exhausted(){ return global.vitals.energy <= 0; }
 
@@ -71,7 +71,7 @@ function tool_energy_cost(_name = ""){
 	// Each tool upgrade saves another 10%
 	// A cursed tool drains twice as fast (status script)
 	var cursed = (_name != "" && is_struct(global.inv) && curse_item() == "c|held|" + _name) ? 2 : 1;
-	return 2 * (1 - clamp(stat("stamina") * 0.02, 0, 0.5)) * (1 - 0.1 * tool_tier(_name)) * cursed;
+	return 2 * (1 - clamp(stat("stamina") * 0.02, 0, 0.5)) * (1 - 0.1 * tool_tier(_name)) * cursed * skill_tool_energy_mult(_name);   // skills: scripts/skills
 }
 
 /// @description True for farm tools (they cost energy); weapons are free to swing, as in Stardew.

@@ -308,7 +308,7 @@ function villager_table(){
 		                ["You're not as dull as the rest of them.", "I fixed a hoe nobody could fix. Don't tell Mara.", "Ayla dances. I fight. We're a good pair."],
 		                ["Fine. You're my favourite. Happy?", "Let's get out of this town one night. Just us.", "You actually get me. That's rare."]],
 		        rewards: [["m|iron", 5], ["d|cloth|charcoal", 1], ["m|steel", 2], ["d|cloth|red", 1], ["m|ember_core", 1]]},
-		ayla:   {name: "Ayla Kassar", title: "the Dancer", race: "Human", body: "female", seed: 7016,
+		ayla:   {name: "Ayla Kassar", title: "the Dancer", race: "Human", body: "female", seed: 7016, shop: "dance",
 		        loves: ["m|silk", "m|moonsilk", "f|gourd_pie"], likes: ["m|", "f|", "w|"], dislikes: ["m|coal"], hates: ["m|bone", "m|troll_hide"],
 		        lines: [["Come to the tavern on the weekend! I dance!", "Zenya's all bark. Mostly.", "Hello, sweetie."],
 		                ["Dancing is just walking with joy.", "The market's the best place for people-watching.", "My feet hurt. Worth it."],
@@ -650,6 +650,7 @@ function people_trade(_key){
 		case "tinker":    inv.shopStock = shop_list([["m|gear", 0], ["o|sprinkler", 0]]); inv.shopTitle = "Brassbolt's Tinker Workshop (the rail cart is coming)"; break;
 		case "boatyard":  inv.shopStock = shop_list([["m|rope", 0], ["m|wood", 0]]); inv.shopTitle = "Saltwhistle Boatyard (boats are coming)"; break;
 		case "glassworks":inv.shopStock = shop_list([["m|glass", 0], ["m|glass_jar", 0]]); inv.shopTitle = "Fairglass Glassworks"; break;
+		case "dance":     inv.shopStock = dance_stock(); inv.shopTitle = "Ayla's dance lessons (your Agility: " + string(attr("agility")) + ")"; break;   // scripts/skills
 		case "land":      inv.shopStock = pshop_land_stock(); inv.shopTitle = "City Hall - land for sale (standing " + string(pshop_standing().total) + ")"; break;   // the Mayor (scripts/pshops)
 		case "stables":   inv.shopStock = shop_list([["m|horse_feed", 0], ["m|saddle", 0]]); inv.shopTitle = "Hayward Stables (horses are coming)"; break;
 	}
@@ -731,5 +732,5 @@ function dialogue_open(){ return instance_exists(obj_dialogue); }
 /// monsters hold still, and Esc / I belong to the window.
 function ui_blocking(){
 	return instance_exists(obj_inventory) || dialogue_open() || mine_menu_open() || instance_exists(obj_fishing) || instance_exists(obj_world_map)
-	       || (instance_exists(obj_quest_board) && obj_quest_board.open) || transit_menu_open() || plot_menu_open();
+	       || (instance_exists(obj_quest_board) && obj_quest_board.open) || transit_menu_open() || plot_menu_open() || instance_exists(obj_character);
 }

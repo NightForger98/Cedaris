@@ -355,14 +355,19 @@ function gather_break(_inst){
 	for(var i = 0; i < array_length(def.drops); i++){
 		var dr = def.drops[i];
 		var chance = dr[3] + ((dr[0] == "m|gem" || dr[0] == "m|coal") ? luck : 0);
+		if((dr[0] == "m|gem" || dr[0] == "m|coal") && skill_has("geologist")) chance *= 2;   // scripts/skills
 		if(random(1) >= chance) continue;
 		var n = irandom_range(dr[1], dr[2]);
+		if(n > 0) n += skill_extra_drops(d.key, dr[0]);
+		if(n > 0 && skill_has("prospector") && array_get_index(def.tools, "Pickaxe") != -1 && random(1) < 0.25) n *= 2;
 		if(n <= 0) continue;
 		if(inv_add(item_stack(dr[0], n)) > 0) lost = true;
 		got += ((got == "") ? "+" : ",  +") + string(n) + " " + item_def(dr[0]).name;
 	}
 	if(lost) got += "  -  your bag is full";
 	if(got != "") farm_message(got);
+	var sx = skill_gather_xp(d.key, def);   // Mining or Foraging experience (scripts/skills)
+	skill_add_xp(sx[0], sx[1]);
 
 	var objs = resource_objects(room_get_name(room));
 	if(variable_struct_exists(def, "becomes")){

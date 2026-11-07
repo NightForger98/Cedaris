@@ -132,9 +132,12 @@ function farm_harvest(_inst){
 	var type = _inst.cropType;
 	var c = crop_table()[type];
 	var luck = stat("luck") * 0.01 + (global.clock[$ "luck"] ?? 0);
+	// Farming skill: +1% gold and +1.5% silver a level; the Green Thumb far more gold (scripts/skills)
+	var fl = skill_level("farming"), gold = 0.02 + luck + fl * 0.01 + (skill_has("green_thumb") ? 0.15 : 0);
 	var r = random(1);
-	var q = (r < 0.02 + luck) ? 2 : ((r < 0.12 + luck * 2) ? 1 : 0);
+	var q = (r < gold) ? 2 : ((r < 0.12 + luck * 2 + fl * 0.025) ? 1 : 0);
 	if(inv_add(item_stack("p|" + c.key + "|" + string(q))) > 0){ farm_message("Your inventory is full"); return; }
+	skill_add_xp("farming", max(1, round(16 * ln(0.018 * c.sell + 1))));   // Stardew's harvest experience
 	farm_message("Harvested " + item_def("p|" + c.key + "|" + string(q)).name);
 	if(c.regrow > 0){
 		with(_inst){
@@ -179,7 +182,7 @@ function farm_new_day(_season){
 			var cr = r.crops[c];
 			if(!crop_in_season(cr.type, _season)){ died++; continue; }
 			var t = tiles[$ farm_key(cr.gx, cr.gy)];
-			if(t != undefined && t.watered) cr.days += 1;
+			if(t != undefined && t.watered) cr.days += 1 + ((skill_has("agriculturist") && random(1) < 0.2) ? 1 : 0);   // scripts/skills
 			array_push(keep, cr);
 		}
 		r.crops = keep;

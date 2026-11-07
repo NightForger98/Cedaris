@@ -3,6 +3,10 @@
 // Stand still while a window is open (inventory, dialogue, notice board, lift); blink for a moment after being hit
 if(iframes > 0) iframes--;
 if(ui_blocking() || game.dying){ moveX = 0; moveY = 0; facing = -1; exit; }
+// Dancing (scripts/skills): you stand and dance until it's done
+if(danceT > 0){ danceT--; moveX = 0; moveY = 0; facing = -1; exit; }
+if(input_pressed(key_of("skills")) && !instance_exists(obj_character)){ instance_create_depth(0, 0, -9000, obj_character); exit; }
+if(input_pressed(key_of("dance")) && act == undefined && charge == undefined){ dance_start(); exit; }
 
 // Charging: the swing waits on its wind-up while the button is held, a level every CHARGE_LEVEL_TIME; letting go plays
 // it with that level (see the charging script). You can still walk, slowly, without turning.
@@ -100,6 +104,7 @@ if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(k
 	if(heldType == "produce"){ farm_eat(held); exit; }
 	if(heldType == "food"){ food_eat(held); exit; }
 	if(heldType == "scroll"){ spell_learn(held); exit; }
+	if(heldType == "lesson"){ dance_learn(held); exit; }   // a dance lesson (scripts/skills)
 	if(heldType == "forage"){ forage_eat(held); exit; }
 	if(heldType == "placeable"){ placeable_place(held, cell[0], cell[1]); exit; }
 	if(heldType == "furniture"){ furniture_place(held); exit; }
@@ -107,7 +112,12 @@ if(!busy && !planting && (mouse_check_button_pressed(mb_left) || input_pressed(k
 	if(heldType == "fish"){ fish_eat(held); exit; }
 	if(heldType == "crate"){ animal_release(held); exit; }
 	if(heldType == "animalproduct"){ animal_product_eat(held); exit; }
+	// a metal weapon too heavy for your Strength won't swing (scripts/skills)
+	var heavy = (heldType == "held") ? gear_too_heavy(held) : "";
+	if(heavy != ""){ farm_message(heavy); exit; }
 	act = character_action_for(look);
+	// Agility: weapons swing faster (tools don't)
+	if(act != undefined && heldType == "held" && !item_is_tool(item_def(held.id).name)) act.fps *= attr_attack_speed();
 	// Too tired to swing a tool (weapons still work)
 	if(act != undefined && world_time_ready() && vitals_exhausted() && item_is_tool(lpc_catalog().items[look.parts.held.item].name)){
 		act = undefined;

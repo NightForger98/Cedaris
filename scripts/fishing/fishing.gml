@@ -45,11 +45,11 @@ function fish_roll(){
 		if((f.time == "day" && night) || (f.time == "night" && !night)) continue;
 		if(f.rain && !weather_is_wet()) continue;
 		array_push(cands, names[i]);
-		total += f.weight;
+		total += f.weight * ((skill_has("lucky_line") && f.weight < 15) ? 2 : 1);   // rarer fish bite more (scripts/skills)
 	}
 	if(total <= 0) return undefined;
 	var r = random(total);
-	for(var i = 0; i < array_length(cands); i++){ r -= t[$ cands[i]].weight; if(r < 0) return cands[i]; }
+	for(var i = 0; i < array_length(cands); i++){ var fw = t[$ cands[i]].weight; r -= fw * ((skill_has("lucky_line") && fw < 15) ? 2 : 1); if(r < 0) return cands[i]; }
 	return cands[0];
 }
 
@@ -72,13 +72,15 @@ function fishing_cast(_user, _dir, _level = 0){
 
 /// @description The green zone's width (0-1 of the bar) for a fish: harder fish, narrower; Luck widens it.
 function fishing_zone_width(_fish){
-	return clamp(0.36 - fish_def(_fish).hard * 0.28 + stat("luck") * 0.006, 0.07, 0.5);
+	// Fishing skill: +1% a level; the Patient specialisation +6% (scripts/skills)
+	return clamp(0.36 - fish_def(_fish).hard * 0.28 + stat("luck") * 0.006 + skill_level("fishing") * 0.01 + (skill_has("patient") ? 0.06 : 0), 0.07, 0.55);
 }
 
 /// @description You landed it: into the bag (a lucky catch is silver or gold quality - not yet; one size fits all).
 function fishing_catch(_fish){
 	var f = fish_def(_fish);
 	if(inv_add(item_stack("x|" + _fish)) > 0){ farm_message("Your bag is full - it got away"); return; }
+	skill_add_xp("fishing", (f[$ "junk"] ?? false) ? 3 : 3 + round(f.sell / 4));   // scripts/skills
 	farm_message((f[$ "junk"] ?? false) ? "You fished up an " + f.name + ". Lovely." : "Caught a " + f.name + "!");
 }
 

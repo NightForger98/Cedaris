@@ -69,7 +69,20 @@ travel rules) still holds.
   day they make up to `make` into goods and sell up to `sell` (e.g. 10 / 5 for the tailor), less a daily wage; the
   takings (or wages owed) wait in the till until you talk to them. Inside: `rm_pshop_<id>` (`tools/world2/pshop_room.js`,
   specs written by `pshop_specs.js` from make_specs). Test `pshops`.
-- **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only).
+- **Skills, attributes, gear metals, dances** (`scripts/skills`, the user, 2026-11-07): five Stardew skills (Farming,
+  Mining, Foraging, Fishing, Combat; Stardew's xp table 100 ... 15000; xp hooks in farm_harvest, animal_tend,
+  gather_break, fishing_catch, monster_kill) with perks per level and a specialisation at 5 and 10 (`skill_table`,
+  `skill_has`). Every skill level = 1 attribute point (+5 to start): Strength (melee, metal gear), Agility (attack
+  speed, dodge, move speed, dances), Intelligence (+Magic), Vitality (health, energy), Luck, Charisma (+Charm) -
+  `attr_stat_bonus` feeds `stat()`. The character screen: K (`obj_character`). Metal weapons and armour have a metal
+  (`stack.metal`, saved): copper / iron / steel / silver / gold / mithril (`gear_metals`: Strength 0/4/8/12/16/22,
+  x0.85-1.6); armour is crafted in each metal from its bars, weapons come in `weapon_default_metal`; the dye slot only
+  recolours. Tools show their upgrade metal in hand (`tool_tier_pal`; `lpc_pal_metal_mithril` was made for it).
+  Dances: Ayla teaches at the tavern 18-22:30 (shop "dance", lesson items `v|<dance>`, Agility gates); B dances your
+  best (friendship from villagers watching once a day; a festival's dance contest). Test `skills`.
+- **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only); the user's edited villager
+  list (a Word file) is still to come - apply it to `villager_table` / `villager_routines`; their dancer shop may
+  replace Ayla's lessons.
 
 ### Cedar & Sea's world (2026-11-06)
 

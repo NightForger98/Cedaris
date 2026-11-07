@@ -159,6 +159,12 @@ function monster_spawn(_key, _x, _y, _floor){
 /// Returns true if it hit something (or fired).
 function combat_player_hit(_user, _item, _dir, _w = undefined){
 	var w = _w ?? weapon_def(_item);   // a charged move passes its own, stronger stats
+	if(_user.object_index == obj_plyr){
+		var hs = inv_held_stack();
+		var heavy = gear_too_heavy(hs);
+		if(heavy != ""){ farm_message(heavy); return false; }
+		w = gear_weapon_stats(w, hs);   // its metal and your Strength (scripts/skills)
+	}
 	var ang = [90, 180, 270, 0][_dir];
 	if(w[$ "ranged"] ?? false){
 		if((w[$ "returns"] ?? false) && boomerang_out()) return false;   // still flying: catch it first
@@ -187,7 +193,7 @@ function combat_player_hit(_user, _item, _dir, _w = undefined){
 /// @description Damage a monster with a weapon: Luck adds to the crit chance, Defence takes some off.
 function monster_damage(_inst, _w, _ang){
 	var crit = random(1) < _w.crit + stat("luck") * 0.005;
-	var dmg = irandom_range(_w.dmg[0], _w.dmg[1]) * (crit ? 2 : 1);
+	var dmg = irandom_range(_w.dmg[0], _w.dmg[1]) * (crit ? (skill_has("desperado") ? 3 : 2) : 1);
 	dmg = max(1, dmg - _inst.def.def);
 	with(_inst){
 		hp -= dmg;
@@ -218,6 +224,7 @@ function monster_kill(_inst){
 		got += ((got == "") ? "+" : ",  +") + string(n) + " " + item_def(dr[0]).name;
 	}
 	quests_on_kill(_inst.kind);
+	if(!(m[$ "passive"] ?? false)) skill_add_xp("combat", max(2, round(m.hp / 3)));   // scripts/skills
 	if(m[$ "boss"] ?? false) mine_boss_beaten(_inst);
 	// Pixies and moths are caught, not defeated
 	if(m[$ "passive"] ?? false) farm_message("Caught a " + string_lower(m.name) + "  " + ((got == "") ? "(it slipped away with nothing)" : got));
@@ -230,6 +237,7 @@ function monster_kill(_inst){
 /// shove away from the hit. At 0 health you're knocked out.
 function player_hurt(_dmg, _fromX, _fromY){
 	if(!instance_exists(obj_plyr) || obj_plyr.iframes > 0 || game.sleeping || game.dying) return;
+	if(random(1) < attr_dodge()){ popup(obj_plyr.x, obj_plyr.y - 62, "Dodged!", make_colour_rgb(160, 220, 255)); obj_plyr.iframes = 20; return; }   // Agility
 	var dmg = max(1, round(_dmg) - stat("defense"));
 	global.vitals.health = max(0, global.vitals.health - dmg);
 	popup(obj_plyr.x, obj_plyr.y - 62, "-" + string(dmg), make_colour_rgb(240, 80, 70));

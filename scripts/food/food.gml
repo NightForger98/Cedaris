@@ -10,6 +10,7 @@ function stat(_key){
 	if(variable_global_exists("inv") && is_struct(global.inv) && variable_struct_exists(global.inv, "stats")) v += global.inv.stats[$ _key] ?? 0;
 	var b = food_buff();
 	if(b != undefined) v += b.stats[$ _key] ?? 0;
+	v += attr_stat_bonus(_key);   // attributes (scripts/skills)
 	// A curse takes 30% off your Defence (status script)
 	if(_key == "defense" && variable_global_exists("inv") && is_struct(global.inv) && curse_active()) v = floor(v * 0.7);
 	return v;

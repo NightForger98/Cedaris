@@ -192,9 +192,11 @@ if(shop && upgrades){
 		var rc = list[i];
 		var ok = inv_can_afford(rc.cost);
 		var over = overPanel && my >= y1 && my < y1 + rowH;
-		if(over){ draw_set_colour(c.hover); draw_roundrect_ext(panelX1 + 8, y1, panelX2 - 8, y1 + rowH - 4, 8, 8, false); tip = item_stack(rc.id); }
-		item_draw_icon(item_stack(rc.id), panelX1 + 14, y1 + 2, 44, body);
-		ui_text(panelX1 + 70, y1 + rowH / 2, item_def(rc.id).name, 0.58, ok ? item_tier_colour(item_def(rc.id).tier) : c.dim, fa_left);
+		var rmetal = rc[$ "metal"] ?? "", rst = item_stack(rc.id);
+		if(rmetal != ""){ rst.metal = rmetal; rst.pal = gear_metal(rmetal).pal; }   // metal armour (scripts/skills)
+		if(over){ draw_set_colour(c.hover); draw_roundrect_ext(panelX1 + 8, y1, panelX2 - 8, y1 + rowH - 4, 8, 8, false); tip = rst; }
+		item_draw_icon(rst, panelX1 + 14, y1 + 2, 44, body);
+		ui_text(panelX1 + 70, y1 + rowH / 2, ((rmetal != "") ? gear_metal(rmetal).name + " " : "") + item_def(rc.id).name, 0.58, ok ? item_tier_colour(item_def(rc.id).tier) : c.dim, fa_left);
 		// Cost as little material swatches with counts
 		var cx2 = panelX2 - 20;
 		for(var m = array_length(mats) - 1; m >= 0; m--){
@@ -221,7 +223,7 @@ if(shop && upgrades){
 			cx2 -= 40;
 		}
 		if(over && mouse_check_button_pressed(mb_left) && cursor == undefined){
-			var why = inv_craft(rc.id, rc.cost);
+			var why = inv_craft(rc.id, rc.cost, rc[$ "metal"] ?? "");
 			showMessage((why == "") ? "Made " + item_def(rc.id).name : why);
 			changed();
 		}
@@ -272,8 +274,15 @@ if(tip != undefined && cursor == undefined){
 		case "food":     array_push(lines, "Food"); break;
 	}
 	if(tierLine != "") lines[1] = tierLine + " " + string_lower(lines[1]);
-	var statLine = item_stats_text(d.stats);
+	var statLine = item_stats_text(gear_stack_stats(tip));
 	if(statLine != "") array_push(lines, statLine);
+	// its metal, and the Strength it needs (scripts/skills)
+	var tm = gear_metal(gear_stack_metal(tip));
+	if(tm != undefined){
+		lines[0] = tm.name + " " + lines[0];
+		array_push(lines, tm.name + ": needs " + string(tm.str) + " Strength" + ((attr("strength") < tm.str) ? "  (too heavy for you)" : "") + ((d.type == "held") ? ", x" + string(tm.mult) + " damage" : ""));
+	}
+	if(d.type == "lesson") array_push(lines, "Needs " + string(dance_table()[$ d.dance].agi) + " Agility" + (dance_knows(d.dance) ? "  (you know it)" : ""));
 	if(d.type == "material"){
 		var mt = item_material(string_split(tip.id, "|")[1]);
 		var ms = item_stats_text(mt.stats);

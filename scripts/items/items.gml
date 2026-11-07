@@ -201,6 +201,13 @@ function item_def(_id){
 				     desc: fg.desc + ((fg.energy > 0) ? " Hold it and use it to eat (+" + string(fg.energy) + " energy)." : "")};
 			}
 			break;
+		case "v":   // a dance lesson (scripts/skills): use it to learn the dance
+			var dn = dance_table()[$ p[1]];
+			if(dn != undefined){
+				d = {id: _id, type: "lesson", dance: p[1], name: dn.name + " Lesson", max: 1, price: dn.price, tier: min(4, dn.power - 1), stats: {}, colour: make_colour_rgb(240, 120, 170),
+				     desc: "Ayla's lesson in " + dn.name + ". Hold it and use it to learn the dance (needs " + string(dn.agi) + " Agility)."};
+			}
+			break;
 		case "k":
 			var sp = spell_def(p[1]);
 			if(sp != undefined){
@@ -361,8 +368,15 @@ function item_recipes(){
 	var cat = lpc_catalog().items;
 	for(var i = 0; i < array_length(cat); i++){
 		if(array_get_index(slots, cat[i].slot) == -1) continue;
-		array_push(list, {id: "c|" + cat[i].slot + "|" + cat[i].name, slot: cat[i].slot, cat: i,
-		                  cost: item_recipe_cost(cat[i].slot, cat[i].material, cat[i].name)});
+		var cost = item_recipe_cost(cat[i].slot, cat[i].material, cat[i].name);
+		if(cat[i].material == "metal"){
+			// metal armour: one recipe a metal, made of its bars (scripts/skills: Strength decides what you can wear)
+			var gm = gear_metals();
+			for(var g = 0; g < array_length(gm); g++)
+				array_push(list, {id: "c|" + cat[i].slot + "|" + cat[i].name, slot: cat[i].slot, cat: i, metal: gm[g].key, cost: gear_recipe_cost(cost, gm[g].key)});
+			continue;
+		}
+		array_push(list, {id: "c|" + cat[i].slot + "|" + cat[i].name, slot: cat[i].slot, cat: i, cost: cost});
 	}
 	return list;
 }
@@ -466,7 +480,7 @@ function item_shop_price(_id){
 function item_sell_price(_id){
 	var d = item_def(_id);
 	var base = (d.type == "produce") ? produce_price(d.crop, d.quality) : max(1, floor(d.price / 2));
-	return max(1, round(base * (1 + clamp(stat("charm") * 0.01, 0, 0.2))));
+	return max(1, round(base * (1 + clamp(stat("charm") * 0.01, 0, 0.2)) * skill_sell_mult(_id)));   // specialisations (scripts/skills)
 }
 
 // ---------------------------------------------------------------- icons
@@ -564,6 +578,7 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			draw_sprite_part_ext(spr_tile_terrain, 0, fa[0], fa[1], fa[2], fa[3], cx - fa[2] * fs / 2, cy - fa[3] * fs / 2, fs, fs, c_white, 1);
 			break;
 		case "scroll":
+		case "lesson":   // a dance lesson: a scroll with a pink ribbon
 			// A rolled parchment tied with a ribbon in the spell's colour
 			var sw = _size * 0.3, sh = _size * 0.38;
 			draw_set_colour(make_colour_rgb(120, 95, 60));

@@ -9,6 +9,8 @@ mine 1
 wait 40
 call autotest_open_floor 120 380 90
 expectnot none
+# strong enough for iron weapons (scripts/skills: metal gear needs Strength)
+call autotest_attr strength 10
 give c|held|Arming Sword
 give c|held|Mace
 give c|held|Bow

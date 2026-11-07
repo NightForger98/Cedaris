@@ -31,3 +31,8 @@ charge = undefined; // winding a tool up while the button is held: {item, t, lev
 actCharge = 0;      // the level the current action was charged to (0: a tap)
 motion = undefined;  // how a charged release plays out: a spin or a big swing (charge_release_motion), or undefined
 doorPrev = undefined; // the transition (door, road out) you stood on last step: walking onto a new one takes you through it (Step)
+
+// Dancing (scripts/skills): frames left, the dance, its step
+danceT = 0;
+danceKey = "";
+danceStep = 0;

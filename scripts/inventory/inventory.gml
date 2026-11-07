@@ -158,7 +158,7 @@ function inv_can_place(_loc, _stack, _look){
 			if(d.type != "clothing" || d.slot != _loc.key) return "That doesn't go in the " + item_slot_label(_loc.key) + " slot";
 			if(!character_item_fits(d.cat, _look.body)) return "It doesn't come in your size";
 			if(!character_race_allows(character_race(_look.race), d.slot, d.cat)) return "Your race can't wear that";
-			return "";
+			return gear_too_heavy(_stack);   // its metal needs Strength (scripts/skills)
 		case "dye":
 			if(d.type != "dye") return "Only dyes go in dye slots";
 			return "";
@@ -195,6 +195,12 @@ function inv_apply_look(_look){
 	var hd = (h == undefined) ? undefined : item_def(h.id);
 	_look.parts.held.item = (hd != undefined && hd.type == "held") ? hd.cat : -1;
 	_look.parts.held.pal = (hd != undefined && hd.type == "held" && h.pal != "") ? asset_get_index(h.pal) : -1;
+	if(hd != undefined && hd.type == "held"){
+		// a tool shows its upgrade's metal; a metal weapon its own metal (scripts/skills)
+		var tp = (tool_upgradable(hd.name) != "" && hd.name != "Watering Can") ? tool_tier_pal(tool_tier(hd.name)) : "";
+		if(tp == "" && h.pal == ""){ var wm = gear_metal(gear_stack_metal(h)); if(wm != undefined) tp = wm.pal; }
+		if(tp != "" && asset_get_index(tp) != -1) _look.parts.held.pal = asset_get_index(tp);
+	}
 	_look.parts.held.want = _look.parts.held.item;
 	inv.stats = inv_stats();
 }
@@ -208,7 +214,7 @@ function inv_stats(){
 	for(var i = 0; i < array_length(slots); i++){
 		var st = global.inv.equip[$ slots[i]];
 		if(st == undefined) continue;
-		var s = item_def(st.id).stats;
+		var s = gear_stack_stats(st);   // its metal (scripts/skills)
 		for(var k = 0; k < array_length(keys); k++) total[$ keys[k]] += s[$ keys[k]] ?? 0;
 	}
 	return total;
@@ -243,19 +249,21 @@ function inv_can_afford(_cost){
 }
 
 /// @description Craft: spend the materials (story mode) and add the item. Returns "" or the reason it failed.
-function inv_craft(_id, _cost){
+function inv_craft(_id, _cost, _metal = ""){
 	if(!inv_can_afford(_cost)) return "Not enough materials";
 	if(!inv_is_free()){
 		var names = variable_struct_get_names(_cost);
 		for(var i = 0; i < array_length(names); i++) cost_take(names[i], _cost[$ names[i]]);
 	}
-	if(inv_add(item_stack(_id, 1)) > 0) return "Your inventory is full";
+	var st = item_stack(_id, 1);
+	if(_metal != ""){ st.metal = _metal; st.pal = gear_metal(_metal).pal; }   // metal armour: made of that metal (scripts/skills)
+	if(inv_add(st) > 0) return "Your inventory is full";
 	return "";
 }
 
 // ---------------------------------------------------------------- saving
 
-function inv_stack_to_save(_s){ return (_s == undefined) ? undefined : {id: _s.id, count: _s.count, pal: _s.pal}; }
+function inv_stack_to_save(_s){ return (_s == undefined) ? undefined : {id: _s.id, count: _s.count, pal: _s.pal, metal: _s[$ "metal"] ?? ""}; }
 
 function inv_to_save(){
 	var inv = global.inv;
@@ -272,7 +280,7 @@ function inv_to_save(){
 }
 
 // JSON null can come back as something other than undefined, so only structs count as stacks
-function inv_stack_from_save(_s){ return is_struct(_s) ? item_stack(_s.id, _s.count, _s.pal) : undefined; }
+function inv_stack_from_save(_s){ if(!is_struct(_s)) return undefined; var st = item_stack(_s.id, _s.count, _s.pal); if((_s[$ "metal"] ?? "") != "") st.metal = _s.metal; return st; }
 
 function inv_from_save(_data){
 	var inv = inv_new(_data.mode);

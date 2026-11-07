@@ -1,0 +1,60 @@
+# Skills, attributes, gear metals, tool colours and dances (scripts/skills): skills level from experience
+# (Stardew's table), each level gives an attribute point; Strength gates metal gear; Agility gates dances
+start story
+wait 60
+call autotest_date 0 2
+time 19
+call autotest_skills_line
+expect level 0 points 5
+# 100 farming experience: level 1, a point
+call autotest_skill_xp farming 100
+expect farming 1
+call autotest_skills_line
+expect level 1 points 6
+# a harvest-sized gain doesn't level again yet
+call autotest_skill_xp farming 50
+expect farming 1
+# combat to 5: a specialisation, and more health
+call autotest_skill_xp combat 2150
+expect combat 5
+call skill_pending_choices
+expect 1
+call skill_choose combat 5 fighter
+call skill_has fighter
+expect 1
+call vitals_max_health
+expect 140
+# Strength and metal gear
+call autotest_gear_heavy c|held|Dagger copper
+expect fine
+call autotest_gear_heavy c|held|Katana silver
+expect needs 12 Strength
+call autotest_attr strength 12
+call autotest_gear_heavy c|held|Katana silver
+expect fine
+# tools show their upgrade's metal in hand
+call autotest_tool_pal Pickaxe
+expect lpc_pal_metal_iron
+call autotest_tool_tier Pickaxe 1
+call autotest_tool_pal Pickaxe
+expect lpc_pal_metal_copper
+# Agility and dances: Ayla's Spin needs 4 Agility
+call autotest_attr agility 0
+give v|spin
+equip v|spin
+use
+wait 10
+call dance_knows spin
+expect 0
+call autotest_attr agility 4
+use
+wait 10
+call dance_knows spin
+expect 1
+call dance_best
+expect spin
+key b
+wait 30
+shot 01_dancing
+call autotest_attr strength 0
+quit

@@ -26,6 +26,22 @@ if(facing != -1){
 
 // Blink while invulnerable after a hit
 if(iframes > 0 && (iframes div 4) mod 2 == 0) exit;
+// Dancing (scripts/skills): its steps in turn - a row of the sheet, a hop, a sway
+if(danceT > 0 && danceKey != ""){
+	var dd = dance_table()[$ danceKey], st = dd.steps, t = 150 - danceT, total = 0;
+	for(var i = 0; i < array_length(st); i++) total += st[i][1] * 4;
+	var tt = t mod total, k = 0;
+	while(tt >= st[k][1] * 4){ tt -= st[k][1] * 4; k++; }
+	var s = st[k], frac2 = tt / (s[1] * 4);
+	var fr = (s[0] < 4) ? floor(frac2 * 7) : 1 + floor(frac2 * 8) mod 8;   // arms raised: frames 0-6; the walk: 1-8
+	var hop = round(sin(frac2 * pi) * s[2]), sway = round(sin(frac2 * pi) * s[3]);
+	character_draw(look, fr, s[0], xx + sway, yy - hop, 1);
+	draw_set_font(fnt_eq);
+	draw_set_halign(fa_center);
+	draw_text_transformed_colour(x + 14, y - 74 - (t mod 30) / 3, "~", 0.5 * wtx(), 0.5 * wtx(), 0, make_colour_rgb(255, 180, 210), make_colour_rgb(255, 180, 210), make_colour_rgb(255, 180, 210), make_colour_rgb(255, 180, 210), 1 - (t mod 30) / 30);
+	draw_set_halign(fa_left);
+	exit;
+}
 // Charging: the cells the release will work, under your feet
 if(charge != undefined) charge_draw_cells(id);
 // All layers, palettes and draw order live in character_draw (character_look script)

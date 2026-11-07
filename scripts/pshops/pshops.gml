@@ -36,7 +36,7 @@ function pshop_kinds(){
 function pshop_kind_keys(){ static k = ["tailor", "smithy", "bakery", "flowers", "tavern", "apothecary", "produce", "fish", "lumber"]; return k; }
 
 /// @description Who runs the shops: villagers with no work of their own, in the order they're taken on.
-function pshop_staff_pool(){ static p = ["liora", "clara", "nerissa", "sylva", "tauriel", "ayla", "marina", "tomas", "della"]; return p; }
+function pshop_staff_pool(){ static p = ["liora", "clara", "nerissa", "sylva", "tauriel", "marina", "tomas", "della", "noor"]; return p; }
 
 /// @description A plot's state (made the first time it's asked for).
 function pshop_plot(_id){

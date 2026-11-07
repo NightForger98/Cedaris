@@ -41,10 +41,11 @@ function forage_eat(_stack){
 	var key = string_split(_stack.id, "|")[1];
 	var f = forage_table()[$ key];
 	if(f == undefined || f.energy <= 0){ farm_message("You'd rather not eat that"); return false; }
-	global.vitals.energy = min(vitals_max_energy(), global.vitals.energy + f.energy);
+	var en = f.energy * (skill_has("herbalist") ? 2 : 1);   // the Herbalist (scripts/skills)
+	global.vitals.energy = min(vitals_max_energy(), global.vitals.energy + en);
 	_stack.count--;
 	if(_stack.count <= 0) global.inv.slots[global.inv.hotbar] = undefined;
-	farm_message("Ate " + f.name + "  (+" + string(f.energy) + " energy)");
+	farm_message("Ate " + f.name + "  (+" + string(en) + " energy)");
 	return true;
 }
 

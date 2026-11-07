@@ -118,6 +118,7 @@ function animal_tend(_a){
 		if(inv_add(item_stack(d.product, n)) > 0) return "Your bag is full";
 		_a.ready = false;
 		_a.days = 0;
+		skill_add_xp("farming", 5);   // scripts/skills
 		msg += ((msg == "") ? "" : "  ") + "+" + string(n) + " " + item_def(d.product).name;
 	}
 	return (msg == "") ? _a.name + " is happy to see you" : msg;

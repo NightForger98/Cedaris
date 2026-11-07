@@ -1,1 +1,1 @@
-sprite_index = spr_house_townhouse;
+sprite_index = spr_house_lodge;

@@ -10,7 +10,7 @@ const terrains = {
 	shore: {tileset: "TS_terrain", block: [3, 9],  fill: [[4, 12]]},
 	grass: {tileset: "TS_terrain", block: [21, 0], fill: [[21, 5], [22, 5], [23, 5], [22, 3], [22, 3], [22, 3]]},
 	dirt:  {tileset: "TS_terrain", block: [15, 0], fill: [[16, 3]]},
-	path:  {tileset: "TS_terrain", block: [18, 0], fill: [[19, 3]]},
+	path:  {tileset: "TS_road_summer", block: [0, 0], fill: [[1, 3]]},   // the dark road, in its season (tools/map/road_seasons.js; was TS_terrain 18,0)
 	sand:  {tileset: "TS_terrain", block: [0, 9],  fill: [[0, 14], [1, 14], [2, 14], [1, 12]]},
 	water: {tileset: "TS_terrain", block: [6, 9],  fill: [[7, 12]]},
 	// The farm's field: farming looks for a layer called T_Soil to know where you can till

@@ -1,1 +1,1 @@
-sprite_index = spr_prop_old_hangar;
+sprite_index = spr_house_tinker_workshop;

@@ -666,7 +666,12 @@ const SHOPS = {"Tavern": "Tavern", "Bank": "Bank", "Tools": "Tools", "Guild hall
 	"Flowers": "Flowers", "Furniture": "Furniture", "Hospital": "Clinic", "Library": "Library", "Apothecary": "Apothecary",
 	"Outfitter": "Tailor", "Museum": "Museum", "Glassworks": "Glassworks", "Riviera hotel": "Hotel", "Fish market": "Fish market"};
 function cityPlaces(id, R){
-	const {ox, oy, W, H, things, instances, taken, free, take, own, at} = R;
+	const {ox, oy, W, H, things, instances, points, taken, free, take, own, at} = R;
+	// a spot for the townsfolk to visit (sched points "rm_beirut.<name>"): the nearest open ground to (c, r)
+	const spot = (name, c, r) => { for(let d = 0; d <= 4; d++) for(let dy = -d; dy <= d; dy++) for(let dx = -d; dx <= d; dx++){
+		if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue; const cc = c + dx, rr = r + dy;
+		if(cc < 1 || rr < 1 || cc >= W - 1 || rr >= H - 1 || !own(cc, rr) || ![".", ",", ";", ":"].includes(at(cc, rr)) || taken.has(cc + "," + rr)) continue;
+		taken.add(cc + "," + rr); points[name] = [cc * 32 + 16, rr * 32 + 16]; return true; } return false; };
 	const cg = LAYOUT.city_grid || {}, lines = Object.values(cg);
 	const L = (wx, wy) => [wx - ox, wy - oy];
 	const put = (is, c, r, ok = [".", ","], over = false) => { if(!T.things[is]) return false; const [w, h] = size(is); if(!free(c, r, w, h, ok, over)) return false; things.push({is, at: [c, r]}); take(c - 1, r - 1, w + 2, h + 2); return true; };
@@ -681,6 +686,7 @@ side = "here";`}); return true; } return false; };
 		const [sc, sr] = L(89, 27);
 		near(sc - 2, sr - 2, "prop_fountain", [";", ":", ".", ","], true);   // (on the paving, which counts as taken)
 		for(const [dx, dy] of [[-6, -4], [4, -4], [-6, 3], [4, 3]]) near(sc + dx, sr + dy, "prop_bench", [";", ".", ","]);
+		[[-5, -2], [5, -2], [-5, 5], [5, 5]].forEach(([dx, dy], i) => spot("square_" + "abcd"[i], sc + dx, sr + dy));
 		// landmarks closing each street's ends (where a street stops inside town)
 		const ends = [];
 		for(const [[x1, y1], [x2, y2]] of lines) for(const e of [[x1, y1, Math.sign(x1 - x2), Math.sign(y1 - y2)], [x2, y2, Math.sign(x2 - x1), Math.sign(y2 - y1)]]) ends.push(e);
@@ -713,7 +719,21 @@ side = "here";`}); return true; } return false; };
 			near(c - 5, r - 3, "prop_flower_bed"); near(c + 2, r + 2, "prop_flower_bed"); near(c + 3, r - 3, "prop_bench");
 			near(c - 4, r + 2, "oak"); near(c + 4, r - 1, "oak");
 			parks++;
+			spot("park_" + parks, c + 1, r + 1);
 		}
+	}
+	// a scene a district (the user, 2026-11-07): a market row along Red Street, a café below the square, the port's
+	// cargo by the quays
+	if(id === "rm_beirut"){
+		const stalls = ["stall_stripe", "stall_white", "fruit_table", "stall_green", "stall_blue", "stall_cart"];
+		stalls.forEach((is, i) => { const [c, r] = L(22 + i * 8, 24); near(c, r, is); });
+		const [cc, cr] = L(86, 35);
+		near(cc, cr, "prop_town_cafe"); near(cc - 4, cr + 2, "prop_beach_umbrella"); near(cc + 5, cr + 2, "prop_beach_umbrella");
+		spot("cafe_a", cc - 3, cr + 4); spot("cafe_b", cc + 6, cr + 4);
+		[0, 2, 4].forEach((i, k) => spot("market_" + "abc"[k], 22 + i * 8 - ox + 2, 24 - oy + 2));
+	}
+	if(id === "rm_phoenix"){
+		for(let i = 0; i < 6; i++){ const [c, r] = L(92 + i * 5, 12); near(c, r, ["barrels", "crate_open", "stall_cart", "barrel", "crate_open", "barrels"][i], [".", ",", ";", ":"]); }
 	}
 	// at each way into town: a lamp each side and a board with the town's name
 	for(const [gx, gy] of LAYOUT.gates || []){

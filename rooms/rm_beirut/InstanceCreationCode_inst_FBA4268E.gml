@@ -1,2 +1,2 @@
-text = "Pigeon Rocks";
+text = "Manara's Light";
 side = "here";

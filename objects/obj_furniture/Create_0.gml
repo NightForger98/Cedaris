@@ -9,6 +9,7 @@ drawX = data.gx * 32 + (sz[0] * 32 - w) / 2;
 drawY = (data.gy + 1) * 32 - h;
 boxes = [];
 if(flat) depth = instance_exists(obj_plyr) ? obj_plyr.baseDepth : depth;   // under everything that sorts
+else if(furniture_on_wall(data.kind)) depth_sort();   // on the wall: not solid (the wall already is)
 else {
 	depth_sort();
 	for(var c = 0; c < sz[0]; c++) for(var r = 0; r < sz[1]; r++){

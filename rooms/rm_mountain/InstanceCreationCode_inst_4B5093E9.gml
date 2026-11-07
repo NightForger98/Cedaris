@@ -1,1 +1,1 @@
-sprite_index = spr_prop_stone_terrace;
+sprite_index = spr_prop_cedar_young;

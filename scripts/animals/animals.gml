@@ -71,12 +71,37 @@ function animal_release(_stack){
 	return true;
 }
 
-/// @description Room Start on the farm: the herd, somewhere in the meadow.
+/// @description Whether the animals are in their barn and coop: in the evening and at night (6 pm to 7 am), in rain,
+/// storms and snow, and all winter.
+function animals_indoors(){
+	if(!world_time_ready()) return false;
+	var h = (global.clock.minutes div 60) mod 24, w = weather_now();
+	return h >= 18 || h < 7 || w == "rain" || w == "storm" || w == "snow" || (global.clock.season mod 4) == 3;
+}
+
+/// @description The room an animal sleeps in: the coop for chickens, the barn for the rest.
+function animal_home(_kind){ return (_kind == "chicken") ? rm_coop : rm_barn; }
+
+/// @description Where animals wander in this room (room pixels): the pasture on the farm, the pen in the barn or coop.
+function animal_bounds(){
+	if(room == rm_1) return animal_pasture();
+	static pens = {};
+	var n = room_get_name(room);
+	if(pens[$ n] == undefined) pens[$ n] = layout_area(n, "pen");
+	return pens[$ n];
+}
+
+/// @description Room Start: the herd in the meadow by day; at night, in bad weather and in winter, in the barn and coop.
 function animals_room_start(){
-	if(room != rm_1) return;
-	var list = animals_list(), p = animal_pasture();
-	for(var i = 0; i < array_length(list); i++)
+	var inside = animals_indoors();
+	if(room == rm_1 && inside) return;
+	if(room != rm_1 && room != rm_barn && room != rm_coop) return;
+	if(room != rm_1 && !inside) return;
+	var list = animals_list(), p = animal_bounds();
+	for(var i = 0; i < array_length(list); i++){
+		if(room != rm_1 && animal_home(list[i].kind) != room) continue;
 		instance_create_depth(irandom_range(p[0], p[2]), irandom_range(p[1], p[3]), 0, obj_animal, {data: list[i]});
+	}
 }
 
 /// @description E beside an animal: pet it (once a day: +15 love) and take what it has for you. Returns a message.
@@ -103,9 +128,9 @@ function animals_new_day(){
 	var list = animals_list(), yesterday = day_index() - 1;
 	for(var i = 0; i < array_length(list); i++){
 		var a = list[i];
-		if(a.petted < yesterday) a.love = max(0, a.love - 5);
+		if(a.petted < yesterday) a.love = max(0, a.love - farm_silo_love_loss());
 		a.days += 1;
-		if(a.days >= animal_def(a.kind).every) a.ready = true;
+		if(a.days >= farm_silo_every(animal_def(a.kind).every)) a.ready = true;
 	}
 }
 

@@ -136,6 +136,7 @@ if(instance_exists(camera) && camera.move_cam){ in_left = 0; in_right = 0; in_up
 var in_walk = input_held(key_of("walk"));
 var in_run = input_held(key_of("run"));
 if(input_pressed(key_of("autorun")) && !ui_blocking()) always_run_toggle();
+if(input_pressed(key_of("flip")) && !ui_blocking()) furniture_flip();   // mirror the held piece of furniture, or the one in front
 sprinting = in_run;   // drawn with the run cycle while moving (Draw)
 // Your pace: running, or walking with always run off (R); Shift sprints, Ctrl walks
 if(in_run) spd = r_spd;

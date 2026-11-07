@@ -1,4 +1,4 @@
-targetRoom = rm_home_gullwater;
+targetRoom = rm_home_whitlow;
 targetX = 224;
 targetY = 280;
 PlayerFacingBefore = dir.up;

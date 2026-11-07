@@ -13,7 +13,7 @@ const ROOT = path.join(__dirname, "..", "..");
 const B = A.all(), NEWROOMS = Object.keys(B.rooms);
 const outdoors = ["rm_1", ...NEWROOMS];
 const AREA_NAME = Object.fromEntries(Object.entries(A.ROOM_OF).map(([n, id]) => [id, n]));
-const names = {rm_mine: "The Mine", rm_12: "Player Farm", rm_123: "Player Farm", rm_1: "Player Farm"};
+const names = {rm_mine: "The Mine", rm_12: "Player Farm", rm_123: "Player Farm", rm_1: "Player Farm", rm_barn: "Player Farm", rm_coop: "Player Farm"};
 for(const id of NEWROOMS) names[id] = AREA_NAME[id];
 // an interior is named for its old district (the room its door used to be in)
 for(const [id, R] of Object.entries(ROOMS)) for(const b of R.buildings || []) names[b.room] = R.name;

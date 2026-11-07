@@ -1,5 +1,5 @@
-targetRoom = rm_sunset;
-targetX = 1328;
-targetY = 2192;
-PlayerFacingBefore = dir.left;
-PlayerFacingAfter = dir.left;
+targetRoom = rm_12;
+targetX = 160;
+targetY = 472;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

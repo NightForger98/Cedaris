@@ -1,1 +1,1 @@
-sprite_index = spr_prop_haystack;
+sprite_index = spr_prop_shepherd_hut;

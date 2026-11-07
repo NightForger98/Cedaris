@@ -1,1 +1,1 @@
-sprite_index = spr_prop_town_shop2;
+sprite_index = spr_prop_tide_pools;

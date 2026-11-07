@@ -1,0 +1,13 @@
+/// @description Where it leads, once you're close - drawn last of all (Draw End), so nothing covers the words
+if(!instance_exists(obj_plyr)) exit;
+var d = point_distance(x, y, obj_plyr.x, obj_plyr.y);
+if(d > 140) exit;
+draw_set_font(fnt_eq);
+draw_set_halign(fa_center);
+draw_set_valign(fa_bottom);
+var a = clamp((140 - d) / 40, 0, 1);
+var t = (side == "here") ? text : "To " + text;   // a district's name board, or a way out
+draw_text_transformed_colour(x + 1, y - 33, t, 0.32 * wtx(), 0.32 * wtx(), 0, c_black, c_black, c_black, c_black, a * 0.7);
+draw_text_transformed_colour(x, y - 34, t, 0.32 * wtx(), 0.32 * wtx(), 0, c_white, c_white, c_white, c_white, a);
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);

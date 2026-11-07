@@ -1,1 +1,1 @@
-sprite_index = spr_house_home_quill;
+sprite_index = spr_house_townhouse;

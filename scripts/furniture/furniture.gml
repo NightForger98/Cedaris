@@ -2,7 +2,9 @@
 /// (rm_12, rm_123) and a see-through preview shows where it goes - green if it fits, red if not - on the cells in
 /// front of you, or under the mouse when you've just moved it near you. Use places it; use with an empty hand (or the
 /// pickaxe) on a piece picks it back up. Rugs lie flat (you walk over them, other pieces go on them).
-/// Saved per room: world_room(<room>).furniture = [{kind, gx, gy}] - gx, gy: the cell of its bottom-left corner.
+/// The flip key (X) mirrors the held piece, or the piece in front of you. Wall pieces (paintings, the clock face...)
+/// hang on the wall: on a wall cell with floor below it.
+/// Saved per room: world_room(<room>).furniture = [{kind, gx, gy, flip}] - gx, gy: the cell of its bottom-left corner.
 /// Art: PixelLab (art/furniture, spr_furn_<kind>).
 
 /// @description The pieces: name, price, how many rows of cells at its foot are solid (rugs: flat).
@@ -24,7 +26,7 @@ function furniture_table(){
 		plant:       {name: "Potted Plant",       price: 150,  rows: 1},
 		fireplace:   {name: "Fireplace",          price: 2000, rows: 1},
 		stove:       {name: "Old Stove",          price: 1200, rows: 1},
-		painting:    {name: "Landscape Painting", price: 500,  rows: 1},
+		painting:    {name: "Landscape Painting", price: 500,  rows: 1, wall: true},
 		clock:       {name: "Grandfather Clock",  price: 1000, rows: 1},
 		cabinet:     {name: "Kitchen Cabinet",    price: 700,  rows: 1},
 		chest:       {name: "Storage Chest",      price: 300,  rows: 1},
@@ -33,6 +35,15 @@ function furniture_table(){
 }
 
 function furniture_def(_kind){ return furniture_table()[$ _kind]; }
+
+/// @description Whether a piece hangs on the wall.
+function furniture_on_wall(_kind){ var d = furniture_def(_kind); return d != undefined && (d[$ "wall"] ?? false); }
+
+/// @description Whether a cell is wall (solid) - for hanging pieces.
+function furniture_cell_solid(_c, _r){
+	var cx = _c * 32 + 16, cy = _r * 32 + 16;
+	return collision_rectangle(cx - 12, cy - 12, cx + 12, cy + 12, obj_col_box, false, true) != noone;
+}
 
 /// @description A piece's sprite (-1 if its art isn't in the game).
 function furniture_sprite(_kind){ return asset_get_index("spr_furn_" + _kind); }
@@ -91,6 +102,17 @@ function furniture_target(_kind){
 /// other pieces (rugs only clash with rugs) and you.
 function furniture_fits(_kind, _gx, _gy){
 	var sz = furniture_size(_kind), flat = furniture_def(_kind)[$ "flat"] ?? false;
+	if(furniture_on_wall(_kind)){
+		// on the wall: every cell solid wall, the row below it open floor, no other wall piece there
+		for(var c = _gx; c < _gx + sz[0]; c++){
+			if(c < 0 || _gy < 0 || c * 32 >= room_width || (_gy + 1) * 32 >= room_height) return false;
+			if(!furniture_cell_solid(c, _gy) || furniture_cell_solid(c, _gy + 1)) return false;
+			if(collision_rectangle(c * 32, _gy * 32 - 16, c * 32 + 31, _gy * 32 + 63, obj_transition, false, true) != noone) return false;
+			var o = furniture_at(c, _gy, false);
+			if(o != undefined && furniture_on_wall(o.kind)) return false;
+		}
+		return true;
+	}
 	for(var c = _gx; c < _gx + sz[0]; c++) for(var r = _gy - sz[1] + 1; r <= _gy; r++){
 		var cx = c * 32 + 16, cy = r * 32 + 16;
 		if(c < 1 || r < 1 || cx > room_width - 32 || cy > room_height - 32) return false;
@@ -116,8 +138,8 @@ function furniture_place(_stack){
 	var kind = string_split(_stack.id, "|")[1];
 	if(!furniture_room_ok()){ farm_message("Furniture goes in your farmhouse"); return false; }
 	var t = furniture_target(kind);
-	if(!furniture_fits(kind, t[0], t[1])){ farm_message("There's no room for it there"); return false; }
-	var d = {kind: kind, gx: t[0], gy: t[1]};
+	if(!furniture_fits(kind, t[0], t[1])){ farm_message(furniture_on_wall(kind) ? "Hang it on a wall" : "There's no room for it there"); return false; }
+	var d = {kind: kind, gx: t[0], gy: t[1], flip: variable_global_exists("furnFlip") && global.furnFlip};
 	array_push(furniture_list(room_get_name(room)), d);
 	instance_create_depth(0, 0, 0, obj_furniture, {data: d});
 	_stack.count--;
@@ -143,6 +165,27 @@ function furniture_pick_up(){
 	with(obj_furniture) if(data == d) instance_destroy();
 	farm_message("Picked up the " + string_lower(furniture_def(d.kind).name));
 	return true;
+}
+
+/// @description The flip key: mirror the held piece (its preview, and how it's placed), or with an empty hand the piece
+/// in front of you (or under the mouse).
+function furniture_flip(){
+	if(!furniture_room_ok() || !instance_exists(obj_plyr)) return;
+	var held = inv_held_stack();
+	if(held != undefined && item_def(held.id).type == "furniture"){
+		global.furnFlip = !(variable_global_exists("furnFlip") && global.furnFlip);
+		return;
+	}
+	if(held != undefined) return;
+	var p = obj_plyr, cells = [];
+	if(furniture_mouse_aim()) array_push(cells, [floor(mouse_x / 32), floor(mouse_y / 32)]);
+	var dirn = clamp(p.y_frame - 8, 0, 3);
+	array_push(cells, [floor((p.x + [0, -26, 0, 26][dirn]) / 32), floor((p.y - 6 + [-26, 0, 30, 0][dirn]) / 32)]);
+	var d = undefined;
+	for(var i = 0; i < array_length(cells) && d == undefined; i++) d = furniture_at(cells[i][0], cells[i][1], false);
+	for(var i = 0; i < array_length(cells) && d == undefined; i++) d = furniture_at(cells[i][0], cells[i][1], true);
+	if(d == undefined) return;
+	d.flip = !(d[$ "flip"] ?? false);
 }
 
 /// @description Room Start: this room's furniture.
@@ -173,7 +216,9 @@ function furniture_draw_preview(){
 	draw_rectangle(t[0] * 32, (t[1] - sz[1] + 1) * 32, (t[0] + sz[0]) * 32 - 1, (t[1] + 1) * 32 - 1, false);
 	draw_set_alpha(1);
 	draw_set_colour(c_white);
-	if(s != -1) draw_sprite_ext(s, 0, t[0] * 32 + (sz[0] * 32 - sprite_get_width(s)) / 2, (t[1] + 1) * 32 - sprite_get_height(s), 1, 1, 0, col, 0.6);
+	if(s == -1) return;
+	var fl = variable_global_exists("furnFlip") && global.furnFlip, dx = t[0] * 32 + (sz[0] * 32 - sprite_get_width(s)) / 2;
+	draw_sprite_ext(s, 0, fl ? dx + sprite_get_width(s) : dx, (t[1] + 1) * 32 - sprite_get_height(s), fl ? -1 : 1, 1, 0, col, 0.6);
 }
 
 /// @description Draw a piece as an icon in a slot.

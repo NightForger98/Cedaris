@@ -1,2 +1,2 @@
-text = "Museum, Smithy";
+text = "Library, Clinic";
 side = "here";

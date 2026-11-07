@@ -1,4 +1,4 @@
-targetRoom = rm_home_fairglass;
+targetRoom = rm_home_gullwater;
 targetX = 224;
 targetY = 280;
 PlayerFacingBefore = dir.up;

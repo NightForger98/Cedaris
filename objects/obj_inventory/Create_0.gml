@@ -165,8 +165,11 @@ recipeList = function(){
 		var r = all_r[i];
 		if(filter != "" && r.slot != filter) continue;
 		if(!inv_recipe_ok(r, global.look)) continue;
-		if(filter == "" && !inv_can_afford(r.cost)) continue;
-		array_push(out, r);
+		var rc = {cost: farm_shed_cost(r.cost)};
+		var rn = variable_struct_get_names(r);
+		for(var j = 0; j < array_length(rn); j++) if(rn[j] != "cost") rc[$ rn[j]] = r[$ rn[j]];
+		if(filter == "" && !inv_can_afford(rc.cost)) continue;
+		array_push(out, rc);
 	}
 	return out;
 };

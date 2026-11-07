@@ -329,7 +329,7 @@ function settings_save(){
 /// @description The actions you can rebind, in the order the Controls screen lists them, with their default keys.
 function keys_default(){
 	static k = {up: vk_up, down: vk_down, left: vk_left, right: vk_right, run: vk_shift, walk: vk_control, autorun: ord("R"),
-	            use: vk_space, interact: ord("E"), inventory: ord("I"), map: ord("M"), cast: ord("F"), spell: ord("Q")};
+	            use: vk_space, interact: ord("E"), inventory: ord("I"), map: ord("M"), cast: ord("F"), spell: ord("Q"), flip: ord("X")};
 	return k;
 }
 
@@ -338,7 +338,7 @@ function keys_actions(){
 	static a = [["up", "Walk up"], ["down", "Walk down"], ["left", "Walk left"], ["right", "Walk right"],
 	            ["run", "Run (hold)"], ["walk", "Walk slowly (hold)"], ["autorun", "Walk / run pace (toggle)"], ["use", "Use the held tool (or click)"],
 	            ["interact", "Talk / use / open"], ["inventory", "Inventory"], ["map", "World map"],
-	            ["cast", "Cast with a staff"], ["spell", "Change spell"]];
+	            ["cast", "Cast with a staff"], ["spell", "Change spell"], ["flip", "Flip furniture"]];
 	return a;
 }
 

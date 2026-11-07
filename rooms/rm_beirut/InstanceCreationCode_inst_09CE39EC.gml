@@ -1,1 +1,1 @@
-sprite_index = spr_prop_town_yellowhouse2;
+sprite_index = spr_prop_town_yellowhouse;

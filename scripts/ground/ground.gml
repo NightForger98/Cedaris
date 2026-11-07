@@ -20,6 +20,8 @@ function ground_season_apply(){
 		if(tm == -1) continue;
 		var cur = tilemap_get_tileset(tm);
 		if(cur != want && array_get_index(sheets, cur) != -1) tilemap_tileset(tm, want);
+		var roads = [TS_road_spring, TS_road_summer, TS_road_autumn, TS_road_winter], rw = roads[clamp(global.clock.season, 0, 3)];
+		if(cur != rw && array_get_index(roads, cur) != -1) tilemap_tileset(tm, rw);   // the dark road's season
 	}
 }
 

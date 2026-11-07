@@ -90,6 +90,11 @@ module.exports = {
 		{obj: "obj_building", x: 0, y: 0, code: "farm_building_setup(\"coop\", 2048, 832);"},
 		{obj: "obj_building", x: 0, y: 0, code: "farm_building_setup(\"shed\", 1696, 192);"},
 		{obj: "obj_building", x: 0, y: 0, code: "farm_building_setup(\"silo\", 1856, 416);"},
+		// The barn's and the coop's doors (their insides: specs/rm_barn.js, rm_coop.js)
+		{obj: "obj_transition", x: 2160, y: 444, sx: 2, sy: 1,
+		 code: "targetRoom = rm_barn;\ntargetX = 256;\ntargetY = 312;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
+		{obj: "obj_transition", x: 2048, y: 828, sx: 2, sy: 1,
+		 code: "targetRoom = rm_coop;\ntargetX = 192;\ntargetY = 248;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
 		// The farmhouse door
 		{obj: "obj_transition", x: 816, y: 528, sx: 2, sy: 1,
 		 code: "targetRoom = rm_12;\ntargetX = 160;\ntargetY = 472;\nPlayerFacingBefore = dir.up;\nPlayerFacingAfter = dir.up;"},
@@ -102,6 +107,8 @@ module.exports = {
 	points: {
 		start: [816, 592],       // a new game, in front of the farmhouse
 		door: [816, 564],        // back out of the farmhouse
+		barn_door: [2160, 484],  // out of the barn
+		coop_door: [2048, 868],  // out of the coop
 		path_north: [1296, 72],  // down from Wing Hill
 		road_t: [1296, 72],
 		road_l: [64, 576],       // in from South Beach

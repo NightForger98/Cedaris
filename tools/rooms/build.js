@@ -111,6 +111,8 @@ function lpcrGround(spec, W, H, rand){
 	let gave = 0;
 	for(let y = 0; y <= H; y++) for(let x = 0; x <= W; x++){
 		let c = [terr(x - 1, y - 1), terr(x, y - 1), terr(x - 1, y), terr(x, y)];
+		// grass, dirt and water at one corner: the grass gives way (a muddy bank all along, not a notch)
+		if(!LPCR[c.join(",")] && c.includes("dirt") && c.includes("grass") && (c.includes("shallow_water") || c.includes("deep_water"))) c = c.map(t => t === "grass" ? "dirt" : t);
 		for(let g = 0; g < 10 && !LPCR[c.join(",")]; g++){
 			const u = [...new Set(c)], victim = u.sort((a, b) => c.filter(t => t === a).length - c.filter(t => t === b).length)[0];
 			c = c.map(t => t === victim ? (LPCR_GIVE[victim] || "grass") : t); gave++;

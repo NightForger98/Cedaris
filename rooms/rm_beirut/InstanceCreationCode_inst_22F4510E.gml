@@ -1,2 +1,2 @@
 kind = "tram";
-stop = "Downtown";
+stop = "Verdun Street";

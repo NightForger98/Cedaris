@@ -22,6 +22,24 @@ with(obj_monster){
 	gpu_set_blendmode(bm_normal);
 }
 
+// Street lamps light up as night falls, and the houses' doors glow warm (drawn over the night tint)
+if(game_is_playing_room() && world_time_ready() && room_is_outdoors() && night_amount() > 0.05){
+	var cam2 = view_camera[0], vx2 = camera_get_view_x(cam2), vy2 = camera_get_view_y(cam2), vw2 = camera_get_view_width(cam2), vh2 = camera_get_view_height(cam2);
+	var kx = guiWidth / vw2, ky = guiHeight / vh2, na = night_amount();
+	gpu_set_blendmode(bm_add);
+	with(obj_building){
+		if(sprite_index == -1 || x > vx2 + vw2 + 64 || x + sprite_get_width(sprite_index) < vx2 - 64 || y < vy2 - 64 || y - sprite_get_height(sprite_index) > vy2 + vh2 + 64) continue;
+		var lamp = (sprite_index == spr_prop_lamp);
+		var lx = x + sprite_get_width(sprite_index) / 2, ly = lamp ? y - sprite_get_height(sprite_index) + 10 : y - 18;
+		var house = !lamp && string_pos("spr_house_", sprite_get_name(sprite_index)) == 1;
+		if(!lamp && !house) continue;
+		draw_set_alpha((lamp ? 0.55 : 0.28) * na);
+		draw_circle_colour((lx - vx2) * kx, (ly - vy2) * ky, (lamp ? 70 : 34) * kx, make_colour_rgb(255, 190, 110), c_black, false);
+	}
+	draw_set_alpha(1);
+	gpu_set_blendmode(bm_normal);
+}
+
 // Rain, storms and snow over outdoor rooms
 if(game_is_playing_room() && world_time_ready()) weather_draw(guiWidth, guiHeight);
 

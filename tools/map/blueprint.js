@@ -133,7 +133,7 @@ disc(246, 168, 3, 3, "river");
 // and with it to the sea. Where it crosses a cliff face the cliff stays and a waterfall spills west over it (FALLS,
 // in world_layout.json; tools/world2/areas_build.js puts obj_waterfall there)
 const STREAM = [[226, 22], [214, 23], [202, 22], [190, 23], [176, 22], [162, 23], [150, 22], [140, 22]];   // (it steps down at each fall)
-const FALLS = [];
+const FALLS = [], FOOTBRIDGES = [];
 { // walked west a tile at a time; at a cliff face the water drops DROP rows (the fall's picture: it arrives along the
   // top from the east and falls down the screen), then runs on west from the splash
   const DROP = 6, pts = [];
@@ -153,7 +153,7 @@ const FALLS = [];
 	}
 	// a footbridge every 8 tiles (not by a fall), so the stream cuts nothing off
 	const foot = ((x % 8) === 4 || (x % 8) === 5) && !FALLS.some(q => Math.abs(q.x - x) < 3);
-	for(const yy of [y, y + 1]){ const k = get(x + M, yy + M); if(!["deep", "sea", "shallow", "cliff"].includes(k)) set(x + M, yy + M, foot ? "pier" : "river"); }
+	for(const yy of [y, y + 1]){ const k = get(x + M, yy + M); if(!["deep", "sea", "shallow", "cliff"].includes(k)) { set(x + M, yy + M, foot ? "pier" : "river"); if(foot) FOOTBRIDGES.push([x, yy]); } }
   } }
 
 // ---- roads (grey cobbles) and lanes (dirt), after Beirut's real ones, made simpler and wide enough to walk (main roads 3
@@ -305,6 +305,11 @@ for(const [name, pts] of Object.entries(LANES)) lineWhere(pts, "lane", 0.5, hill
 const SIDE_STREETS = () => false;   // (none: the city is its grid, plus the paths to the doors)
 for(const r of OSM.roads.filter(r => r.k === "lane")) if(besideUser(r.pts) < 0.5) lineWhere(r.pts, "lane", 0, hills, SIDE_STREETS);   // 1 tile wide, slimmer than the 2-tile roads
 for(const r of OSM.roads.filter(r => r.k === "road")) if(besideUser(r.pts) < 0.5) SIDE_LATER.push(r.pts.filter(p => inTown(p[0], p[1])));
+// a footbridge with a road crossing near it is one bridge too many: back to stream
+{ const fb = new Set(FOOTBRIDGES.map(([x, y]) => x + "," + y));
+  for(const [x, y] of FOOTBRIDGES){ let other = false;   // another bridge (a road's) over the stream within 4 tiles
+	for(let dy = -4; dy <= 4 && !other; dy++) for(let dx = -4; dx <= 4; dx++) if(get(x + dx + M, y + dy + M) === "pier" && !fb.has((x + dx) + "," + (y + dy))){ other = true; break; }
+	if(other && get(x + M, y + M) === "pier") set(x + M, y + M, "river"); } }
 rect(82, 22, 96, 32, "plaza");                     // Martyrs' Square, downtown by the port
 disc(102, 104, 3, 3, "plaza");                     // the Tayouneh roundabout, by the Horsh pines
 disc(110, 64, 2, 2, "plaza");                      // the Museum crossing

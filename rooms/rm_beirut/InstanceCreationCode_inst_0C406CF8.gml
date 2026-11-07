@@ -1,2 +1,2 @@
-text = "Manara's Light";
+text = "Oven's Window";
 side = "here";

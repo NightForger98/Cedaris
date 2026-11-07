@@ -1,5 +1,5 @@
-targetRoom = rm_outskirts;
-targetX = 144;
-targetY = 1552;
+targetRoom = rm_coop;
+targetX = 192;
+targetY = 248;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

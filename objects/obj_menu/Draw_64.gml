@@ -147,7 +147,7 @@ case "controls":
 	draw_roundrect_ext(cx - 470, 40, cx + 470, guiH - 20, 18, 18, false);
 	draw_set_alpha(1);
 	ui_text(cx, 90, "Controls", 1.6, c.accent);
-	var acts = keys_actions(), top = 150, rowH = 42;   // 13 actions: the footer stays above the buttons at 840 high
+	var acts = keys_actions(), top = 150, rowH = 39;   // 14 actions: the footer stays above the buttons at 840 high
 	for(var i = 0; i < array_length(acts); i++){
 		var ry = top + i * rowH, act = acts[i][0];
 		ui_text(cx - 40, ry + 18, acts[i][1], 0.65, c_white, fa_right);

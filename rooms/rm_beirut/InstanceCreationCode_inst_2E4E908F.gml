@@ -1,3 +1,2 @@
-plot = "b2";
-pw = 7;
-ph = 6;
+text = "Pigeon Rocks";
+side = "here";

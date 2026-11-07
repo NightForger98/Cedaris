@@ -1,2 +1,2 @@
-text = "South Beach";
+text = "Beirut";
 side = "here";

@@ -90,6 +90,14 @@ travel rules) still holds.
   cycle with afterimages, or a hop back over a shadow (standing still, or heading away from where you face).
   `player_hurt` now returns "hit"/"blocked"/"parried"/"dodged"/"". `sfx(name)` plays `snd_<name>` once sounds exist
   (hit, crit, hurt, block, parry, dodge). Test `combat_feel`.
+- **New resource art and finds** (2026-11-07): PixelLab pieces in `art/resources_pl`, `flowers_pl`, `furniture_pl`,
+  imported with `tools/art/import_sprites.js <folder> <prefix> <sprite folder>` (trimmed, top-left origin). Resources
+  draw `resource_sprite(key)` (spr_res_* / spr_flower_*); seasonal flowers and berries spawn in their season and wilt
+  out of it (`resource_in_season`); shells and coral on the shore; a vase (furniture) holds a picked flower.
+- **Borders and collision from the art** (2026-11-07): where an area's ground ends against a neighbour (the hidden
+  edge wall, `addWays`), a wooden fence now stands on each wall cell on land (`borderCells`); and a sprite building's
+  or prop's solid cells come from its picture (`artSolid` in `tools/rooms/sprite_buildings.js`: of its bottom rows,
+  only cells at least a fifth drawn on; the door cell open), not whole rows.
 - **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only); sounds; the user's edited villager
   list (a Word file) is still to come - apply it to `villager_table` / `villager_routines`; their dancer shop may
   replace Ayla's lessons.

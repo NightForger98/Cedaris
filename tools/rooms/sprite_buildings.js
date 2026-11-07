@@ -39,12 +39,33 @@ const PROPS = {bench: 1, lamp: 1, fountain: 2, planter: 1, campfire: 1,
 	alt_saba: 2, alt_saltwhistle: 2, alt_hayward: 2, alt_ward: 2, alt_tawil: 2, alt_kassar: 2, alt_night: 2, alt_cottage: 2, alt_family_house: 2, alt_larkspun: 2, alt_quill: 2,
 	cedar_tree: 1, cedar_young: 1, apple_tree: 1, shepherd_hut: 2, haystack: 1, beehives: 1, stone_terrace: 1, wildflowers: 0};
 
-function spriteSize(name){
+const IMGS = {};
+function spriteImg(name){
+	if(IMGS[name] !== undefined) return IMGS[name];
 	const dir = path.join(root, "sprites", name);
-	if(!fs.existsSync(dir)) return null;
+	if(!fs.existsSync(dir)) return IMGS[name] = null;
 	const png = fs.readdirSync(dir).find(f => f.endsWith(".png"));
-	const img = readPng(path.join(dir, png));
-	return [img.w, img.h];
+	return IMGS[name] = readPng(path.join(dir, png));
+}
+function spriteSize(name){ const img = spriteImg(name); return img ? [img.w, img.h] : null; }
+
+// Collision from the art itself (the user, 2026-11-07): of the bottom `rows` rows of the thing's box, only the cells
+// its picture really covers (a fifth or more of the cell drawn on) are solid - no invisible edges beside a narrow prop
+// or under a building's open eaves. skip: a cell left open (a door). The sprite stands on the box's bottom edge, x ox.
+function artSolid(sprite, ox, w, h, rows, skip){
+	const img = spriteImg(sprite), out = [];
+	if(!img || rows <= 0) return out;
+	const top = h * 32 - img.h;   // where the sprite's top row lands in the box
+	for(let cy = h - rows; cy < h; cy++) for(let cx = 0; cx < w; cx++){
+		if(skip && skip[0] === cx && skip[1] === cy) continue;
+		let n = 0;
+		for(let py = cy * 32; py < cy * 32 + 32; py++) for(let px = cx * 32; px < cx * 32 + 32; px++){
+			const sx = px - ox, sy = py - top;
+			if(sx >= 0 && sy >= 0 && sx < img.w && sy < img.h && img.px[(sy * img.w + sx) * 4 + 3] > 128) n++;
+		}
+		if(n >= 205) out.push([cx, cy, 1, 1]);
+	}
+	return out;
 }
 
 const things = {};
@@ -54,7 +75,7 @@ for(const [n, doorPx] of Object.entries(DOORS)){
 	const [pw, ph] = sz;
 	const dc = Math.floor(doorPx / 32), ox = dc * 32 + 16 - doorPx;   // shift so the door is over cell dc's middle
 	const w = Math.ceil((Math.max(0, ox) + pw) / 32), h = Math.ceil(ph / 32), foot = ph >= 250 ? 3 : 2;
-	const solid = [[0, h - foot, w, foot - 1], [0, h - 1, dc, 1], [dc + 1, h - 1, w - dc - 1, 1]].filter(s => s[2] > 0 && s[3] > 0);
+	const solid = artSolid(sprite, ox, w, h, foot, [dc, h - 1]);
 	// src: the box in cells, for code that only asks a thing its size (no tiles are drawn from it)
 	things["house_" + n] = {sprite, pw, ph, ox, src: [0, 0, w, h], door: [dc, h - 1], solid, above: 0};
 }
@@ -64,7 +85,7 @@ for(const [n, rows] of Object.entries(PROPS)){
 	if(!sz) continue;
 	const [pw, ph] = sz, w = Math.ceil(pw / 32), h = Math.ceil(ph / 32);
 	things["prop_" + n] = {sprite, pw, ph, ox: Math.floor((w * 32 - pw) / 2), src: [0, 0, w, h],
-		solid: rows ? [[0, h - rows, w, rows]] : [], above: 0};
+		solid: artSolid(sprite, Math.floor((w * 32 - pw) / 2), w, h, rows), above: 0};
 }
 
 module.exports = {things, DOORS, PROPS};

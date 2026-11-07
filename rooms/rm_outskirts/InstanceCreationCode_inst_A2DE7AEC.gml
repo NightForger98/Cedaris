@@ -1,1 +1,1 @@
-sprite_index = spr_prop_olive_tree;
+sprite_index = spr_prop_apple_tree;

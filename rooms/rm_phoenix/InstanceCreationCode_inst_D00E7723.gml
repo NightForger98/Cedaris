@@ -1,1 +1,1 @@
-sprite_index = spr_house_home_brassbolt;
+sprite_index = spr_house_tinker_workshop;

@@ -1,3 +1,2 @@
-plot = "o1";
-pw = 7;
-ph = 6;
+text = "Resolve's Rise";
+side = "here";

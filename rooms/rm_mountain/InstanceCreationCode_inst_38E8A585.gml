@@ -1,2 +1,1 @@
-text = "Beirut";
-side = "here";
+if(project_done("bridge")) instance_destroy();

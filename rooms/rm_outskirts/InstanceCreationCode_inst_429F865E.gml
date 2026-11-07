@@ -1,4 +1,4 @@
-targetRoom = rm_home_tawil;
+targetRoom = rm_home_kassar;
 targetX = 224;
 targetY = 280;
 PlayerFacingBefore = dir.up;

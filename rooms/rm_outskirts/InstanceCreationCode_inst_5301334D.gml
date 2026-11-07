@@ -1,1 +1,1 @@
-sprite_index = spr_prop_herb_bed;
+sprite_index = spr_prop_swing;

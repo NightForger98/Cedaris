@@ -672,6 +672,20 @@ side = "${side}";`}); }
 		S.instances.push({obj: "obj_col_box", x: (c1 + n / 2) * 32, y: r * 32 + 16, sx: n * 2, sy: 2});
 		i = j + 1;
 	}
+	// ...and something to see there (the user, 2026-11-07: real borders, not invisible walls): a wooden fence on every
+	// wall cell on land - rails along a run, a post where it turns or ends; water and cliffs are their own edge
+	{ const isWall = new Set(wall.map(([c, r]) => c + "," + r));
+	  const land = (c, r) => { const ch = (S.map[r] || "")[c]; return ch !== undefined && ch !== "~" && ch !== "X" && ch !== "b"; };
+	  let n = 0;
+	  for(const [c, r] of wall){
+		if(!land(c, r)) continue;
+		const run = isWall.has((c - 1) + "," + r) && isWall.has((c + 1) + "," + r) && land(c - 1, r) && land(c + 1, r);
+		S.things.push({src: run ? [32, 24, 1, 1] : [31, 25, 1, 1], tileset: "TS_lpcr_summer", at: [c, r], role: "decor"});
+		n++;
+	  }
+	  S.borderFence = n;
+	  S.borderCells = wall.filter(([c, r]) => land(c, r));
+	}
 	delete S.edge;
 }
 

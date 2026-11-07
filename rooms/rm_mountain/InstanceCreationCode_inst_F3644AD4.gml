@@ -1,1 +1,2 @@
-dir = "left";
+text = "Victory Hill";
+side = "here";

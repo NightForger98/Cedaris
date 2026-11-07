@@ -1,1 +1,1 @@
-sprite_index = spr_prop_flower_bed;
+sprite_index = spr_prop_town_hallhouse2;

@@ -1,1 +1,1 @@
-sprite_index = spr_prop_wildflowers;
+sprite_index = spr_prop_beehives;

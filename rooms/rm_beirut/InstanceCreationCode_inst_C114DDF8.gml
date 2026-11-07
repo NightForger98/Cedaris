@@ -1,5 +1,5 @@
-targetRoom = rm_glassworks;
-targetX = 256;
-targetY = 312;
+targetRoom = rm_hotel;
+targetX = 320;
+targetY = 344;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

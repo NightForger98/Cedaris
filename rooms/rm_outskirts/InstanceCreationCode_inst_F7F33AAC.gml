@@ -1,2 +1,2 @@
-text = "Resolve's Rise";
+text = "Dahya";
 side = "here";

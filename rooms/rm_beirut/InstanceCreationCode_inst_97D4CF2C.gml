@@ -1,2 +1,2 @@
-text = "Manara's Light";
+text = "Verdun Street";
 side = "here";

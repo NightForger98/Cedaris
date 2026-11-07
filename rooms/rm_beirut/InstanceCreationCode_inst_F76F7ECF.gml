@@ -1,5 +1,3 @@
-targetRoom = rm_pshop_b3;
-targetX = 224;
-targetY = 280;
-PlayerFacingBefore = dir.up;
-PlayerFacingAfter = dir.up;
+plot = "b2";
+pw = 7;
+ph = 6;

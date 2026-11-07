@@ -1,5 +1,5 @@
-targetRoom = rm_hospital;
-targetX = 256;
-targetY = 312;
+targetRoom = rm_lighthouse;
+targetX = 160;
+targetY = 280;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

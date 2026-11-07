@@ -1,1 +1,1 @@
-sprite_index = spr_prop_apple_tree;
+sprite_index = spr_prop_herb_bed;

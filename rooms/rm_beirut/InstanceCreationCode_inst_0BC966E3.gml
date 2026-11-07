@@ -1,2 +1,2 @@
-text = "Furniture, Flowers";
+text = "Bank, Tavern";
 side = "here";

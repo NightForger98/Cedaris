@@ -6,7 +6,7 @@ wait 60
 room rm_12 304 300
 wait 20
 call autotest_furniture
-expect 20 in the catalogue
+expect 21 in the catalogue
 pos 420 200
 give u|rug_red
 equip u|rug_red

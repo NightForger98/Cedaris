@@ -1,4 +1,10 @@
 /// @description Draw the art from the terrain tileset with its ground point on the cell; veins get ore specks
+// the PixelLab picture (2026-11-07): standing on the cell's ground point, wobbling when hit
+if(artSpr != -1){
+	var wob2 = (shake > 0) ? sin(shake * 1.7) * shake * 0.25 : 0;
+	draw_sprite(artSpr, 0, round(x - sprite_get_width(artSpr) / 2 + wob2), round(y + 6 - sprite_get_height(artSpr)));
+	exit;
+}
 var a = def.art;
 var sc = def[$ "scale"] ?? 1;
 var wob = (shake > 0) ? sin(shake * 1.7) * shake * 0.25 : 0;

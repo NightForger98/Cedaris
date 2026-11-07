@@ -56,6 +56,21 @@ function resource_table(){
 		forage_mushroom:  {name: "Mushrooms",     tools: ["any"], hp: 1, hard: 0, art: [862, 893, 43, 34], anchor: [21, 30], foot: [1, 0.75], scale: 0.7, drops: [["w|mushroom", 1, 2, 1]]},
 		forage_toadstool: {name: "Red Toadstool", tools: ["any"], hp: 1, hard: 0, art: [830, 994, 32, 30], anchor: [16, 28], foot: [1, 0.75], scale: 0.8, drops: [["w|toadstool", 1, 1, 1]]},
 		forage_herb:      {name: "Wild Herbs",    tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [1, 0.75], tint: make_colour_rgb(200, 255, 170), drops: [["w|herb", 1, 2, 1]]},
+		// The new world's finds (PixelLab, 2026-11-07): seasonal flowers to pick (and put in a vase), the beach's shells
+		// and coral, fallen branches, berries, tall grass. Small and easy to step round (foot), drawn from spr_res_* / spr_flower_*.
+		forage_flower_tulip: {name: "Tulips", tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], seasons: [0], flower: true, drops: [["w|tulip", 1, 1, 1]]},
+		forage_flower_daffodil: {name: "Daffodils", tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], seasons: [0], flower: true, drops: [["w|daffodil", 1, 1, 1]]},
+		forage_flower_sunflower: {name: "Sunflower", tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], seasons: [1], flower: true, drops: [["w|sunflower", 1, 1, 1]]},
+		forage_flower_poppy: {name: "Poppies", tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], seasons: [1], flower: true, drops: [["w|poppy", 1, 1, 1]]},
+		forage_flower_aster: {name: "Asters", tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], seasons: [2], flower: true, drops: [["w|aster", 1, 1, 1]]},
+		forage_flower_chrysanthemum: {name: "Chrysanthemums", tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], seasons: [2], flower: true, drops: [["w|chrysanthemum", 1, 1, 1]]},
+		forage_flower_snowdrop: {name: "Snowdrops", tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], seasons: [3], flower: true, drops: [["w|snowdrop", 1, 1, 1]]},
+		forage_flower_crocus: {name: "Crocuses", tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], seasons: [3], flower: true, drops: [["w|crocus", 1, 1, 1]]},
+		forage_seashell:  {name: "Seashell",      tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], drops: [["w|seashell", 1, 1, 1]]},
+		forage_coral:     {name: "Coral",         tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.5, 0.4], drops: [["w|coral", 1, 1, 1]]},
+		forage_branch:    {name: "Fallen Branch", tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [1, 0.5], drops: [["m|wood", 2, 4, 1]]},
+		forage_berry:     {name: "Wild Berries",  tools: ["any"], hp: 1, hard: 0, art: [416, 453, 30, 33], anchor: [15, 30], foot: [0.75, 0.5], seasons: [1, 2], drops: [["w|berry", 1, 3, 1]]},
+		tall_grass:       {name: "Tall Grass",    tools: ["any"], hp: 1, hard: 0, art: [191, 767, 30, 33], anchor: [15, 30], foot: [0.75, 0.5], drops: [["m|fibre", 1, 2, 1]]},
 		weeds:        {name: "Weeds",        tools: ["any"],     hp: 1,  hard: 0, art: [191, 767, 30, 33],  anchor: [15, 30],  foot: [1.25, 1],
 		               drops: [["m|fibre", 1, 2, 1]]},
 		bush:         {name: "Bush",         tools: ["Scythe", "Axe"], hp: 2, hard: 0, art: [289, 447, 29, 33], anchor: [14, 30], foot: [1.5, 1],
@@ -72,7 +87,8 @@ function resource_areas(){
 	static a = array_concat([
 		// Farm (areas named in tools/rooms/specs/rm_1.js): the meadow by the path - weeds, bushes and stones (no trees)
 		{room: "rm_1", cells: layout_cells("rm_1", "meadow"), max: 12, perDay: 3, start: 9,
-		 kinds: [["weeds", 55], ["bush", 25], ["stone", 20]]},
+		 kinds: [["weeds", 45], ["tall_grass", 10], ["bush", 20], ["stone", 15], ["forage_flower_tulip", 4], ["forage_flower_daffodil", 4], ["forage_flower_sunflower", 4],
+		         ["forage_flower_poppy", 4], ["forage_flower_aster", 4], ["forage_flower_chrysanthemum", 4], ["forage_flower_snowdrop", 4], ["forage_flower_crocus", 4]]},
 		// Farm: the grass west of the field
 		{room: "rm_1", cells: layout_cells("rm_1", "west"), max: 10, perDay: 2, start: 7,
 		 kinds: [["weeds", 40], ["bush", 15], ["stone", 30], ["boulder", 5], ["copper_vein", 5], ["oak", 5]]},
@@ -217,15 +233,34 @@ function resource_cell_free(_gx, _gy){
 	return true;
 }
 
+/// @description Whether a resource grows this season (a flower has its season; most things any time).
+function resource_in_season(_key){
+	var d = resource_def(_key);   // (also asked of monster kinds, by mine_room_start: those aren't resources)
+	if(d == undefined) return true;
+	var s = d[$ "seasons"];
+	return s == undefined || !world_time_ready() || array_get_index(s, global.clock.season mod 4) != -1;
+}
+
 function resource_pick_kind(_kinds){
 	var total = 0;
-	for(var i = 0; i < array_length(_kinds); i++) total += _kinds[i][1];
+	for(var i = 0; i < array_length(_kinds); i++) if(resource_in_season(_kinds[i][0])) total += _kinds[i][1];
+	if(total <= 0) return "weeds";
 	var r = random(total);
 	for(var i = 0; i < array_length(_kinds); i++){
+		if(!resource_in_season(_kinds[i][0])) continue;
 		r -= _kinds[i][1];
 		if(r < 0) return _kinds[i][0];
 	}
-	return _kinds[0][0];
+	return "weeds";
+}
+
+/// @description A resource's picture (the PixelLab art, 2026-11-07): spr_res_<kind> (forage_: without it), the flowers
+/// spr_flower_<name>; -1: the old part of the terrain sheet.
+function resource_sprite(_key){
+	if(string_pos("forage_flower_", _key) == 1) return asset_get_index("spr_flower_" + string_delete(_key, 1, 14));
+	var k = (string_pos("forage_", _key) == 1) ? string_delete(_key, 1, 7) : _key;
+	if(k == "berry") k = "berry_bush";
+	return asset_get_index("spr_res_" + k);
 }
 
 function resource_make(_key, _gx, _gy, _area){
@@ -281,6 +316,8 @@ function resources_new_day(){
 	for(var n = 0; n < array_length(names); n++){
 		var r = global.world.rooms[$ names[n]];
 		var objs = r[$ "objects"] ?? [];
+		// flowers and berries out of season wilt away overnight
+		for(var i = array_length(objs) - 1; i >= 0; i--) if(resource_def(objs[i].key) != undefined && !resource_in_season(objs[i].key)) array_delete(objs, i, 1);
 		for(var i = 0; i < array_length(objs); i++){
 			var g = resource_def(objs[i].key)[$ "grow"];
 			if(g == undefined) continue;

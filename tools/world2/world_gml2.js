@@ -28,12 +28,17 @@ for(const id of NEWROOMS){
 	roads[id] = {w: m[0].length, grid: m.map(r => [...r].map(c => (c === ":" || c === ";") ? "1" : "0").join("")).join("")};
 }
 
+// (seasonal flowers: only the season's spawn - resource_pick_kind; 2026-11-07: flowers, berries, branches, shells)
+const FLOWERS = w => ["tulip", "daffodil", "sunflower", "poppy", "aster", "chrysanthemum", "snowdrop", "crocus"].map(f => ["forage_flower_" + f, w]);
 const KINDS = {
-	town:  [["weeds", 45], ["bush", 25], ["stone", 25], ["forage_herb", 5]],
-	rural: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]],
-	deep:  [["oak", 22], ["pine", 22], ["bush", 12], ["weeds", 6], ["stone", 4], ["forage_herb", 16], ["forage_mushroom", 16], ["forage_toadstool", 8]],
-	wild:  [["oak", 20], ["pine", 20], ["bush", 12], ["weeds", 8], ["stone", 6], ["forage_herb", 12], ["forage_mushroom", 14], ["forage_toadstool", 8]],
-	shore: [["stone", 40], ["boulder", 15], ["weeds", 25], ["bush", 15], ["copper_vein", 5]],
+	town:  [["weeds", 35], ["tall_grass", 10], ["bush", 20], ["stone", 20], ["forage_herb", 5], ...FLOWERS(3)],
+	rural: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 14], ["tall_grass", 8], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8],
+	        ["forage_berry", 6], ["forage_branch", 5], ...FLOWERS(4)],
+	deep:  [["oak", 22], ["pine", 22], ["bush", 12], ["weeds", 6], ["stone", 4], ["forage_herb", 16], ["forage_mushroom", 16], ["forage_toadstool", 8],
+	        ["forage_berry", 8], ["forage_branch", 8], ...FLOWERS(2)],
+	wild:  [["oak", 20], ["pine", 20], ["bush", 12], ["weeds", 8], ["tall_grass", 6], ["stone", 6], ["forage_herb", 12], ["forage_mushroom", 14], ["forage_toadstool", 8],
+	        ["forage_berry", 8], ["forage_branch", 6], ...FLOWERS(2)],
+	shore: [["stone", 30], ["boulder", 12], ["weeds", 18], ["bush", 10], ["copper_vein", 5], ["forage_seashell", 15], ["forage_coral", 6]],
 	cliff: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]],
 };
 const areas = [];

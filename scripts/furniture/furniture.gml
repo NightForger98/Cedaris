@@ -30,6 +30,7 @@ function furniture_table(){
 		clock:       {name: "Grandfather Clock",  price: 1000, rows: 1},
 		cabinet:     {name: "Kitchen Cabinet",    price: 700,  rows: 1},
 		chest:       {name: "Storage Chest",      price: 300,  rows: 1},
+		vase:        {name: "Flower Vase",        price: 200,  rows: 1},   // holds a flower you picked (furniture_vase_fill)
 	};
 	return t;
 }
@@ -160,6 +161,7 @@ function furniture_pick_up(){
 	for(var i = 0; i < array_length(cells) && d == undefined; i++) d = furniture_at(cells[i][0], cells[i][1], true);
 	if(d == undefined) return false;
 	if(inv_add(item_stack("u|" + d.kind)) > 0){ farm_message("Your bag is full"); return true; }
+	if((d[$ "flower"] ?? "") != ""){ inv_add(item_stack("w|" + d.flower)); d.flower = ""; }   // the vase's flower comes back too
 	var l = furniture_list(room_get_name(room));
 	array_delete(l, array_get_index(l, d), 1);
 	with(obj_furniture) if(data == d) instance_destroy();
@@ -241,3 +243,26 @@ function furniture_catalogue(){
 	for(var i = 0; i < array_length(names); i++) if(furniture_sprite(names[i]) != -1) array_push(out, {id: "u|" + names[i], price: furniture_def(names[i]).price});
 	return out;
 }
+
+/// @description A flower in hand (a forage flower) and a vase in front of you (or under the mouse): the flower goes in
+/// (one at a time; one already there comes back to your bag). Returns true if it went in.
+function furniture_vase_fill(_stack){
+	if(!furniture_room_ok() || !instance_exists(obj_plyr)) return false;
+	var p = obj_plyr, cells = [];
+	if(furniture_mouse_aim()) array_push(cells, [floor(mouse_x / 32), floor(mouse_y / 32)]);
+	var dirn = clamp(p.y_frame - 8, 0, 3);
+	array_push(cells, [floor((p.x + [0, -26, 0, 26][dirn]) / 32), floor((p.y - 6 + [-26, 0, 30, 0][dirn]) / 32)]);
+	var d = undefined;
+	for(var i = 0; i < array_length(cells) && d == undefined; i++){ var f = furniture_at(cells[i][0], cells[i][1], false); if(f != undefined && f.kind == "vase") d = f; }
+	if(d == undefined) return false;
+	var fk = string_split(_stack.id, "|")[1];
+	if((d[$ "flower"] ?? "") != "") inv_add(item_stack("w|" + d.flower));
+	d.flower = fk;
+	_stack.count--;
+	if(_stack.count <= 0) global.inv.slots[global.inv.hotbar] = undefined;
+	farm_message("You put the " + string_lower(forage_table()[$ fk].name) + " in the vase");
+	return true;
+}
+
+/// @description Test: the flower in the first vase here ("" if none).
+function autotest_vase(){ var l = furniture_list(room_get_name(room)); for(var i = 0; i < array_length(l); i++) if(l[i].kind == "vase") return "vase " + (l[i][$ "flower"] ?? ""); return "no vase"; }

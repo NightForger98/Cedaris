@@ -197,7 +197,7 @@ function item_def(_id){
 		case "w":
 			var fg = forage_table()[$ p[1]];
 			if(fg != undefined){
-				d = {id: _id, type: "forage", forage: p[1], name: fg.name, max: 99, price: fg.sell * 2, tier: 0, stats: {}, art: fg.art,
+				d = {id: _id, type: "forage", forage: p[1], name: fg.name, max: 99, price: fg.sell * 2, tier: 0, stats: {}, art: fg.art, spr: asset_get_index(fg[$ "spr"] ?? ""),
 				     desc: fg.desc + ((fg.energy > 0) ? " Hold it and use it to eat (+" + string(fg.energy) + " energy)." : "")};
 			}
 			break;
@@ -574,6 +574,11 @@ function item_draw_icon(_stack, _x, _y, _size, _body = "male"){
 			break;
 		case "forage":
 			// The plant itself, from the terrain tileset
+			if((d[$ "spr"] ?? -1) != -1){   // its PixelLab picture (2026-11-07)
+				var fsp = d.spr, fk = (_size * 0.8) / max(sprite_get_width(fsp), sprite_get_height(fsp));
+				draw_sprite_ext(fsp, 0, cx - sprite_get_width(fsp) * fk / 2, cy - sprite_get_height(fsp) * fk / 2, fk, fk, 0, c_white, 1);
+				break;
+			}
 			var fa = d.art, fs = (_size * 0.8) / max(fa[2], fa[3]);
 			draw_sprite_part_ext(spr_tile_terrain, 0, fa[0], fa[1], fa[2], fa[3], cx - fa[2] * fs / 2, cy - fa[3] * fs / 2, fs, fs, c_white, 1);
 			break;

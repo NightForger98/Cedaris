@@ -1,0 +1,36 @@
+# The new resource art (PixelLab, 2026-11-07) and the seasonal finds: rocks, ores, weeds, herbs, mushrooms drawn from
+# spr_res_*; flowers by season (spring: tulips and daffodils); a picked flower goes in a vase in the farmhouse
+start story
+wait 60
+call autotest_date 0 3
+time 10
+room rm_countryside
+wait 40
+shot 01_countryside
+room rm_mine
+wait 10
+mine 12
+wait 40
+shot 02_mine
+# a vase in the farmhouse, a tulip in it
+room rm_12 304 300
+wait 20
+pos 420 200
+give u|vase
+equip u|vase
+face n
+wait 5
+use
+wait 10
+call autotest_vase
+expect vase
+give w|tulip
+equip w|tulip
+face n
+wait 5
+use
+wait 10
+call autotest_vase
+expect vase tulip
+shot 03_vase
+quit

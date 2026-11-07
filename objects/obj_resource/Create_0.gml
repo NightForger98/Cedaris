@@ -9,3 +9,4 @@ image_yscale = def.foot[1];
 event_inherited();
 shake = 0;    // frames of wobble after a hit
 sorted = false;
+artSpr = resource_sprite(data.key);   // its PixelLab picture, or -1 (the old terrain-sheet part)

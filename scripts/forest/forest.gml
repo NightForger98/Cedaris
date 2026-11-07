@@ -29,9 +29,22 @@ function woods_room_start(){
 /// or sold. Art: a part of spr_tile_terrain, for the icon.
 function forage_table(){
 	static t = {
-		mushroom:  {name: "Wild Mushroom", energy: 20, sell: 25, art: [862, 893, 43, 34], desc: "Earthy and good in a stew."},
-		toadstool: {name: "Red Toadstool", energy: 0,  sell: 60, art: [830, 994, 32, 30], desc: "Pretty, but don't eat it. Elda might want it."},
-		herb:      {name: "Wild Herb",     energy: 10, sell: 18, art: [416, 453, 30, 33], desc: "Fragrant leaves from the forest floor."},
+		mushroom:  {name: "Wild Mushroom", energy: 20, sell: 25, art: [862, 893, 43, 34], spr: "spr_res_mushroom", desc: "Earthy and good in a stew."},
+		toadstool: {name: "Red Toadstool", energy: 0,  sell: 60, art: [830, 994, 32, 30], spr: "spr_res_toadstool", desc: "Pretty, but don't eat it. Elda might want it."},
+		herb:      {name: "Wild Herb",     energy: 10, sell: 18, art: [416, 453, 30, 33], spr: "spr_res_herb", desc: "Fragrant leaves from the forest floor."},
+		// Seasonal flowers (2026-11-07): pick them, sell them, give them, or put one in a vase (furniture)
+		tulip:         {name: "Tulip",         energy: 0, sell: 30, art: [416, 453, 30, 33], spr: "spr_flower_tulip",         flower: true, desc: "A spring tulip. Lovely in a vase."},
+		daffodil:      {name: "Daffodil",      energy: 0, sell: 30, art: [416, 453, 30, 33], spr: "spr_flower_daffodil",      flower: true, desc: "A cheerful spring daffodil. Lovely in a vase."},
+		sunflower:     {name: "Sunflower",     energy: 0, sell: 45, art: [416, 453, 30, 33], spr: "spr_flower_sunflower",     flower: true, desc: "A tall summer sunflower. Lovely in a vase."},
+		poppy:         {name: "Poppy",         energy: 0, sell: 35, art: [416, 453, 30, 33], spr: "spr_flower_poppy",         flower: true, desc: "A bright red summer poppy. Lovely in a vase."},
+		aster:         {name: "Aster",         energy: 0, sell: 35, art: [416, 453, 30, 33], spr: "spr_flower_aster",         flower: true, desc: "A purple autumn aster. Lovely in a vase."},
+		chrysanthemum: {name: "Chrysanthemum", energy: 0, sell: 40, art: [416, 453, 30, 33], spr: "spr_flower_chrysanthemum", flower: true, desc: "An orange autumn chrysanthemum. Lovely in a vase."},
+		snowdrop:      {name: "Snowdrop",      energy: 0, sell: 45, art: [416, 453, 30, 33], spr: "spr_flower_snowdrop",      flower: true, desc: "A brave winter snowdrop. Lovely in a vase."},
+		crocus:        {name: "Crocus",        energy: 0, sell: 45, art: [416, 453, 30, 33], spr: "spr_flower_crocus",        flower: true, desc: "A purple crocus in the snow. Lovely in a vase."},
+		// The beach and the bushes
+		seashell:  {name: "Seashell",      energy: 0,  sell: 30, art: [416, 453, 30, 33], spr: "spr_res_seashell", desc: "A pink spiral shell from the shore."},
+		coral:     {name: "Coral",         energy: 0,  sell: 70, art: [416, 453, 30, 33], spr: "spr_res_coral", desc: "A branch of red coral, washed up on the beach."},
+		berry:     {name: "Wild Berries",  energy: 15, sell: 12, art: [416, 453, 30, 33], spr: "spr_res_berry_bush", desc: "Sweet berries from a wild bush."},
 	};
 	return t;
 }
@@ -40,7 +53,9 @@ function forage_table(){
 function forage_eat(_stack){
 	var key = string_split(_stack.id, "|")[1];
 	var f = forage_table()[$ key];
-	if(f == undefined || f.energy <= 0){ farm_message("You'd rather not eat that"); return false; }
+	if(f == undefined) return false;
+	if(f[$ "flower"] ?? false){ if(!furniture_vase_fill(_stack)) farm_message("Put it in a vase - Rowan sells them"); return true; }   // (scripts/furniture)
+	if(f.energy <= 0){ farm_message("You'd rather not eat that"); return false; }
 	var en = f.energy * (skill_has("herbalist") ? 2 : 1);   // the Herbalist (scripts/skills)
 	global.vitals.energy = min(vitals_max_energy(), global.vitals.energy + en);
 	_stack.count--;

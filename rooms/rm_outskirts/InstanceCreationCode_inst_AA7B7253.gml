@@ -1,1 +1,1 @@
-sprite_index = spr_prop_alt_kassar;
+sprite_index = spr_prop_apple_tree;

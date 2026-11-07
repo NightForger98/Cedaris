@@ -77,7 +77,7 @@ function world_districts(){
 		{name: "Plummet's Point", room: "rm_mountain", x: 2544, y: 1008},
 		{name: "Olive Bay", room: "rm_sunset", x: 1328, y: 1072},
 		{name: "Red Street", room: "rm_beirut", x: 1232, y: 816},
-		{name: "Downtown", room: "rm_beirut", x: 2704, y: 528},
+		{name: "Downtown", room: "rm_beirut", x: 2736, y: 560},
 		{name: "Grace Tower", room: "rm_beirut", x: 3920, y: 336},
 		{name: "Beacon Hill", room: "rm_mountain", x: 1680, y: 1936},
 		{name: "Pigeon Rocks", room: "rm_beirut", x: 464, y: 1936},
@@ -98,6 +98,35 @@ function world_districts(){
 	return t;
 }
 
+/// @description The buildings you can choose for a plot (scripts/pshops): is, name, sprite, size in cells, the
+/// sprite's x offset, the door cell and the solid cells [dx, dy, w, h].
+function world_plot_designs(){
+	static t = [
+		{is: "prop_town_hallhouse", name: "Hall House", spr: spr_prop_town_hallhouse, w: 5, h: 4, ox: 14, door: [2, 3], solid: [[0,2,5,2]]},
+		{is: "prop_town_hallhouse3", name: "Tall Hall House", spr: spr_prop_town_hallhouse3, w: 5, h: 5, ox: 9, door: [2, 4], solid: [[0,3,5,2]]},
+		{is: "prop_town_apartments", name: "Apartments", spr: spr_prop_town_apartments, w: 3, h: 6, ox: 1, door: [1, 5], solid: [[0,4,3,2]]},
+		{is: "prop_town_yellowhouse", name: "Yellow House", spr: spr_prop_town_yellowhouse, w: 4, h: 5, ox: 7, door: [2, 4], solid: [[0,3,4,2]]},
+		{is: "prop_town_yellowhouse2", name: "Narrow Yellow House", spr: spr_prop_town_yellowhouse2, w: 3, h: 5, ox: 10, door: [1, 4], solid: [[0,3,3,2]]},
+		{is: "prop_town_villa", name: "Villa", spr: spr_prop_town_villa, w: 6, h: 4, ox: 2, door: [3, 3], solid: [[0,2,6,2]]},
+		{is: "prop_town_villa2", name: "Grand Villa", spr: spr_prop_town_villa2, w: 6, h: 5, ox: 1, door: [3, 4], solid: [[0,3,6,2]]},
+		{is: "prop_town_shop", name: "Shop Front", spr: spr_prop_town_shop, w: 4, h: 3, ox: 3, door: [2, 2], solid: [[0,1,4,2]]},
+		{is: "prop_town_shop2", name: "Wide Shop Front", spr: spr_prop_town_shop2, w: 5, h: 3, ox: 8, door: [2, 2], solid: [[0,1,5,2]]},
+		{is: "prop_town_cafe", name: "Cafe", spr: spr_prop_town_cafe, w: 5, h: 3, ox: 6, door: [2, 2], solid: [[0,1,5,2]]},
+		{is: "prop_town_cafe2", name: "Corner Cafe", spr: spr_prop_town_cafe2, w: 4, h: 3, ox: 5, door: [2, 2], solid: [[0,1,4,2]]},
+		{is: "prop_town_bakery", name: "Bakery", spr: spr_prop_town_bakery, w: 5, h: 3, ox: 2, door: [2, 2], solid: [[0,1,5,2]]},
+		{is: "prop_town_bakery2", name: "Little Bakery", spr: spr_prop_town_bakery2, w: 5, h: 3, ox: 10, door: [2, 2], solid: [[0,1,5,2]]},
+		{is: "prop_alt_saba", name: "Stone House", spr: spr_prop_alt_saba, w: 7, h: 5, ox: 8, door: [3, 4], solid: [[0,3,7,2]]},
+		{is: "prop_alt_hayward", name: "Farmhouse", spr: spr_prop_alt_hayward, w: 7, h: 5, ox: 7, door: [3, 4], solid: [[0,3,7,2]]},
+		{is: "prop_alt_ward", name: "Tall Cottage", spr: spr_prop_alt_ward, w: 4, h: 5, ox: 0, door: [2, 4], solid: [[0,3,4,2]]},
+		{is: "prop_alt_tawil", name: "Long House", spr: spr_prop_alt_tawil, w: 7, h: 5, ox: 15, door: [3, 4], solid: [[0,3,7,2]]},
+		{is: "prop_alt_kassar", name: "Red-roofed House", spr: spr_prop_alt_kassar, w: 6, h: 6, ox: 5, door: [3, 5], solid: [[0,4,6,2]]},
+		{is: "prop_alt_cottage", name: "Cottage", spr: spr_prop_alt_cottage, w: 6, h: 5, ox: 13, door: [3, 4], solid: [[0,3,6,2]]},
+		{is: "prop_alt_larkspun", name: "Townhouse", spr: spr_prop_alt_larkspun, w: 6, h: 5, ox: 5, door: [3, 4], solid: [[0,3,6,2]]},
+		{is: "prop_alt_quill", name: "Square House", spr: spr_prop_alt_quill, w: 5, h: 5, ox: 4, door: [2, 4], solid: [[0,3,5,2]]},
+	];
+	return t;
+}
+
 /// @description Resource spawn areas of the generated rooms (resource_areas in scripts/gathering appends these).
 function world_resource_areas(){
 	return [
@@ -112,6 +141,8 @@ function world_resource_areas(){
 		{room: "rm_beirut", cells: layout_cells("rm_beirut", "a0_7"), max: 2, perDay: 1, start: 1,
 		 kinds: [["weeds", 45], ["bush", 25], ["stone", 25], ["forage_herb", 5]]},
 		{room: "rm_beirut", cells: layout_cells("rm_beirut", "a1_2"), max: 2, perDay: 1, start: 1,
+		 kinds: [["weeds", 45], ["bush", 25], ["stone", 25], ["forage_herb", 5]]},
+		{room: "rm_beirut", cells: layout_cells("rm_beirut", "a1_3"), max: 2, perDay: 1, start: 1,
 		 kinds: [["weeds", 45], ["bush", 25], ["stone", 25], ["forage_herb", 5]]},
 		{room: "rm_beirut", cells: layout_cells("rm_beirut", "a1_4"), max: 2, perDay: 1, start: 1,
 		 kinds: [["weeds", 45], ["bush", 25], ["stone", 25], ["forage_herb", 5]]},
@@ -213,6 +244,8 @@ function world_resource_areas(){
 		 kinds: [["stone", 40], ["boulder", 8], ["copper_vein", 24], ["coal_vein", 10], ["iron_vein", 10], ["silver_vein", 5], ["gold_vein", 3]]},
 		{room: "rm_mountain", cells: layout_cells("rm_mountain", "a7_0"), max: 2, perDay: 1, start: 1,
 		 kinds: [["oak", 20], ["pine", 20], ["bush", 12], ["weeds", 8], ["stone", 6], ["forage_herb", 12], ["forage_mushroom", 14], ["forage_toadstool", 8]]},
+		{room: "rm_sunset", cells: layout_cells("rm_sunset", "a0_2"), max: 4, perDay: 1, start: 3,
+		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
 		{room: "rm_sunset", cells: layout_cells("rm_sunset", "a1_2"), max: 4, perDay: 1, start: 3,
 		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
 		{room: "rm_sunset", cells: layout_cells("rm_sunset", "a6_1"), max: 2, perDay: 1, start: 1,
@@ -243,11 +276,17 @@ function world_resource_areas(){
 		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
 		{room: "rm_outskirts", cells: layout_cells("rm_outskirts", "a2_0"), max: 5, perDay: 1, start: 4,
 		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
+		{room: "rm_outskirts", cells: layout_cells("rm_outskirts", "a2_1"), max: 5, perDay: 1, start: 4,
+		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
 		{room: "rm_outskirts", cells: layout_cells("rm_outskirts", "a2_2"), max: 5, perDay: 1, start: 4,
 		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
 		{room: "rm_outskirts", cells: layout_cells("rm_outskirts", "a2_3"), max: 5, perDay: 1, start: 4,
 		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
+		{room: "rm_outskirts", cells: layout_cells("rm_outskirts", "a2_4"), max: 5, perDay: 1, start: 4,
+		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
 		{room: "rm_outskirts", cells: layout_cells("rm_outskirts", "a2_5"), max: 5, perDay: 1, start: 4,
+		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
+		{room: "rm_outskirts", cells: layout_cells("rm_outskirts", "a2_6"), max: 4, perDay: 1, start: 3,
 		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},
 		{room: "rm_outskirts", cells: layout_cells("rm_outskirts", "a3_0"), max: 2, perDay: 1, start: 1,
 		 kinds: [["oak", 18], ["pine", 14], ["bush", 15], ["weeds", 18], ["stone", 15], ["forage_herb", 12], ["forage_mushroom", 8]]},

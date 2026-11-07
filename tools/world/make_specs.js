@@ -46,3 +46,4 @@ for(const [r, [outdoor, key]] of Object.entries(REUSED)){
 	fs.writeFileSync(file, s);
 }
 console.log(`specs: ${Object.keys(NEW).length} new interiors, ${Object.keys(REUSED).length} re-pointed`);
+require("../world2/pshop_specs.js");   // the shops on the plots for sale (scripts/pshops)

@@ -1,1 +1,1 @@
-sprite_index = spr_prop_merchant_cart;
+sprite_index = spr_prop_herb_bed;

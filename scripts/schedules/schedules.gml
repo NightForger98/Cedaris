@@ -78,6 +78,7 @@ function villager_routines(){
 		hesta:   {home: "rm_village_hesta.hesta_bed", seasons: {spring: {routine: [[7, "rm_village_hesta.hesta_home"], [9, "rm_village_store.shop_b"], [10.5, "rm_sthereza.s3"], [17.5, "rm_village_hesta.hesta_home"], [21, "home"]]}}, routine: [[7, "rm_village_hesta.hesta_home"], [10, "rm_sthereza.s2"], [12, "rm_village_hesta.hesta_home"], [15, "rm_sthereza.s4"], [18, "home"]]},
 		tobin:   {home: "rm_village_hesta.tobin_bed", kid: true, seasons: {summer: {routine: [[8, "rm_village_hesta.tobin_home"], [10, "rm_southbeach.s2"], [16, "rm_village_hesta.tobin_home"], [21, "home"]]}}, routine: [[8, "rm_village_hesta.tobin_home"], [9, "rm_sthereza.s1"], [12, "rm_sthereza.s3"], [16.5, "rm_village_hesta.tobin_home"], [21, "home"]]},
 		jul:     {home: "rm_village_hesta.hesta_home", kid: true, routine: [[21, "home"]]},   // the baby: stays home
+		mayor:   {home: "rm_mayor.mayor_bed", work: {at: "rm_mayor.mayor_work", open: 9, close: 17, off: 6}, after: [[17, "rm_beirut.square_b"], [19, "rm_beirut.cafe_a"], [21, "home"]], dayoff: [[10, "rm_beirut.park_1"], [13, "rm_beirut.cafe_a"], [16, "rm_beirut.square_d"], [19, "home"]]},   // City Hall: plots for sale (scripts/pshops)
 		aldous:  {home: "rm_home_ward.aldous_bed", rainproof: true, work: {at: "rm_church.aldous_work", open: 8, close: 18, off: 1}, dayoff: [[9, "rm_abda.s2"], [12, "rm_frere.s3"], [16, "rm_church.pew_a"], [19, "home"]]},   // the old church
 		alaric:  {home: "rm_home_ward.alaric_bed", work: {at: "rm_guild.alaric_work", open: 9, close: 17, off: 4}, after: [[17, "rm_abda.s3"], [20, "home"]], dayoff: [[8, "rm_beaconhill.mid"], [13, "rm_church.pew_b"], [17, "rm_town_inn.table_c"], [21, "home"]]},   // close-range weapons at the Guild
 	};
@@ -97,6 +98,7 @@ function villager_names(){
 /// @description A villager's routine; once married, your spouse comes home to the farmhouse (scripts/marriage).
 function villager_routine(_key){
 	var r = villager_routines()[$ _key];
+	if(r != undefined && world_time_ready() && pshop_staff_plot(_key) != "") r = pshop_staff_routine(_key, r);   // runs one of your shops (scripts/pshops)
 	if(r == undefined || !marriage_married() || marriage_spouse() != _key) return r;
 	var m = {}, keys = variable_struct_get_names(r);
 	for(var i = 0; i < array_length(keys); i++) m[$ keys[i]] = r[$ keys[i]];

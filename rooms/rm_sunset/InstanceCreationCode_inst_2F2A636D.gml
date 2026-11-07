@@ -1,5 +1,5 @@
-targetRoom = rm_boatyard;
-targetX = 256;
-targetY = 312;
+targetRoom = rm_home_saba;
+targetX = 224;
+targetY = 280;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

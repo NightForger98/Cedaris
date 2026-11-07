@@ -143,6 +143,11 @@ function villager_table(){
 		        rewards: [["m|wool", 8], ["d|cloth|green", 1], ["w|herb", 5], ["d|cloth|lavender", 1], ["m|unicorn_hair", 1]]},
 		// No house or temple yet (that comes with the world map): he stands in the town square by day and lodges at the
 		// inn. Holding a cursed tool, he offers to lift the curse (priest_offer; status script)
+		// The Mayor (2026-11-07): City Hall by the square; sells plots of land (scripts/pshops)
+		mayor:  {name: "Mayor Haddad", title: "of Beirut", race: "Human", body: "male", seed: 8801, shop: "land", look: "mayor",
+		        loves: ["m|gold", "f|gourd_pie", "m|olive_oil"], likes: ["f|", "m|glass_jar", "a|"], dislikes: ["m|bone", "m|fibre"], hates: ["m|troll_hide", "w|toadstool"],
+		        lines: [["Welcome to City Hall."], ["Good to see you."], ["Always a pleasure."]],
+		        rewards: [["m|olive_oil", 2], ["d|cloth|navy", 1], ["m|gold", 3], ["d|cloth|maroon", 1], ["m|gem", 3]]},
 		aldous: {name: "Father Aldous", title: "the Priest", race: "Human", body: "male", seed: 6101, look: "aldous",
 		        loves: ["f|veg_stew", "w|herb", "m|moonsilk"], likes: ["f|", "p|", "w|"], dislikes: ["m|bone"], hates: ["m|void_pearl", "m|troll_hide"],
 		        lines: [["Peace be with you, child.", "I've no roof over my altar yet. The square will do; the sky is a fine ceiling.", "If the mine ever lays a curse on you, come to me."],
@@ -396,6 +401,7 @@ function villager_look(_key){
 	if(v[$ "look"] == "brom") return villager_look_brom();
 	if(v[$ "look"] == "mara") return villager_look_mara();
 	if(v[$ "look"] == "aldous") return villager_look_aldous();
+	if(v[$ "look"] == "mayor") return villager_look_mayor();
 	random_set_seed(v.seed);
 	var look = character_random_look(v.race);
 	character_set_body(look, v.body);
@@ -479,6 +485,24 @@ function villager_look_brom(){
 }
 
 /// @description Father Aldous: a grey-haired priest in a white robe.
+/// @description The Mayor: a formal shirt, a waistcoat and a tie, grey at the temples, a moustache.
+function villager_look_mayor(){
+	var look = character_empty_look("Human", "male");
+	var p = look.parts;
+	p.body.pal  = character_find_palette("body", "olive");
+	if(p.body.pal == -1) p.body.pal = character_find_palette("body", "light");
+	p.head      = {item: character_find_item("head", "Human Male Plump"), pal: -1};
+	p.hair      = {item: character_find_item("hair", "Balding"),          pal: character_find_palette("hair", "dark gray")};
+	p.beard     = {item: character_find_item("beard", "Mustache"),        pal: character_find_palette("hair", "dark gray")};
+	p.shirt     = {item: character_find_item("shirt", "Collared/Formal Longsleeve"), pal: character_find_palette("cloth", "white")};
+	p.vest      = {item: character_find_item("vest", "Vest"),             pal: character_find_palette("cloth", "navy")};
+	p.neck      = {item: character_find_item("neck", "Necktie"),          pal: character_find_palette("cloth", "maroon")};
+	p.pants     = {item: character_find_item("pants", "Formal Pants"),    pal: character_find_palette("cloth", "charcoal")};
+	p.shoes     = {item: character_find_item("shoes", "Basic Shoes"),     pal: character_find_palette("cloth", "black")};
+	character_validate(look);
+	return look;
+}
+
 function villager_look_aldous(){
 	var look = character_empty_look("Human", "male");
 	var p = look.parts;
@@ -516,6 +540,8 @@ function villager_line(_key){
 	var tier = (h >= 6) ? 2 : ((h >= 2) ? 1 : 0);
 	var lines = v.lines[tier];
 	var line = lines[(day_index() + string_length(_key)) mod array_length(lines)];
+	// the Mayor talks land and your standing (scripts/pshops)
+	if(_key == "mayor") return pshop_mayor_line();
 	// Aunt Hesta always knows tomorrow's weather
 	return (_key == "hesta") ? weather_forecast_line() + "  " + line : line;
 }
@@ -584,6 +610,13 @@ function people_open(_npc){
 	var key = _npc.who;
 	if(key == "aldous" && curse_active()){ priest_offer(_npc); return; }
 	var reward = people_talk(key);
+	// your employee, in your shop: their report, and the takings (scripts/pshops)
+	var pid = pshop_staff_plot(key);
+	if(pid != "" && room_get_name(room) == "rm_pshop_" + pid){
+		var st = pshop_staff_talk(key);
+		instance_create_depth(0, 0, -9000, obj_dialogue, {who: key, npc: _npc, text: st[0], note: (reward != "") ? reward + "  " + st[1] : st[1]});
+		return;
+	}
 	instance_create_depth(0, 0, -9000, obj_dialogue, {who: key, npc: _npc, text: villager_line(key), note: reward});
 }
 
@@ -617,6 +650,7 @@ function people_trade(_key){
 		case "tinker":    inv.shopStock = shop_list([["m|gear", 0], ["o|sprinkler", 0]]); inv.shopTitle = "Brassbolt's Tinker Workshop (the rail cart is coming)"; break;
 		case "boatyard":  inv.shopStock = shop_list([["m|rope", 0], ["m|wood", 0]]); inv.shopTitle = "Saltwhistle Boatyard (boats are coming)"; break;
 		case "glassworks":inv.shopStock = shop_list([["m|glass", 0], ["m|glass_jar", 0]]); inv.shopTitle = "Fairglass Glassworks"; break;
+		case "land":      inv.shopStock = pshop_land_stock(); inv.shopTitle = "City Hall - land for sale (standing " + string(pshop_standing().total) + ")"; break;   // the Mayor (scripts/pshops)
 		case "stables":   inv.shopStock = shop_list([["m|horse_feed", 0], ["m|saddle", 0]]); inv.shopTitle = "Hayward Stables (horses are coming)"; break;
 	}
 }
@@ -697,5 +731,5 @@ function dialogue_open(){ return instance_exists(obj_dialogue); }
 /// monsters hold still, and Esc / I belong to the window.
 function ui_blocking(){
 	return instance_exists(obj_inventory) || dialogue_open() || mine_menu_open() || instance_exists(obj_fishing) || instance_exists(obj_world_map)
-	       || (instance_exists(obj_quest_board) && obj_quest_board.open) || transit_menu_open();
+	       || (instance_exists(obj_quest_board) && obj_quest_board.open) || transit_menu_open() || plot_menu_open();
 }

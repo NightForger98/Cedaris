@@ -1,1 +1,1 @@
-sprite_index = spr_prop_old_station;
+sprite_index = spr_prop_lamp;

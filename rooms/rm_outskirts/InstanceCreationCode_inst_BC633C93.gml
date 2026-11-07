@@ -1,1 +1,1 @@
-sprite_index = spr_prop_stadium;
+sprite_index = spr_prop_swing;

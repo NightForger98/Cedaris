@@ -1,1 +1,2 @@
-sprite_index = spr_prop_bench;
+text = "Oven's Window";
+side = "here";

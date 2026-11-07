@@ -87,6 +87,16 @@ const BROKEN_BRIDGE = {room: "rm_mountain", at: [146, 80], size: [2, 2]};   // w
 // The spare homes (no way in): the flat versions kept when the remakes with depth replaced them, and the remakes of
 // Larkspun and Quill (the families kept their old ones) - art/ai_houses/alt_*
 const ALT_HOMES = ["saba", "saltwhistle", "hayward", "ward", "tawil", "kassar", "night", "cottage", "family_house", "larkspun", "quill"].map(n => "prop_alt_" + n);
+// The plots for sale (scripts/pshops): how many in each room, their size (cells: room for the biggest design), the
+// buildings you can choose for them (the town's spare designs), and where you arrive inside a shop (tools/world2/pshop_room.js)
+const PLOTS_IN = {rm_beirut: 8, rm_outskirts: 2};
+const PLOT_DESIGNS = ["prop_town_hallhouse", "prop_town_hallhouse3", "prop_town_apartments", "prop_town_yellowhouse", "prop_town_yellowhouse2",
+	"prop_town_villa", "prop_town_villa2", "prop_town_shop", "prop_town_shop2", "prop_town_cafe", "prop_town_cafe2", "prop_town_bakery",
+	"prop_town_bakery2"].concat(ALT_HOMES);
+const PLOT_W = 7, PLOT_H = 6, PSHOP_IN = [224, 280];
+const PLOTS = [];
+// The Mayor's house (the town hall, by the square) and where you arrive inside it (tools/rooms/specs/rm_mayor.js)
+const MAYOR_HOUSE = "prop_town_hallhouse2", MAYOR_IN = [224, 280];
 const RUINS = {
 	house: {w: 8, h: 4, parts: [["ruin_wall_brick", 0, 0], ["ruin_wall_stone", 4, 0], ["ruin_rubble", 1, 3], ["ruin_rubble", 5, 3], ["ruin_stump", 3, 2]]},
 	temple: {w: 8, h: 5, parts: [["ruin_pillar", 0, 0], ["ruin_ivy", 2, 1], ["ruin_head", 3, 1], ["ruin_columns", 6, 1], ["ruin_rubble", 1, 4], ["ruin_stump", 5, 3]]},
@@ -119,6 +129,7 @@ function buildAll(){
 	for(const id of ids) frames[id] = frameOf(id);
 	const rooms = {}, exits = {};
 	STATIONS.length = 0;
+	PLOTS.length = 0;
 	for(const id of ids) rooms[id] = buildRoom(id, frames[id], exits);
 	// Ways through, now that every room exists: a strip each side of each crossing, arriving on the other side
 	SOLID = {rooms, frames, cells: {}};
@@ -334,50 +345,51 @@ side = "here";`});
 		points[o + "__sign"] = [spot[0] * 32 + 16, spot[1] * 32 + 56];
 	}
 
-	// The town's houses between the landmarks (PixelLab, 2026-11-06): no way in, each by a street, on the
-	// blueprint's plain town ground with a cell clear around it
-	{ const FILL = ["prop_town_hallhouse", "prop_town_hallhouse2", "prop_town_hallhouse3", "prop_town_apartments",
-		"prop_town_yellowhouse", "prop_town_yellowhouse2", "prop_town_villa", "prop_town_villa2",
-		"prop_town_shop", "prop_town_shop2", "prop_town_cafe", "prop_town_cafe2", "prop_town_bakery", "prop_town_bakery2"].concat(ALT_HOMES).filter(k => T.things[k]);
-	  // and out of town, a home now and then by the roads and lanes (the spare homes: the Outskirts, the Countryside, the
-	  // Sunset Coast felt empty)
-	  const RURAL = ["rm_outskirts", "rm_countryside", "rm_sunset"].includes(id), POOL = RURAL ? ALT_HOMES.filter(k => T.things[k]) : FILL;
-	  if((KIND[id] === "town" || RURAL) && POOL.length){
-		const FILL = POOL;
-		const fr = rng(seed + 57), want = Math.round(W * H / (RURAL ? 900 : 350)), road = ch => ch === ":" || ch === ",";
+	// Plots for sale (the user, 2026-11-07): where the town's houses with no way in stood, empty lots facing a street -
+	// the Mayor sells them, you choose a building and a shop for each (scripts/pshops). Each is PLOT_W x PLOT_H cells,
+	// its door in the middle of its bottom row: a door (obj_transition) to its shop's inside (rm_pshop_<id>) that
+	// obj_plot shuts until a shop stands there.
+	if(PLOTS_IN[id]){
+		const fr = rng(seed + 57), want = PLOTS_IN[id], prefix = id === "rm_beirut" ? "b" : "o";
 		let n = 0;
-		// every cell in a shuffled order, each trying the houses in a shuffled order, until the town has enough
 		const cells = [];
-		for(let r = 2; r < H - 5; r++) for(let c = 2; c < W - 4; c++) cells.push([c, r]);
+		for(let r = 2; r < H - PLOT_H - 3; r++) for(let c = 2; c < W - PLOT_W - 2; c++) cells.push([c, r]);
 		for(let i = cells.length - 1; i > 0; i--){ const j = Math.floor(fr() * (i + 1)); [cells[i], cells[j]] = [cells[j], cells[i]]; }
+		const street = ch => ch === "," || ch === ":";
 		for(const [c, r] of cells){
 			if(n >= want) break;
-			const order = FILL.slice().sort(() => fr() - 0.5);
-			for(const is of order){
-				const [w, h] = size(is), mid = c + Math.floor(w / 2);
-				if(c + w >= W - 2 || r + h >= H - 3) continue;
-				// facing a street: its door looks onto a side lane (in town; out of town a road or a lane) at most two
-				// cells of grass away - houses and workshops along the side lanes, which go somewhere (tools/map/blueprint.js)
-				const street = ch => ch === "," || ch === ":";   // a side street, or (now slim) a main road
-				let front = null;   // [x, y] of the street cell nearest below the house (under its width)
-				for(let k2 = 0; k2 < 3 && !front; k2++) for(let x = c; x < c + w && !front; x++) if(street(at(x, r + h + k2))) front = [x, r + h + k2];
-				if(!front || !free(c - 1, r, w + 2, h, ["."])) continue;   // a cell clear each side (its back may meet the next street)
-				let pathOk = true;   // the path from the door: down to the street's row, then along to it, all on grass
-				for(let y = r + h; y < front[1] && pathOk; y++) if(at(mid, y) !== "." || taken.has(mid + "," + y)) pathOk = false;
-				for(let x = Math.min(mid, front[0]); x <= Math.max(mid, front[0]) && pathOk; x++){ const ch = at(x, front[1]); if(!street(ch) && (ch !== "." || taken.has(x + "," + front[1]))) pathOk = false; }
-				if(!pathOk) continue;
-				for(let y = r + h; y < front[1]; y++) grid[y][mid] = ",";
-				for(let x = Math.min(mid, front[0]); x <= Math.max(mid, front[0]); x++) if(at(x, front[1]) === ".") grid[front[1]][x] = ",";
-				let plain = true;
-				for(let y = r; y < r + h && plain; y++) for(let x = c; x < c + w && plain; x++) if(bk(x, y) !== ".") plain = false;
-				if(!plain) continue;
-				things.push({is, at: [c, r]});
-				take(c - 1, r - 1, w + 2, h + 1);
-				n++;
-				break;
-			}
+			const w = PLOT_W, h = PLOT_H, mid = c + Math.floor(w / 2);
+			// keep the plots apart, so the town's spread round them
+			if(PLOTS.some(p => p.room === id && Math.abs(p.c - c) < w + 6 && Math.abs(p.r - r) < h + 4)) continue;
+			let front = null;
+			for(let k2 = 0; k2 < 3 && !front; k2++) for(let x = c; x < c + w && !front; x++) if(street(at(x, r + h + k2))) front = [x, r + h + k2];
+			if(!front || !free(c - 1, r, w + 2, h, ["."])) continue;
+			let pathOk = true;
+			for(let y = r + h; y < front[1] && pathOk; y++) if(at(mid, y) !== "." || taken.has(mid + "," + y)) pathOk = false;
+			for(let x = Math.min(mid, front[0]); x <= Math.max(mid, front[0]) && pathOk; x++){ const ch = at(x, front[1]); if(!street(ch) && (ch !== "." || taken.has(x + "," + front[1]))) pathOk = false; }
+			if(!pathOk) continue;
+			let plain = true;
+			for(let y = r; y < r + h && plain; y++) for(let x = c; x < c + w && plain; x++) if(bk(x, y) !== ".") plain = false;
+			if(!plain) continue;
+			for(let y = r + h; y < front[1]; y++) grid[y][mid] = ",";
+			for(let x = Math.min(mid, front[0]); x <= Math.max(mid, front[0]); x++) if(at(x, front[1]) === ".") grid[front[1]][x] = ",";
+			take(c - 1, r - 1, w + 2, h + 1);
+			n++;
+			const pid = prefix + n, dx = mid * 32 + 16, dy = (r + h - 1) * 32 + 16;
+			PLOTS.push({id: pid, room: id, c, r});
+			instances.push({obj: "obj_plot", x: c * 32, y: r * 32, code: `plot = "${pid}";
+pw = ${w};
+ph = ${h};`});
+			instances.push({obj: "obj_transition", x: dx, y: dy, sx: 2, sy: 1,
+				code: `targetRoom = rm_pshop_${pid};
+targetX = ${PSHOP_IN[0]};
+targetY = ${PSHOP_IN[1]};
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;`});
+			exits["pshop_" + pid] = [id, dx, dy + 36];
+			points["plot_" + pid] = [dx, dy + 52];
 		}
-	  } }
+	}
 
 	// The wild places' life (2026-11-06; the user found the Outskirts and the cliffs empty): clusters set down on open
 	// ground away from the roads - a cedar grove and terraced slopes on the Mountain, orchards, olive groves, vineyards,
@@ -584,7 +596,7 @@ if(project_done("bridge")) instance_destroy();`});
 			things.push({src: [src[0], src[1], 1, 1], at: [c2, r], role: "terrain"});
 		}
 	}
-	cityPlaces(id, {ox, oy, W, H, grid, things, instances, points, taken, free, take, own, at, bk});
+	cityPlaces(id, {ox, oy, W, H, grid, things, instances, points, taken, free, take, own, at, bk, exits});
 	return {
 		// the camera, in a 1500 x 840 window (the farm and interiors keep their own)
 		// (Beirut 1.5x: 1000 x 560, about 31 x 17 tiles; the areas round it 2x; the far ones 3x)
@@ -695,6 +707,33 @@ side = "here";`}); return true; } return false; };
 		near(sc - 2, sr - 2, "prop_fountain", [";", ":", ".", ","], true);   // (on the paving, which counts as taken)
 		for(const [dx, dy] of [[-6, -4], [4, -4], [-6, 3], [4, 3]]) near(sc + dx, sr + dy, "prop_bench", [";", ".", ","]);
 		[[-5, -2], [5, -2], [-5, 5], [5, 5]].forEach(([dx, dy], i) => spot("square_" + "abcd"[i], sc + dx, sr + dy));
+		// the town hall: the Mayor's house by the square (scripts/pshops: he sells the plots), its door into rm_mayor
+		{ const [mw, mh] = size(MAYOR_HOUSE), md = doorOf(MAYOR_HOUSE);
+		  let hall = null;
+		  for(let d = 4; d <= 24 && !hall; d++) for(let dy = -d; dy <= d && !hall; dy++) for(let dx = -d; dx <= d && !hall; dx++){
+			if(Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
+			const c = sc + dx, r = sr + dy;
+			if(!free(c - 1, r, mw + 2, mh, ["."])) continue;
+			const below = at(c + md[0], r + mh);
+			if(![".", ",", ";", ":"].includes(below)) continue;
+			hall = [c, r];
+		  }
+		  if(hall){
+			const [c, r] = hall;
+			things.push({is: MAYOR_HOUSE, at: [c, r]});
+			take(c - 1, r, mw + 2, mh + 1);
+			const dx = (c + md[0]) * 32 + 16, dy = (r + md[1]) * 32 + 16;
+			instances.push({obj: "obj_transition", x: dx, y: dy, sx: 2, sy: 1,
+				code: `targetRoom = rm_mayor;
+targetX = ${MAYOR_IN[0]};
+targetY = ${MAYOR_IN[1]};
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;`});
+			R.exits.mayor = [id, dx, dy + 36];
+			points.mayor_front = [dx, dy + 52];
+			sign(c + md[0] + 2, r + mh + 1, "City Hall");
+		  } else console.log("  rm_beirut: no room for the town hall");
+		}
 		// landmarks closing each street's ends (where a street stops inside town)
 		const ends = [];
 		for(const [[x1, y1], [x2, y2]] of lines) for(const e of [[x1, y1, Math.sign(x1 - x2), Math.sign(y1 - y2)], [x2, y2, Math.sign(x2 - x1), Math.sign(y2 - y1)]]) ends.push(e);
@@ -800,6 +839,7 @@ function all(){ if(!BUILT){ BUILT = buildAll(); addFerry(BUILT); } return BUILT;
 module.exports = {
 	spec: id => { const s = all().rooms[id]; if(!s) throw new Error("no new room " + id); return s; },
 	all, ROOM_OF, ALIAS, KIND, WATER, owner,
+	PLOTS, PLOT_DESIGNS, PLOT_W, PLOT_H, PSHOP_IN, MAYOR_IN, doorOf,
 	exits: () => all().exits,
 	farmArrive: side => {
 		// where the farm's side leads: the crossing in that area nearest the farm, arriving two cells in

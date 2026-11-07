@@ -53,6 +53,8 @@ function item_materials(){
 		{key: "fur",     name: "Fur",         tier: 0, shape: "hide",    colour: make_colour_rgb(175, 135, 95),  price: 8,  stats: {warmth: 2.5},              desc: "Keeps the winter out."},
 		// Marriage (scripts/marriage): the proposal token, and the plans for the next farmhouse upgrade (built overnight)
 		{key: "blue_feather", name: "Blue Feather", tier: 0, shape: "feather", colour: make_colour_rgb(80, 140, 235), price: 1000, stats: {}, desc: "A token of love. Give it to the one you want to marry."},
+		// Plots (scripts/pshops): a deed from the Mayor, taken to a For Sale sign
+		{key: "land_deed", name: "Land Deed", tier: 0, shape: "fibre", colour: make_colour_rgb(235, 225, 170), price: 1, stats: {}, desc: "The Mayor's deed to a plot of land in town. Use it on a For Sale sign to claim that plot."},
 		{key: "house_plans", name: "House Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(230, 220, 190), price: 1000, stats: {}, desc: "Rowan's plans for your farmhouse. Her crew builds it overnight."},
 		{key: "barn_plans", name: "Barn Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(220, 160, 150), price: 1000, stats: {}, desc: "Rowan's plans for a bigger barn (room for more cows and sheep). Her crew builds it overnight with your wood and stone (Rowan sells both)."},
 		{key: "coop_plans", name: "Coop Plans", tier: 0, shape: "fibre", colour: make_colour_rgb(235, 210, 150), price: 1000, stats: {}, desc: "Rowan's plans for a bigger coop (room for more chickens). Her crew builds it overnight with your wood and stone (Rowan sells both)."},

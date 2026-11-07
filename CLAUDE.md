@@ -57,6 +57,18 @@ travel rules) still holds.
 - **Farmhouse cleared** for your own furniture: `tools/rooms/clear_stamp.js` writes `stamps/house_*_clear.json` from
   the captured stamps (furniture tiles dropped; the stairs, hearth, kitchen, bed and windows kept; the upstairs rug
   stays); `rm_12` / `rm_123` use them, with their walk maps redrawn. The original stamps are kept.
+- **Plots and player-run shops** (`scripts/pshops`, the user's design): the 36 houses with no way in are gone; in
+  their place 10 plots for sale (8 in Beirut, 2 in the Outskirts; `PLOTS_IN`, 7 x 6 cells, `obj_plot` with a For Sale
+  sign). **Mayor Haddad** (City Hall by the square, `rm_mayor`, the hall-house design) sells Land Deeds (T) once you
+  have the Big Barn; how many plots you may own follows your **town standing** = farm building stages + farmhouse
+  upgrades + his hearts + 2 per town project (`pshop_thresholds`: 8, 13, 18, 22, 26, 29, 31, 33 - max standing is 33
+  with today's 6 projects). The deed on a sign claims the plot; the sign's menu then orders a shop (one of each of 9
+  kinds copying the town's shops, `pshop_kinds`) in one of 21 spare designs (`world_plot_designs`, generated), for
+  4,000 gold, 200 wood, 100 stone; Rowan's crew builds it overnight. A villager with no job (`pshop_staff_pool`) runs
+  it (their routine is swapped: `pshop_staff_routine`). Leave raw materials in the crate (`obj_pshop_crate`); each
+  day they make up to `make` into goods and sell up to `sell` (e.g. 10 / 5 for the tailor), less a daily wage; the
+  takings (or wages owed) wait in the till until you talk to them. Inside: `rm_pshop_<id>` (`tools/world2/pshop_room.js`,
+  specs written by `pshop_specs.js` from make_specs). Test `pshops`.
 - **Not done**: an interior tile kit (the LPC Revised "buildings" sheet is exterior only).
 
 ### Cedar & Sea's world (2026-11-06)

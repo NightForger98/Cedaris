@@ -1,0 +1,57 @@
+# Plots and player-run shops (scripts/pshops): the Mayor sells land once you have the Big Barn and enough town
+# standing; a plot's sign orders a shop, built overnight and run by a villager with no work of their own; they make
+# and sell up to a day's limit from the stock you leave, take a wage, and the takings wait for you
+start story
+wait 60
+call autotest_date 0 2
+time 10
+# no Big Barn: no land
+call pshop_land_why_not
+expect Big Barn
+call autotest_farm_building barn 1
+call pshop_land_why_not
+expect standing
+call pshop_slots
+expect 0
+# the farm built up: standing 8, one plot
+call autotest_farm_building barn 2
+call autotest_farm_building coop 2
+call autotest_farm_building shed 2
+call autotest_farm_building silo 2
+call pshop_slots
+expect 1
+call pshop_mayor_line
+expect deed
+# a plot for sale in town
+room rm_beirut 1872 1520
+wait 30
+shot 01_for_sale
+# a tailor's on it, built overnight, Liora runs it
+call autotest_pshop_build b1 tailor
+expect tailor
+expect Liora
+call pshop_staff_plot liora
+expect b1
+# 100 wool: she makes 10 a day and sells 5 (5 x 11 gold, less her wage of 30)
+call autotest_pshop_stock b1 m|wool 100
+expect 100
+call autotest_next_day
+call autotest_pshop_state b1
+expect 90 5 25 liora
+# another day: the takings add up, uncollected
+call autotest_next_day
+call autotest_pshop_state b1
+expect 80 10 50 liora
+# one of each kind: the tailor's taken
+call pshop_free_kinds
+expect smithy
+room rm_beirut 1872 1520
+wait 30
+shot 02_built
+room rm_pshop_b1 224 280
+wait 30
+shot 03_inside
+room rm_mayor 224 280
+wait 30
+shot 04_city_hall
+quit

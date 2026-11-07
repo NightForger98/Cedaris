@@ -1,2 +1,2 @@
 text = "Beirut";
-side = "here";
+side = "n";

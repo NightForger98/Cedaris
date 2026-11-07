@@ -1,1 +1,2 @@
-sprite_index = spr_prop_flower_bed;
+text = "Uptown";
+side = "here";

@@ -1,1 +1,1 @@
-sprite_index = spr_prop_museum;
+sprite_index = spr_prop_lamp;

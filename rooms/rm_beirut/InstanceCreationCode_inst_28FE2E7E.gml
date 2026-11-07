@@ -1,5 +1,5 @@
-targetRoom = rm_glassworks;
-targetX = 256;
-targetY = 312;
+targetRoom = rm_phoenix;
+targetX = 336;
+targetY = 1104;
 PlayerFacingBefore = dir.up;
 PlayerFacingAfter = dir.up;

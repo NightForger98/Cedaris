@@ -1,1 +1,3 @@
-sprite_index = spr_prop_flower_bed;
+plot = "b7";
+pw = 7;
+ph = 6;

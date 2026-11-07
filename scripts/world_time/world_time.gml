@@ -134,7 +134,9 @@ function day_advance(_passedOut){
 	var paid = shipping_payout();
 	var wed = marriage_new_day();   // house plans built overnight, the wedding
 	var built = farm_buildings_new_day();   // barn, coop, shed and silo plans built overnight
+	var shops = pshops_new_day();   // plots' shops built overnight, and the shops' days (scripts/pshops)
 	global.world.morningNote = wed + ((wed != "" && built != "") ? " " : "") + built;
+	if(shops != "") global.world.morningNote += ((global.world.morningNote != "") ? " " : "") + shops;
 
 	// You: passing out costs gold and leaves you half rested
 	var lost = 0;

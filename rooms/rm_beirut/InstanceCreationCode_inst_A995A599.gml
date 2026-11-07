@@ -1,2 +1,5 @@
-text = "Downtown";
-side = "here";
+targetRoom = rm_outskirts;
+targetX = 1168;
+targetY = 80;
+PlayerFacingBefore = dir.down;
+PlayerFacingAfter = dir.down;

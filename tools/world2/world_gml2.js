@@ -48,6 +48,16 @@ for(const id of NEWROOMS){
 }
 
 const q = s => JSON.stringify(s);
+// the buildings you can choose for a plot (scripts/pshops): the spare designs that fit one
+const T = require("../rooms/tiles.js");
+const NAMES = {hallhouse: "Hall House", hallhouse3: "Tall Hall House", apartments: "Apartments", yellowhouse: "Yellow House", yellowhouse2: "Narrow Yellow House",
+	villa: "Villa", villa2: "Grand Villa", shop: "Shop Front", shop2: "Wide Shop Front", cafe: "Cafe", cafe2: "Corner Cafe", bakery: "Bakery",
+	bakery2: "Little Bakery", saba: "Stone House", hayward: "Farmhouse", ward: "Tall Cottage", tawil: "Long House", kassar: "Red-roofed House",
+	cottage: "Cottage", larkspun: "Townhouse", quill: "Square House"};
+const designs = A.PLOT_DESIGNS.filter(k => T.things[k] && T.things[k].sprite && T.things[k].src[2] <= A.PLOT_W && T.things[k].src[3] <= A.PLOT_H).map(k => {
+	const t = T.things[k], short = k.replace(/^prop_(town|alt)_/, "");
+	return `		{is: "${k}", name: ${JSON.stringify(NAMES[short] || short)}, spr: ${t.sprite}, w: ${t.src[2]}, h: ${t.src[3]}, ox: ${t.ox || 0}, door: [${A.doorOf(k).join(", ")}], solid: ${JSON.stringify(t.solid || [[0, t.src[3] - 2, t.src[2], 2]])}},`;
+}).join(String.fromCharCode(10));
 // the old districts' middles, for the world map
 const districtsGml = Object.entries(ROOMS).filter(([o]) => A.ALIAS[o] && B.rooms[A.ALIAS[o]] && B.rooms[A.ALIAS[o]].points[o + "__mid"])
 	.map(([o, R]) => { const p = B.rooms[A.ALIAS[o]].points[o + "__mid"]; return "		{name: " + q(R.name) + ", room: \"" + A.ALIAS[o] + "\", x: " + p[0] + ", y: " + p[1] + "},"; }).join(String.fromCharCode(10));
@@ -110,6 +120,15 @@ ${B.stations.map(t => `		{kind: "${t.kind}", name: ${q(t.name)}, room: "${t.room
 function world_districts(){
 	static t = [
 ${districtsGml}
+	];
+	return t;
+}
+
+/// @description The buildings you can choose for a plot (scripts/pshops): is, name, sprite, size in cells, the
+/// sprite's x offset, the door cell and the solid cells [dx, dy, w, h].
+function world_plot_designs(){
+	static t = [
+${designs}
 	];
 	return t;
 }

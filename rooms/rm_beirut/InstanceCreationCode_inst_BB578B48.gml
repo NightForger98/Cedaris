@@ -1,1 +1,2 @@
-sprite_index = spr_prop_lamp;
+kind = "tram";
+stop = "Cardo";

@@ -1,1 +1,5 @@
-sprite_index = spr_prop_town_yellowhouse2;
+targetRoom = rm_lighthouse;
+targetX = 160;
+targetY = 280;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

@@ -1,1 +1,2 @@
-sprite_index = spr_prop_swing;
+text = "Manara's Light";
+side = "here";

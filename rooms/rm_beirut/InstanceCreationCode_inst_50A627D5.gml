@@ -1,1 +1,3 @@
-sprite_index = spr_prop_swing;
+plot = "b5";
+pw = 7;
+ph = 6;

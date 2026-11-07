@@ -1,2 +1,2 @@
-kind = "tram";
-stop = "Dahya";
+text = "Beirut";
+side = "here";

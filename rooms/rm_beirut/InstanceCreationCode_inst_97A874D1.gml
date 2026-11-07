@@ -1,1 +1,3 @@
-sprite_index = spr_prop_fountain;
+plot = "b3";
+pw = 7;
+ph = 6;

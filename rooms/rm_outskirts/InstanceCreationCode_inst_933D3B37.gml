@@ -1,1 +1,5 @@
-sprite_index = spr_prop_lamp;
+targetRoom = rm_home_kassar;
+targetX = 224;
+targetY = 280;
+PlayerFacingBefore = dir.up;
+PlayerFacingAfter = dir.up;

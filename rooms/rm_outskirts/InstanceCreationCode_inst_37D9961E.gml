@@ -1,1 +1,1 @@
-sprite_index = spr_house_home_kassar;
+sprite_index = spr_prop_merchant_cart;

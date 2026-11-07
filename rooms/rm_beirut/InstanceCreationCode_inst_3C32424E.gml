@@ -1,2 +1,2 @@
-kind = "tram";
-stop = "Oven's Window";
+text = "Sunset Coast";
+side = "s";
